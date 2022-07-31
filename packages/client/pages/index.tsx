@@ -1,35 +1,16 @@
-import { gql } from '@apollo/client';
-import {
-  Avatar,
-  Badge,
-  Button,
-  Card,
-  Center,
-  Container,
-  Group,
-  NativeSelect,
-  Pagination,
-  Paper,
-  SimpleGrid,
-  Space,
-  Table,
-  Text,
-  TextInput,
-  Title,
-} from '@mantine/core';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
-import { AiOutlineStar, AiOutlineSearch, AiFillFire, AiFillClockCircle, AiFillHourglass } from 'react-icons/ai';
+
 import Hero from '../components/Hero/Hero';
-import Highlights from '../components/Highlights/Highlights';
 import ProjectsTable from '../components/ProjectsTable/ProjectsTable';
+import JoinOurCommunity from '../components/JoinOurCommunity';
+import BlogPosts from '../components/BlogPosts';
 import TrackVitalsDisclaimer from '../components/TrackVitalsDisclaimer';
-import client from '../data/apollo-client';
+import { getProjectsList } from '../data/getters';
 
 const Home: NextPage = ({ projects }) => {
   console.log(projects);
-
+  
   return (
     <div>
       <Head>
@@ -39,54 +20,9 @@ const Home: NextPage = ({ projects }) => {
       </Head>
       <div>
         <Hero />
-        <Highlights />
         <ProjectsTable data={projects} />
-
-        <div className="my-40">
-          <Container>
-            <Center>
-              <div className="text-center">
-                <Title order={2} className="mb-4">
-                  Grow together with a global community!
-                </Title>
-                <Text className="mb-4">
-                  Our community is made up of people all over the world who are excited to monitor the health of their
-                  favorite projects. Learn from new and veteran cryptocurrency users, provide suggestions, and find how
-                  you could improve your projects or obtain more knowledge!
-                </Text>
-                <Button color="violet" size="lg" variant="light">
-                  Join our community
-                </Button>
-              </div>
-            </Center>
-          </Container>
-        </div>
-
-        <div className="my-20">
-          <Container>
-            <SimpleGrid cols={4}>
-              {Array(6)
-                .fill(1)
-                .map((x, i) => {
-                  return (
-                    <div className="w-[200px]">
-                      <Card shadow="sm" p="lg">
-                        <Card.Section>
-                          <Image src="/images/trendtitano.webp" width={200} height="100%" alt="Norway" />
-                        </Card.Section>
-                        <Group position="apart" className="mb-2">
-                          <Text size="xs">Post</Text>
-                          <Text size="xs">2022-07-21 7:21 PM</Text>
-                        </Group>
-                        <Text size="sm">Lorem ipsum dolore. Some text goes here. It's a summary.</Text>
-                      </Card>
-                    </div>
-                  );
-                })}
-            </SimpleGrid>
-          </Container>
-        </div>
-
+        <JoinOurCommunity />
+        <BlogPosts />
         <TrackVitalsDisclaimer />
       </div>
     </div>
@@ -96,24 +32,12 @@ const Home: NextPage = ({ projects }) => {
 export default Home;
 
 export const getStaticProps = async () => {
-  const { data } = await client.query({
-    query: gql`
-      {
-        projects {
-          name
-          slug
-          tags {
-            name
-          }
-        }
-      }
-    `,
-  });
+  const projects = await getProjectsList();
 
   return {
     props: {
-      projects: data.projects || null,
+      projects,
     },
-    revalidate: 60,
+    revalidate: 5,
   };
 };

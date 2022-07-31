@@ -10,7 +10,13 @@ type User {
   apiKey: String
   apiSecret: String
   Api: ApiAccessLevel
-  projects: Project
+  projects(
+    where: ProjectWhereInput! = {}
+    orderBy: [ProjectOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Project!]
+  projectsCount(where: ProjectWhereInput! = {}): Int
 }
 
 type PasswordState {
@@ -36,7 +42,7 @@ input UserWhereInput {
   apiKey: StringFilter
   apiSecret: StringFilter
   Api: ApiAccessLevelWhereInput
-  projects: ProjectWhereInput
+  projects: ProjectManyRelationFilter
 }
 
 input IDFilter {
@@ -89,6 +95,12 @@ input DateTimeNullableFilter {
   not: DateTimeNullableFilter
 }
 
+input ProjectManyRelationFilter {
+  every: ProjectWhereInput
+  some: ProjectWhereInput
+  none: ProjectWhereInput
+}
+
 input UserOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -111,7 +123,7 @@ input UserUpdateInput {
   apiKey: String
   apiSecret: String
   Api: ApiAccessLevelRelateToOneForUpdateInput
-  projects: ProjectRelateToOneForUpdateInput
+  projects: ProjectRelateToManyForUpdateInput
 }
 
 input ApiAccessLevelRelateToOneForUpdateInput {
@@ -120,10 +132,11 @@ input ApiAccessLevelRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input ProjectRelateToOneForUpdateInput {
-  create: ProjectCreateInput
-  connect: ProjectWhereUniqueInput
-  disconnect: Boolean
+input ProjectRelateToManyForUpdateInput {
+  disconnect: [ProjectWhereUniqueInput!]
+  set: [ProjectWhereUniqueInput!]
+  create: [ProjectCreateInput!]
+  connect: [ProjectWhereUniqueInput!]
 }
 
 input UserUpdateArgs {
@@ -139,7 +152,7 @@ input UserCreateInput {
   apiKey: String
   apiSecret: String
   Api: ApiAccessLevelRelateToOneForCreateInput
-  projects: ProjectRelateToOneForCreateInput
+  projects: ProjectRelateToManyForCreateInput
 }
 
 input ApiAccessLevelRelateToOneForCreateInput {
@@ -147,9 +160,9 @@ input ApiAccessLevelRelateToOneForCreateInput {
   connect: ApiAccessLevelWhereUniqueInput
 }
 
-input ProjectRelateToOneForCreateInput {
-  create: ProjectCreateInput
-  connect: ProjectWhereUniqueInput
+input ProjectRelateToManyForCreateInput {
+  create: [ProjectCreateInput!]
+  connect: [ProjectWhereUniqueInput!]
 }
 
 type MarketStat {
@@ -160,6 +173,7 @@ type MarketStat {
   liquidity: Float
   pairPrice: Float
   customData: JSON
+  dateAdded: DateTime
   project: Project
 }
 
@@ -177,6 +191,7 @@ input MarketStatWhereInput {
   totalSupply: FloatNullableFilter
   liquidity: FloatNullableFilter
   pairPrice: FloatNullableFilter
+  dateAdded: DateTimeNullableFilter
   project: ProjectWhereInput
 }
 
@@ -198,6 +213,7 @@ input MarketStatOrderByInput {
   totalSupply: OrderDirection
   liquidity: OrderDirection
   pairPrice: OrderDirection
+  dateAdded: OrderDirection
 }
 
 input MarketStatUpdateInput {
@@ -207,7 +223,14 @@ input MarketStatUpdateInput {
   liquidity: Float
   pairPrice: Float
   customData: JSON
+  dateAdded: DateTime
   project: ProjectRelateToOneForUpdateInput
+}
+
+input ProjectRelateToOneForUpdateInput {
+  create: ProjectCreateInput
+  connect: ProjectWhereUniqueInput
+  disconnect: Boolean
 }
 
 input MarketStatUpdateArgs {
@@ -222,14 +245,23 @@ input MarketStatCreateInput {
   liquidity: Float
   pairPrice: Float
   customData: JSON
+  dateAdded: DateTime
   project: ProjectRelateToOneForCreateInput
+}
+
+input ProjectRelateToOneForCreateInput {
+  create: ProjectCreateInput
+  connect: ProjectWhereUniqueInput
 }
 
 type Project {
   id: ID!
   name: String
   slug: String
+  logo: ImageFieldOutput
   enabled: Boolean
+  isListed: Boolean
+  isRebasing: Boolean
   tags(
     where: TagWhereInput! = {}
     orderBy: [TagOrderByInput!]! = []
@@ -247,15 +279,39 @@ type Project {
   ): [Token!]
   pairTokenCount(where: TokenWhereInput! = {}): Int
   network: Network
+  trackHoldersFromTokenAmount: Float
   description: String
   ABI: JSON
   customData: JSON
+  sellTax: Float
+  buyTax: Float
+  rebasePeriod: String
+  apy: Float
+  dailyApy: Float
   website: String
   whitepaper: String
   twitter: String
   telegram: String
   discord: String
   reddit: String
+  youtube: String
+  dateAdded: DateTime
+}
+
+type ImageFieldOutput {
+  id: ID!
+  filesize: Int!
+  width: Int!
+  height: Int!
+  extension: ImageExtension!
+  url: String!
+}
+
+enum ImageExtension {
+  jpg
+  png
+  webp
+  gif
 }
 
 input ProjectWhereUniqueInput {
@@ -270,18 +326,28 @@ input ProjectWhereInput {
   name: StringFilter
   slug: StringFilter
   enabled: BooleanFilter
+  isListed: BooleanFilter
+  isRebasing: BooleanFilter
   tags: TagManyRelationFilter
   contractAddress: StringFilter
   pairAddress: StringFilter
   pairToken: TokenManyRelationFilter
   network: NetworkWhereInput
+  trackHoldersFromTokenAmount: FloatNullableFilter
   description: StringFilter
+  sellTax: FloatNullableFilter
+  buyTax: FloatNullableFilter
+  rebasePeriod: StringFilter
+  apy: FloatNullableFilter
+  dailyApy: FloatNullableFilter
   website: StringFilter
   whitepaper: StringFilter
   twitter: StringFilter
   telegram: StringFilter
   discord: StringFilter
   reddit: StringFilter
+  youtube: StringFilter
+  dateAdded: DateTimeNullableFilter
 }
 
 input BooleanFilter {
@@ -306,36 +372,66 @@ input ProjectOrderByInput {
   name: OrderDirection
   slug: OrderDirection
   enabled: OrderDirection
+  isListed: OrderDirection
+  isRebasing: OrderDirection
   contractAddress: OrderDirection
   pairAddress: OrderDirection
+  trackHoldersFromTokenAmount: OrderDirection
   description: OrderDirection
+  sellTax: OrderDirection
+  buyTax: OrderDirection
+  rebasePeriod: OrderDirection
+  apy: OrderDirection
+  dailyApy: OrderDirection
   website: OrderDirection
   whitepaper: OrderDirection
   twitter: OrderDirection
   telegram: OrderDirection
   discord: OrderDirection
   reddit: OrderDirection
+  youtube: OrderDirection
+  dateAdded: OrderDirection
 }
 
 input ProjectUpdateInput {
   name: String
   slug: String
+  logo: ImageFieldInput
   enabled: Boolean
+  isListed: Boolean
+  isRebasing: Boolean
   tags: TagRelateToManyForUpdateInput
   contractAddress: String
   pairAddress: String
   pairToken: TokenRelateToManyForUpdateInput
   network: NetworkRelateToOneForUpdateInput
+  trackHoldersFromTokenAmount: Float
   description: String
   ABI: JSON
   customData: JSON
+  sellTax: Float
+  buyTax: Float
+  rebasePeriod: String
+  apy: Float
+  dailyApy: Float
   website: String
   whitepaper: String
   twitter: String
   telegram: String
   discord: String
   reddit: String
+  youtube: String
+  dateAdded: DateTime
 }
+
+input ImageFieldInput {
+  upload: Upload!
+}
+
+"""
+The `Upload` scalar type represents a file upload.
+"""
+scalar Upload
 
 input TagRelateToManyForUpdateInput {
   disconnect: [TagWhereUniqueInput!]
@@ -365,21 +461,32 @@ input ProjectUpdateArgs {
 input ProjectCreateInput {
   name: String
   slug: String
+  logo: ImageFieldInput
   enabled: Boolean
+  isListed: Boolean
+  isRebasing: Boolean
   tags: TagRelateToManyForCreateInput
   contractAddress: String
   pairAddress: String
   pairToken: TokenRelateToManyForCreateInput
   network: NetworkRelateToOneForCreateInput
+  trackHoldersFromTokenAmount: Float
   description: String
   ABI: JSON
   customData: JSON
+  sellTax: Float
+  buyTax: Float
+  rebasePeriod: String
+  apy: Float
+  dailyApy: Float
   website: String
   whitepaper: String
   twitter: String
   telegram: String
   discord: String
   reddit: String
+  youtube: String
+  dateAdded: DateTime
 }
 
 input TagRelateToManyForCreateInput {
@@ -501,6 +608,7 @@ input StableLiquidityPairCreateInput {
 type Network {
   id: ID!
   name: String
+  logo: ImageFieldOutput
   url: String
 }
 
@@ -525,6 +633,7 @@ input NetworkOrderByInput {
 
 input NetworkUpdateInput {
   name: String
+  logo: ImageFieldInput
   url: String
 }
 
@@ -535,6 +644,7 @@ input NetworkUpdateArgs {
 
 input NetworkCreateInput {
   name: String
+  logo: ImageFieldInput
   url: String
 }
 
@@ -563,12 +673,6 @@ input TagWhereInput {
   projects: ProjectManyRelationFilter
 }
 
-input ProjectManyRelationFilter {
-  every: ProjectWhereInput
-  some: ProjectWhereInput
-  none: ProjectWhereInput
-}
-
 input TagOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -579,13 +683,6 @@ input TagUpdateInput {
   projects: ProjectRelateToManyForUpdateInput
 }
 
-input ProjectRelateToManyForUpdateInput {
-  disconnect: [ProjectWhereUniqueInput!]
-  set: [ProjectWhereUniqueInput!]
-  create: [ProjectCreateInput!]
-  connect: [ProjectWhereUniqueInput!]
-}
-
 input TagUpdateArgs {
   where: TagWhereUniqueInput!
   data: TagUpdateInput!
@@ -594,11 +691,6 @@ input TagUpdateArgs {
 input TagCreateInput {
   name: String
   projects: ProjectRelateToManyForCreateInput
-}
-
-input ProjectRelateToManyForCreateInput {
-  create: [ProjectCreateInput!]
-  connect: [ProjectWhereUniqueInput!]
 }
 
 type DiscordBot {
@@ -769,6 +861,181 @@ input ApiAccessLevelCreateInput {
   price: Int
 }
 
+type Roadmap {
+  id: ID!
+  title: String
+  isFinished: Boolean
+  content: String
+  estimated: String
+  dateAdded: DateTime
+}
+
+input RoadmapWhereUniqueInput {
+  id: ID
+}
+
+input RoadmapWhereInput {
+  AND: [RoadmapWhereInput!]
+  OR: [RoadmapWhereInput!]
+  NOT: [RoadmapWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  isFinished: BooleanFilter
+  content: StringFilter
+  estimated: StringFilter
+  dateAdded: DateTimeNullableFilter
+}
+
+input RoadmapOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  isFinished: OrderDirection
+  content: OrderDirection
+  estimated: OrderDirection
+  dateAdded: OrderDirection
+}
+
+input RoadmapUpdateInput {
+  title: String
+  isFinished: Boolean
+  content: String
+  estimated: String
+  dateAdded: DateTime
+}
+
+input RoadmapUpdateArgs {
+  where: RoadmapWhereUniqueInput!
+  data: RoadmapUpdateInput!
+}
+
+input RoadmapCreateInput {
+  title: String
+  isFinished: Boolean
+  content: String
+  estimated: String
+  dateAdded: DateTime
+}
+
+type Content {
+  id: ID!
+  title: String
+  slug: String
+  image: ImageFieldOutput
+  enabled: Boolean
+  content: Content_content_Document
+  blockName: ContentBlock
+  dateAdded: DateTime
+}
+
+type Content_content_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
+
+input ContentWhereUniqueInput {
+  id: ID
+}
+
+input ContentWhereInput {
+  AND: [ContentWhereInput!]
+  OR: [ContentWhereInput!]
+  NOT: [ContentWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  slug: StringFilter
+  enabled: BooleanFilter
+  blockName: ContentBlockWhereInput
+  dateAdded: DateTimeNullableFilter
+}
+
+input ContentOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  slug: OrderDirection
+  enabled: OrderDirection
+  dateAdded: OrderDirection
+}
+
+input ContentUpdateInput {
+  title: String
+  slug: String
+  image: ImageFieldInput
+  enabled: Boolean
+  content: JSON
+  blockName: ContentBlockRelateToOneForUpdateInput
+  dateAdded: DateTime
+}
+
+input ContentBlockRelateToOneForUpdateInput {
+  create: ContentBlockCreateInput
+  connect: ContentBlockWhereUniqueInput
+  disconnect: Boolean
+}
+
+input ContentUpdateArgs {
+  where: ContentWhereUniqueInput!
+  data: ContentUpdateInput!
+}
+
+input ContentCreateInput {
+  title: String
+  slug: String
+  image: ImageFieldInput
+  enabled: Boolean
+  content: JSON
+  blockName: ContentBlockRelateToOneForCreateInput
+  dateAdded: DateTime
+}
+
+input ContentBlockRelateToOneForCreateInput {
+  create: ContentBlockCreateInput
+  connect: ContentBlockWhereUniqueInput
+}
+
+type ContentBlock {
+  id: ID!
+  title: String
+  blockName: String
+  enabled: Boolean
+}
+
+input ContentBlockWhereUniqueInput {
+  id: ID
+}
+
+input ContentBlockWhereInput {
+  AND: [ContentBlockWhereInput!]
+  OR: [ContentBlockWhereInput!]
+  NOT: [ContentBlockWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  blockName: StringFilter
+  enabled: BooleanFilter
+}
+
+input ContentBlockOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  blockName: OrderDirection
+  enabled: OrderDirection
+}
+
+input ContentBlockUpdateInput {
+  title: String
+  blockName: String
+  enabled: Boolean
+}
+
+input ContentBlockUpdateArgs {
+  where: ContentBlockWhereUniqueInput!
+  data: ContentBlockUpdateInput!
+}
+
+input ContentBlockCreateInput {
+  title: String
+  blockName: String
+  enabled: Boolean
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -862,6 +1129,33 @@ type Mutation {
   deleteApiAccessLevels(
     where: [ApiAccessLevelWhereUniqueInput!]!
   ): [ApiAccessLevel]
+  createRoadmap(data: RoadmapCreateInput!): Roadmap
+  createRoadmaps(data: [RoadmapCreateInput!]!): [Roadmap]
+  updateRoadmap(
+    where: RoadmapWhereUniqueInput!
+    data: RoadmapUpdateInput!
+  ): Roadmap
+  updateRoadmaps(data: [RoadmapUpdateArgs!]!): [Roadmap]
+  deleteRoadmap(where: RoadmapWhereUniqueInput!): Roadmap
+  deleteRoadmaps(where: [RoadmapWhereUniqueInput!]!): [Roadmap]
+  createContent(data: ContentCreateInput!): Content
+  createContents(data: [ContentCreateInput!]!): [Content]
+  updateContent(
+    where: ContentWhereUniqueInput!
+    data: ContentUpdateInput!
+  ): Content
+  updateContents(data: [ContentUpdateArgs!]!): [Content]
+  deleteContent(where: ContentWhereUniqueInput!): Content
+  deleteContents(where: [ContentWhereUniqueInput!]!): [Content]
+  createContentBlock(data: ContentBlockCreateInput!): ContentBlock
+  createContentBlocks(data: [ContentBlockCreateInput!]!): [ContentBlock]
+  updateContentBlock(
+    where: ContentBlockWhereUniqueInput!
+    data: ContentBlockUpdateInput!
+  ): ContentBlock
+  updateContentBlocks(data: [ContentBlockUpdateArgs!]!): [ContentBlock]
+  deleteContentBlock(where: ContentBlockWhereUniqueInput!): ContentBlock
+  deleteContentBlocks(where: [ContentBlockWhereUniqueInput!]!): [ContentBlock]
   endSession: Boolean!
   authenticateUserWithPassword(
     email: String!
@@ -966,6 +1260,30 @@ type Query {
   ): [ApiAccessLevel!]
   apiAccessLevel(where: ApiAccessLevelWhereUniqueInput!): ApiAccessLevel
   apiAccessLevelsCount(where: ApiAccessLevelWhereInput! = {}): Int
+  roadmaps(
+    where: RoadmapWhereInput! = {}
+    orderBy: [RoadmapOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Roadmap!]
+  roadmap(where: RoadmapWhereUniqueInput!): Roadmap
+  roadmapsCount(where: RoadmapWhereInput! = {}): Int
+  contents(
+    where: ContentWhereInput! = {}
+    orderBy: [ContentOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Content!]
+  content(where: ContentWhereUniqueInput!): Content
+  contentsCount(where: ContentWhereInput! = {}): Int
+  contentBlocks(
+    where: ContentBlockWhereInput! = {}
+    orderBy: [ContentBlockOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [ContentBlock!]
+  contentBlock(where: ContentBlockWhereUniqueInput!): ContentBlock
+  contentBlocksCount(where: ContentBlockWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

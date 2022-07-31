@@ -10,9 +10,11 @@ import {
   json,
   integer,
   float,
+  image,
 } from '@keystone-6/core/fields';
 import { document } from '@keystone-6/fields-document';
 import { Lists } from '.keystone/types';
+import { number } from 'zod';
 
 export const lists: Lists = {
   User: list({
@@ -28,7 +30,7 @@ export const lists: Lists = {
       apiKey: text(),
       apiSecret: text(),
       Api: relationship({ ref: 'ApiAccessLevel' }),
-      projects: relationship({ ref: 'Project' }),
+      projects: relationship({ ref: 'Project', many: true }),
     },
   }),
   MarketStat: list({
@@ -39,6 +41,7 @@ export const lists: Lists = {
       liquidity: float(),
       pairPrice: float(),
       customData: json({ defaultValue: [] }),
+      dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
       project: relationship({ ref: 'Project' }),
     },
   }),
@@ -46,7 +49,10 @@ export const lists: Lists = {
     fields: {
       name: text({ validation: { isRequired: true } }),
       slug: text({ validation: { isRequired: true } }),
+      logo: image({ storage: 'localLogos' }),
       enabled: checkbox({ defaultValue: false }),
+      isListed: checkbox({ defaultValue: false }),
+      isRebasing: checkbox({ defaultValue: false }),
       tags: relationship({
         ref: 'Tag.projects',
         many: true,
@@ -55,15 +61,23 @@ export const lists: Lists = {
       pairAddress: text(),
       pairToken: relationship({ ref: 'Token', many: true }),
       network: relationship({ ref: 'Network' }),
+      trackHoldersFromTokenAmount: float({ defaultValue: 0 }),
       description: text({ ui: { displayMode: 'textarea' } }),
       ABI: json(),
       customData: json({ defaultValue: [] }),
+      sellTax: float(),
+      buyTax: float(),
+      rebasePeriod: text(),
+      apy: float(),
+      dailyApy: float(),
       website: text(),
       whitepaper: text(),
       twitter: text(),
       telegram: text(),
       discord: text(),
       reddit: text(),
+      youtube: text(),
+      dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
     },
   }),
   Token: list({
@@ -85,6 +99,7 @@ export const lists: Lists = {
   Network: list({
     fields: {
       name: text({ validation: { isRequired: true } }),
+      logo: image({ storage: 'localLogos' }),
       url: text({ validation: { isRequired: true } }),
     },
   }),
@@ -173,6 +188,41 @@ export const lists: Lists = {
         },
       }),
       price: integer(),
+    },
+  }),
+  Roadmap: list({
+    fields: {
+      title: text(),
+      isFinished: checkbox({ defaultValue: false }),
+      content: text({ ui: { displayMode: 'textarea' } }),
+      estimated: text(),
+      dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
+    },
+  }),
+  Content: list({
+    fields: {
+      title: text(),
+      slug: text(),
+      image: image({ storage: 'localImages' }),
+      enabled: checkbox({ defaultValue: false }),
+      content: document({
+        formatting: true,
+        dividers: true,
+        links: true,
+        layouts: [
+          [1, 1],
+          [1, 1, 1],
+        ],
+      }),
+      blockName: relationship({ ref: 'ContentBlock' }),
+      dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
+    },
+  }),
+  ContentBlock: list({
+    fields: {
+      title: text(),
+      blockName: text(),
+      enabled: checkbox({ defaultValue: false }),
     },
   }),
 };

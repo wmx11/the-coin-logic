@@ -22,50 +22,64 @@ model User {
   apiSecret      String          @default("")
   Api            ApiAccessLevel? @relation("User_Api", fields: [ApiId], references: [id])
   ApiId          String?         @map("Api")
-  projects       Project?        @relation("User_projects", fields: [projectsId], references: [id])
-  projectsId     String?         @map("projects")
+  projects       Project[]       @relation("User_projects")
 
   @@index([ApiId])
-  @@index([projectsId])
 }
 
 model MarketStat {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   price       Float?
   marketCap   Float?
   totalSupply Float?
   liquidity   Float?
   pairPrice   Float?
-  customData  String?  @default("[]")
-  project     Project? @relation("MarketStat_project", fields: [projectId], references: [id])
-  projectId   String?  @map("project")
+  customData  String?   @default("[]")
+  dateAdded   DateTime? @default(now())
+  project     Project?  @relation("MarketStat_project", fields: [projectId], references: [id])
+  projectId   String?   @map("project")
 
   @@index([projectId])
 }
 
 model Project {
-  id                      String       @id @default(cuid())
-  name                    String       @default("")
-  slug                    String       @default("")
-  enabled                 Boolean      @default(false)
-  tags                    Tag[]        @relation("Project_tags")
-  contractAddress         String       @default("")
-  pairAddress             String       @default("")
-  pairToken               Token[]      @relation("Project_pairToken")
-  network                 Network?     @relation("Project_network", fields: [networkId], references: [id])
-  networkId               String?      @map("network")
-  description             String       @default("")
-  ABI                     String?
-  customData              String?      @default("[]")
-  website                 String       @default("")
-  whitepaper              String       @default("")
-  twitter                 String       @default("")
-  telegram                String       @default("")
-  discord                 String       @default("")
-  reddit                  String       @default("")
-  from_User_projects      User[]       @relation("User_projects")
-  from_MarketStat_project MarketStat[] @relation("MarketStat_project")
-  from_DiscordBot_project DiscordBot[] @relation("DiscordBot_project")
+  id                          String       @id @default(cuid())
+  name                        String       @default("")
+  slug                        String       @default("")
+  logo_filesize               Int?
+  logo_extension              String?
+  logo_width                  Int?
+  logo_height                 Int?
+  logo_id                     String?
+  enabled                     Boolean      @default(false)
+  isListed                    Boolean      @default(false)
+  isRebasing                  Boolean      @default(false)
+  tags                        Tag[]        @relation("Project_tags")
+  contractAddress             String       @default("")
+  pairAddress                 String       @default("")
+  pairToken                   Token[]      @relation("Project_pairToken")
+  network                     Network?     @relation("Project_network", fields: [networkId], references: [id])
+  networkId                   String?      @map("network")
+  trackHoldersFromTokenAmount Float?       @default(0)
+  description                 String       @default("")
+  ABI                         String?
+  customData                  String?      @default("[]")
+  sellTax                     Float?
+  buyTax                      Float?
+  rebasePeriod                String       @default("")
+  apy                         Float?
+  dailyApy                    Float?
+  website                     String       @default("")
+  whitepaper                  String       @default("")
+  twitter                     String       @default("")
+  telegram                    String       @default("")
+  discord                     String       @default("")
+  reddit                      String       @default("")
+  youtube                     String       @default("")
+  dateAdded                   DateTime?    @default(now())
+  from_User_projects          User[]       @relation("User_projects")
+  from_MarketStat_project     MarketStat[] @relation("MarketStat_project")
+  from_DiscordBot_project     DiscordBot[] @relation("DiscordBot_project")
 
   @@index([networkId])
 }
@@ -97,6 +111,11 @@ model StableLiquidityPair {
 model Network {
   id                               String                @id @default(cuid())
   name                             String                @default("")
+  logo_filesize                    Int?
+  logo_extension                   String?
+  logo_width                       Int?
+  logo_height                      Int?
+  logo_id                          String?
   url                              String                @default("")
   from_Project_network             Project[]             @relation("Project_network")
   from_Token_network               Token[]               @relation("Token_network")
@@ -133,4 +152,39 @@ model ApiAccessLevel {
   rateLimit        String?
   price            Int?
   from_User_Api    User[]  @relation("User_Api")
+}
+
+model Roadmap {
+  id         String    @id @default(cuid())
+  title      String    @default("")
+  isFinished Boolean   @default(false)
+  content    String    @default("")
+  estimated  String    @default("")
+  dateAdded  DateTime? @default(now())
+}
+
+model Content {
+  id              String        @id @default(cuid())
+  title           String        @default("")
+  slug            String        @default("")
+  image_filesize  Int?
+  image_extension String?
+  image_width     Int?
+  image_height    Int?
+  image_id        String?
+  enabled         Boolean       @default(false)
+  content         String        @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  blockName       ContentBlock? @relation("Content_blockName", fields: [blockNameId], references: [id])
+  blockNameId     String?       @map("blockName")
+  dateAdded       DateTime?     @default(now())
+
+  @@index([blockNameId])
+}
+
+model ContentBlock {
+  id                     String    @id @default(cuid())
+  title                  String    @default("")
+  blockName              String    @default("")
+  enabled                Boolean   @default(false)
+  from_Content_blockName Content[] @relation("Content_blockName")
 }

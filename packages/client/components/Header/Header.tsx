@@ -1,8 +1,13 @@
-import { Button, Container, Group } from '@mantine/core';
+import { Button, Container } from '@mantine/core';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
+import SignInModal from '../Modals/SignInModal';
+import SignUpModal from '../Modals/SignUpModal';
 
 function Header() {
+  const [signUpOpened, seSignUpOpened] = useState(false);
+  const [signInOpened, setSignInOpened] = useState(false);
+  
   return (
     <div className="bg-lightBlue">
       <Container>
@@ -13,30 +18,37 @@ function Header() {
                 <a>TCL Logo</a>
               </Link>
             </div>
-            <div>Products</div>
-            <div>Resources</div>
+            <div className="font-bold hover:underline">Products</div>
+            <div className="font-bold hover:underline">Resources</div>
             <div>
               <Link href="/about-us">
-                <a>About Us</a>
+                <a className="font-bold hover:underline">About Us</a>
               </Link>
             </div>
             <div>
               <Link href="/roadmap">
-                <a>Roadmap</a>
+                <a className="font-bold hover:underline">Roadmap</a>
               </Link>
             </div>
             <div>
               <Link href="/pricing">
-                <a>Pricing</a>
+                <a className="font-bold hover:underline">Pricing</a>
               </Link>
             </div>
           </div>
 
           <div className="flex gap-4 items-center">
-            <div>Log In</div>
-            <Button color="violet">Sign Up</Button>
+            <Button onClick={() => setSignInOpened(true)} color="violet" variant="white">
+              Sign In
+            </Button>
+            <Button onClick={() => seSignUpOpened(true)} color="violet">
+              Sign Up
+            </Button>
           </div>
         </div>
+
+        <SignInModal opened={signInOpened} setOpened={() => setSignInOpened(false)} />
+        <SignUpModal opened={signUpOpened} setOpened={() => seSignUpOpened(false)} />
       </Container>
     </div>
   );

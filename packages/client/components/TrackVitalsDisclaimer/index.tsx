@@ -1,7 +1,10 @@
 import { Button, Center, Container, Text, Title } from '@mantine/core';
-import React from 'react';
+import React, { useState } from 'react';
+import SignUpModal from '../Modals/SignUpModal';
 
 function TrackVitalsDisclaimer() {
+  const [opened, setOpened] = useState(false);
+  
   return (
     <div className="my-40">
       <Container>
@@ -13,9 +16,11 @@ function TrackVitalsDisclaimer() {
             <Text className="mb-4">
               Sign up now and we will help you set up your analytics dashboard on The Coin Logic
             </Text>
-            <Button color="violet" size="lg">
+            <Button onClick={() => setOpened(true)} color="violet" size="lg">
               Sign up to get started
             </Button>
+
+            <SignUpModal opened={opened} setOpened={() => setOpened(false)} />
           </div>
         </Center>
       </Container>

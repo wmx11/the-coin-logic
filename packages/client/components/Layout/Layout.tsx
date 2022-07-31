@@ -1,19 +1,16 @@
-import { Container } from '@mantine/core';
-import React from 'react';
-import BarChartSvg from '../BarChartSvg/BarChartSvg';
+import React, { FC } from 'react';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
-import Navigation from '../Navigation/Navigation';
 
-interface LayoutProps<Tprops> {
+interface LayoutProps {
   children: JSX.Element;
 }
 
-const Layout = <Tprops,>({ children }: LayoutProps<Tprops>) => {
+const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <div>
       <Header></Header>
-      <main className="">{children}</main>
+      <main>{children}</main>
       <Footer></Footer>
     </div>
   );

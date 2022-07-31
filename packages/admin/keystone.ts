@@ -27,10 +27,30 @@ export default withAuth(
       // For our starter, we check that someone has session data before letting them see the Admin UI.
       isAccessAllowed: (context) => !!context.session?.data,
     },
+    storage: {
+      localLogos: {
+        kind: 'local',
+        type: 'image',
+        generateUrl: (path) => `http://localhost:3500/logos${path}`,
+        serverRoute: {
+          path: '/logos',
+        },
+        storagePath: 'public/logos',
+      },
+      localImages: {
+        kind: 'local',
+        type: 'image',
+        generateUrl: (path) => `http://localhost:3500/images${path}`,
+        serverRoute: {
+          path: '/images',
+        },
+        storagePath: 'public/images',
+      },
+    },
     server: {
       port: 3500,
     },
     lists,
     session,
-  })
+  }),
 );
