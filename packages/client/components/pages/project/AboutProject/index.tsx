@@ -1,15 +1,17 @@
 import { Avatar, Badge, Paper, Space, Spoiler, Text } from '@mantine/core';
 import React from 'react';
-import { FaDiscord, FaReddit, FaTelegram, FaTwitter } from 'react-icons/fa';
+import { FaDiscord, FaGithub, FaReddit, FaTelegram, FaTwitter } from 'react-icons/fa';
 import { FiLink, FiExternalLink } from 'react-icons/fi';
 import { IoDocumentText } from 'react-icons/io5';
 import { BiUserCheck } from 'react-icons/bi';
 import { formatDate } from '../../../../utils/formatters';
 import ClipboardButton from '../../../ClipboardButton';
+import { NetworkBadge } from '../../../NetworkBadge';
 
 const AboutProject = ({ data }) => {
   const {
     website,
+    name,
     whitepaper,
     pairAddress,
     contractAddress,
@@ -20,6 +22,7 @@ const AboutProject = ({ data }) => {
     telegram,
     discord,
     reddit,
+    github,
   } = data;
 
   const socials = [
@@ -27,6 +30,7 @@ const AboutProject = ({ data }) => {
     { title: 'Twitter', href: twitter, Icon: FaTwitter },
     { title: 'Telegram', href: telegram, Icon: FaTelegram },
     { title: 'Reddit', href: reddit, Icon: FaReddit },
+    { title: 'GitHub', href: github, Icon: FaGithub },
   ];
 
   return (
@@ -77,48 +81,41 @@ const AboutProject = ({ data }) => {
         <Text size="sm">
           <strong>Network:</strong>
           <div className="my-2">
-            <Badge
-              color="violet"
-              variant="outline"
-              size="md"
-              leftSection={<Avatar alt="Avatar for badge" size={15} src={network.logo.url} />}
-            >
-              {network.name}
-            </Badge>
+            <NetworkBadge network={network} />
           </div>
         </Text>
       </div>
 
       <div className="mb-4">
         <Text size="sm" weight={700}>
-          Description
+          About {name}
         </Text>
-        <Spoiler maxHeight={120} showLabel="Show more" hideLabel="Hide" className="text-sm">
+        <Spoiler maxHeight={120} showLabel="Show More" hideLabel="Hide" className="text-sm">
           {description}
         </Spoiler>
       </div>
 
       <div className="mb-4">
         <Text size="sm" weight={700} className="mb-2">
-          Community
+          {name} Social Media
         </Text>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           {socials.map(({ title, href, Icon }, index) => {
             return (
               href && (
-                <Avatar
+                <Badge
+                  color="violet"
+                  variant="outline"
+                  size="md"
                   key={`${title}_${index}`}
                   component="a"
-                  radius="xl"
-                  size="md"
-                  color="violet"
                   href={`${href}`}
                   target="_blank"
-                  src={null}
-                  alt={`${title}`}
+                  className="cursor-pointer"
+                  leftSection={<Icon />}
                 >
-                  <Icon />
-                </Avatar>
+                  {title}
+                </Badge>
               )
             );
           })}

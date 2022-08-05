@@ -13,16 +13,18 @@ generator client {
 }
 
 model User {
-  id             String          @id @default(cuid())
-  name           String          @default("")
-  email          String          @unique @default("")
-  password       String
-  subscribedTill DateTime?
-  apiKey         String          @default("")
-  apiSecret      String          @default("")
-  Api            ApiAccessLevel? @relation("User_Api", fields: [ApiId], references: [id])
-  ApiId          String?         @map("Api")
-  projects       Project[]       @relation("User_projects")
+  id                  String          @id @default(cuid())
+  name                String          @default("")
+  email               String          @unique @default("")
+  isSubscribedToEmail Boolean         @default(false)
+  password            String
+  subscribedTill      DateTime?
+  referral            String          @default("")
+  apiKey              String          @default("")
+  apiSecret           String          @default("")
+  Api                 ApiAccessLevel? @relation("User_Api", fields: [ApiId], references: [id])
+  ApiId               String?         @map("Api")
+  projects            Project[]       @relation("User_projects")
 
   @@index([ApiId])
 }
@@ -43,44 +45,49 @@ model MarketStat {
 }
 
 model Project {
-  id                          String       @id @default(cuid())
-  name                        String       @default("")
-  slug                        String       @default("")
+  id                          String               @id @default(cuid())
+  name                        String               @default("")
+  slug                        String               @default("")
   logo_filesize               Int?
   logo_extension              String?
   logo_width                  Int?
   logo_height                 Int?
   logo_id                     String?
-  enabled                     Boolean      @default(false)
-  isListed                    Boolean      @default(false)
-  isRebasing                  Boolean      @default(false)
-  tags                        Tag[]        @relation("Project_tags")
-  contractAddress             String       @default("")
-  pairAddress                 String       @default("")
-  pairToken                   Token[]      @relation("Project_pairToken")
-  network                     Network?     @relation("Project_network", fields: [networkId], references: [id])
-  networkId                   String?      @map("network")
-  trackHoldersFromTokenAmount Float?       @default(0)
-  description                 String       @default("")
+  enabled                     Boolean              @default(false)
+  isListed                    Boolean              @default(false)
+  isRebasing                  Boolean              @default(false)
+  tags                        Tag[]                @relation("Project_tags")
+  contractAddress             String               @default("")
+  pairAddress                 String               @default("")
+  burnAddress                 String               @default("")
+  pairToken                   Token[]              @relation("Project_pairToken")
+  stableLiquidityPair         StableLiquidityPair? @relation("Project_stableLiquidityPair", fields: [stableLiquidityPairId], references: [id])
+  stableLiquidityPairId       String?              @map("stableLiquidityPair")
+  network                     Network?             @relation("Project_network", fields: [networkId], references: [id])
+  networkId                   String?              @map("network")
+  trackHoldersFromTokenAmount Float?               @default(0)
+  description                 String               @default("")
   ABI                         String?
-  customData                  String?      @default("[]")
+  customData                  String?              @default("[]")
   sellTax                     Float?
   buyTax                      Float?
-  rebasePeriod                String       @default("")
+  rebasePeriod                String               @default("")
   apy                         Float?
   dailyApy                    Float?
-  website                     String       @default("")
-  whitepaper                  String       @default("")
-  twitter                     String       @default("")
-  telegram                    String       @default("")
-  discord                     String       @default("")
-  reddit                      String       @default("")
-  youtube                     String       @default("")
-  dateAdded                   DateTime?    @default(now())
-  from_User_projects          User[]       @relation("User_projects")
-  from_MarketStat_project     MarketStat[] @relation("MarketStat_project")
-  from_DiscordBot_project     DiscordBot[] @relation("DiscordBot_project")
+  website                     String               @default("")
+  whitepaper                  String               @default("")
+  twitter                     String               @default("")
+  telegram                    String               @default("")
+  discord                     String               @default("")
+  reddit                      String               @default("")
+  youtube                     String               @default("")
+  github                      String               @default("")
+  dateAdded                   DateTime?            @default(now())
+  from_User_projects          User[]               @relation("User_projects")
+  from_MarketStat_project     MarketStat[]         @relation("MarketStat_project")
+  from_DiscordBot_project     DiscordBot[]         @relation("DiscordBot_project")
 
+  @@index([stableLiquidityPairId])
   @@index([networkId])
 }
 
@@ -98,12 +105,13 @@ model Token {
 }
 
 model StableLiquidityPair {
-  id        String   @id @default(cuid())
-  name      String   @default("")
-  address   String   @default("")
-  pairToken Token[]  @relation("StableLiquidityPair_pairToken")
-  network   Network? @relation("StableLiquidityPair_network", fields: [networkId], references: [id])
-  networkId String?  @map("network")
+  id                               String    @id @default(cuid())
+  name                             String    @default("")
+  address                          String    @default("")
+  pairToken                        Token[]   @relation("StableLiquidityPair_pairToken")
+  network                          Network?  @relation("StableLiquidityPair_network", fields: [networkId], references: [id])
+  networkId                        String?   @map("network")
+  from_Project_stableLiquidityPair Project[] @relation("Project_stableLiquidityPair")
 
   @@index([networkId])
 }

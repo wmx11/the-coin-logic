@@ -14,19 +14,20 @@ import {
 } from '@keystone-6/core/fields';
 import { document } from '@keystone-6/fields-document';
 import { Lists } from '.keystone/types';
-import { number } from 'zod';
 
 export const lists: Lists = {
   User: list({
     fields: {
-      name: text({ validation: { isRequired: true } }),
+      name: text(),
       email: text({
         validation: { isRequired: true },
         isIndexed: 'unique',
         isFilterable: true,
       }),
+      isSubscribedToEmail: checkbox({ defaultValue: false }),
       password: password({ validation: { isRequired: true } }),
       subscribedTill: timestamp(),
+      referral: text(),
       apiKey: text(),
       apiSecret: text(),
       Api: relationship({ ref: 'ApiAccessLevel' }),
@@ -59,7 +60,9 @@ export const lists: Lists = {
       }),
       contractAddress: text(),
       pairAddress: text(),
+      burnAddress: text(),
       pairToken: relationship({ ref: 'Token', many: true }),
+      stableLiquidityPair: relationship({ ref: 'StableLiquidityPair' }),
       network: relationship({ ref: 'Network' }),
       trackHoldersFromTokenAmount: float({ defaultValue: 0 }),
       description: text({ ui: { displayMode: 'textarea' } }),
@@ -77,6 +80,7 @@ export const lists: Lists = {
       discord: text(),
       reddit: text(),
       youtube: text(),
+      github: text(),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
     },
   }),

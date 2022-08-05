@@ -2,15 +2,19 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 
 import Hero from '../components/Hero/Hero';
-import ProjectsTable from '../components/ProjectsTable/ProjectsTable';
+import { ProjectsTable } from '../components/ProjectsTable';
 import JoinOurCommunity from '../components/JoinOurCommunity';
 import BlogPosts from '../components/BlogPosts';
 import TrackVitalsDisclaimer from '../components/TrackVitalsDisclaimer';
-import { getProjectsList } from '../data/getters';
+import { getProjectsCount, getProjectsForHomepageList } from '../data/getters';
+import { MarketDataWithChangeAndProjectTypes } from '../types/MarketData';
 
-const Home: NextPage = ({ projects }) => {
-  console.log(projects);
-  
+type HomeProps = {
+  projects: MarketDataWithChangeAndProjectTypes[];
+  projectsCount: number;
+};
+
+const Home: NextPage<HomeProps> = ({ projects, projectsCount }) => {
   return (
     <div>
       <Head>
@@ -20,7 +24,7 @@ const Home: NextPage = ({ projects }) => {
       </Head>
       <div>
         <Hero />
-        <ProjectsTable data={projects} />
+        <ProjectsTable data={projects} projectsCount={projectsCount} />
         <JoinOurCommunity />
         <BlogPosts />
         <TrackVitalsDisclaimer />
@@ -32,11 +36,13 @@ const Home: NextPage = ({ projects }) => {
 export default Home;
 
 export const getStaticProps = async () => {
-  const projects = await getProjectsList();
+  const projects = await getProjectsForHomepageList();
+  const projectsCount = await getProjectsCount();
 
   return {
     props: {
       projects,
+      projectsCount,
     },
     revalidate: 5,
   };

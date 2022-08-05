@@ -1,45 +1,58 @@
-import { format } from 'date-fns';
 import React, { FC } from 'react';
 import { BsBarChartLineFill } from 'react-icons/bs';
-import { MarketDataTypes } from '../../../../types/MarketData';
+import { MarketDataWithChangeAndProjectTypes } from '../../../../types/MarketData';
 import { formateDateWithHours } from '../../../../utils/formatters';
-import StatsTabGroup from '../../../StatsTabGroup';
+import { StatsTabGroup } from '../../../StatsTabGroup';
 
 interface MarketDataProps {
-  data: MarketDataTypes;
+  data: MarketDataWithChangeAndProjectTypes;
 }
 
 const MarketData: FC<MarketDataProps> = ({ data }) => {
-  const { price, liquidity, marketCap, pairPrice, totalSupply, dateAdded, customData } = data;
+  const {
+    price,
+    liquidity,
+    marketCap,
+    pairPrice,
+    totalSupply,
+    dateAdded,
+    project: { pairToken },
+    customData,
+    priceChange,
+    marketCapChange,
+    liquidityChange,
+    pairPriceChange,
+    totalSupplyChange,
+  } = data;
 
   const marketData = [
     {
       value: price,
-      previousValue: 333,
+      previousValue: priceChange,
       title: 'Price',
       isCurrency: true,
     },
     {
       value: marketCap,
-      previousValue: 100000,
+      previousValue: marketCapChange,
       title: 'Market Cap',
       isCurrency: true,
     },
     {
       value: liquidity,
-      previousValue: liquidity,
+      previousValue: liquidityChange,
       title: 'Liquidity',
       isCurrency: true,
     },
     {
       value: pairPrice,
-      previousValue: pairPrice,
-      title: 'Pair Price',
+      previousValue: pairPriceChange,
+      title: `Pair Price (${pairToken[0].name})`,
       isCurrency: true,
     },
     {
       value: totalSupply,
-      previousValue: totalSupply,
+      previousValue: totalSupplyChange,
       title: 'Total Supply',
       isCurrency: false,
     },
@@ -49,7 +62,7 @@ const MarketData: FC<MarketDataProps> = ({ data }) => {
     <StatsTabGroup
       title="Market Data"
       Icon={BsBarChartLineFill}
-      subtitle={`Last updated ${formateDateWithHours(dateAdded)}`}
+      subtitle={`Last updated ${formateDateWithHours(dateAdded as string)}`}
       data={marketData}
     />
   );

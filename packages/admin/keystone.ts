@@ -49,6 +49,7 @@ export default withAuth(
     },
     server: {
       port: 3500,
+      cors: { origin: '*' }
     },
     lists,
     session,

@@ -16,13 +16,13 @@ function Announcements() {
       </div>
       <div className="mb-4">
         <Title order={6} className="text-lightBlue">
-          Titan Talk Episode 10
+          Weekly Summary
         </Title>
         <Text className="text-slate-500 mb-4 text-xs">2022-10-10 10:10</Text>
       </div>
       <div className="mb-4">
         <Title order={6} className="text-lightBlue">
-          TikTok Video #2
+          Weekly Summary
         </Title>
         <Text className="text-slate-500 mb-4 text-xs">2022-10-10 10:10</Text>
       </div>

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { FaDiscord, FaTwitter, FaWallet } from 'react-icons/fa';
-import StatsTabGroup from '../../../StatsTabGroup';
+import { StatsTabGroup } from '../../../StatsTabGroup';
 
 const SocialAnalysisData: FC = () => {
   const socialAnalysisData = [

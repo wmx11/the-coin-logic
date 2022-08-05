@@ -3,9 +3,9 @@ import React from 'react';
 
 function Hero() {
   return (
-    <div className="bg-[url('../public/images/wave4.svg')] bg-no-repeat bg-cover bg-bottom w-full h-[635px] py-10 flex items-center">
+    <div className="bg-[url('../public/images/wave4.svg')] bg-no-repeat bg-cover bg-bottom w-full h-screen md:h-[635px] py-10 flex items-center">
       <Container>
-        <div className="flex justify-between items-center gap-8">
+        <div className="flex justify-between items-center gap-8 flex-wrap">
           <div className="text-white flex-1">
             <Title order={1} className="text-6xl mb-2">
               Track your project vitals.
@@ -15,7 +15,7 @@ function Hero() {
             <Title order={4}>Transparency Through Data</Title>
           </div>
 
-          <div className="flex-1">
+          <div className=" md:min-w-[470px] max-w-[570px]">
             <Paper p="xl" shadow="xl" className="bg-gradient-to-r from-lightBlue to-darkBlue text-white">
               <Text weight={700} size="xl" className="text-3xl mb-4">
                 LOG-X

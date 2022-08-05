@@ -1,12 +1,12 @@
-import { Divider, Text, Title } from '@mantine/core';
+import { Center, Divider, Text, Title } from '@mantine/core';
 import React, { FC } from 'react';
 import { IconType } from 'react-icons';
+import { MarketDataPreviousValueType } from '../../types/MarketData';
 import StatTab from '../StatTab/StatTab';
 
-type StatsData = {
+type StatsData = MarketDataPreviousValueType & {
   title?: string;
   value?: number;
-  previousValue?: number;
   isCurrency?: boolean;
   subGroup?: SubGroupData;
 };
@@ -17,15 +17,30 @@ type SubGroupData = {
   data?: StatsData[];
 };
 
-interface StatsTabGroupProps {
+type StatsTabGroupProps = {
   Icon?: IconType;
   title?: string;
   subtitle?: string;
+  untrackedMessage?: string;
   data?: StatsData[];
-}
+};
 
-const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, data }) => {
+const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untrackedMessage, data }) => {
   const StatTabsComponent = () => {
+    if (!data || !data.length) {
+      return (
+        <Center className="my-16 flex-col">
+          <Text weight={700} className="text-3xl text-slate-500">
+            {untrackedMessage}
+          </Text>
+          <Text className="text-sm text-slate-500">
+            We currently have no data available for the following stats. If you think this is a mistake, please contact
+            us.
+          </Text>
+        </Center>
+      );
+    }
+
     const Stats = ({ data }: StatsTabGroupProps) => {
       return (
         <div>
@@ -92,7 +107,6 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, data }) 
       )}
 
       <Divider my="sm" />
-
       <StatTabsComponent />
     </>
   );
