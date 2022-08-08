@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Badge } from '@mantine/core';
 
-interface BadgesProps {
+type BadgesProps = {
   badges: {
     name: string;
   }[];

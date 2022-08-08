@@ -2,13 +2,13 @@ import { Avatar, Title } from '@mantine/core';
 import React, { FC, HTMLAttributeAnchorTarget } from 'react';
 import Link from 'next/link';
 
-interface ProjectTitleProps {
+type ProjectTitleProps = {
   size: string;
   avatar: string;
   title: string;
   component?: string;
   href?: string;
-}
+};
 
 const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, href }) => {
   const TitleComponent = () => {

@@ -38,7 +38,7 @@ export default Home;
 export const getStaticProps = async () => {
   const projects = await getProjectsForHomepageList();
   const projectsCount = await getProjectsCount();
-
+  
   return {
     props: {
       projects,

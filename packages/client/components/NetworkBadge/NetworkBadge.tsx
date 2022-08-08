@@ -1,13 +1,9 @@
 import { Avatar, Badge } from '@mantine/core';
 import React, { FC } from 'react';
+import { Network } from '../../types/Network';
 
 type NetworkBadgeProps = {
-  network: {
-    logo: {
-      url: string;
-    };
-    name: string;
-  };
+  network: Network;
   showName?: boolean;
 };
 
@@ -17,12 +13,12 @@ const NetworkBadge: FC<NetworkBadgeProps> = ({ network, showName }) => {
       color="violet"
       variant="outline"
       size="md"
-      leftSection={<Avatar alt="Avatar for badge" size={15} src={network.logo.url} />}
+      leftSection={<Avatar alt="Avatar for badge" size={15} src={network?.logo?.url} />}
     >
       {network.name}
     </Badge>
   ) : (
-    <Avatar alt="Avatar for badge" size={20} src={network.logo.url} />
+    <Avatar alt="Avatar for badge" size={20} src={network?.logo?.url} />
   );
 };
 

@@ -10,7 +10,7 @@ type SignInModalProps = {
 };
 
 const SignInModal: FC<SignInModalProps> = ({ opened, setOpened }) => {
-  const [showFormError, setShowFormError] = useState<boolean>(false);
+  const [showFormError, setShowFormError] = useState(false);
 
   const form = useForm({
     validate: zodResolver(userLoginSchema),

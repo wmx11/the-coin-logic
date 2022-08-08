@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const request = async <Tobj>(query: string, variables?: Tobj) => {
+const request = async <T>(query: string, variables?: T) => {
   try {
     const data = await axios({
       url: 'http://localhost:3500/api/graphql',

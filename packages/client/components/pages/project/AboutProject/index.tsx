@@ -1,5 +1,5 @@
-import { Avatar, Badge, Paper, Space, Spoiler, Text } from '@mantine/core';
-import React from 'react';
+import { Badge, Paper, Space, Spoiler, Text } from '@mantine/core';
+import React, { FC } from 'react';
 import { FaDiscord, FaGithub, FaReddit, FaTelegram, FaTwitter } from 'react-icons/fa';
 import { FiLink, FiExternalLink } from 'react-icons/fi';
 import { IoDocumentText } from 'react-icons/io5';
@@ -7,8 +7,14 @@ import { BiUserCheck } from 'react-icons/bi';
 import { formatDate } from '../../../../utils/formatters';
 import ClipboardButton from '../../../ClipboardButton';
 import { NetworkBadge } from '../../../NetworkBadge';
+import { Project } from '../../../../types/Projects';
+import { Network } from '../../../../types/Network';
 
-const AboutProject = ({ data }) => {
+type AboutProjectProps = {
+  data: Project;
+}
+
+const AboutProject: FC<AboutProjectProps> = ({ data }) => {
   const {
     website,
     name,
@@ -67,7 +73,7 @@ const AboutProject = ({ data }) => {
           <Space />
           <div className="flex items-center gap-1">
             {contractAddress}
-            <ClipboardButton copy={contractAddress} />
+            <ClipboardButton copy={contractAddress as string} />
           </div>
         </Text>
         <Text size="sm">
@@ -75,13 +81,13 @@ const AboutProject = ({ data }) => {
           <Space />
           <div className="flex items-center gap-1">
             {pairAddress}
-            <ClipboardButton copy={pairAddress} />
+            <ClipboardButton copy={pairAddress as string} />
           </div>
         </Text>
         <Text size="sm">
           <strong>Network:</strong>
           <div className="my-2">
-            <NetworkBadge network={network} />
+            <NetworkBadge network={network as Network} showName/>
           </div>
         </Text>
       </div>
@@ -123,7 +129,7 @@ const AboutProject = ({ data }) => {
       </div>
       <div className="flex justify-end my-2">
         <Badge color="violet" leftSection={<BiUserCheck />}>
-          Onboarded {formatDate(dateAdded)}
+          Onboarded {formatDate(dateAdded as string)}
         </Badge>
       </div>
     </Paper>

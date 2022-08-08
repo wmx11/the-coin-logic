@@ -9,7 +9,7 @@ import MarketData from '../../components/pages/project/MarketData';
 import SocialAnalysisData from '../../components/pages/project/SocialAnalysisData';
 import { ProjectTitle } from '../../components/ProjectTitle';
 import TrackVitalsDisclaimer from '../../components/TrackVitalsDisclaimer';
-import { getProjectTypeBySlug } from '../../data/getters';
+import { getProjectTypeBySlug } from '../../data/getters/getters';
 import { MarketDataWithChangeAndProjectTypes } from '../../types/MarketData';
 import { NotFound } from '../../components/NotFound';
 
