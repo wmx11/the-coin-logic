@@ -5,3 +5,5 @@ node_modules
 
 # JS files
 *.js
+
+yarn-error.log
