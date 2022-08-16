@@ -1,2 +1,2 @@
 export * from './holders';
-export * from './createNewWalletEntries';
+export * from './createOrUpdateWalletEntriesFromTransferEvents';

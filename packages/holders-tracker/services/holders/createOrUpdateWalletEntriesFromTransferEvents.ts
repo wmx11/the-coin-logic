@@ -32,7 +32,7 @@ const getTransferEvents = (projectId: string, hasHolders: boolean, perPage: numb
   });
 };
 
-const createNewWalletEntries = async (projectId: string, hasHolders = false) => {
+const createOrUpdateWalletEntriesFromTransferEvents = async (projectId: string, hasHolders = false) => {
   if (!projectId) {
     throw new Error('Please provide a project ID.');
   }
@@ -96,4 +96,4 @@ const createNewWalletEntries = async (projectId: string, hasHolders = false) => 
   iterate(page);
 };
 
-export default createNewWalletEntries;
+export default createOrUpdateWalletEntriesFromTransferEvents;

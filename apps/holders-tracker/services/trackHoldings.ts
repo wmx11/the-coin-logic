@@ -1,13 +1,21 @@
 import { getEnabledProjectsForHoldersTracking } from 'tcl-packages/graphql/queries';
 import { getWalletsCountByProjectId } from 'tcl-packages/holders-tracker/services/holders';
-import createNewWalletEntries from 'tcl-packages/holders-tracker/services/holders/createNewWalletEntries';
+import createOrUpdateWalletEntriesFromTransferEvents from 'tcl-packages/holders-tracker/services/holders/createOrUpdateWalletEntriesFromTransferEvents';
+
+let isRunning = false;
 
 const trackHoldings = async () => {
+  if (isRunning) {
+    return undefined;
+  }
+
   const projects = await getEnabledProjectsForHoldersTracking();
 
   if (!projects || !projects.length) {
     return undefined;
   }
+
+  isRunning = true;
 
   for (const project of projects) {
     if (!project.network?.url) {
@@ -16,8 +24,10 @@ const trackHoldings = async () => {
 
     const hasHolders = !!(await getWalletsCountByProjectId(project?.id));
 
-    await createNewWalletEntries(project?.id, hasHolders);
+    await createOrUpdateWalletEntriesFromTransferEvents(project?.id, hasHolders);
   }
+
+  isRunning = false;
 };
 
 export default trackHoldings;
