@@ -1,8 +1,11 @@
 schema: './apps/admin/*.graphql'
 generates:
-  ./packages/types/types.d.ts:
+  ./packages/types.d.ts:
     plugins:
       - typescript
   ./apps/client/types.d.ts:
+    plugins:
+      - typescript
+  ./apps/admin/types.d.ts:
     plugins:
       - typescript

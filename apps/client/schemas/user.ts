@@ -12,7 +12,7 @@ export const userSchema = z.object({
     message:
       'Password should contain both letter and numbers, at least 1 uppercase letter, with minimum length of 8 characters',
   }),
-  referral: z.string(),
+  referrer: z.string(),
   subscribeToEmail: z.boolean(),
 });
 

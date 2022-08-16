@@ -7,11 +7,8 @@ type User {
   email: String
   isSubscribedToEmail: Boolean
   password: PasswordState
-  subscribedTill: DateTime
-  referral: String
-  apiKey: String
-  apiSecret: String
-  Api: ApiAccessLevel
+  subscribedToProductTill: DateTime
+  referrer: String
   projects(
     where: ProjectWhereInput! = {}
     orderBy: [ProjectOrderByInput!]! = []
@@ -41,11 +38,8 @@ input UserWhereInput {
   name: StringFilter
   email: StringFilter
   isSubscribedToEmail: BooleanFilter
-  subscribedTill: DateTimeNullableFilter
-  referral: StringFilter
-  apiKey: StringFilter
-  apiSecret: StringFilter
-  Api: ApiAccessLevelWhereInput
+  subscribedToProductTill: DateTimeNullableFilter
+  referrer: StringFilter
   projects: ProjectManyRelationFilter
 }
 
@@ -115,10 +109,8 @@ input UserOrderByInput {
   name: OrderDirection
   email: OrderDirection
   isSubscribedToEmail: OrderDirection
-  subscribedTill: OrderDirection
-  referral: OrderDirection
-  apiKey: OrderDirection
-  apiSecret: OrderDirection
+  subscribedToProductTill: OrderDirection
+  referrer: OrderDirection
 }
 
 enum OrderDirection {
@@ -131,18 +123,9 @@ input UserUpdateInput {
   email: String
   isSubscribedToEmail: Boolean
   password: String
-  subscribedTill: DateTime
-  referral: String
-  apiKey: String
-  apiSecret: String
-  Api: ApiAccessLevelRelateToOneForUpdateInput
+  subscribedToProductTill: DateTime
+  referrer: String
   projects: ProjectRelateToManyForUpdateInput
-}
-
-input ApiAccessLevelRelateToOneForUpdateInput {
-  create: ApiAccessLevelCreateInput
-  connect: ApiAccessLevelWhereUniqueInput
-  disconnect: Boolean
 }
 
 input ProjectRelateToManyForUpdateInput {
@@ -162,17 +145,9 @@ input UserCreateInput {
   email: String
   isSubscribedToEmail: Boolean
   password: String
-  subscribedTill: DateTime
-  referral: String
-  apiKey: String
-  apiSecret: String
-  Api: ApiAccessLevelRelateToOneForCreateInput
+  subscribedToProductTill: DateTime
+  referrer: String
   projects: ProjectRelateToManyForCreateInput
-}
-
-input ApiAccessLevelRelateToOneForCreateInput {
-  create: ApiAccessLevelCreateInput
-  connect: ApiAccessLevelWhereUniqueInput
 }
 
 input ProjectRelateToManyForCreateInput {
@@ -188,8 +163,8 @@ type MarketStat {
   liquidity: Float
   pairPrice: Float
   customData: JSON
-  dateAdded: DateTime
   project: Project
+  dateAdded: DateTime
 }
 
 input MarketStatWhereUniqueInput {
@@ -206,8 +181,8 @@ input MarketStatWhereInput {
   totalSupply: FloatNullableFilter
   liquidity: FloatNullableFilter
   pairPrice: FloatNullableFilter
-  dateAdded: DateTimeNullableFilter
   project: ProjectWhereInput
+  dateAdded: DateTimeNullableFilter
 }
 
 input FloatNullableFilter {
@@ -238,8 +213,8 @@ input MarketStatUpdateInput {
   liquidity: Float
   pairPrice: Float
   customData: JSON
-  dateAdded: DateTime
   project: ProjectRelateToOneForUpdateInput
+  dateAdded: DateTime
 }
 
 input ProjectRelateToOneForUpdateInput {
@@ -260,8 +235,8 @@ input MarketStatCreateInput {
   liquidity: Float
   pairPrice: Float
   customData: JSON
-  dateAdded: DateTime
   project: ProjectRelateToOneForCreateInput
+  dateAdded: DateTime
 }
 
 input ProjectRelateToOneForCreateInput {
@@ -276,6 +251,7 @@ type Project {
   logo: ImageFieldOutput
   enabled: Boolean
   isListed: Boolean
+  trackHolders: Boolean
   isRebasing: Boolean
   tags(
     where: TagWhereInput! = {}
@@ -287,14 +263,6 @@ type Project {
   contractAddress: String
   pairAddress: String
   burnAddress: String
-  pairToken(
-    where: TokenWhereInput! = {}
-    orderBy: [TokenOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Token!]
-  pairTokenCount(where: TokenWhereInput! = {}): Int
-  stableLiquidityPair: StableLiquidityPair
   liquidityPair(
     where: LiquidityPairWhereInput! = {}
     orderBy: [LiquidityPairOrderByInput!]! = []
@@ -321,6 +289,9 @@ type Project {
   youtube: String
   github: String
   dateAdded: DateTime
+  launchDate: DateTime
+  launchBlock: Int
+  trackFromBlock: Int
 }
 
 type ImageFieldOutput {
@@ -352,13 +323,12 @@ input ProjectWhereInput {
   slug: StringFilter
   enabled: BooleanFilter
   isListed: BooleanFilter
+  trackHolders: BooleanFilter
   isRebasing: BooleanFilter
   tags: TagManyRelationFilter
   contractAddress: StringFilter
   pairAddress: StringFilter
   burnAddress: StringFilter
-  pairToken: TokenManyRelationFilter
-  stableLiquidityPair: StableLiquidityPairWhereInput
   liquidityPair: LiquidityPairManyRelationFilter
   network: NetworkWhereInput
   trackHoldersFromTokenAmount: FloatNullableFilter
@@ -377,6 +347,9 @@ input ProjectWhereInput {
   youtube: StringFilter
   github: StringFilter
   dateAdded: DateTimeNullableFilter
+  launchDate: DateTimeNullableFilter
+  launchBlock: IntNullableFilter
+  trackFromBlock: IntNullableFilter
 }
 
 input TagManyRelationFilter {
@@ -385,16 +358,21 @@ input TagManyRelationFilter {
   none: TagWhereInput
 }
 
-input TokenManyRelationFilter {
-  every: TokenWhereInput
-  some: TokenWhereInput
-  none: TokenWhereInput
-}
-
 input LiquidityPairManyRelationFilter {
   every: LiquidityPairWhereInput
   some: LiquidityPairWhereInput
   none: LiquidityPairWhereInput
+}
+
+input IntNullableFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntNullableFilter
 }
 
 input ProjectOrderByInput {
@@ -403,6 +381,7 @@ input ProjectOrderByInput {
   slug: OrderDirection
   enabled: OrderDirection
   isListed: OrderDirection
+  trackHolders: OrderDirection
   isRebasing: OrderDirection
   contractAddress: OrderDirection
   pairAddress: OrderDirection
@@ -423,6 +402,9 @@ input ProjectOrderByInput {
   youtube: OrderDirection
   github: OrderDirection
   dateAdded: OrderDirection
+  launchDate: OrderDirection
+  launchBlock: OrderDirection
+  trackFromBlock: OrderDirection
 }
 
 input ProjectUpdateInput {
@@ -431,13 +413,12 @@ input ProjectUpdateInput {
   logo: ImageFieldInput
   enabled: Boolean
   isListed: Boolean
+  trackHolders: Boolean
   isRebasing: Boolean
   tags: TagRelateToManyForUpdateInput
   contractAddress: String
   pairAddress: String
   burnAddress: String
-  pairToken: TokenRelateToManyForUpdateInput
-  stableLiquidityPair: StableLiquidityPairRelateToOneForUpdateInput
   liquidityPair: LiquidityPairRelateToManyForUpdateInput
   network: NetworkRelateToOneForUpdateInput
   trackHoldersFromTokenAmount: Float
@@ -458,6 +439,9 @@ input ProjectUpdateInput {
   youtube: String
   github: String
   dateAdded: DateTime
+  launchDate: DateTime
+  launchBlock: Int
+  trackFromBlock: Int
 }
 
 input ImageFieldInput {
@@ -474,19 +458,6 @@ input TagRelateToManyForUpdateInput {
   set: [TagWhereUniqueInput!]
   create: [TagCreateInput!]
   connect: [TagWhereUniqueInput!]
-}
-
-input TokenRelateToManyForUpdateInput {
-  disconnect: [TokenWhereUniqueInput!]
-  set: [TokenWhereUniqueInput!]
-  create: [TokenCreateInput!]
-  connect: [TokenWhereUniqueInput!]
-}
-
-input StableLiquidityPairRelateToOneForUpdateInput {
-  create: StableLiquidityPairCreateInput
-  connect: StableLiquidityPairWhereUniqueInput
-  disconnect: Boolean
 }
 
 input LiquidityPairRelateToManyForUpdateInput {
@@ -513,13 +484,12 @@ input ProjectCreateInput {
   logo: ImageFieldInput
   enabled: Boolean
   isListed: Boolean
+  trackHolders: Boolean
   isRebasing: Boolean
   tags: TagRelateToManyForCreateInput
   contractAddress: String
   pairAddress: String
   burnAddress: String
-  pairToken: TokenRelateToManyForCreateInput
-  stableLiquidityPair: StableLiquidityPairRelateToOneForCreateInput
   liquidityPair: LiquidityPairRelateToManyForCreateInput
   network: NetworkRelateToOneForCreateInput
   trackHoldersFromTokenAmount: Float
@@ -540,21 +510,14 @@ input ProjectCreateInput {
   youtube: String
   github: String
   dateAdded: DateTime
+  launchDate: DateTime
+  launchBlock: Int
+  trackFromBlock: Int
 }
 
 input TagRelateToManyForCreateInput {
   create: [TagCreateInput!]
   connect: [TagWhereUniqueInput!]
-}
-
-input TokenRelateToManyForCreateInput {
-  create: [TokenCreateInput!]
-  connect: [TokenWhereUniqueInput!]
-}
-
-input StableLiquidityPairRelateToOneForCreateInput {
-  create: StableLiquidityPairCreateInput
-  connect: StableLiquidityPairWhereUniqueInput
 }
 
 input LiquidityPairRelateToManyForCreateInput {
@@ -643,6 +606,12 @@ input StableLiquidityPairWhereInput {
   network: NetworkWhereInput
 }
 
+input TokenManyRelationFilter {
+  every: TokenWhereInput
+  some: TokenWhereInput
+  none: TokenWhereInput
+}
+
 input StableLiquidityPairOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -654,6 +623,13 @@ input StableLiquidityPairUpdateInput {
   address: String
   pairToken: TokenRelateToManyForUpdateInput
   network: NetworkRelateToOneForUpdateInput
+}
+
+input TokenRelateToManyForUpdateInput {
+  disconnect: [TokenWhereUniqueInput!]
+  set: [TokenWhereUniqueInput!]
+  create: [TokenCreateInput!]
+  connect: [TokenWhereUniqueInput!]
 }
 
 input StableLiquidityPairUpdateArgs {
@@ -668,20 +644,19 @@ input StableLiquidityPairCreateInput {
   network: NetworkRelateToOneForCreateInput
 }
 
+input TokenRelateToManyForCreateInput {
+  create: [TokenCreateInput!]
+  connect: [TokenWhereUniqueInput!]
+}
+
 type LiquidityPair {
   id: ID!
   name: String
   address: String
   stablePair: StableLiquidityPair
-  pairToken(
-    where: TokenWhereInput! = {}
-    orderBy: [TokenOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Token!]
-  pairTokenCount(where: TokenWhereInput! = {}): Int
   network: Network
   project: Project
+  exchange: Exchange
 }
 
 input LiquidityPairWhereUniqueInput {
@@ -696,9 +671,9 @@ input LiquidityPairWhereInput {
   name: StringFilter
   address: StringFilter
   stablePair: StableLiquidityPairWhereInput
-  pairToken: TokenManyRelationFilter
   network: NetworkWhereInput
   project: ProjectWhereInput
+  exchange: ExchangeWhereInput
 }
 
 input LiquidityPairOrderByInput {
@@ -711,9 +686,21 @@ input LiquidityPairUpdateInput {
   name: String
   address: String
   stablePair: StableLiquidityPairRelateToOneForUpdateInput
-  pairToken: TokenRelateToManyForUpdateInput
   network: NetworkRelateToOneForUpdateInput
   project: ProjectRelateToOneForUpdateInput
+  exchange: ExchangeRelateToOneForUpdateInput
+}
+
+input StableLiquidityPairRelateToOneForUpdateInput {
+  create: StableLiquidityPairCreateInput
+  connect: StableLiquidityPairWhereUniqueInput
+  disconnect: Boolean
+}
+
+input ExchangeRelateToOneForUpdateInput {
+  create: ExchangeCreateInput
+  connect: ExchangeWhereUniqueInput
+  disconnect: Boolean
 }
 
 input LiquidityPairUpdateArgs {
@@ -725,9 +712,19 @@ input LiquidityPairCreateInput {
   name: String
   address: String
   stablePair: StableLiquidityPairRelateToOneForCreateInput
-  pairToken: TokenRelateToManyForCreateInput
   network: NetworkRelateToOneForCreateInput
   project: ProjectRelateToOneForCreateInput
+  exchange: ExchangeRelateToOneForCreateInput
+}
+
+input StableLiquidityPairRelateToOneForCreateInput {
+  create: StableLiquidityPairCreateInput
+  connect: StableLiquidityPairWhereUniqueInput
+}
+
+input ExchangeRelateToOneForCreateInput {
+  create: ExchangeCreateInput
+  connect: ExchangeWhereUniqueInput
 }
 
 type Network {
@@ -771,6 +768,54 @@ input NetworkCreateInput {
   name: String
   logo: ImageFieldInput
   url: String
+}
+
+type Exchange {
+  id: ID!
+  name: String
+  logo: ImageFieldOutput
+  url: String
+  tradeUrl: String
+}
+
+input ExchangeWhereUniqueInput {
+  id: ID
+}
+
+input ExchangeWhereInput {
+  AND: [ExchangeWhereInput!]
+  OR: [ExchangeWhereInput!]
+  NOT: [ExchangeWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  url: StringFilter
+  tradeUrl: StringFilter
+}
+
+input ExchangeOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  url: OrderDirection
+  tradeUrl: OrderDirection
+}
+
+input ExchangeUpdateInput {
+  name: String
+  logo: ImageFieldInput
+  url: String
+  tradeUrl: String
+}
+
+input ExchangeUpdateArgs {
+  where: ExchangeWhereUniqueInput!
+  data: ExchangeUpdateInput!
+}
+
+input ExchangeCreateInput {
+  name: String
+  logo: ImageFieldInput
+  url: String
+  tradeUrl: String
 }
 
 type Tag {
@@ -913,77 +958,6 @@ input DiscordBotCreateInput {
   tracking: String
   customTracking: String
   project: ProjectRelateToOneForCreateInput
-}
-
-type ApiAccessLevel {
-  id: ID!
-  name: String
-  enabled: Boolean
-  marketBots: Boolean
-  trackingInterval: String
-  rateLimit: String
-  price: Int
-}
-
-input ApiAccessLevelWhereUniqueInput {
-  id: ID
-}
-
-input ApiAccessLevelWhereInput {
-  AND: [ApiAccessLevelWhereInput!]
-  OR: [ApiAccessLevelWhereInput!]
-  NOT: [ApiAccessLevelWhereInput!]
-  id: IDFilter
-  name: StringFilter
-  enabled: BooleanFilter
-  marketBots: BooleanFilter
-  trackingInterval: StringNullableFilter
-  rateLimit: StringNullableFilter
-  price: IntNullableFilter
-}
-
-input IntNullableFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: IntNullableFilter
-}
-
-input ApiAccessLevelOrderByInput {
-  id: OrderDirection
-  name: OrderDirection
-  enabled: OrderDirection
-  marketBots: OrderDirection
-  trackingInterval: OrderDirection
-  rateLimit: OrderDirection
-  price: OrderDirection
-}
-
-input ApiAccessLevelUpdateInput {
-  name: String
-  enabled: Boolean
-  marketBots: Boolean
-  trackingInterval: String
-  rateLimit: String
-  price: Int
-}
-
-input ApiAccessLevelUpdateArgs {
-  where: ApiAccessLevelWhereUniqueInput!
-  data: ApiAccessLevelUpdateInput!
-}
-
-input ApiAccessLevelCreateInput {
-  name: String
-  enabled: Boolean
-  marketBots: Boolean
-  trackingInterval: String
-  rateLimit: String
-  price: Int
 }
 
 type Roadmap {
@@ -1239,6 +1213,15 @@ type Mutation {
   updateNetworks(data: [NetworkUpdateArgs!]!): [Network]
   deleteNetwork(where: NetworkWhereUniqueInput!): Network
   deleteNetworks(where: [NetworkWhereUniqueInput!]!): [Network]
+  createExchange(data: ExchangeCreateInput!): Exchange
+  createExchanges(data: [ExchangeCreateInput!]!): [Exchange]
+  updateExchange(
+    where: ExchangeWhereUniqueInput!
+    data: ExchangeUpdateInput!
+  ): Exchange
+  updateExchanges(data: [ExchangeUpdateArgs!]!): [Exchange]
+  deleteExchange(where: ExchangeWhereUniqueInput!): Exchange
+  deleteExchanges(where: [ExchangeWhereUniqueInput!]!): [Exchange]
   createTag(data: TagCreateInput!): Tag
   createTags(data: [TagCreateInput!]!): [Tag]
   updateTag(where: TagWhereUniqueInput!, data: TagUpdateInput!): Tag
@@ -1254,17 +1237,6 @@ type Mutation {
   updateDiscordBots(data: [DiscordBotUpdateArgs!]!): [DiscordBot]
   deleteDiscordBot(where: DiscordBotWhereUniqueInput!): DiscordBot
   deleteDiscordBots(where: [DiscordBotWhereUniqueInput!]!): [DiscordBot]
-  createApiAccessLevel(data: ApiAccessLevelCreateInput!): ApiAccessLevel
-  createApiAccessLevels(data: [ApiAccessLevelCreateInput!]!): [ApiAccessLevel]
-  updateApiAccessLevel(
-    where: ApiAccessLevelWhereUniqueInput!
-    data: ApiAccessLevelUpdateInput!
-  ): ApiAccessLevel
-  updateApiAccessLevels(data: [ApiAccessLevelUpdateArgs!]!): [ApiAccessLevel]
-  deleteApiAccessLevel(where: ApiAccessLevelWhereUniqueInput!): ApiAccessLevel
-  deleteApiAccessLevels(
-    where: [ApiAccessLevelWhereUniqueInput!]!
-  ): [ApiAccessLevel]
   createRoadmap(data: RoadmapCreateInput!): Roadmap
   createRoadmaps(data: [RoadmapCreateInput!]!): [Roadmap]
   updateRoadmap(
@@ -1380,6 +1352,14 @@ type Query {
   ): [Network!]
   network(where: NetworkWhereUniqueInput!): Network
   networksCount(where: NetworkWhereInput! = {}): Int
+  exchanges(
+    where: ExchangeWhereInput! = {}
+    orderBy: [ExchangeOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Exchange!]
+  exchange(where: ExchangeWhereUniqueInput!): Exchange
+  exchangesCount(where: ExchangeWhereInput! = {}): Int
   tags(
     where: TagWhereInput! = {}
     orderBy: [TagOrderByInput!]! = []
@@ -1396,14 +1376,6 @@ type Query {
   ): [DiscordBot!]
   discordBot(where: DiscordBotWhereUniqueInput!): DiscordBot
   discordBotsCount(where: DiscordBotWhereInput! = {}): Int
-  apiAccessLevels(
-    where: ApiAccessLevelWhereInput! = {}
-    orderBy: [ApiAccessLevelOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ApiAccessLevel!]
-  apiAccessLevel(where: ApiAccessLevelWhereUniqueInput!): ApiAccessLevel
-  apiAccessLevelsCount(where: ApiAccessLevelWhereInput! = {}): Int
   roadmaps(
     where: RoadmapWhereInput! = {}
     orderBy: [RoadmapOrderByInput!]! = []

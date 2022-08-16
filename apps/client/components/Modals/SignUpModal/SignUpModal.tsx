@@ -18,17 +18,17 @@ const SignUpModal: FC<SignUpModalProps> = ({ opened, setOpened }) => {
       username: '',
       email: '',
       password: '',
-      referral: '',
+      referrer: '',
       subscribeToEmail: false,
     },
   });
 
   const [registeruser, { data, loading, error }] = useMutation(CREATE_USER as DocumentNode);
 
-  const handleSubmit = ({ username, email, password, referral, subscribeToEmail }: User) => {
+  const handleSubmit = ({ username, email, password, referrer, subscribeToEmail }: User) => {
     try {
       registeruser({
-        variables: { name: username, email, password, referral, isSubscribedToEmail: subscribeToEmail },
+        variables: { name: username, email, password, referrer, isSubscribedToEmail: subscribeToEmail },
       });
     } catch (e) {
       console.log(e);
@@ -74,9 +74,9 @@ const SignUpModal: FC<SignUpModalProps> = ({ opened, setOpened }) => {
             />
 
             <TextInput
-              {...form.getInputProps('referral')}
-              placeholder="Enter referral ID"
-              label="Referral ID (Optional)"
+              {...form.getInputProps('referrer')}
+              placeholder="Enter referrer ID"
+              label="referrer ID (Optional)"
             />
 
             <Checkbox

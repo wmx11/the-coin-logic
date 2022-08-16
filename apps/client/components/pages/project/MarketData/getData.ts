@@ -8,13 +8,15 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
     marketCap,
     pairPrice,
     totalSupply,
-    project: { pairToken },
+    project: { liquidityPair },
     priceChange,
     marketCapChange,
     liquidityChange,
     pairPriceChange,
     totalSupplyChange,
   } = data;
+
+  const pairToken = liquidityPair && liquidityPair[0].stablePair?.pairToken;
 
   return [
     {

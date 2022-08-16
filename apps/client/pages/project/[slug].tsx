@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Center, Container, Divider, Grid, Text } from '@mantine/core';
+import { Center, Container, Divider, Text } from '@mantine/core';
 import { Badges } from '../../components/Badges';
 import AboutProject from '../../components/pages/project/AboutProject';
 import Announcements from '../../components/pages/project/Announcements';
@@ -12,16 +12,16 @@ import { getProjectTypeBySlug } from '../../data/getters/getters';
 import { NotFound } from '../../components/NotFound';
 import { Tag } from 'types';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
-import useMobileScreen from 'hooks/useMobileScreen';
+import Markets from 'components/pages/project/Markets';
 
 type ProjectProps = {
   projectData: ProjectWithMarketStatsAndChanges;
 };
 
 const project: FC<ProjectProps> = ({ projectData }) => {
-  const { isMobileScreen } = useMobileScreen();
+  const { project } = projectData;
 
-  if (!projectData) {
+  if (!project) {
     return (
       <Container className="py-10 h-screen flex items-center justify-center">
         <Center>
@@ -30,8 +30,6 @@ const project: FC<ProjectProps> = ({ projectData }) => {
       </Container>
     );
   }
-
-  const { project } = projectData;
 
   return (
     <Container className="py-10">
@@ -53,7 +51,9 @@ const project: FC<ProjectProps> = ({ projectData }) => {
             <AboutProject data={project} />
           </div>
           <div className={`w-full md:w-[29%]`}>
-            <Announcements />
+            {/* <Announcements /> */}
+            {/* <div className="mb-4"></div> */}
+            <Markets data={project} />
           </div>
         </div>
       </div>

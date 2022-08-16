@@ -14,6 +14,7 @@ import {
 } from '@keystone-6/core/fields';
 import { document } from '@keystone-6/fields-document';
 import { Lists } from '.keystone/types';
+import { createProject, deleteProject, updateProject } from './utils/holdersTrackerCrud';
 
 export const lists: Lists = {
   User: list({
@@ -26,11 +27,8 @@ export const lists: Lists = {
       }),
       isSubscribedToEmail: checkbox({ defaultValue: false }),
       password: password({ validation: { isRequired: true } }),
-      subscribedTill: timestamp(),
-      referral: text(),
-      apiKey: text(),
-      apiSecret: text(),
-      Api: relationship({ ref: 'ApiAccessLevel' }),
+      subscribedToProductTill: timestamp(),
+      referrer: text(),
       projects: relationship({ ref: 'Project', many: true }),
     },
   }),
@@ -42,8 +40,8 @@ export const lists: Lists = {
       liquidity: float(),
       pairPrice: float(),
       customData: json({ defaultValue: [] }),
-      dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
       project: relationship({ ref: 'Project' }),
+      dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
     },
   }),
   Project: list({
@@ -53,6 +51,7 @@ export const lists: Lists = {
       logo: image({ storage: 'localLogos' }),
       enabled: checkbox({ defaultValue: false }),
       isListed: checkbox({ defaultValue: false }),
+      trackHolders: checkbox({ defaultValue: false }),
       isRebasing: checkbox({ defaultValue: false }),
       tags: relationship({
         ref: 'Tag.projects',
@@ -61,8 +60,6 @@ export const lists: Lists = {
       contractAddress: text(),
       pairAddress: text(),
       burnAddress: text(),
-      pairToken: relationship({ ref: 'Token', many: true }),
-      stableLiquidityPair: relationship({ ref: 'StableLiquidityPair' }),
       liquidityPair: relationship({ ref: 'LiquidityPair', many: true }),
       network: relationship({ ref: 'Network' }),
       trackHoldersFromTokenAmount: float({ defaultValue: 0 }),
@@ -83,6 +80,26 @@ export const lists: Lists = {
       youtube: text(),
       github: text(),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
+      launchDate: timestamp(),
+      launchBlock: integer(),
+      trackFromBlock: integer(),
+    },
+    hooks: {
+      afterOperation: async ({ operation, item, originalItem, context }) => {
+        switch (operation) {
+          case 'create':
+            createProject(item, context);
+            break;
+          case 'update':
+            updateProject(item, context);
+            break;
+          case 'delete':
+            deleteProject(originalItem);
+            break;
+          default:
+            break;
+        }
+      },
     },
   }),
   Token: list({
@@ -106,9 +123,9 @@ export const lists: Lists = {
       name: text({ validation: { isRequired: true } }),
       address: text(),
       stablePair: relationship({ ref: 'StableLiquidityPair' }),
-      pairToken: relationship({ ref: 'Token', many: true }),
       network: relationship({ ref: 'Network' }),
       project: relationship({ ref: 'Project' }),
+      exchange: relationship({ ref: 'Exchange' }),
     },
   }),
   Network: list({
@@ -116,6 +133,14 @@ export const lists: Lists = {
       name: text({ validation: { isRequired: true } }),
       logo: image({ storage: 'localLogos' }),
       url: text({ validation: { isRequired: true } }),
+    },
+  }),
+  Exchange: list({
+    fields: {
+      name: text({ validation: { isRequired: true } }),
+      logo: image({ storage: 'localLogos' }),
+      url: text({ validation: { isRequired: true } }),
+      tradeUrl: text({ validation: { isRequired: true } }),
     },
   }),
   Tag: list({
@@ -157,52 +182,6 @@ export const lists: Lists = {
       }),
       customTracking: text(),
       project: relationship({ ref: 'Project' }),
-    },
-  }),
-  ApiAccessLevel: list({
-    fields: {
-      name: text(),
-      enabled: checkbox({ defaultValue: false }),
-      marketBots: checkbox({ defaultValue: false }),
-      trackingInterval: select({
-        options: [
-          {
-            label: '30 minutes',
-            value: '30',
-          },
-          {
-            label: '5 minutes',
-            value: '5',
-          },
-          {
-            label: '1 minute',
-            value: '1',
-          },
-        ],
-        ui: {
-          displayMode: 'segmented-control',
-        },
-      }),
-      rateLimit: select({
-        options: [
-          {
-            label: '1 per 5s',
-            value: '1/5',
-          },
-          {
-            label: '1 per 2s',
-            value: '1/2',
-          },
-          {
-            label: '1 per 1s',
-            value: '1/1',
-          },
-        ],
-        ui: {
-          displayMode: 'segmented-control',
-        },
-      }),
-      price: integer(),
     },
   }),
   Roadmap: list({

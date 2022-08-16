@@ -2,7 +2,6 @@ import { Avatar, Divider, Menu, Text, UnstyledButton } from '@mantine/core';
 import { Session } from 'next-auth';
 import { signOut } from 'next-auth/react';
 import React, { FC, ReactNode } from 'react';
-import { IconType } from 'react-icons';
 import { FaUserCog } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
 

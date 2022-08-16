@@ -99,8 +99,22 @@ query($slug: String) {
       whitepaper
       contractAddress
       pairAddress
-      pairToken(take: 1) {
+      liquidityPair {
         name
+        address
+        stablePair {
+          pairToken(take: 1) {
+            name
+          }
+        }
+        exchange {
+          name
+          url
+          tradeUrl
+          logo {
+            url
+          }
+        }
       }
       network {
         name

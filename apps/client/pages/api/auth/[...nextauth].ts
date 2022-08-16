@@ -1,3 +1,4 @@
+import { DocumentNode } from 'graphql';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import client from '../../../data/apollo-client';
@@ -16,7 +17,7 @@ export default NextAuth({
           const {
             data: { authenticateUserWithPassword },
           } = await client.mutate({
-            mutation: AUTHENTICATE_USER,
+            mutation: AUTHENTICATE_USER as DocumentNode,
             variables: {
               email: credentials?.email,
               password: credentials?.password,

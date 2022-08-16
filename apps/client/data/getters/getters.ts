@@ -11,6 +11,7 @@ import {
   GET_PROJECT_AND_MARKET_STATS_BY_SLUG,
   MARKET_STAT_CHANGES,
 } from './constants';
+import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 
 const getData = async <T>(query: string, variables?: T) => {
   const { data } = await client.query({
@@ -84,7 +85,7 @@ export const getProjectsForHomepageList = async () => {
   return projectsArray;
 };
 
-export const getProjectTypeBySlug = async (slug: string) => {
+export const getProjectTypeBySlug = async (slug: string): Promise<ProjectWithMarketStatsAndChanges | null> => {
   const marketStatsArray = await getData(GET_PROJECT_AND_MARKET_STATS_BY_SLUG, { slug });
 
   const marketStats = marketStatsArray.marketStats[0] || null;
