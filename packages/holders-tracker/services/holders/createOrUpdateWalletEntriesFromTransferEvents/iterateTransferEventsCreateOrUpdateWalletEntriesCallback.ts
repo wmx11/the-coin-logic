@@ -9,7 +9,7 @@ import sleep from '../../../../utils/sleep';
 import toDecimals from '../../../../utils/toDecimals';
 import config from '../../../config';
 
-type AddedContext = Context & {
+type ExtendedContext = Context & {
   decimals: number;
   contract: Contract;
   getPagination: (
@@ -22,7 +22,7 @@ type AddedContext = Context & {
   perPage: number;
 };
 
-const iterateTransferEventsCreateOrUpdateWalletEntriesCallback = async (context: AddedContext) => {
+const iterateTransferEventsCreateOrUpdateWalletEntriesCallback = async (context: ExtendedContext) => {
   const { projectId, hasHolders, perPage, getPagination, iteration, cache, decimals, contract } = context;
 
   const transferEvents = await getTransferEvents(
