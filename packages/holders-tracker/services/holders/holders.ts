@@ -95,7 +95,7 @@ export const getHoldersWithEnabledProjectsFromDateLowerThan = (date: Date) => {
         lte: date,
       },
       projects: {
-        some: { enabled: true, isRebasing: true, trackHolders: true },
+        some: { enabled: true, isRebasing: true, trackHolders: true, initialized: true },
       },
     },
     include: {
@@ -107,6 +107,7 @@ export const getHoldersWithEnabledProjectsFromDateLowerThan = (date: Date) => {
           isRebasing: true,
           enabled: true,
           trackHolders: true,
+          initialized: true,
         },
       },
     },

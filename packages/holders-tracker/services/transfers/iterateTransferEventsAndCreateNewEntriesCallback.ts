@@ -7,6 +7,7 @@ import { updateBlock } from '../base';
 import { addTransferEvent, getPastTransferEvents, getTransferType } from './transfers';
 import { Blocks } from '@prisma/client';
 import type { Project } from '../../../types';
+import { default as holdersTrackerConfig } from '../../config';
 
 type ExtendedContext = Context & {
   decimals: number;
@@ -59,7 +60,8 @@ const iterateTransferEventsAndCreateNewEntriesCallback = async (context: Extende
     }
 
     console.log(iteration + ' ===>', iterations, result);
-    await sleep(65);
+
+    await sleep(holdersTrackerConfig.timeouts.iterateTransferEventsAndCreateNewEntriesCallback);
   }
 
   const newFromBlock = from + config.chunks;

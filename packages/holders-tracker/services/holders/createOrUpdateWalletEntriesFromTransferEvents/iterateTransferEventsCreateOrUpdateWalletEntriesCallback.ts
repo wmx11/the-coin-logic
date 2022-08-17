@@ -7,6 +7,7 @@ import getTransferEvents from './getTransferEvents';
 import { getWalletBalance } from '../../base';
 import sleep from '../../../../utils/sleep';
 import toDecimals from '../../../../utils/toDecimals';
+import config from '../../../config';
 
 type AddedContext = Context & {
   decimals: number;
@@ -41,8 +42,10 @@ const iterateTransferEventsCreateOrUpdateWalletEntriesCallback = async (context:
 
     if (!cache.has(event.toAddress)) {
       const balance = await getWalletBalance(contract, event.toAddress);
+
       cache.set(event.toAddress, { balance: toDecimals(balance, decimals) || event.amount });
-      await sleep(5);
+
+      await sleep(10);
     }
 
     const result = await createOrUpdateWallet(
@@ -68,7 +71,7 @@ const iterateTransferEventsCreateOrUpdateWalletEntriesCallback = async (context:
 
     console.log(result);
 
-    await sleep(60);
+    await sleep(config.timeouts.iterateTransferEventsAndCreateNewEntriesCallback);
   }
 
   return null;

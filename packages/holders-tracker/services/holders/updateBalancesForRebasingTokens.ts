@@ -6,8 +6,8 @@ import { Contract } from 'web3-eth-contract';
 import Web3 from 'web3';
 import baseAbi from '../../../web3/baseAbi';
 import sleep from '../../../utils/sleep';
-import { sub } from 'date-fns';
 import toDecimals from '../../../utils/toDecimals';
+import config from '../../config';
 
 type Cache = {
   decimals: number;
@@ -41,27 +41,24 @@ const updateWalletBalanceForProject = async ({ cache, project, holder }: UpdateW
 };
 
 const updateBalancesForRebasingTokens = async () => {
-  const holders = await getHoldersWithEnabledProjectsFromDateLowerThan(sub(new Date(), { hours: 1 }));
+  const holders = await getHoldersWithEnabledProjectsFromDateLowerThan(config.getDateForRebasingTokens());
 
   const cache = new Map();
 
   for (const holder of holders) {
-    const projects = holder.projects.filter((item) => item.enabled && item.isRebasing && item.trackHolders);
+    const projects = holder.projects.filter((item) => item.enabled && item.isRebasing && item.trackHolders && item.initialized);
 
     if (!projects || !projects.length) {
       return null;
     }
 
     for (const project of projects) {
-      const result = await updateWalletBalanceForProject({ holder, project, cache });
-      console.log(result);
-      await sleep(90);
+      await updateWalletBalanceForProject({ holder, project, cache });
+      await sleep(config.timeouts.updateBalancesForRebasingTokens);
     }
 
-    await sleep(90);
+    await sleep(config.timeouts.updateBalancesForRebasingTokens);
   }
 };
-
-updateBalancesForRebasingTokens();
 
 export default updateBalancesForRebasingTokens;

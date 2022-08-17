@@ -1,17 +1,17 @@
 import Web3 from 'web3';
 import baseAbi from 'tcl-packages/web3/baseAbi';
 import createOrUpdateWalletEntriesFromTransferEvents from 'tcl-packages/holders-tracker/services/holders/createOrUpdateWalletEntriesFromTransferEvents';
-import { getEnabledProjectsForHoldersTracking } from 'tcl-packages/graphql/queries';
 import { getWalletsCountByProjectId } from 'tcl-packages/holders-tracker/services/holders';
+import { getProjects } from 'tcl-packages/holders-tracker/services/projects';
 
 let isRunning = false;
 
-const trackHoldings = async () => {
+const trackHoldings = async (initial = false) => {
   if (isRunning) {
     return null;
   }
 
-  const projects = await getEnabledProjectsForHoldersTracking();
+  const projects = await getProjects(initial);
 
   if (!projects || !projects.length) {
     return null;
@@ -34,7 +34,5 @@ const trackHoldings = async () => {
 
   isRunning = false;
 };
-
-trackHoldings();
 
 export default trackHoldings;

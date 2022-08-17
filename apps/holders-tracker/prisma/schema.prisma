@@ -50,6 +50,7 @@ model Projects {
   enabled         Boolean   @default(false)
   isRebasing      Boolean   @default(false)
   trackHolders    Boolean   @default(false)
+  initialized     Boolean   @default(false)
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   Holders         Holders[]

@@ -18,16 +18,28 @@ export const GET_ENABLED_PROJECTS = `
 }
 `;
 
+const COMMON_GETTER_FOR_TRACKING = `
+  id
+  contractAddress
+  pairAddress
+  launchBlock
+  network {
+    url
+  }
+`;
+
 export const GET_ENABLED_PROJECTS_FOR_HOLDERS_TRACKING = `
 {
-  projects(where: { enabled: { equals: true }, trackHolders: { equals: true } }) {
-    id
-    contractAddress
-    pairAddress
-    launchBlock
-    network {
-      url
-    }
+  projects(where: { enabled: { equals: true }, trackHolders: { equals: true }, initialized: { equals: true } }) {
+    ${COMMON_GETTER_FOR_TRACKING}
+  }
+}
+`;
+
+export const GET_ENABLED_AND_NOT_INITIALIZED_PROJECTS_FOR_HOLDERS_TRACKING = `
+{
+  projects(where: { enabled: { equals: true }, trackHolders: { equals: true }, initialized: { equals: false } }) {
+    ${COMMON_GETTER_FOR_TRACKING}
   }
 }
 `;

@@ -27,6 +27,7 @@ const getProjectFields = (item: Project, network: string) => {
     enabled: item.enabled as boolean,
     isRebasing: item.isRebasing as boolean,
     trackHolders: item.trackHolders as boolean,
+    initialized: item.initialized as boolean,
     contractAddress: item.contractAddress as string,
     rpc: network as string,
   };

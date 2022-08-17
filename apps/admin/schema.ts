@@ -53,6 +53,7 @@ export const lists: Lists = {
       isListed: checkbox({ defaultValue: false }),
       trackHolders: checkbox({ defaultValue: false }),
       isRebasing: checkbox({ defaultValue: false }),
+      initialized: checkbox({ defaultValue: false }),
       tags: relationship({
         ref: 'Tag.projects',
         many: true,
