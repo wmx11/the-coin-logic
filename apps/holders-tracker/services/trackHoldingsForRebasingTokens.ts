@@ -4,7 +4,7 @@ let isRunning = false;
 
 const trackHoldingsForRebasingTokens = async () => {
   if (isRunning) {
-    return undefined;
+    return null;
   }
 
   isRunning = true;

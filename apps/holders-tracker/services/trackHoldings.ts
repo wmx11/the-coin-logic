@@ -1,18 +1,20 @@
+import Web3 from 'web3';
+import baseAbi from 'tcl-packages/web3/baseAbi';
+import createOrUpdateWalletEntriesFromTransferEvents from 'tcl-packages/holders-tracker/services/holders/createOrUpdateWalletEntriesFromTransferEvents';
 import { getEnabledProjectsForHoldersTracking } from 'tcl-packages/graphql/queries';
 import { getWalletsCountByProjectId } from 'tcl-packages/holders-tracker/services/holders';
-import createOrUpdateWalletEntriesFromTransferEvents from 'tcl-packages/holders-tracker/services/holders/createOrUpdateWalletEntriesFromTransferEvents';
 
 let isRunning = false;
 
 const trackHoldings = async () => {
   if (isRunning) {
-    return undefined;
+    return null;
   }
 
   const projects = await getEnabledProjectsForHoldersTracking();
 
   if (!projects || !projects.length) {
-    return undefined;
+    return null;
   }
 
   isRunning = true;
@@ -24,10 +26,15 @@ const trackHoldings = async () => {
 
     const hasHolders = !!(await getWalletsCountByProjectId(project?.id));
 
-    await createOrUpdateWalletEntriesFromTransferEvents(project?.id, hasHolders);
+    const web3 = new Web3(project.network?.url as string);
+    const contract = new web3.eth.Contract(baseAbi, project.contractAddress as string);
+
+    await createOrUpdateWalletEntriesFromTransferEvents(project?.id, hasHolders, contract);
   }
 
   isRunning = false;
 };
+
+trackHoldings();
 
 export default trackHoldings;

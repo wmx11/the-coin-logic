@@ -1,13 +1,14 @@
-import Web3 from 'web3';
 import {
   createOrUpdateBlock,
   getBlockByProjectId,
   getIterations,
   getLatestBlock,
 } from 'tcl-packages/holders-tracker/services/base';
+
+import type { Project } from '../../../types';
+import Web3 from 'web3';
 import baseAbi from 'tcl-packages/web3/baseAbi';
 import createNewTransferEventEntries from './createNewTransferEventEntries';
-import type { Project } from '../../../types';
 
 const trackTransferEventsByProject = async (project: Project) => {
   if (!project) {
@@ -39,7 +40,7 @@ const trackTransferEventsByProject = async (project: Project) => {
     { previousBlock: fromBlock as number },
   );
 
-  createNewTransferEventEntries({ contract, iterations, project, fromBlock, toBlock });
+  await createNewTransferEventEntries({ contract, iterations, project, fromBlock });
 };
 
 export default trackTransferEventsByProject;

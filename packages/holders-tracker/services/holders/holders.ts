@@ -1,6 +1,6 @@
-import prisma from '../../../prisma';
+import type { Pagination } from '../types';
 import type { Prisma } from '@prisma/client';
-import { Pagination } from '../types';
+import prisma from '../../../prisma';
 
 export const getWalletPosition = (address: string) => {
   return;
@@ -27,6 +27,14 @@ export const getWallet = (address: string) => {
 export const getWalletsByProjectId = (projectId: string, pagination?: Pagination) => {
   return prisma.holders.findMany({
     ...pagination,
+    where: {
+      projectId,
+    },
+  });
+};
+
+export const getWalletByProjectId = (projectId: string) => {
+  return prisma.holders.findFirst({
     where: {
       projectId,
     },
@@ -80,20 +88,26 @@ export const createOrUpdateWallet = (
   });
 };
 
-export const getHoldersWithEnabledProjectsFromTime = (date: Date) => {
+export const getHoldersWithEnabledProjectsFromDateLowerThan = (date: Date) => {
   return prisma.holders.findMany({
     where: {
       updatedAt: {
         lte: date,
       },
       projects: {
-        isRebasing: true,
-        enabled: true,
+        some: { enabled: true, isRebasing: true, trackHolders: true },
       },
     },
     include: {
       projects: {
-        select: { contractAddress: true, rpc: true },
+        select: {
+          contractAddress: true,
+          rpc: true,
+          projectId: true,
+          isRebasing: true,
+          enabled: true,
+          trackHolders: true,
+        },
       },
     },
   });

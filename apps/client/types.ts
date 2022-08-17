@@ -1221,6 +1221,7 @@ export type Project = {
   tags?: Maybe<Array<Tag>>;
   tagsCount?: Maybe<Scalars['Int']>;
   telegram?: Maybe<Scalars['String']>;
+  trackFromBlock?: Maybe<Scalars['Int']>;
   trackHolders?: Maybe<Scalars['Boolean']>;
   trackHoldersFromTokenAmount?: Maybe<Scalars['Float']>;
   twitter?: Maybe<Scalars['String']>;
@@ -1283,6 +1284,7 @@ export type ProjectCreateInput = {
   slug?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<TagRelateToManyForCreateInput>;
   telegram?: InputMaybe<Scalars['String']>;
+  trackFromBlock?: InputMaybe<Scalars['Int']>;
   trackHolders?: InputMaybe<Scalars['Boolean']>;
   trackHoldersFromTokenAmount?: InputMaybe<Scalars['Float']>;
   twitter?: InputMaybe<Scalars['String']>;
@@ -1320,6 +1322,7 @@ export type ProjectOrderByInput = {
   sellTax?: InputMaybe<OrderDirection>;
   slug?: InputMaybe<OrderDirection>;
   telegram?: InputMaybe<OrderDirection>;
+  trackFromBlock?: InputMaybe<OrderDirection>;
   trackHolders?: InputMaybe<OrderDirection>;
   trackHoldersFromTokenAmount?: InputMaybe<OrderDirection>;
   twitter?: InputMaybe<OrderDirection>;
@@ -1384,6 +1387,7 @@ export type ProjectUpdateInput = {
   slug?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<TagRelateToManyForUpdateInput>;
   telegram?: InputMaybe<Scalars['String']>;
+  trackFromBlock?: InputMaybe<Scalars['Int']>;
   trackHolders?: InputMaybe<Scalars['Boolean']>;
   trackHoldersFromTokenAmount?: InputMaybe<Scalars['Float']>;
   twitter?: InputMaybe<Scalars['String']>;
@@ -1421,6 +1425,7 @@ export type ProjectWhereInput = {
   slug?: InputMaybe<StringFilter>;
   tags?: InputMaybe<TagManyRelationFilter>;
   telegram?: InputMaybe<StringFilter>;
+  trackFromBlock?: InputMaybe<IntNullableFilter>;
   trackHolders?: InputMaybe<BooleanFilter>;
   trackHoldersFromTokenAmount?: InputMaybe<FloatNullableFilter>;
   twitter?: InputMaybe<StringFilter>;

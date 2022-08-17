@@ -16,7 +16,7 @@ const getNetworkById = async (id: string, context: KeystoneContext) => {
     return project.network.url;
   } catch (error) {
     console.log(error);
-    return undefined;
+    return null;
   }
 };
 

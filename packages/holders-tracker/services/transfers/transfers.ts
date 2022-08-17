@@ -1,9 +1,9 @@
-import prisma from '../../../prisma';
-import { getBlockByProjectId } from '../base';
-import type { Prisma } from '@prisma/client';
 import type { Contract } from 'web3-eth-contract';
-import type { Project } from '../../../types';
 import type { Pagination } from '../types';
+import type { Prisma } from '@prisma/client';
+import type { Project } from '../../../types';
+import { getBlockByProjectId } from '../base';
+import prisma from '../../../prisma';
 
 type GetPastTransferEvents = {
   contract: Contract;
@@ -29,11 +29,11 @@ export const addTransferEvent = (data: Prisma.TransfersCreateInput) => {
 };
 
 export const getTransferType = ({ project, fromAddress, toAddress }: GetTransferType) => {
-  const from = fromAddress.toLocaleLowerCase();
-  const to = toAddress.toLocaleLowerCase();
-  const exchange = project.pairAddress?.toLocaleLowerCase();
-  const contract = project.contractAddress?.toLocaleLowerCase();
-  const burn = project.burnAddress?.toLocaleLowerCase();
+  const from = fromAddress.toLowerCase();
+  const to = toAddress.toLowerCase();
+  const exchange = project.pairAddress?.toLowerCase();
+  const contract = project.contractAddress?.toLowerCase();
+  const burn = project.burnAddress?.toLowerCase();
 
   // Burn
   if (to === burn) {
@@ -54,6 +54,14 @@ export const getTransferType = ({ project, fromAddress, toAddress }: GetTransfer
   if (from !== exchange && (to !== contract || to !== burn)) {
     return 2;
   }
+
+  // Tax
+  if (from === exchange && to === contract) {
+    return 3;
+  }
+
+  // Other
+  return 4;
 };
 
 export const getTransferEventsFromPreviousBlockByProjectId = (projectId: string, previousBlock: number) => {
@@ -64,15 +72,6 @@ export const getTransferEventsFromPreviousBlockByProjectId = (projectId: string,
         gte: previousBlock,
       },
     },
-  });
-};
-
-export const getUniqueWalletAddressesByProjectId = (projectId: string) => {
-  return prisma.transfers.findMany({
-    where: {
-      projectId,
-    },
-    distinct: ['address'],
   });
 };
 
@@ -119,6 +118,6 @@ export const getTransferEventsFromPreviousBlock = async (projectId: string, pagi
     });
   } catch (error) {
     console.log(error);
-    return undefined;
+    return null;
   }
 };
