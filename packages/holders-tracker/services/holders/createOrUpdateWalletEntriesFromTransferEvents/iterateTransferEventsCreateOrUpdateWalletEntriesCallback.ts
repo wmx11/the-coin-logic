@@ -71,7 +71,7 @@ const iterateTransferEventsCreateOrUpdateWalletEntriesCallback = async (context:
 
     console.log(result);
 
-    await sleep(config.timeouts.iterateTransferEventsAndCreateNewEntriesCallback);
+    await sleep(config.timeouts.iterateTransferEventsCreateOrUpdateWalletEntriesCallback);
   }
 
   return null;
