@@ -23,6 +23,7 @@ const COMMON_GETTER_FOR_TRACKING = `
   contractAddress
   pairAddress
   launchBlock
+  initialized
   network {
     url
   }

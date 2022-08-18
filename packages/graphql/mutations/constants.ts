@@ -24,3 +24,15 @@ mutation createMarketStats(
     }
   }
 }`;
+
+export const UPDATE_PROJECT_INITIALIZED_STATUS = `
+mutation($id: ID, $initialized: Boolean) {
+  updateProject(
+    where: { id: $id }
+    data: { initialized: $initialized }
+  ) {
+    id
+    name
+    initialized
+  }
+}`;

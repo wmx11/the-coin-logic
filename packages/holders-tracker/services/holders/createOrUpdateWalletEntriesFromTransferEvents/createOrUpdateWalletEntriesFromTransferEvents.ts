@@ -5,12 +5,22 @@ import getPaginationFor from '../../../../utils/getPaginationFor';
 import getTransferEventsCount from './getTransferEventsCount';
 import iterateTransferEventsCreateOrUpdateWalletEntriesCallback from './iterateTransferEventsCreateOrUpdateWalletEntriesCallback';
 import iterateWithContext from '../../../../utils/iterateWithContext';
+import { updateProjectInitializedStatus } from '../../../../graphql/mutations';
+import { Project } from '../../../../types';
 
-const createOrUpdateWalletEntriesFromTransferEvents = async (
-  projectId: string,
-  hasHolders = false,
-  contract: Contract,
-) => {
+type CreateOrUpdateWalletEntriesFromTransferEvents = {
+  project: Project;
+  hasHolders: boolean;
+  contract: Contract;
+};
+
+const createOrUpdateWalletEntriesFromTransferEvents = async ({
+  project,
+  hasHolders,
+  contract,
+}: CreateOrUpdateWalletEntriesFromTransferEvents) => {
+  const projectId = project.id;
+
   if (!projectId) {
     throw new Error('Please provide a project ID.');
   }
@@ -24,7 +34,7 @@ const createOrUpdateWalletEntriesFromTransferEvents = async (
 
   const context = {
     iterations: getPagination(perPage, 1).pages,
-    iteration: 1, // Start from 1 if it has pagination
+    iteration: 1,
     decimals,
     contract,
     getPagination,
@@ -35,6 +45,10 @@ const createOrUpdateWalletEntriesFromTransferEvents = async (
   };
 
   await iterateWithContext(context, iterateTransferEventsCreateOrUpdateWalletEntriesCallback);
+
+  if (!hasHolders || !project.initialized) {
+    await updateProjectInitializedStatus({ id: projectId, initialized: true });
+  }
 };
 
 export default createOrUpdateWalletEntriesFromTransferEvents;

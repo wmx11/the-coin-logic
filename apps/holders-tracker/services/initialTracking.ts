@@ -10,4 +10,6 @@ const initialTracking = async () => {
   await trackHoldings(true);
 };
 
+initialTracking()
+
 export default initialTracking;

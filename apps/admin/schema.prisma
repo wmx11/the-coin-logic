@@ -51,6 +51,7 @@ model Project {
   isListed                    Boolean         @default(false)
   trackHolders                Boolean         @default(false)
   isRebasing                  Boolean         @default(false)
+  initialized                 Boolean         @default(false)
   tags                        Tag[]           @relation("Project_tags")
   contractAddress             String          @default("")
   pairAddress                 String          @default("")

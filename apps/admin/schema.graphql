@@ -253,6 +253,7 @@ type Project {
   isListed: Boolean
   trackHolders: Boolean
   isRebasing: Boolean
+  initialized: Boolean
   tags(
     where: TagWhereInput! = {}
     orderBy: [TagOrderByInput!]! = []
@@ -325,6 +326,7 @@ input ProjectWhereInput {
   isListed: BooleanFilter
   trackHolders: BooleanFilter
   isRebasing: BooleanFilter
+  initialized: BooleanFilter
   tags: TagManyRelationFilter
   contractAddress: StringFilter
   pairAddress: StringFilter
@@ -383,6 +385,7 @@ input ProjectOrderByInput {
   isListed: OrderDirection
   trackHolders: OrderDirection
   isRebasing: OrderDirection
+  initialized: OrderDirection
   contractAddress: OrderDirection
   pairAddress: OrderDirection
   burnAddress: OrderDirection
@@ -415,6 +418,7 @@ input ProjectUpdateInput {
   isListed: Boolean
   trackHolders: Boolean
   isRebasing: Boolean
+  initialized: Boolean
   tags: TagRelateToManyForUpdateInput
   contractAddress: String
   pairAddress: String
@@ -486,6 +490,7 @@ input ProjectCreateInput {
   isListed: Boolean
   trackHolders: Boolean
   isRebasing: Boolean
+  initialized: Boolean
   tags: TagRelateToManyForCreateInput
   contractAddress: String
   pairAddress: String

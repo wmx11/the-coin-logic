@@ -88,14 +88,15 @@ export const createOrUpdateWallet = (
   });
 };
 
-export const getHoldersWithEnabledProjectsFromDateLowerThan = (date: Date) => {
+export const getHoldersWithEnabledAndRebasingProjectsFromDateLowerThan = (date: Date) => {
   return prisma.holders.findMany({
     where: {
       updatedAt: {
         lte: date,
       },
       projects: {
-        some: { enabled: true, isRebasing: true, trackHolders: true, initialized: true },
+        some: { enabled: true, isRebasing: true, trackHolders: true },
+        none: { initialized: false },
       },
     },
     include: {

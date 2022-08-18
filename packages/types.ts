@@ -1204,6 +1204,7 @@ export type Project = {
   enabled?: Maybe<Scalars['Boolean']>;
   github?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  initialized?: Maybe<Scalars['Boolean']>;
   isListed?: Maybe<Scalars['Boolean']>;
   isRebasing?: Maybe<Scalars['Boolean']>;
   launchBlock?: Maybe<Scalars['Int']>;
@@ -1269,6 +1270,7 @@ export type ProjectCreateInput = {
   discord?: InputMaybe<Scalars['String']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
   github?: InputMaybe<Scalars['String']>;
+  initialized?: InputMaybe<Scalars['Boolean']>;
   isListed?: InputMaybe<Scalars['Boolean']>;
   isRebasing?: InputMaybe<Scalars['Boolean']>;
   launchBlock?: InputMaybe<Scalars['Int']>;
@@ -1311,6 +1313,7 @@ export type ProjectOrderByInput = {
   enabled?: InputMaybe<OrderDirection>;
   github?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
+  initialized?: InputMaybe<OrderDirection>;
   isListed?: InputMaybe<OrderDirection>;
   isRebasing?: InputMaybe<OrderDirection>;
   launchBlock?: InputMaybe<OrderDirection>;
@@ -1372,6 +1375,7 @@ export type ProjectUpdateInput = {
   discord?: InputMaybe<Scalars['String']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
   github?: InputMaybe<Scalars['String']>;
+  initialized?: InputMaybe<Scalars['Boolean']>;
   isListed?: InputMaybe<Scalars['Boolean']>;
   isRebasing?: InputMaybe<Scalars['Boolean']>;
   launchBlock?: InputMaybe<Scalars['Int']>;
@@ -1411,6 +1415,7 @@ export type ProjectWhereInput = {
   enabled?: InputMaybe<BooleanFilter>;
   github?: InputMaybe<StringFilter>;
   id?: InputMaybe<IdFilter>;
+  initialized?: InputMaybe<BooleanFilter>;
   isListed?: InputMaybe<BooleanFilter>;
   isRebasing?: InputMaybe<BooleanFilter>;
   launchBlock?: InputMaybe<IntNullableFilter>;

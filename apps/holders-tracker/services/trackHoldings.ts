@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import baseAbi from 'tcl-packages/web3/baseAbi';
 import createOrUpdateWalletEntriesFromTransferEvents from 'tcl-packages/holders-tracker/services/holders/createOrUpdateWalletEntriesFromTransferEvents';
 import { getWalletsCountByProjectId } from 'tcl-packages/holders-tracker/services/holders';
-import { getProjects } from 'tcl-packages/holders-tracker/services/projects';
+import { getProjects, setProjectStatus } from 'tcl-packages/holders-tracker/services/projects';
 
 let isRunning = false;
 
@@ -20,16 +20,27 @@ const trackHoldings = async (initial = false) => {
   isRunning = true;
 
   for (const project of projects) {
-    if (!project.network?.url) {
-      throw new Error('Project does not have an RPC endpoint.');
+    try {
+      if (!project.network?.url) {
+        throw new Error('Project does not have an RPC endpoint.');
+      }
+
+      const hasHolders = !!(await getWalletsCountByProjectId(project?.id));
+
+      const web3 = new Web3(project.network?.url as string);
+      const contract = new web3.eth.Contract(baseAbi, project.contractAddress as string);
+
+      await setProjectStatus(project.id, 'tracking_holdings');
+
+      await createOrUpdateWalletEntriesFromTransferEvents({ project, hasHolders, contract });
+
+      await setProjectStatus(project.id, 'idle');
+
+    } catch (error) {
+      console.log(error);
+      await setProjectStatus(project.id, 'failed');
+      return null;
     }
-
-    const hasHolders = !!(await getWalletsCountByProjectId(project?.id));
-
-    const web3 = new Web3(project.network?.url as string);
-    const contract = new web3.eth.Contract(baseAbi, project.contractAddress as string);
-
-    await createOrUpdateWalletEntriesFromTransferEvents(project?.id, hasHolders, contract);
   }
 
   isRunning = false;

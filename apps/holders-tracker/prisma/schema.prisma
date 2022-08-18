@@ -47,10 +47,12 @@ model Projects {
   projectId       String    @default("")
   contractAddress String    @default("")
   rpc             String    @default("")
+  status          String    @default("idle") // syncing | failed | idle 
   enabled         Boolean   @default(false)
   isRebasing      Boolean   @default(false)
   trackHolders    Boolean   @default(false)
   initialized     Boolean   @default(false)
+  initializedAt   DateTime?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   Holders         Holders[]
@@ -63,10 +65,8 @@ model Holders {
   balance     Float       @default(0)
   note        String      @default("")
   isContract  Boolean     @default(false)
-  // projects    Projects?  @relation(fields: [projectsId], references: [id])
   projects    Projects[]
   projectsId  String?
-  // transfers   Transfers? @relation(fields: [transfersId], references: [id])
   transfers   Transfers[]
   transfersId String?
   createdAt   DateTime    @default(now())
