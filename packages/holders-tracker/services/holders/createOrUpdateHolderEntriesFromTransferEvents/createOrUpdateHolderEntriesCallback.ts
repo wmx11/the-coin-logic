@@ -1,4 +1,4 @@
-import { createOrUpdateWallet, getWallet } from '../holders';
+import { createOrUpdateHolder, getHolder } from '../holders';
 
 import { Context } from '../../../../utils/iterateWithContext';
 import { Contract } from 'web3-eth-contract';
@@ -22,7 +22,7 @@ type ExtendedContext = Context & {
   perPage: number;
 };
 
-const iterateTransferEventsCreateOrUpdateWalletEntriesCallback = async (context: ExtendedContext) => {
+const createOrUpdateHolderEntriesCallback = async (context: ExtendedContext) => {
   const { projectId, hasHolders, perPage, getPagination, iteration, cache, decimals, contract } = context;
 
   const transferEvents = await getTransferEvents(
@@ -37,7 +37,7 @@ const iterateTransferEventsCreateOrUpdateWalletEntriesCallback = async (context:
   }
 
   for (const event of transferEvents) {
-    const wallet = await getWallet(event.toAddress);
+    const wallet = await getHolder(event.toAddress);
     const project = await getProjectByProjectId(event.projectId);
 
     if (!cache.has(event.toAddress)) {
@@ -48,7 +48,7 @@ const iterateTransferEventsCreateOrUpdateWalletEntriesCallback = async (context:
       await sleep(10);
     }
 
-    const result = await createOrUpdateWallet(
+    const result = await createOrUpdateHolder(
       wallet?.id as string,
       {
         projectId,
@@ -71,10 +71,10 @@ const iterateTransferEventsCreateOrUpdateWalletEntriesCallback = async (context:
 
     console.log(result);
 
-    await sleep(config.timeouts.iterateTransferEventsCreateOrUpdateWalletEntriesCallback);
+    await sleep(config.timeouts.createOrUpdateHolderEntriesCallback);
   }
 
   return null;
 };
 
-export default iterateTransferEventsCreateOrUpdateWalletEntriesCallback;
+export default createOrUpdateHolderEntriesCallback;

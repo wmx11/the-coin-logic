@@ -162,6 +162,8 @@ type MarketStat {
   totalSupply: Float
   liquidity: Float
   pairPrice: Float
+  holders: Float
+  avgHoldings: Float
   customData: JSON
   project: Project
   dateAdded: DateTime
@@ -181,6 +183,8 @@ input MarketStatWhereInput {
   totalSupply: FloatNullableFilter
   liquidity: FloatNullableFilter
   pairPrice: FloatNullableFilter
+  holders: FloatNullableFilter
+  avgHoldings: FloatNullableFilter
   project: ProjectWhereInput
   dateAdded: DateTimeNullableFilter
 }
@@ -203,6 +207,8 @@ input MarketStatOrderByInput {
   totalSupply: OrderDirection
   liquidity: OrderDirection
   pairPrice: OrderDirection
+  holders: OrderDirection
+  avgHoldings: OrderDirection
   dateAdded: OrderDirection
 }
 
@@ -212,6 +218,8 @@ input MarketStatUpdateInput {
   totalSupply: Float
   liquidity: Float
   pairPrice: Float
+  holders: Float
+  avgHoldings: Float
   customData: JSON
   project: ProjectRelateToOneForUpdateInput
   dateAdded: DateTime
@@ -234,6 +242,8 @@ input MarketStatCreateInput {
   totalSupply: Float
   liquidity: Float
   pairPrice: Float
+  holders: Float
+  avgHoldings: Float
   customData: JSON
   project: ProjectRelateToOneForCreateInput
   dateAdded: DateTime
@@ -735,6 +745,7 @@ input ExchangeRelateToOneForCreateInput {
 type Network {
   id: ID!
   name: String
+  slug: String
   logo: ImageFieldOutput
   url: String
 }
@@ -749,17 +760,20 @@ input NetworkWhereInput {
   NOT: [NetworkWhereInput!]
   id: IDFilter
   name: StringFilter
+  slug: StringFilter
   url: StringFilter
 }
 
 input NetworkOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  slug: OrderDirection
   url: OrderDirection
 }
 
 input NetworkUpdateInput {
   name: String
+  slug: String
   logo: ImageFieldInput
   url: String
 }
@@ -771,6 +785,7 @@ input NetworkUpdateArgs {
 
 input NetworkCreateInput {
   name: String
+  slug: String
   logo: ImageFieldInput
   url: String
 }

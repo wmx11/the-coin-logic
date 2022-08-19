@@ -4,8 +4,8 @@ import {
 } from '../../../graphql/queries';
 import prisma from '../../../prisma';
 
-export const getProjects = (init: boolean) => {
-  if (init) {
+export const getProjects = (initial: boolean) => {
+  if (initial) {
     return getEnabledAndNotInitializedProjectsForHoldersTracking();
   }
 

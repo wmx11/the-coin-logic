@@ -2,29 +2,48 @@ import type { Pagination } from '../types';
 import type { Prisma } from '@prisma/client';
 import prisma from '../../../prisma';
 
-export const getWalletPosition = (address: string) => {
+export const getHolderPosition = (address: string) => {
   return;
 };
 
-export const getHoldersAmount = (from: number) => {
-  return prisma.holders.count({
-    where: {
-      balance: {
-        gte: from,
+export const getHoldersCountByProjectIdFrom = (projectId: string, from: number) => {
+  try {
+    return prisma.holders.count({
+      where: {
+        projectId: projectId,
+        balance: {
+          gte: from,
+        },
       },
-    },
-  });
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
 
-export const getAverageHoldings = () => {
-  return;
+export const getAverageHoldingsByProjectId = async (projectId: string) => {
+  try {
+    const { _avg } = await prisma.holders.aggregate({
+      _avg: {
+        balance: true,
+      },
+      where: {
+        projectId,
+      },
+    });
+    return _avg.balance;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
 
-export const getWallet = (address: string) => {
+export const getHolder = (address: string) => {
   return prisma.holders.findFirst({ where: { address } });
 };
 
-export const getWalletsByProjectId = (projectId: string, pagination?: Pagination) => {
+export const getHoldersByProjectId = (projectId: string, pagination?: Pagination) => {
   return prisma.holders.findMany({
     ...pagination,
     where: {
@@ -33,7 +52,7 @@ export const getWalletsByProjectId = (projectId: string, pagination?: Pagination
   });
 };
 
-export const getWalletByProjectId = (projectId: string) => {
+export const getHolderByProjectId = (projectId: string) => {
   return prisma.holders.findFirst({
     where: {
       projectId,
@@ -41,7 +60,7 @@ export const getWalletByProjectId = (projectId: string) => {
   });
 };
 
-export const getWalletsCountByProjectId = (projectId: string) => {
+export const getHoldersCountByProjectId = (projectId: string) => {
   return prisma.holders.count({
     where: {
       projectId,
@@ -49,23 +68,23 @@ export const getWalletsCountByProjectId = (projectId: string) => {
   });
 };
 
-export const getWalletsCount = () => {
+export const getHoldersCount = () => {
   return prisma.holders.count();
 };
 
-export const getWallets = (where: Prisma.HoldersWhereInput) => {
+export const getHolders = (where: Prisma.HoldersWhereInput) => {
   return prisma.holders.findMany({
     where,
   });
 };
 
-export const addWallet = (data: Prisma.HoldersCreateInput) => {
+export const addHolder = (data: Prisma.HoldersCreateInput) => {
   return prisma.holders.create({
     data,
   });
 };
 
-export const updateWallet = (id: string, data: Prisma.HoldersUpdateInput) => {
+export const updateHolder = (id: string, data: Prisma.HoldersUpdateInput) => {
   return prisma.holders.update({
     where: {
       id,
@@ -74,7 +93,7 @@ export const updateWallet = (id: string, data: Prisma.HoldersUpdateInput) => {
   });
 };
 
-export const createOrUpdateWallet = (
+export const createOrUpdateHolder = (
   id: string,
   create: Prisma.HoldersCreateInput,
   update: Prisma.HoldersUpdateInput,

@@ -531,8 +531,10 @@ export type LiquidityPairWhereUniqueInput = {
 
 export type MarketStat = {
   __typename?: 'MarketStat';
+  avgHoldings?: Maybe<Scalars['Float']>;
   customData?: Maybe<Scalars['JSON']>;
   dateAdded?: Maybe<Scalars['DateTime']>;
+  holders?: Maybe<Scalars['Float']>;
   id: Scalars['ID'];
   liquidity?: Maybe<Scalars['Float']>;
   marketCap?: Maybe<Scalars['Float']>;
@@ -543,8 +545,10 @@ export type MarketStat = {
 };
 
 export type MarketStatCreateInput = {
+  avgHoldings?: InputMaybe<Scalars['Float']>;
   customData?: InputMaybe<Scalars['JSON']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
+  holders?: InputMaybe<Scalars['Float']>;
   liquidity?: InputMaybe<Scalars['Float']>;
   marketCap?: InputMaybe<Scalars['Float']>;
   pairPrice?: InputMaybe<Scalars['Float']>;
@@ -554,7 +558,9 @@ export type MarketStatCreateInput = {
 };
 
 export type MarketStatOrderByInput = {
+  avgHoldings?: InputMaybe<OrderDirection>;
   dateAdded?: InputMaybe<OrderDirection>;
+  holders?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   liquidity?: InputMaybe<OrderDirection>;
   marketCap?: InputMaybe<OrderDirection>;
@@ -569,8 +575,10 @@ export type MarketStatUpdateArgs = {
 };
 
 export type MarketStatUpdateInput = {
+  avgHoldings?: InputMaybe<Scalars['Float']>;
   customData?: InputMaybe<Scalars['JSON']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
+  holders?: InputMaybe<Scalars['Float']>;
   liquidity?: InputMaybe<Scalars['Float']>;
   marketCap?: InputMaybe<Scalars['Float']>;
   pairPrice?: InputMaybe<Scalars['Float']>;
@@ -583,7 +591,9 @@ export type MarketStatWhereInput = {
   AND?: InputMaybe<Array<MarketStatWhereInput>>;
   NOT?: InputMaybe<Array<MarketStatWhereInput>>;
   OR?: InputMaybe<Array<MarketStatWhereInput>>;
+  avgHoldings?: InputMaybe<FloatNullableFilter>;
   dateAdded?: InputMaybe<DateTimeNullableFilter>;
+  holders?: InputMaybe<FloatNullableFilter>;
   id?: InputMaybe<IdFilter>;
   liquidity?: InputMaybe<FloatNullableFilter>;
   marketCap?: InputMaybe<FloatNullableFilter>;
@@ -1129,18 +1139,21 @@ export type Network = {
   id: Scalars['ID'];
   logo?: Maybe<ImageFieldOutput>;
   name?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
   url?: Maybe<Scalars['String']>;
 };
 
 export type NetworkCreateInput = {
   logo?: InputMaybe<ImageFieldInput>;
   name?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
   url?: InputMaybe<Scalars['String']>;
 };
 
 export type NetworkOrderByInput = {
   id?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
+  slug?: InputMaybe<OrderDirection>;
   url?: InputMaybe<OrderDirection>;
 };
 
@@ -1163,6 +1176,7 @@ export type NetworkUpdateArgs = {
 export type NetworkUpdateInput = {
   logo?: InputMaybe<ImageFieldInput>;
   name?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
   url?: InputMaybe<Scalars['String']>;
 };
 
@@ -1172,6 +1186,7 @@ export type NetworkWhereInput = {
   OR?: InputMaybe<Array<NetworkWhereInput>>;
   id?: InputMaybe<IdFilter>;
   name?: InputMaybe<StringFilter>;
+  slug?: InputMaybe<StringFilter>;
   url?: InputMaybe<StringFilter>;
 };
 

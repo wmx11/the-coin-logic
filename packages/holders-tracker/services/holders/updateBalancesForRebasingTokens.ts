@@ -1,6 +1,6 @@
 import type { Holders, Projects } from '@prisma/client';
 import { getDecimals, getWalletBalance } from '../base';
-import { getHoldersWithEnabledAndRebasingProjectsFromDateLowerThan, getWallets, updateWallet } from './holders';
+import { getHoldersWithEnabledAndRebasingProjectsFromDateLowerThan, getHolders, updateHolder } from './holders';
 
 import { Contract } from 'web3-eth-contract';
 import Web3 from 'web3';
@@ -33,10 +33,10 @@ const updateHoldersWalletBalanceByProject = async ({ cache, holder }: UpdateHold
     }
 
     const balance = await getWalletBalance(cache.get(projectId)?.contract as Contract, holder.address);
-    const wallets = await getWallets({ address: holder.address, projectId });
+    const wallets = await getHolders({ address: holder.address, projectId });
 
     for (const wallet of wallets) {
-      const result = await updateWallet(wallet?.id as string, {
+      const result = await updateHolder(wallet?.id as string, {
         balance: toDecimals(balance, cache.get(projectId)?.decimals) || 0,
       });
       console.log(result);

@@ -8,7 +8,7 @@ const config = {
   timeouts: {
     iterateTransferEventsAndCreateNewEntriesCallback: 25,
     updateBalancesForRebasingTokens: 75,
-    iterateTransferEventsCreateOrUpdateWalletEntriesCallback: 75,
+    createOrUpdateHolderEntriesCallback: 75,
   },
 };
 

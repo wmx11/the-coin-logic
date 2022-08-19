@@ -6,6 +6,9 @@ mutation createMarketStats(
   $liquidity: Float
   $pairPrice: Float
   $id: ID
+  $holders: Float
+  $avgHoldings: Float
+  $customData: JSON
 ) {
   createMarketStat(
     data: {
@@ -14,6 +17,9 @@ mutation createMarketStats(
       totalSupply: $totalSupply
       liquidity: $liquidity
       pairPrice: $pairPrice
+      holders: $holders
+      avgHoldings: $avgHoldings
+      customData: $customData
       project: { connect: { id: $id } }
     }
   ) {

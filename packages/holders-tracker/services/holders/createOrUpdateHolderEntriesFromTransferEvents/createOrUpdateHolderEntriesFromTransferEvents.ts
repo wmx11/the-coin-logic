@@ -3,22 +3,22 @@ import config from '../../../config';
 import { getDecimals } from '../../base';
 import getPaginationFor from '../../../../utils/getPaginationFor';
 import getTransferEventsCount from './getTransferEventsCount';
-import iterateTransferEventsCreateOrUpdateWalletEntriesCallback from './iterateTransferEventsCreateOrUpdateWalletEntriesCallback';
+import createOrUpdateHolderEntriesCallback from './createOrUpdateHolderEntriesCallback';
 import iterateWithContext from '../../../../utils/iterateWithContext';
 import { updateProjectInitializedStatus } from '../../../../graphql/mutations';
 import { Project } from '../../../../types';
 
-type CreateOrUpdateWalletEntriesFromTransferEvents = {
+type createOrUpdateHolderEntriesFromTransferEvents = {
   project: Project;
   hasHolders: boolean;
   contract: Contract;
 };
 
-const createOrUpdateWalletEntriesFromTransferEvents = async ({
+const createOrUpdateHolderEntriesFromTransferEvents = async ({
   project,
   hasHolders,
   contract,
-}: CreateOrUpdateWalletEntriesFromTransferEvents) => {
+}: createOrUpdateHolderEntriesFromTransferEvents) => {
   const projectId = project.id;
 
   if (!projectId) {
@@ -44,11 +44,11 @@ const createOrUpdateWalletEntriesFromTransferEvents = async ({
     perPage,
   };
 
-  await iterateWithContext(context, iterateTransferEventsCreateOrUpdateWalletEntriesCallback);
+  await iterateWithContext(context, createOrUpdateHolderEntriesCallback);
 
   if (!hasHolders || !project.initialized) {
     await updateProjectInitializedStatus({ id: projectId, initialized: true });
   }
 };
 
-export default createOrUpdateWalletEntriesFromTransferEvents;
+export default createOrUpdateHolderEntriesFromTransferEvents;

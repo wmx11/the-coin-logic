@@ -7,17 +7,18 @@ const addMarketStats = async (): Promise<void> => {
   const projects = await getEnabledProjects();
 
   if (!projects || !projects.length) {
-    console.log('No projects found');
-    return;
+    throw new Error('No projects found');
   }
+
+  const cache = new Map();
 
   for (const project of projects) {
     try {
-      const marketStats = await generateMarketStats(project);
+      const marketStats = await generateMarketStats(project, cache);
       await createMarketStats(marketStats);
-      await sleep(2000);
+      await sleep(1000);
     } catch (error) {
-      console.log(JSON.stringify(error));
+      console.log(error);
     }
   }
 };

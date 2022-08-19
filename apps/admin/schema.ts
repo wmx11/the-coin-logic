@@ -39,6 +39,8 @@ export const lists: Lists = {
       totalSupply: float(),
       liquidity: float(),
       pairPrice: float(),
+      holders: float(),
+      avgHoldings: float(),
       customData: json({ defaultValue: [] }),
       project: relationship({ ref: 'Project' }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
@@ -132,6 +134,7 @@ export const lists: Lists = {
   Network: list({
     fields: {
       name: text({ validation: { isRequired: true } }),
+      slug: text({ validation: { isRequired: true } }),
       logo: image({ storage: 'localLogos' }),
       url: text({ validation: { isRequired: true } }),
     },

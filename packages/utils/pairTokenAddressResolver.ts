@@ -2,20 +2,20 @@ import { Project } from '../types';
 
 const pairTokenAddressResolver =
   (project: Project) =>
-  (key: number): string => {
+  (key: number): string | null => {
     const pair = project?.liquidityPair;
 
     if (!pair || !pair.length) {
-      return '';
+      return null;
     }
 
     const pairTokens = pair[0].stablePair?.pairToken;
 
     if (!pairTokens || !pairTokens.length) {
-      return '';
+      return null;
     }
 
-    return pairTokens[key].address || '';
+    return pairTokens[key].address || null;
   };
 
 export default pairTokenAddressResolver;

@@ -4,19 +4,21 @@ export const GET_ENABLED_PROJECTS = `
     id
     contractAddress
     pairAddress
-    stableLiquidityPair {
-      pairToken {
-        address
-      }
+    liquidityPair {
       address
+      stablePair {
+        address
+        pairToken {
+          address
+        }
+      }
     }
     network {
       url
     }
     customData
   }
-}
-`;
+}`;
 
 const COMMON_GETTER_FOR_TRACKING = `
   id
@@ -44,3 +46,23 @@ export const GET_ENABLED_AND_NOT_INITIALIZED_PROJECTS_FOR_HOLDERS_TRACKING = `
   }
 }
 `;
+
+export const GET_HOLDERS_DATA_BY_PROJECT_ID = `
+query($id: ID) {
+  marketStats(
+    take: 1
+    orderBy: { dateAdded: desc }
+    where: { project: { id: { equals: $id } } }
+  ) {
+    holders
+    avgHoldings
+  }
+}`;
+
+export const GET_NETWORK_BY_SLUG = `
+query($slug: String) {
+  networks(where: { slug: { equals: $slug } }) {
+    slug
+    url
+  }
+}`;

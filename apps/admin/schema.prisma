@@ -30,6 +30,8 @@ model MarketStat {
   totalSupply Float?
   liquidity   Float?
   pairPrice   Float?
+  holders     Float?
+  avgHoldings Float?
   customData  String?   @default("[]")
   project     Project?  @relation("MarketStat_project", fields: [projectId], references: [id])
   projectId   String?   @map("project")
@@ -135,6 +137,7 @@ model LiquidityPair {
 model Network {
   id                               String                @id @default(cuid())
   name                             String                @default("")
+  slug                             String                @default("")
   logo_filesize                    Int?
   logo_extension                   String?
   logo_width                       Int?
