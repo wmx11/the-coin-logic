@@ -4,6 +4,7 @@ export const GET_ENABLED_PROJECTS = `
     id
     contractAddress
     pairAddress
+    trackHoldersFromTokenAmount
     liquidityPair {
       address
       stablePair {
@@ -56,6 +57,9 @@ query($id: ID) {
   ) {
     holders
     avgHoldings
+    newHolders
+    recurringHolders
+    leavingHolders
   }
 }`;
 

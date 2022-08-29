@@ -11,6 +11,8 @@ import { createAuth } from '@keystone-6/auth';
 
 // See https://keystonejs.com/docs/apis/session#session-api for the session docs
 import { statelessSessions } from '@keystone-6/core/session';
+import sendPasswordResetEmail from 'tcl-packages/email/sendPasswordResetEmail';
+import jwt from 'jsonwebtoken';
 
 let sessionSecret = process.env.SESSION_SECRET;
 
@@ -18,9 +20,7 @@ let sessionSecret = process.env.SESSION_SECRET;
 // however it should always be there in production.
 if (!sessionSecret) {
   if (process.env.NODE_ENV === 'production') {
-    throw new Error(
-      'The SESSION_SECRET environment variable must be set in production'
-    );
+    throw new Error('The SESSION_SECRET environment variable must be set in production');
   } else {
     sessionSecret = '-- DEV COOKIE SECRET; CHANGE ME --';
   }
@@ -32,18 +32,37 @@ if (!sessionSecret) {
 const { withAuth } = createAuth({
   listKey: 'User',
   identityField: 'email',
-  sessionData: 'name',
+  sessionData: 'id name isAdmin roles { isAdmin isModerator isEditor }',
   secretField: 'password',
   initFirstItem: {
     // If there are no items in the database, keystone will ask you to create
     // a new user, filling in these fields.
     fields: ['name', 'email', 'password'],
+    itemData: { isAdmin: true },
+  },
+  passwordResetLink: {
+    sendToken: async ({ itemId, identity, token }) => {
+      if (!itemId || !identity || !token) {
+        return;
+      }
+
+      const passwordResetData = {
+        email: identity,
+        token
+      };
+      
+      const signedToken = jwt.sign(passwordResetData, process.env.PASSWORD_RESET_JWT_SECRET as string);
+
+      await sendPasswordResetEmail(identity, `${process.env.PASSWORD_RESET_LINK}/${signedToken}`);
+      return;
+    },
+    tokensValidForMins: 10,
   },
 });
 
 // This defines how long people will remain logged in for.
 // This will get refreshed when they log back in.
-let sessionMaxAge = 60 * 60 * 24 * 30; // 30 days
+const sessionMaxAge = 60 * 60 * 24 * 30; // 30 days
 
 // This defines how sessions should work. For more details, check out: https://keystonejs.com/docs/apis/session#session-api
 const session = statelessSessions({

@@ -1,6 +1,7 @@
 import type { Pagination } from '../types';
 import type { Prisma } from '@prisma/client';
-import prisma from '../../../prisma';
+import prisma from '../../../holdersDb';
+import { subDays } from 'date-fns';
 
 export const getHolderPosition = (address: string) => {
   return;
@@ -132,4 +133,67 @@ export const getHoldersWithEnabledAndRebasingProjectsFromDateLowerThan = (date: 
       },
     },
   });
+};
+
+export const getNewHoldersCountByProjectId = async (projectId: string, tokenAmount = 0) => {
+  try {
+    return prisma.holders.count({
+      where: {
+        projectId,
+        balance: {
+          gte: tokenAmount,
+        },
+        createdAt: {
+          gte: subDays(new Date(), 1),
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getLeavingHoldersCountByProjectId = async (projectId: string, tokenAmount = 0) => {
+  try {
+    return prisma.holders.count({
+      where: {
+        projectId,
+        balance: {
+          lte: tokenAmount,
+        },
+        updatedAt: {
+          gte: subDays(new Date(), 1),
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getRecurringHoldersCountByProjectId = async (projectId: string, tokenAmount = 0) => {
+  try {
+    return prisma.holders.count({
+      where: {
+        projectId,
+        balance: {
+          gte: tokenAmount,
+        },
+        createdAt: {
+          lt: subDays(new Date(), 1),
+        },
+        updatedAt: {
+          gte: subDays(new Date(), 1),
+        },
+        transfers: {
+          every: { createdAt: { gte: subDays(new Date(), 1) } },
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };

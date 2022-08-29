@@ -9,11 +9,11 @@ export const TABLE_DATA = {
     label: 'Price',
   },
   holders: {
-    styles: `${commonSpacing} ${commonBefore} md:max-w-[100px] before:content-["Holders:"]`,
+    styles: `${commonSpacing} ${commonBefore} hidden md:block md:max-w-[100px] before:content-["Holders:"]`,
     label: 'Holders',
   },
   avgHoldings: {
-    styles: `${commonSpacing} ${commonBefore} md:max-w-[150px] before:content-["Avg._Holdings:"]`,
+    styles: `${commonSpacing} ${commonBefore} hidden md:block md:max-w-[150px] before:content-["Avg._Holdings:"]`,
     label: 'Avg. Holdings',
   },
   marketCap: {
@@ -21,11 +21,11 @@ export const TABLE_DATA = {
     label: 'Market Cap',
   },
   tags: {
-    styles: `${commonSpacing} ${commonBefore} md:max-w-[150px] before:mb-2 before:content-["Tags:"]`,
+    styles: `${commonSpacing} ${commonBefore} hidden md:block md:max-w-[150px] before:mb-2 before:content-["Tags:"]`,
     label: 'Tags',
   },
   network: {
-    styles: `${commonSpacing} ${commonBefore} flex items-center justify-center md:max-w-[80px] before:mb-2 before:content-["Network:"]`,
+    styles: `${commonSpacing} ${commonBefore} hidden md:block md:flex md:items-center md:justify-center md:max-w-[80px] before:mb-2 before:content-["Network:"]`,
     label: 'Tags',
   },
 };

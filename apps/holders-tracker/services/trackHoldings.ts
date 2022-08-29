@@ -45,4 +45,6 @@ const trackHoldings = async (initial = false) => {
   isRunning = false;
 };
 
+trackHoldings()
+
 export default trackHoldings;

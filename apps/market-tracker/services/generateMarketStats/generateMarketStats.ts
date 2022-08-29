@@ -4,6 +4,9 @@ import marketStatsContract from 'tcl-packages/web3/marketStatsContract';
 import {
   getHoldersCountByProjectIdFrom,
   getAverageHoldingsByProjectId,
+  getNewHoldersCountByProjectId,
+  getLeavingHoldersCountByProjectId,
+  getRecurringHoldersCountByProjectId,
 } from 'tcl-packages/holders-tracker/services/holders';
 import { getHoldersDataByProjectId } from 'tcl-packages/graphql/queries';
 import resolveCustomData from '../resolveCustomData';
@@ -100,6 +103,18 @@ const generateMarketStats = async (project: Project, cache: Map<string, Cache>) 
 
   const customData = await resolveCustomData(project.customData, { pairPrice, tokenPrice });
 
+  const newHolders = await getNewHoldersCountByProjectId(project.id, project.trackHoldersFromTokenAmount as number);
+
+  const leavingHolders = await getLeavingHoldersCountByProjectId(
+    project.id,
+    project.trackHoldersFromTokenAmount as number,
+  );
+
+  const recurringHolders = await getRecurringHoldersCountByProjectId(
+    project.id,
+    project.trackHoldersFromTokenAmount as number,
+  );
+
   const results = {
     id: project.id,
     price: tokenPrice,
@@ -109,6 +124,9 @@ const generateMarketStats = async (project: Project, cache: Map<string, Cache>) 
     pairPrice,
     holders: holders || prevHoldersData?.holders,
     avgHoldings: avgHoldings || prevHoldersData?.avgHoldings,
+    newHolders: newHolders || prevHoldersData?.newHolders,
+    recurringHolders: recurringHolders || prevHoldersData?.recurringHolders,
+    leavingHolders: leavingHolders || prevHoldersData?.leavingHolders,
     customData,
   };
 

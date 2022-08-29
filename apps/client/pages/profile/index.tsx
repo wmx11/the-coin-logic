@@ -1,7 +1,13 @@
-import React from 'react';
+import ProfileData from 'components/pages/profile/ProfileData';
+import UserLayout from 'components/pages/profile/ProfileLayout';
+import { ReactElement } from 'react';
 
-function index() {
-  return <div>index</div>;
+function ProfilePage<NextPageWithLayout>() {
+  return <ProfileData className="w-full md:max-w-[550px]" />;
 }
 
-export default index;
+export default ProfilePage;
+
+ProfilePage.getLayout = function getLayout(page: ReactElement) {
+  return <UserLayout>{page}</UserLayout>;
+};

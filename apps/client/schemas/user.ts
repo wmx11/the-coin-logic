@@ -1,19 +1,21 @@
 import { z } from 'zod';
 
-const commons = {
+export const commons = {
+  username: z.string().min(3, { message: 'Username must be at least 3 characters long.' }).max(24),
   email: z.string().min(1, { message: 'Email is required.' }).email({ message: 'Email is invalid.' }),
   password: z.string().min(8, { message: 'Password must be at least 8 characters long.' }),
+  subscribeToEmail: z.boolean(),
 };
 
 export const userSchema = z.object({
-  username: z.string().min(3, { message: 'Username must be at least 3 characters long.' }).max(24),
+  username: commons.username,
   email: commons.email,
   password: commons.password.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,}$/, {
     message:
       'Password should contain both letter and numbers, at least 1 uppercase letter, with minimum length of 8 characters',
   }),
   referrer: z.string(),
-  subscribeToEmail: z.boolean(),
+  subscribeToEmail: commons.subscribeToEmail,
 });
 
 export const userLoginSchema = z.object({
@@ -21,5 +23,13 @@ export const userLoginSchema = z.object({
   password: commons.password,
 });
 
+export const userProfileSchema = z.object({
+  username: commons.username,
+  firstName: z.nullable(z.string().min(2, { message: 'First Name must be at least 2 characters long.' }).max(24)),
+  lastName: z.nullable(z.string().min(2, { message: 'Last Name must be at least 2 characters long.' }).max(24)),
+  subscribeToEmail: commons.subscribeToEmail,
+});
+
 export type User = z.infer<typeof userSchema>;
 export type UserLogin = z.infer<typeof userLoginSchema>;
+export type UserProfile = z.infer<typeof userProfileSchema>;

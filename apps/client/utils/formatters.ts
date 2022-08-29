@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-export const formatDate = (date: string) => {
+export const formatDate = (date: Date | string) => {
   if (!date) {
     return null;
   }

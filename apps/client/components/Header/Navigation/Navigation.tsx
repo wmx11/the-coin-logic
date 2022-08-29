@@ -1,23 +1,30 @@
+import { Divider } from '@mantine/core';
 import useMobileScreen from 'hooks/useMobileScreen';
-import Image from 'next/image';
 import Link from 'next/link';
-import React, { FC } from 'react';
-import tclLogo from '../../../public/images/tcl_logo.png';
-import UserNavigation from '../UserNavigation';
+import { FC } from 'react';
+import routes from 'utils/routes';
 
 type NavLinkProps = {
   href: string;
   label: string;
 };
 
-const Navigation = () => {
+type NavigationProps = {
+  setIsOpen?: (type: boolean) => void;
+};
+
+const Navigation: FC<NavigationProps> = ({ setIsOpen }) => {
   const { isMobileScreen } = useMobileScreen();
 
   const NavLink: FC<NavLinkProps> = ({ href, label }) => {
     return (
-      <div className="w-full md:w-auto">
+      <div className="w-full md:w-auto" onClick={isMobileScreen && setIsOpen ? () => setIsOpen(false) : undefined}>
         <Link href={href}>
-          <a className={`font-bold hover:underline ${isMobileScreen && 'w-full p-4 block mb-2 bg-violet rounded-md'}`}>
+          <a
+            className={`font-bold hover:text-purple-300 transition-colors ${
+              isMobileScreen && 'w-full p-3 mb-2 block bg-violet/10 text-violet rounded-md'
+            }`}
+          >
             {label}
           </a>
         </Link>
@@ -28,21 +35,12 @@ const Navigation = () => {
   return (
     <div className={`flex justify-between text-white py-4 ${isMobileScreen && 'flex-col items-center'}`}>
       <div className={`flex gap-x-8 items-center ${isMobileScreen && 'flex-col mb-8 text-center w-full'} `}>
-        <div className="">
-          <Link href="/">
-            <a className="flex">
-              <Image src={tclLogo} alt="TCL Logo" width={30} height={35} placeholder="blur" />
-            </a>
-          </Link>
-        </div>
-        <NavLink href="" label="Products" />
-        <NavLink href="" label="Resources" />
-        <NavLink href="/about-us" label="About Us" />
-        <NavLink href="/roadmap" label="Roadmap" />
-        <NavLink href="/pricing" label="Pricing" />
+        <NavLink href={routes.services} label="Services" />
+        <NavLink href={routes.resources} label="Resources" />
+        <NavLink href={routes.aboutUs} label="About Us" />
+        <NavLink href={routes.roadmap} label="Roadmap" />
+        <NavLink href={routes.pricing} label="Pricing" />
       </div>
-
-      <UserNavigation />
     </div>
   );
 };

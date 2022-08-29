@@ -1,18 +1,19 @@
-import React, { FC } from 'react';
-import { Center, Container, Divider, Text } from '@mantine/core';
-import { Badges } from '../../components/Badges';
-import AboutProject from '../../components/pages/project/AboutProject';
-import Announcements from '../../components/pages/project/Announcements';
-import HoldersData from '../../components/pages/project/HoldersData';
-import MarketData from '../../components/pages/project/MarketData';
-import SocialAnalysisData from '../../components/pages/project/SocialAnalysisData';
-import { ProjectTitle } from '../../components/ProjectTitle';
-import TrackVitalsDisclaimer from '../../components/TrackVitalsDisclaimer';
-import { getProjectTypeBySlug } from '../../data/getters/getters';
-import { NotFound } from '../../components/NotFound';
+import { Button, Center, Container, Divider, Paper, Stack, Text } from '@mantine/core';
+import { useScrollIntoView } from '@mantine/hooks';
+import Meta from 'components/Meta';
+import NotificationBar from 'components/NotificationBar';
+import Markets from 'components/pages/project/Markets';
+import { FC } from 'react';
 import { Tag } from 'types';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
-import Markets from 'components/pages/project/Markets';
+import { Badges } from '../../components/Badges';
+import { NotFound } from '../../components/NotFound';
+import AboutProject from '../../components/pages/project/AboutProject';
+import HoldersData from '../../components/pages/project/HoldersData';
+import MarketData from '../../components/pages/project/MarketData';
+import { ProjectTitle } from '../../components/ProjectTitle';
+import TrackVitalsDisclaimer from '../../components/TrackVitalsDisclaimer';
+import { getProjectAndMarketStatsBySlug } from '../../data/getters';
 
 type ProjectProps = {
   projectData: ProjectWithMarketStatsAndChanges;
@@ -20,6 +21,9 @@ type ProjectProps = {
 
 const project: FC<ProjectProps> = ({ projectData }) => {
   const { project } = projectData;
+  const { notifications } = project;
+  const { scrollIntoView: scrollMarket, targetRef: targetMarket } = useScrollIntoView<HTMLDivElement>({ offset: 60 });
+  const { scrollIntoView: scrollHolders, targetRef: targetHolders } = useScrollIntoView<HTMLDivElement>({ offset: 60 });  
 
   if (!project) {
     return (
@@ -32,48 +36,69 @@ const project: FC<ProjectProps> = ({ projectData }) => {
   }
 
   return (
-    <Container className="py-10">
-      <div className="flex justify-between mb-8">
-        <div>
-          <ProjectTitle title={project.name as string} size="md" avatar={project.logo ? project.logo.url : ''} />
-          <div>
-            <Text color="dimmed" size="xs" className="mb-2">
-              Tags:
-            </Text>
-            <Badges badges={project.tags as Tag[]} />
+    <>
+      <Meta
+        title={`${project.name} Price today, analytics, holders, charts | Coin Logic`}
+        description={`Get the latest ${project.name} price, market cap, analytics, holders, charts from Coin Logic - The Trusted and Transparent DeFi Analytics Platform.`}
+      />
+      <div className="bg-zinc-50">
+        <Container className="py-10">
+          {notifications && (
+            <div className="sticky top-[90px] z-[1]">
+              {notifications?.map((notification, index) => (
+                <NotificationBar notification={notification} key={`notification_${index}`} />
+              ))}
+            </div>
+          )}
+          <Paper p="md" shadow="sm" withBorder className="w-full flex flex-wrap gap-4 mb-8 items-center">
+            <div className="md:max-w-[320px] w-full md:border-r">
+              <ProjectTitle title={project.name as string} size="md" avatar={project.logo ? project.logo.url : ''} />
+              <div>
+                <Text color="dimmed" size="xs" className="mb-2">
+                  Tags:
+                </Text>
+                <Badges badges={project.tags as Tag[]} />
+              </div>
+            </div>
+            <div className="w-full md:w-auto">
+              <Stack>
+                <Button color="violet" variant="outline" onClick={() => scrollMarket({ alignment: 'center' })}>
+                  View Market Data
+                </Button>
+                <Button color="violet" variant="outline" onClick={() => scrollHolders({ alignment: 'center' })}>
+                  View Holders Data
+                </Button>
+              </Stack>
+            </div>
+          </Paper>
+
+          <div className="mb-8">
+            <div className={`flex gap-4 flex-wrap md:flex-nowrap md:justify-between`}>
+              <div className={`w-full md:w-[69%]`}>
+                <AboutProject data={project} />
+              </div>
+              <div className={`w-full md:w-[29%]`}>
+                <Markets data={project} />
+              </div>
+            </div>
           </div>
+        </Container>
+      </div>
+
+      <Container className="py-10">
+        <div className="my-16" ref={targetMarket}>
+          <MarketData data={projectData} />
         </div>
-      </div>
 
-      <div className="mb-8">
-        <div className={`flex gap-4 flex-wrap md:flex-nowrap`}>
-          <div className={`w-full md:w-[69%]`}>
-            <AboutProject data={project} />
-          </div>
-          <div className={`w-full md:w-[29%]`}>
-            {/* <Announcements /> */}
-            {/* <div className="mb-4"></div> */}
-            <Markets data={project} />
-          </div>
+        <div className="mb-16" ref={targetHolders}>
+          <HoldersData data={projectData} />
         </div>
-      </div>
 
-      <div className="my-16">
-        <MarketData data={projectData} />
-      </div>
+        <Divider />
 
-      <div className="mb-16">
-        <HoldersData />
-      </div>
-
-      {/* <div className="mb-16">
-        <SocialAnalysisData />
-      </div> */}
-
-      <Divider />
-
-      <TrackVitalsDisclaimer />
-    </Container>
+        <TrackVitalsDisclaimer />
+      </Container>
+    </>
   );
 };
 
@@ -87,7 +112,7 @@ type Params = {
 
 export const getServerSideProps = async ({ params }: Params) => {
   const slug = params.slug;
-  const projectData = await getProjectTypeBySlug(slug);
+  const projectData = await getProjectAndMarketStatsBySlug(slug);
 
   return {
     props: {

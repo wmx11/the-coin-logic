@@ -1,5 +1,5 @@
 import { KeystoneContext } from '@keystone-6/core/types';
-import prisma from '../../../packages/prisma';
+import prisma from '../../../packages/holdersDb';
 import { Project } from '../types';
 
 const getNetworkById = async (id: string, context: KeystoneContext) => {

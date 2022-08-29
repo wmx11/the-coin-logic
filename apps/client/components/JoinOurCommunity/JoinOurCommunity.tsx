@@ -3,7 +3,7 @@ import { Button, Center, Container, Text, Title } from '@mantine/core';
 
 function JoinOurCommunity() {
   return (
-    <div className="my-40">
+    <div className="my-52">
       <Container>
         <Center>
           <div className="text-center">

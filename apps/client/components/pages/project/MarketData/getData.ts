@@ -1,5 +1,6 @@
-import { StatsData } from 'types/MarketData';
+import { CustomDataResponse, PreviousValueTypes, StatsData } from 'types/MarketData';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
+import { getCustomDataChangeLabels, getCustomDataLabels } from 'utils/prepareCustomData';
 
 export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => {
   const {
@@ -14,40 +15,53 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
     liquidityChange,
     pairPriceChange,
     totalSupplyChange,
+    customData,
   } = data;
 
   const pairToken = liquidityPair && liquidityPair[0].stablePair?.pairToken;
 
+  const customDataChangeLabels = getCustomDataChangeLabels(getCustomDataLabels(customData));
+
+  const resolvedCustomData = customData.map(
+    ({ label, value, withPairPrice, withPrice, ticker }: CustomDataResponse, index: number) => ({
+      value: withPairPrice || withPrice || value,
+      previousValue: data[customDataChangeLabels[index]],
+      title: withPairPrice || withPrice ? label : `${label} (${ticker})`,
+      isCurrency: withPairPrice || withPrice,
+    }),
+  );
+
   return [
     {
       value: price as number,
-      previousValue: priceChange,
+      previousValue: priceChange as PreviousValueTypes,
       title: 'Price',
       isCurrency: true,
     },
     {
       value: marketCap as number,
-      previousValue: marketCapChange,
+      previousValue: marketCapChange as PreviousValueTypes,
       title: 'Market Cap',
       isCurrency: true,
     },
     {
       value: liquidity as number,
-      previousValue: liquidityChange,
+      previousValue: liquidityChange as PreviousValueTypes,
       title: 'Liquidity',
       isCurrency: true,
     },
     {
       value: pairPrice as number,
-      previousValue: pairPriceChange,
+      previousValue: pairPriceChange as PreviousValueTypes,
       title: `Pair Price (${pairToken && pairToken[0].name})`,
       isCurrency: true,
     },
     {
       value: totalSupply as number,
-      previousValue: totalSupplyChange,
+      previousValue: totalSupplyChange as PreviousValueTypes,
       title: 'Total Supply',
       isCurrency: false,
     },
+    ...resolvedCustomData,
   ];
 };

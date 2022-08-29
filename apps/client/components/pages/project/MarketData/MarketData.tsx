@@ -1,9 +1,11 @@
 import React, { FC } from 'react';
 import { BsBarChartLineFill } from 'react-icons/bs';
+import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import { formateDateWithHours } from '../../../../utils/formatters';
 import { StatsTabGroup } from '../../../StatsTabGroup';
 import { getData } from './getData';
-import { MarketDataTypes } from './types';
+
+type MarketDataTypes = { data: ProjectWithMarketStatsAndChanges };
 
 const MarketData: FC<MarketDataTypes> = ({ data }) => {
   const { dateAdded } = data;

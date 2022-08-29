@@ -1,55 +1,50 @@
-import { Avatar, Divider, Menu, Text, UnstyledButton } from '@mantine/core';
+import { Menu } from '@mantine/core';
+import UserAvatar from 'components/UserAvatar';
+import UserNavigationLinks from 'components/UserNavigationLinks';
+import useMobileScreen from 'hooks/useMobileScreen';
 import { Session } from 'next-auth';
-import { signOut } from 'next-auth/react';
-import React, { FC, ReactNode } from 'react';
-import { FaUserCog } from 'react-icons/fa';
-import { FiLogOut } from 'react-icons/fi';
+import { FC } from 'react';
 
-type SessionProps = {
+type AuhenticatedNavigationProps = {
   session: Session;
+  setIsOpen?: (type: boolean) => void;
 };
 
-type MenuNavLinkProps = {
-  href: string;
-  children: string;
-  icon?: ReactNode;
-};
+const AuhenticatedNavigation: FC<AuhenticatedNavigationProps> = ({ session, setIsOpen }) => {
+  const { isMobileScreen } = useMobileScreen();
+  const userName = session?.user?.name;
 
-const MenuNavLink: FC<MenuNavLinkProps> = ({ href, icon, children }) => {
-  return (
-    <Menu.Item icon={icon} color="violet">
-      <UnstyledButton component="a" href={href}>
-        <Text size="xs">{children}</Text>
-      </UnstyledButton>
-    </Menu.Item>
-  );
-};
+  const MenuComponent = () => {
+    if (isMobileScreen) {
+      return (
+        <>
+          <div className="flex mb-4">
+            <UserAvatar name={userName as string} />
+          </div>
+          <UserNavigationLinks isInMenuProvider={false} setIsOpen={setIsOpen} />
+        </>
+      );
+    }
 
-const AuhenticatedNavigation: FC<SessionProps> = ({ session }) => {
-  return (
-    <div className="flex gap-4 items-center">
+    return (
       <Menu
         shadow="md"
         trigger="hover"
         control={
-          <Avatar color="violet" src={null} size="md" radius="xl">
-            {session?.user?.name?.slice(0, 2).toUpperCase()}
-          </Avatar>
+          <div>
+            <UserAvatar name={userName as string} />
+          </div>
         }
       >
-        <Menu.Label>{session?.user?.name}</Menu.Label>
-
-        <MenuNavLink href="/profile" icon={<FaUserCog />}>
-          Profile
-        </MenuNavLink>
-
-        <Divider />
-        <Menu.Item icon={<FiLogOut />} color="violet">
-          <UnstyledButton onClick={() => signOut({ redirect: false })}>
-            <Text size="xs">Log Out</Text>
-          </UnstyledButton>
-        </Menu.Item>
+        <Menu.Label>{userName}</Menu.Label>
+        <UserNavigationLinks />
       </Menu>
+    );
+  };
+
+  return (
+    <div className="flex md:gap-4 md:items-center flex-col md:flex-row w-full md:w-auto">
+      <MenuComponent />
     </div>
   );
 };

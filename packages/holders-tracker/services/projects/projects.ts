@@ -2,7 +2,7 @@ import {
   getEnabledAndNotInitializedProjectsForHoldersTracking,
   getEnabledProjectsForHoldersTracking,
 } from '../../../graphql/queries';
-import prisma from '../../../prisma';
+import prisma from '../../../holdersDb';
 
 export const getProjects = (initial: boolean) => {
   if (initial) {

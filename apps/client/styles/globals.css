@@ -5,3 +5,15 @@
 html, body {
   font-family: 'Roboto', sans-serif;
 }
+
+.grecaptcha-badge { 
+  visibility: hidden;
+}
+
+:root {
+  --toastify-color-success: #82C91E !important;
+  --toastify-color-warning: #FD7E14 !important;
+  --toastify-color-error: #F03E3E !important;
+  --toastify-color-info: #5C7CFA !important;
+}
+

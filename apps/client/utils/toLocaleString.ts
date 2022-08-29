@@ -3,6 +3,10 @@ const toLocaleString = (number?: number) => {
     return 0;
   }
 
+  if (number > -1 && number < 1) {
+    return number.toFixed(8);
+  }
+
   return number.toLocaleString().length < 25 ? number.toLocaleString() : Math.floor(number);
 };
 

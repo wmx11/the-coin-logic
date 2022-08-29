@@ -3,7 +3,7 @@ import type { Pagination } from '../types';
 import type { Prisma } from '@prisma/client';
 import type { Project } from '../../../types';
 import { getBlockByProjectId } from '../base';
-import prisma from '../../../prisma';
+import prisma from '../../../holdersDb';
 
 type GetPastTransferEvents = {
   contract: Contract;

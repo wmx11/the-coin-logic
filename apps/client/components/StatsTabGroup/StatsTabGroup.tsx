@@ -23,7 +23,7 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
     const Stats = ({ data }: StatsTabGroupProps) => {
       return (
         <div>
-          <div className="flex items-stretch flex-wrap gap-4">
+          <div className="flex items-stretch justify-center md:justify-start flex-wrap gap-4">
             {data &&
               data.map(({ value, title, previousValue, isCurrency }, index: number) => {
                 return (
@@ -73,14 +73,14 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
       {title && (
         <div className={`flex gap-2 items-center ${!subtitle && 'mb-4'}`}>
           {Icon && <Icon className="text-xl" />}
-          <Title order={2} className=" text-lightBlue">
+          <Title order={2}>
             {title}
           </Title>
         </div>
       )}
 
       {subtitle && (
-        <Text className="text-slate-500 mb-4" size="sm">
+        <Text className="text-slate-500 mb-4 font-semibold" size="xs">
           {subtitle}
         </Text>
       )}

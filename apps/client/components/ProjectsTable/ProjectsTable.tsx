@@ -3,6 +3,7 @@ import { Button, Container, Paper, Space, Text, Title } from '@mantine/core';
 import TableHead from './TableHead';
 import TableBody from './TableBody';
 import { TableData } from './types';
+import Link from 'next/link';
 
 type ProjectsTableProps = {
   data: TableData[];
@@ -13,14 +14,16 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
   return (
     <div className="my-10">
       <Container>
-        <Title order={2} className="mb-4 text-lightBlue">
+        <Title order={2} className="mb-4">
           Leaderboard
         </Title>
         <Paper p="md" shadow="sm">
-          <TableHead />
-          <TableBody data={data} />
+          <div>
+            <TableHead />
+            <TableBody data={data} />
+          </div>
 
-          {projectsCount && (
+          {projectsCount > 0 && (
             <div className="my-8 flex justify-between items-center">
               <Text>
                 Showing {projectsCount} out of {projectsCount} projects
@@ -32,7 +35,11 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
             <Text weight={700} className="mb-4">
               Can't find your favorite project?
             </Text>
-            <Button color="violet">Refer a project and earn rewards!</Button>
+            <Link href="/referrals" passHref>
+              <Button color="violet" component="a">
+                Refer a project and earn rewards!
+              </Button>
+            </Link>
           </div>
         </Paper>
       </Container>

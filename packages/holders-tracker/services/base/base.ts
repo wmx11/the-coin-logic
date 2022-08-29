@@ -2,7 +2,7 @@ import type { Contract } from 'web3-eth-contract';
 import type { Prisma } from '@prisma/client';
 import type Web3 from 'web3';
 import config from '../../../web3/config';
-import prisma from '../../../prisma';
+import prisma from '../../../holdersDb';
 
 export const getIterations = (from: number, to: number) => Math.ceil((to - from) / 2000);
 

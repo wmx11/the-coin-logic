@@ -15,7 +15,7 @@ const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, h
     if (component === 'a') {
       return (
         <Link href={href as HTMLAttributeAnchorTarget}>
-          <a className="hover:underline">{title}</a>
+          <a className="hover:text-violet transition-colors">{title}</a>
         </Link>
       );
     }

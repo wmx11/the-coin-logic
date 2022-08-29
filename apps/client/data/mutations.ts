@@ -5,7 +5,7 @@ export const CREATE_USER = gql`
     $name: String
     $email: String
     $password: String
-    $referral: String
+    $referrer: String
     $isSubscribedToEmail: Boolean
   ) {
     createUser(
@@ -13,13 +13,54 @@ export const CREATE_USER = gql`
         name: $name
         email: $email
         password: $password
-        referral: $referral
+        referrer: $referrer
         isSubscribedToEmail: $isSubscribedToEmail
       }
     ) {
       name
-      referral
+      referrer
       email
+    }
+  }
+`;
+
+export const UPDATE_USER_BY_EMAIL = gql`
+  mutation UpdateUser($email: String, $firstName: String, $lastName: String, $isSubscribedToEmail: Boolean) {
+    updateUser(
+      where: { email: $email }
+      data: { firstName: $firstName, lastName: $lastName, isSubscribedToEmail: $isSubscribedToEmail }
+    ) {
+      name
+      email
+      firstName
+      lastName
+      isSubscribedToEmail
+    }
+  }
+`;
+
+// Sends a password reset link email to the given email address.
+export const REQUEST_PASSWORD_RESET = gql`
+  mutation ($email: String!) {
+    sendUserPasswordResetLink(email: $email)
+  }
+`;
+
+// Resets a password for the user. REQUEST_PASSWORD_RESET must be used first.
+export const RESET_PASSWORD_WITH_TOKEN = gql`
+  mutation ($email: String!, $token: String!, $password: String!) {
+    redeemUserPasswordResetToken(email: $email, token: $token, password: $password) {
+      code
+      message
+    }
+  }
+`;
+
+// Deletes a user by the given email address
+export const DELETE_USER = gql`
+  mutation ($email: String!) {
+    deleteUser(where: { email: $email }) {
+      name
     }
   }
 `;
@@ -32,6 +73,7 @@ export const AUTHENTICATE_USER = gql`
           id
           name
           email
+          isVerified
           isSubscribedToEmail
         }
       }

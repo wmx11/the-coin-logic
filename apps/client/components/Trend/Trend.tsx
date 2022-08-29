@@ -29,7 +29,7 @@ const Trend: FC<TrendProps> = ({ value, previousValue, inline }) => {
     <>{value}</>
   );
 
-  if (trendValue === 0) {
+  if (trendValue === 0 && !inline) {
     return (
       <div className="flex justify-center">
         <AiOutlineEllipsis />
@@ -44,8 +44,8 @@ const Trend: FC<TrendProps> = ({ value, previousValue, inline }) => {
   return (
     <div className={trendColor}>
       <div className="absolute top-2 left-2 text-xs">{trendIndicator}</div>
-      <Text className="text-sm">
-        {trendText} ({toLocaleString(percentage)}%)
+      <Text className="text-xs font-semibold">
+        {trendText} {percentage !== 0 ? `(${toLocaleString(percentage)}%)` : ''}
       </Text>
     </div>
   );

@@ -1,9 +1,13 @@
 import { useSession } from 'next-auth/react';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import UnaunthenticatedNavigation from './UnaunthenticatedNavigation';
 import AuhenticatedNavigation from './AuhenticatedNavigation';
 
-const UserNavigation = () => {
+type UserNavigationProps = {
+  setIsOpen?: (type: boolean) => void;
+};
+
+const UserNavigation: FC<UserNavigationProps> = ({ setIsOpen }) => {
   const { data: session, status } = useSession();
 
   switch (status) {
@@ -12,7 +16,7 @@ const UserNavigation = () => {
     case 'loading':
       return <UnaunthenticatedNavigation />;
     case 'authenticated':
-      return <AuhenticatedNavigation session={session} />;
+      return <AuhenticatedNavigation session={session} setIsOpen={setIsOpen} />;
     default:
       return <UnaunthenticatedNavigation />;
   }

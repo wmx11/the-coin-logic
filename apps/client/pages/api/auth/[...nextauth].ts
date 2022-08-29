@@ -27,8 +27,9 @@ export default NextAuth({
           const { item: user } = authenticateUserWithPassword;
 
           if (user) {
-            return user;
+            return user.isVerified ? user : false;
           }
+
         } catch (e) {
           return null;
         }
@@ -37,15 +38,19 @@ export default NextAuth({
   ],
   callbacks: {
     async jwt({ token, account, user }) {
-      // if (user) {
-      //   token.lolz = user.cats;
-      // }
+      
+      if (user) {
+        token.id = user.id
+      }
+
       return token;
     },
     async session({ session, user, token }) {
-      // if (token) {
-      //   session.cats = token.lolz;
-      // }
+
+      if (token) {
+        session.id = token.id;
+      }
+
       return session;
     },
   },
