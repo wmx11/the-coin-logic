@@ -9,7 +9,7 @@ type Data = {
 const RECAPTHA_SCORE = 0.5;
 
 const verifyRecaptcha = (token: string) => {
-  const secret = process.env.SECRET_KEY;
+  const secret = process.env.RECAPTHA_SECRET_KEY;
   const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`;
   return axios.post(url);
 };

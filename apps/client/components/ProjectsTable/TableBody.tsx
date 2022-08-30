@@ -58,8 +58,6 @@ const TableBody: FC<TableBodyProps> = ({ data }) => {
                     title={name as string}
                     size="sm"
                     avatar={logo ? logo.url : ''}
-                    component="a"
-                    href={`/project/${slug}`}
                   />
                 </div>
                 <div className={`${TABLE_DATA.price.styles}`}>

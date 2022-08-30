@@ -38,6 +38,7 @@ model Transfers {
 
   @@index([projectId])
   @@index([address])
+  @@index([toAddress])
   @@index([type])
   @@index([createdAt])
 }
@@ -67,14 +68,11 @@ model Holders {
   note        String      @default("")
   isContract  Boolean     @default(false)
   projects    Projects[]
-  projectsId  String?
   transfers   Transfers[]
-  transfersId String?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
   @@index([projectId])
   @@index([address])
-  @@index([transfersId])
   @@index([createdAt])
 }

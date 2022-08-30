@@ -10,7 +10,10 @@
   ],
   "scripts": {
     "dev": "npx concurrently 'yarn workspace admin run dev' 'yarn workspace client run dev'",
-    "generate": "graphql-code-generator"
+    "build:client": "yarn workspaces client build",
+    "build:admin": "yarn workspaces admin build",
+    "generate": "graphql-code-generator",
+    "postinstall": "yarn generate"
   },
   "dependencies": {
     "@graphql-codegen/cli": "^2.11.5",

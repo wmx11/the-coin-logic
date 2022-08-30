@@ -1,10 +1,11 @@
+import type { NextAuthOptions } from 'next-auth';
 import { DocumentNode } from 'graphql';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import client from '../../../data/apollo-client';
 import { AUTHENTICATE_USER } from '../../../data/mutations';
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -29,7 +30,6 @@ export default NextAuth({
           if (user) {
             return user.isVerified ? user : false;
           }
-
         } catch (e) {
           return null;
         }
@@ -38,15 +38,13 @@ export default NextAuth({
   ],
   callbacks: {
     async jwt({ token, account, user }) {
-      
       if (user) {
-        token.id = user.id
+        token.id = user.id;
       }
 
       return token;
     },
     async session({ session, user, token }) {
-
       if (token) {
         session.id = token.id;
       }
@@ -54,4 +52,12 @@ export default NextAuth({
       return session;
     },
   },
-});
+  session: {
+    maxAge: 30 * 60,
+  },
+  pages: {
+    signIn: '/?signIn=true'
+  }
+};
+
+export default NextAuth(authOptions);

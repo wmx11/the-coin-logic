@@ -4,8 +4,6 @@ import { componentBlocks } from '../../../admin/component-blocks/component-block
 
 const componentBlockRenderers: InferRenderersForComponentBlocks<typeof componentBlocks> = {
   image: (props) => {
-    console.log(props);
-
     return (
       <a href={props.src} target="_blank" className="max-w-full">
         <Image

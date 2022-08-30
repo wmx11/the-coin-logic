@@ -1,6 +1,6 @@
 import useResetToken from 'hooks/useResetToken';
 import type { GetServerSideProps, NextPage } from 'next';
-import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 import { useCallback, useEffect, useState } from 'react';
 import useLoginFlowStore from 'store/useLoginFlowStore';
@@ -22,18 +22,25 @@ type HomeProps = {
 const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts }) => {
   const { token } = useResetToken();
   const [projectData, setProjectData] = useState({ projects: [], projectsCount: 0 });
-  const { setResetPassword } = useLoginFlowStore((state) => state);
+  const { setResetPassword, setLogin } = useLoginFlowStore((state) => state);
 
-  const openResetPasswordModalForResetToken = useCallback(() => {
-    if (!token) {
-      return null;
+  const router = useRouter();
+  const { query } = router;
+
+  const openLogInOrPasswordResetModal = useCallback(() => {
+    if (query.signIn) {
+      return setLogin(true);
     }
 
-    setResetPassword(true);
+    if (token) {
+      return setResetPassword(true);
+    }
+
+    return null;
   }, []);
 
   useEffect(() => {
-    openResetPasswordModalForResetToken();
+    openLogInOrPasswordResetModal();
     setProjectData((state) => ({ ...state, projects, projectsCount }));
   }, [projects]);
 
