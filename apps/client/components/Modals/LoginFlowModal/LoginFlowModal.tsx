@@ -1,11 +1,11 @@
 import Modal from 'components/Modal/Modal';
 import RecaptchaDisclaimer from 'components/RecaptchaDisclaimer';
 import useLoginFlowStore from 'store/useLoginFlowStore';
-import DeleteAccountContent from '../DeleteAccountModal/DeleteAccountContent';
-import RequestPasswordResetContent from '../RequestPasswordResetModal/RequestPasswordResetContent';
-import ResetPasswordContent from '../ResetPasswordModal/ResetPasswordContent';
-import SignInContent from '../SignInModal/SignInContent';
-import SignUpContent from '../SignUpModal/SignUpContent';
+import DeleteAccountContent from '../DeleteAccountContent/DeleteAccountContent';
+import RequestPasswordResetContent from '../RequestPasswordResetContent/RequestPasswordResetContent';
+import ResetPasswordContent from '../ResetPasswordContent/ResetPasswordContent';
+import SignInContent from '../SignInContent/SignInContent';
+import SignUpContent from '../SignUpContent/SignUpContent';
 
 const LoginFlowModal = () => {
   const { isRequestResetPassword, isRegister, isLogin, setIsOpen, isOpen, isAccountDelete, isResetPassword } =
