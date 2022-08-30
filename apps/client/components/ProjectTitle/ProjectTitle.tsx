@@ -21,7 +21,7 @@ const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, h
     }
 
     return (
-      <Title order={size === 'md' ? 1 : 4} className=" text-lightBlue">
+      <Title order={size === 'md' ? 1 : 5}>
         {title}
       </Title>
     );
@@ -31,7 +31,7 @@ const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, h
     if (size === 'md') {
       return (
         <div className="flex gap-4 items-center mb-2">
-          <Avatar src={avatar} alt="Titano" size="md" />
+          <Avatar src={avatar} alt="Project logo" size="md" />
           <TitleComponent />
         </div>
       );
@@ -39,7 +39,7 @@ const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, h
     if (size === 'sm') {
       return (
         <div className="flex gap-x-2 items-center">
-          <Avatar src={avatar} alt="Titano" size="sm" />
+          <Avatar src={avatar} alt="Project logo" size="sm" />
           <TitleComponent />
         </div>
       );
