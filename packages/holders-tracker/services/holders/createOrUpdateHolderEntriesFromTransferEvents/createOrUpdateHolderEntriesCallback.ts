@@ -1,13 +1,12 @@
-import { createOrUpdateHolder, getHolder } from '../holders';
-
 import { Context } from '../../../../utils/iterateWithContext';
 import { Contract } from 'web3-eth-contract';
+import { createOrUpdateHolder, getHolder } from '../holders';
 import { getProjectByProjectId } from '../../projects';
-import getTransferEvents from './getTransferEvents';
 import { getWalletBalance } from '../../base';
+import config from '../../../config';
+import getTransferEvents from './getTransferEvents';
 import sleep from '../../../../utils/sleep';
 import toDecimals from '../../../../utils/toDecimals';
-import config from '../../../config';
 
 type ExtendedContext = Context & {
   decimals: number;
@@ -38,20 +37,17 @@ const createOrUpdateHolderEntriesCallback = async (context: ExtendedContext) => 
 
   for (const event of transferEvents) {
     const wallet = await getHolder(event.toAddress);
-    const project = await getProjectByProjectId(event.projectId);
+    const project = await getProjectByProjectId(event.projectId as string);
 
     if (!cache.has(event.toAddress)) {
       const balance = await getWalletBalance(contract, event.toAddress);
-
-      cache.set(event.toAddress, { balance: toDecimals(balance, decimals) || event.amount });
-
+      cache.set(event.toAddress, { balance: toDecimals(balance, decimals) || (event.amount as number) });
       await sleep(10);
     }
 
     const result = await createOrUpdateHolder(
       wallet?.id as string,
       {
-        projectId,
         address: event.toAddress,
         balance: cache.get(event.toAddress)?.balance || event.amount,
         projects: {

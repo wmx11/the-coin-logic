@@ -32,7 +32,7 @@ const trackTransferEventsByProject = async (project: Project) => {
   await createOrUpdateBlock(
     lastBlock?.id as string,
     {
-      projectId: project.id,
+      project: { connect: { id: project.id } },
       firstBlock: project.launchBlock as number,
       previousBlock: project.launchBlock as number,
       lastBlock: lastBlock?.lastBlock as number,

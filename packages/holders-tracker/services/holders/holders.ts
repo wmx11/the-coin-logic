@@ -1,6 +1,5 @@
 import type { Pagination } from '../types';
-import type { Prisma } from '@prisma/client';
-import prisma from '../../../holdersDb';
+import { prismaClient, PrismaSchema } from '../../../prismaClient';
 import { subDays } from 'date-fns';
 
 export const getHolderPosition = (address: string) => {
@@ -9,9 +8,11 @@ export const getHolderPosition = (address: string) => {
 
 export const getHoldersCountByProjectIdFrom = (projectId: string, from: number) => {
   try {
-    return prisma.holders.count({
+    return prismaClient.holder.count({
       where: {
-        projectId: projectId,
+        projects: {
+          every: { id: projectId },
+        },
         balance: {
           gte: from,
         },
@@ -25,12 +26,14 @@ export const getHoldersCountByProjectIdFrom = (projectId: string, from: number) 
 
 export const getAverageHoldingsByProjectId = async (projectId: string) => {
   try {
-    const { _avg } = await prisma.holders.aggregate({
+    const { _avg } = await prismaClient.holder.aggregate({
       _avg: {
         balance: true,
       },
       where: {
-        projectId,
+        projects: {
+          every: { id: projectId },
+        },
       },
     });
     return _avg.balance;
@@ -41,52 +44,56 @@ export const getAverageHoldingsByProjectId = async (projectId: string) => {
 };
 
 export const getHolder = (address: string) => {
-  return prisma.holders.findFirst({ where: { address } });
+  return prismaClient.holder.findFirst({ where: { address } });
 };
 
 export const getHoldersByProjectId = (projectId: string, pagination?: Pagination) => {
-  return prisma.holders.findMany({
+  return prismaClient.holder.findMany({
     ...pagination,
     where: {
-      projectId,
+      projects: {
+        every: { id: projectId },
+      },
     },
   });
 };
 
-export const getHolderByProjectId = (projectId: string) => {
-  return prisma.holders.findFirst({
+export const getHolderByAddress = (address: string) => {
+  return prismaClient.holder.findFirst({
     where: {
-      projectId,
+      address,
     },
   });
 };
 
 export const getHoldersCountByProjectId = (projectId: string) => {
-  return prisma.holders.count({
+  return prismaClient.holder.count({
     where: {
-      projectId,
+      projects: {
+        every: { id: projectId },
+      },
     },
   });
 };
 
 export const getHoldersCount = () => {
-  return prisma.holders.count();
+  return prismaClient.holder.count();
 };
 
-export const getHolders = (where: Prisma.HoldersWhereInput) => {
-  return prisma.holders.findMany({
+export const getHolders = (where: PrismaSchema.HolderWhereInput) => {
+  return prismaClient.holder.findMany({
     where,
   });
 };
 
-export const addHolder = (data: Prisma.HoldersCreateInput) => {
-  return prisma.holders.create({
+export const addHolder = (data: PrismaSchema.HolderCreateInput) => {
+  return prismaClient.holder.create({
     data,
   });
 };
 
-export const updateHolder = (id: string, data: Prisma.HoldersUpdateInput) => {
-  return prisma.holders.update({
+export const updateHolder = (id: string, data: PrismaSchema.HolderUpdateInput) => {
+  return prismaClient.holder.update({
     where: {
       id,
     },
@@ -96,10 +103,10 @@ export const updateHolder = (id: string, data: Prisma.HoldersUpdateInput) => {
 
 export const createOrUpdateHolder = (
   id: string,
-  create: Prisma.HoldersCreateInput,
-  update: Prisma.HoldersUpdateInput,
+  create: PrismaSchema.HolderCreateInput,
+  update: PrismaSchema.HolderUpdateInput,
 ) => {
-  return prisma.holders.upsert({
+  return prismaClient.holder.upsert({
     where: {
       id: id || '',
     },
@@ -109,22 +116,22 @@ export const createOrUpdateHolder = (
 };
 
 export const getHoldersWithEnabledAndRebasingProjectsFromDateLowerThan = (date: Date) => {
-  return prisma.holders.findMany({
+  return prismaClient.holder.findMany({
     where: {
       updatedAt: {
         lte: date,
       },
       projects: {
         some: { enabled: true, isRebasing: true, trackHolders: true },
-        none: { initialized: false },
+        none: { initialized: false, trackData: false },
       },
     },
     include: {
       projects: {
         select: {
           contractAddress: true,
-          rpc: true,
-          projectId: true,
+          network: { select: { url: true } },
+          id: true,
           isRebasing: true,
           enabled: true,
           trackHolders: true,
@@ -137,13 +144,15 @@ export const getHoldersWithEnabledAndRebasingProjectsFromDateLowerThan = (date: 
 
 export const getNewHoldersCountByProjectId = async (projectId: string, tokenAmount = 0) => {
   try {
-    return prisma.holders.count({
+    return prismaClient.holder.count({
       where: {
-        projectId,
+        projects: {
+          every: { id: projectId },
+        },
         balance: {
           gte: tokenAmount,
         },
-        createdAt: {
+        dateAdded: {
           gte: subDays(new Date(), 1),
         },
       },
@@ -156,9 +165,11 @@ export const getNewHoldersCountByProjectId = async (projectId: string, tokenAmou
 
 export const getLeavingHoldersCountByProjectId = async (projectId: string, tokenAmount = 0) => {
   try {
-    return prisma.holders.count({
+    return prismaClient.holder.count({
       where: {
-        projectId,
+        projects: {
+          every: { id: projectId },
+        },
         balance: {
           lte: tokenAmount,
         },
@@ -175,13 +186,15 @@ export const getLeavingHoldersCountByProjectId = async (projectId: string, token
 
 export const getRecurringHoldersCountByProjectId = async (projectId: string, tokenAmount = 0) => {
   try {
-    return prisma.holders.count({
+    return prismaClient.holder.count({
       where: {
-        projectId,
+        projects: {
+          every: { id: projectId },
+        },
         balance: {
           gte: tokenAmount,
         },
-        createdAt: {
+        dateAdded: {
           lt: subDays(new Date(), 1),
         },
         updatedAt: {

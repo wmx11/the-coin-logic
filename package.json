@@ -11,8 +11,12 @@
   "scripts": {
     "dev": "npx concurrently 'yarn workspace admin run dev' 'yarn workspace client run dev'",
     "start": "npx concurrently 'yarn workspace admin run start' 'yarn workspace client run start'",
-    "build:client": "yarn workspace client build",
-    "build:admin": "yarn workspace admin build",
+    "client:build": "yarn workspace client build",
+    "client:dev": "yarn workspace client dev",
+    "client:start": "yarn workspace client start",
+    "admin:build": "yarn workspace admin build",
+    "admin:dev": "yarn workspace admin dev",
+    "admin:start": "yarn workspace admin start",
     "generate": "graphql-code-generator",
     "postinstall": "yarn generate"
   },

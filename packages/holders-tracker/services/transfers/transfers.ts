@@ -1,9 +1,8 @@
 import type { Contract } from 'web3-eth-contract';
 import type { Pagination } from '../types';
-import type { Prisma } from '@prisma/client';
 import type { Project } from '../../../types';
 import { getBlockByProjectId } from '../base';
-import prisma from '../../../holdersDb';
+import { prismaClient, PrismaSchema } from '../../../prismaClient';
 
 type GetPastTransferEvents = {
   contract: Contract;
@@ -24,8 +23,8 @@ export const getPastTransferEvents = ({ contract, fromBlock, toBlock }: GetPastT
   });
 };
 
-export const addTransferEvent = (data: Prisma.TransfersCreateInput) => {
-  return prisma.transfers.create({ data });
+export const addTransferEvent = (data: PrismaSchema.TransferCreateInput) => {
+  return prismaClient.transfer.create({ data });
 };
 
 export const getTransferType = ({ project, fromAddress, toAddress }: GetTransferType) => {
@@ -41,7 +40,7 @@ export const getTransferType = ({ project, fromAddress, toAddress }: GetTransfer
   }
 
   // Sell
-  if (to === exchange && from !== contract) {
+  if (to === contract && from !== exchange) {
     return 0;
   }
 
@@ -65,7 +64,7 @@ export const getTransferType = ({ project, fromAddress, toAddress }: GetTransfer
 };
 
 export const getTransferEventsFromPreviousBlockByProjectId = (projectId: string, previousBlock: number) => {
-  return prisma.transfers.findMany({
+  return prismaClient.transfer.findMany({
     where: {
       projectId,
       block: {
@@ -76,7 +75,7 @@ export const getTransferEventsFromPreviousBlockByProjectId = (projectId: string,
 };
 
 export const getTransferEventsByProjectId = (projectId: string, pagination?: Pagination) => {
-  return prisma.transfers.findMany({
+  return prismaClient.transfer.findMany({
     ...pagination,
     where: {
       projectId,
@@ -85,7 +84,7 @@ export const getTransferEventsByProjectId = (projectId: string, pagination?: Pag
 };
 
 export const getTransferEventsCountByProjectId = (projectId: string) => {
-  return prisma.transfers.count({
+  return prismaClient.transfer.count({
     where: {
       projectId,
     },
@@ -94,7 +93,7 @@ export const getTransferEventsCountByProjectId = (projectId: string) => {
 
 export const getTransferEventsCountFromPreviousBlock = async (projectId: string) => {
   const block = await getBlockByProjectId(projectId);
-  return prisma.transfers.count({
+  return prismaClient.transfer.count({
     where: {
       projectId,
       block: {
@@ -107,7 +106,7 @@ export const getTransferEventsCountFromPreviousBlock = async (projectId: string)
 export const getTransferEventsFromPreviousBlock = async (projectId: string, pagination?: Pagination) => {
   try {
     const block = await getBlockByProjectId(projectId);
-    return prisma.transfers.findMany({
+    return prismaClient.transfer.findMany({
       where: {
         projectId,
         block: {
