@@ -16,3 +16,4 @@ export { default as ContentType } from './ContentType';
 export { default as Notification } from './Notification';
 export { default as Payment } from './Payment';
 export { default as Image } from './Image';
+export { default as Holders } from './Holders';

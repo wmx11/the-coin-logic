@@ -74,7 +74,7 @@ const generateMarketStats = async (project: Project, cache: Map<string, Cache>) 
   const pairStableTokensDecimal = fromCache?.pairStableTokensDecimal;
 
   const holders = await getHoldersCountByProjectIdFrom(project.id, project.trackHoldersFromTokenAmount || 0);
-
+  
   const avgHoldings = await getAverageHoldingsByProjectId(project.id);
 
   /** Get previous holders data in case holders or avgHoldings getters fail */

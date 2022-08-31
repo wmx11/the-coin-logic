@@ -40,7 +40,7 @@ export const GET_PROJECTS_LIST = `
 }`;
 
 export const GET_PROJECTS_COUNT = `{
-  projectsCount(where: { enabled: { equals: true } })
+  projectsCount(where: { enabled: { equals: true }, isListed: { equals: true } })
 }`;
 
 export const GET_PREVIOUS_DAY_MARKET_STATS = `
@@ -122,6 +122,7 @@ query($slug: String) {
       trackHolders
       trackHoldersFromTokenAmount
       initialized
+      trackData
       notifications(where: { enabled: { equals: true } }) {
         title
         content

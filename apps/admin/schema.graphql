@@ -105,7 +105,13 @@ input StringFilter {
   contains: String
   startsWith: String
   endsWith: String
+  mode: QueryMode
   not: NestedStringFilter
+}
+
+enum QueryMode {
+  default
+  insensitive
 }
 
 input NestedStringFilter {
@@ -350,6 +356,7 @@ input StringNullableFilter {
   contains: String
   startsWith: String
   endsWith: String
+  mode: QueryMode
   not: NestedStringNullableFilter
 }
 
@@ -534,9 +541,11 @@ type Project {
   logo: ImageFieldOutput
   enabled: Boolean
   isListed: Boolean
+  trackData: Boolean
   trackHolders: Boolean
   isRebasing: Boolean
   initialized: Boolean
+  status: String
   tags(
     where: TagWhereInput! = {}
     orderBy: [TagOrderByInput!]! = []
@@ -559,7 +568,6 @@ type Project {
   description: String
   launchDate: DateTime
   launchBlock: Int
-  trackFromBlock: Int
   user: User
   notifications(
     where: NotificationWhereInput! = {}
@@ -585,6 +593,13 @@ type Project {
   github: String
   medium: String
   dateAdded: DateTime
+  holders(
+    where: HolderWhereInput! = {}
+    orderBy: [HolderOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Holder!]
+  holdersCount(where: HolderWhereInput! = {}): Int
 }
 
 type ImageFieldOutput {
@@ -616,9 +631,11 @@ input ProjectWhereInput {
   slug: StringFilter
   enabled: BooleanFilter
   isListed: BooleanFilter
+  trackData: BooleanFilter
   trackHolders: BooleanFilter
   isRebasing: BooleanFilter
   initialized: BooleanFilter
+  status: StringNullableFilter
   tags: TagManyRelationFilter
   contractAddress: StringFilter
   pairAddress: StringFilter
@@ -629,7 +646,6 @@ input ProjectWhereInput {
   description: StringFilter
   launchDate: DateTimeNullableFilter
   launchBlock: IntNullableFilter
-  trackFromBlock: IntNullableFilter
   user: UserWhereInput
   notifications: NotificationManyRelationFilter
   sellTax: FloatNullableFilter
@@ -647,6 +663,7 @@ input ProjectWhereInput {
   github: StringFilter
   medium: StringFilter
   dateAdded: DateTimeNullableFilter
+  holders: HolderManyRelationFilter
 }
 
 input TagManyRelationFilter {
@@ -678,15 +695,23 @@ input NotificationManyRelationFilter {
   none: NotificationWhereInput
 }
 
+input HolderManyRelationFilter {
+  every: HolderWhereInput
+  some: HolderWhereInput
+  none: HolderWhereInput
+}
+
 input ProjectOrderByInput {
   id: OrderDirection
   name: OrderDirection
   slug: OrderDirection
   enabled: OrderDirection
   isListed: OrderDirection
+  trackData: OrderDirection
   trackHolders: OrderDirection
   isRebasing: OrderDirection
   initialized: OrderDirection
+  status: OrderDirection
   contractAddress: OrderDirection
   pairAddress: OrderDirection
   burnAddress: OrderDirection
@@ -694,7 +719,6 @@ input ProjectOrderByInput {
   description: OrderDirection
   launchDate: OrderDirection
   launchBlock: OrderDirection
-  trackFromBlock: OrderDirection
   sellTax: OrderDirection
   buyTax: OrderDirection
   rebasePeriod: OrderDirection
@@ -718,9 +742,11 @@ input ProjectUpdateInput {
   logo: ImageFieldInput
   enabled: Boolean
   isListed: Boolean
+  trackData: Boolean
   trackHolders: Boolean
   isRebasing: Boolean
   initialized: Boolean
+  status: String
   tags: TagRelateToManyForUpdateInput
   contractAddress: String
   pairAddress: String
@@ -731,7 +757,6 @@ input ProjectUpdateInput {
   description: String
   launchDate: DateTime
   launchBlock: Int
-  trackFromBlock: Int
   user: UserRelateToOneForUpdateInput
   notifications: NotificationRelateToManyForUpdateInput
   ABI: JSON
@@ -751,6 +776,7 @@ input ProjectUpdateInput {
   github: String
   medium: String
   dateAdded: DateTime
+  holders: HolderRelateToManyForUpdateInput
 }
 
 input ImageFieldInput {
@@ -789,6 +815,13 @@ input NotificationRelateToManyForUpdateInput {
   connect: [NotificationWhereUniqueInput!]
 }
 
+input HolderRelateToManyForUpdateInput {
+  disconnect: [HolderWhereUniqueInput!]
+  set: [HolderWhereUniqueInput!]
+  create: [HolderCreateInput!]
+  connect: [HolderWhereUniqueInput!]
+}
+
 input ProjectUpdateArgs {
   where: ProjectWhereUniqueInput!
   data: ProjectUpdateInput!
@@ -800,9 +833,11 @@ input ProjectCreateInput {
   logo: ImageFieldInput
   enabled: Boolean
   isListed: Boolean
+  trackData: Boolean
   trackHolders: Boolean
   isRebasing: Boolean
   initialized: Boolean
+  status: String
   tags: TagRelateToManyForCreateInput
   contractAddress: String
   pairAddress: String
@@ -813,7 +848,6 @@ input ProjectCreateInput {
   description: String
   launchDate: DateTime
   launchBlock: Int
-  trackFromBlock: Int
   user: UserRelateToOneForCreateInput
   notifications: NotificationRelateToManyForCreateInput
   ABI: JSON
@@ -833,6 +867,7 @@ input ProjectCreateInput {
   github: String
   medium: String
   dateAdded: DateTime
+  holders: HolderRelateToManyForCreateInput
 }
 
 input TagRelateToManyForCreateInput {
@@ -853,6 +888,11 @@ input NetworkRelateToOneForCreateInput {
 input NotificationRelateToManyForCreateInput {
   create: [NotificationCreateInput!]
   connect: [NotificationWhereUniqueInput!]
+}
+
+input HolderRelateToManyForCreateInput {
+  create: [HolderCreateInput!]
+  connect: [HolderWhereUniqueInput!]
 }
 
 type Notification {
@@ -1697,6 +1737,237 @@ input ImageCreateInput {
   dateAdded: DateTime
 }
 
+type Block {
+  id: ID!
+  project: Project
+  firstBlock: Int
+  previousBlock: Int
+  lastBlock: Int
+  dateAdded: DateTime
+}
+
+input BlockWhereUniqueInput {
+  id: ID
+}
+
+input BlockWhereInput {
+  AND: [BlockWhereInput!]
+  OR: [BlockWhereInput!]
+  NOT: [BlockWhereInput!]
+  id: IDFilter
+  project: ProjectWhereInput
+  firstBlock: IntNullableFilter
+  previousBlock: IntNullableFilter
+  lastBlock: IntNullableFilter
+  dateAdded: DateTimeNullableFilter
+}
+
+input BlockOrderByInput {
+  id: OrderDirection
+  firstBlock: OrderDirection
+  previousBlock: OrderDirection
+  lastBlock: OrderDirection
+  dateAdded: OrderDirection
+}
+
+input BlockUpdateInput {
+  project: ProjectRelateToOneForUpdateInput
+  firstBlock: Int
+  previousBlock: Int
+  lastBlock: Int
+  dateAdded: DateTime
+}
+
+input BlockUpdateArgs {
+  where: BlockWhereUniqueInput!
+  data: BlockUpdateInput!
+}
+
+input BlockCreateInput {
+  project: ProjectRelateToOneForCreateInput
+  firstBlock: Int
+  previousBlock: Int
+  lastBlock: Int
+  dateAdded: DateTime
+}
+
+type Transfer {
+  id: ID!
+  project: Project
+  amount: Float
+  type: Int
+  address: String
+  fromAddress: String
+  toAddress: String
+  hash: String
+  block: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input TransferWhereUniqueInput {
+  id: ID
+}
+
+input TransferWhereInput {
+  AND: [TransferWhereInput!]
+  OR: [TransferWhereInput!]
+  NOT: [TransferWhereInput!]
+  id: IDFilter
+  project: ProjectWhereInput
+  amount: FloatNullableFilter
+  type: IntNullableFilter
+  address: StringFilter
+  fromAddress: StringFilter
+  toAddress: StringFilter
+  hash: StringFilter
+  block: IntNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input TransferOrderByInput {
+  id: OrderDirection
+  amount: OrderDirection
+  type: OrderDirection
+  address: OrderDirection
+  fromAddress: OrderDirection
+  toAddress: OrderDirection
+  hash: OrderDirection
+  block: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input TransferUpdateInput {
+  project: ProjectRelateToOneForUpdateInput
+  amount: Float
+  type: Int
+  address: String
+  fromAddress: String
+  toAddress: String
+  hash: String
+  block: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input TransferUpdateArgs {
+  where: TransferWhereUniqueInput!
+  data: TransferUpdateInput!
+}
+
+input TransferCreateInput {
+  project: ProjectRelateToOneForCreateInput
+  amount: Float
+  type: Int
+  address: String
+  fromAddress: String
+  toAddress: String
+  hash: String
+  block: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Holder {
+  id: ID!
+  address: String
+  balance: Float
+  note: String
+  isContract: Boolean
+  projects(
+    where: ProjectWhereInput! = {}
+    orderBy: [ProjectOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Project!]
+  projectsCount(where: ProjectWhereInput! = {}): Int
+  transfers(
+    where: TransferWhereInput! = {}
+    orderBy: [TransferOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Transfer!]
+  transfersCount(where: TransferWhereInput! = {}): Int
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input HolderWhereUniqueInput {
+  id: ID
+}
+
+input HolderWhereInput {
+  AND: [HolderWhereInput!]
+  OR: [HolderWhereInput!]
+  NOT: [HolderWhereInput!]
+  id: IDFilter
+  address: StringFilter
+  balance: FloatNullableFilter
+  note: StringFilter
+  isContract: BooleanFilter
+  projects: ProjectManyRelationFilter
+  transfers: TransferManyRelationFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input TransferManyRelationFilter {
+  every: TransferWhereInput
+  some: TransferWhereInput
+  none: TransferWhereInput
+}
+
+input HolderOrderByInput {
+  id: OrderDirection
+  address: OrderDirection
+  balance: OrderDirection
+  note: OrderDirection
+  isContract: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input HolderUpdateInput {
+  address: String
+  balance: Float
+  note: String
+  isContract: Boolean
+  projects: ProjectRelateToManyForUpdateInput
+  transfers: TransferRelateToManyForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input TransferRelateToManyForUpdateInput {
+  disconnect: [TransferWhereUniqueInput!]
+  set: [TransferWhereUniqueInput!]
+  create: [TransferCreateInput!]
+  connect: [TransferWhereUniqueInput!]
+}
+
+input HolderUpdateArgs {
+  where: HolderWhereUniqueInput!
+  data: HolderUpdateInput!
+}
+
+input HolderCreateInput {
+  address: String
+  balance: Float
+  note: String
+  isContract: Boolean
+  projects: ProjectRelateToManyForCreateInput
+  transfers: TransferRelateToManyForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input TransferRelateToManyForCreateInput {
+  create: [TransferCreateInput!]
+  connect: [TransferWhereUniqueInput!]
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -1856,6 +2127,27 @@ type Mutation {
   updateImages(data: [ImageUpdateArgs!]!): [Image]
   deleteImage(where: ImageWhereUniqueInput!): Image
   deleteImages(where: [ImageWhereUniqueInput!]!): [Image]
+  createBlock(data: BlockCreateInput!): Block
+  createBlocks(data: [BlockCreateInput!]!): [Block]
+  updateBlock(where: BlockWhereUniqueInput!, data: BlockUpdateInput!): Block
+  updateBlocks(data: [BlockUpdateArgs!]!): [Block]
+  deleteBlock(where: BlockWhereUniqueInput!): Block
+  deleteBlocks(where: [BlockWhereUniqueInput!]!): [Block]
+  createTransfer(data: TransferCreateInput!): Transfer
+  createTransfers(data: [TransferCreateInput!]!): [Transfer]
+  updateTransfer(
+    where: TransferWhereUniqueInput!
+    data: TransferUpdateInput!
+  ): Transfer
+  updateTransfers(data: [TransferUpdateArgs!]!): [Transfer]
+  deleteTransfer(where: TransferWhereUniqueInput!): Transfer
+  deleteTransfers(where: [TransferWhereUniqueInput!]!): [Transfer]
+  createHolder(data: HolderCreateInput!): Holder
+  createHolders(data: [HolderCreateInput!]!): [Holder]
+  updateHolder(where: HolderWhereUniqueInput!, data: HolderUpdateInput!): Holder
+  updateHolders(data: [HolderUpdateArgs!]!): [Holder]
+  deleteHolder(where: HolderWhereUniqueInput!): Holder
+  deleteHolders(where: [HolderWhereUniqueInput!]!): [Holder]
   endSession: Boolean!
   authenticateUserWithPassword(
     email: String!
@@ -2041,6 +2333,30 @@ type Query {
   ): [Image!]
   image(where: ImageWhereUniqueInput!): Image
   imagesCount(where: ImageWhereInput! = {}): Int
+  blocks(
+    where: BlockWhereInput! = {}
+    orderBy: [BlockOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Block!]
+  block(where: BlockWhereUniqueInput!): Block
+  blocksCount(where: BlockWhereInput! = {}): Int
+  transfers(
+    where: TransferWhereInput! = {}
+    orderBy: [TransferOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Transfer!]
+  transfer(where: TransferWhereUniqueInput!): Transfer
+  transfersCount(where: TransferWhereInput! = {}): Int
+  holders(
+    where: HolderWhereInput! = {}
+    orderBy: [HolderOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Holder!]
+  holder(where: HolderWhereUniqueInput!): Holder
+  holdersCount(where: HolderWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(
@@ -2127,11 +2443,6 @@ enum KeystoneAdminUIFieldMetaItemViewFieldMode {
   edit
   read
   hidden
-}
-
-enum QueryMode {
-  default
-  insensitive
 }
 
 type KeystoneAdminUISort {

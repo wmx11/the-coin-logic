@@ -2,7 +2,7 @@ import {
   getEnabledAndNotInitializedProjectsForHoldersTracking,
   getEnabledProjectsForHoldersTracking,
 } from '../../../graphql/queries';
-import prisma from '../../../holdersDb';
+import { prismaClient } from '../../../prismaClient';
 
 export const getProjects = (initial: boolean) => {
   if (initial) {
@@ -13,9 +13,9 @@ export const getProjects = (initial: boolean) => {
 };
 
 export const getProjectByProjectId = (projectId: string) => {
-  return prisma.projects.findFirst({
+  return prismaClient.project.findFirst({
     where: {
-      projectId,
+      id: projectId,
     },
   });
 };
@@ -23,7 +23,7 @@ export const getProjectByProjectId = (projectId: string) => {
 export const setProjectInitialized = async (projectId: string, initialized: boolean) => {
   try {
     const project = await getProjectByProjectId(projectId);
-    return prisma.projects.update({
+    return prismaClient.project.update({
       where: {
         id: project?.id,
       },
@@ -43,7 +43,7 @@ export const setProjectStatus = async (
 ) => {
   try {
     const project = await getProjectByProjectId(projectId);
-    return prisma.projects.update({
+    return prismaClient.project.update({
       where: {
         id: project?.id,
       },
@@ -59,7 +59,7 @@ export const setProjectStatus = async (
 
 export const getProjectStatus = async (projectId: string) => {
   try {
-    return prisma.projects.findFirst({
+    return prismaClient.project.findFirst({
       where: {
         id: projectId,
       },

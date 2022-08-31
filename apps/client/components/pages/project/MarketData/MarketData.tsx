@@ -15,7 +15,7 @@ const MarketData: FC<MarketDataTypes> = ({ data }) => {
   return (
     <StatsTabGroup
       title="Market Data"
-      untrackedMessage="Market Data is untracked"
+      untrackedMessage="Market Data is untracked."
       Icon={BsBarChartLineFill}
       subtitle={`Last updated ${formateDateWithHours(dateAdded as string)}`}
       data={marketData}

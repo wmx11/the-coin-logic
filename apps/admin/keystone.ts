@@ -21,13 +21,18 @@ export default withAuth(
   config({
     // the db sets the database provider - we're using sqlite for the fastest startup experience
     db: {
-      provider: 'sqlite',
-      url: 'file:./keystone.db',
+      provider: process.env.DATABASE_URL ? 'postgresql' : 'sqlite',
+      url: process.env.DATABASE_URL || 'file:./keystone.db',
+      useMigrations: true,
     },
     // This config allows us to set up features of the Admin UI https://keystonejs.com/docs/apis/config#ui
     ui: {
       // For our starter, we check that someone has session data before letting them see the Admin UI.
       isAccessAllowed: (context) => {
+        if (context.session?.data.isAdmin) {
+          return true;
+        }
+
         const hasAllowedRoles = context.session?.data.roles.filter(
           (item: Roles) => item.isAdmin || item.isModerator || item.isEditor,
         );

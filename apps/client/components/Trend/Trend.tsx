@@ -17,17 +17,21 @@ const Trend: FC<TrendProps> = ({ value, previousValue, inline }) => {
   const trendColor = trendValue > 0 ? 'text-green-500' : 'text-red-500';
   const trendIndicator = trendValue > 0 ? <GoTriangleUp /> : <GoTriangleDown />;
 
-  const inlineComponent = previousValue?.percentage ? (
-    <div className="flex flex-col justify-center">
-      <span className={`${trendColor} flex items-center`}>
-        {trendIndicator}
-        {value}
-      </span>
-      <div className={`${trendColor} text-xs`}>({toLocaleString(percentage)}%)</div>
-    </div>
-  ) : (
-    <>{value}</>
-  );
+  const InlineComponent = () => {
+    if (previousValue?.percentage) {
+      return (
+        <div className="flex flex-col justify-center">
+          <span className={`${trendColor} flex items-center`}>
+            {trendIndicator}
+            {value}
+          </span>
+          <div className={`${trendColor} text-xs`}>({toLocaleString(percentage)}%)</div>
+        </div>
+      );
+    }
+
+    return <>{value ? value : <AiOutlineEllipsis />}</>;
+  };
 
   if (trendValue === 0 && !inline) {
     return (
@@ -38,7 +42,7 @@ const Trend: FC<TrendProps> = ({ value, previousValue, inline }) => {
   }
 
   if (inline) {
-    return inlineComponent;
+    return <InlineComponent />;
   }
 
   return (

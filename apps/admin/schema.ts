@@ -2,17 +2,23 @@ import { Lists } from '.keystone/types';
 
 import {
   Content,
-  ContentBlock, ContentType, DiscordBot,
+  ContentBlock,
+  ContentType,
+  DiscordBot,
   Exchange,
   LiquidityPair,
   MarketStat,
-  Network, Payment, Project, Notification,
+  Network,
+  Payment,
+  Project,
+  Notification,
   Role,
   StableLiquidityPair,
   Tag,
   Token,
   User,
-  Image
+  Image,
+  Holders,
 } from './schemas';
 
 export const lists: Lists = {
@@ -32,5 +38,6 @@ export const lists: Lists = {
   ...Content,
   ...ContentBlock,
   ...ContentType,
-  ...Image
+  ...Image,
+  ...Holders,
 };
