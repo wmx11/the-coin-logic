@@ -41,7 +41,7 @@ export default withAuth(
       localLogos: {
         kind: 'local',
         type: 'image',
-        generateUrl: (path) => `http://localhost:3500/logos${path}`,
+        generateUrl: (path) => `${process.env.BASE_URL || 'http://localhost:3500'}/logos${path}`,
         serverRoute: {
           path: '/logos',
         },
@@ -50,7 +50,7 @@ export default withAuth(
       localImages: {
         kind: 'local',
         type: 'image',
-        generateUrl: (path) => `http://localhost:3500/images${path}`,
+        generateUrl: (path) => `${process.env.BASE_URL || 'http://localhost:3500'}/images${path}`,
         serverRoute: {
           path: '/images',
         },
