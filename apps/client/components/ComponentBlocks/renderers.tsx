@@ -13,10 +13,13 @@ const renderers: DocumentRendererProps['renderers'] = {
   block: {
     layout: (props) => {
       return (
-        <div className="flex flex-col md:flex-row gap-8 items-center mb-8">
+        <div className="flex flex-col md:flex-row gap-8 items-stretch mb-8">
           {props.layout.map((layout, index) => {
             return (
-              <div className="flex-1 break-words" key={`document_layout_${index}`}>
+              <div
+                className="flex-grow md:flex-1 w-full md:w-auto break-words items-stretch"
+                key={`document_layout_${index}`}
+              >
                 {props.children[index]}
               </div>
             );

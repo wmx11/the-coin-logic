@@ -1,12 +1,12 @@
-import { Context } from '../../../../utils/iterateWithContext';
 import { Contract } from 'web3-eth-contract';
-import { createOrUpdateHolder, getHolder } from '../holders';
-import { getProjectByProjectId } from '../../projects';
-import { getWalletBalance } from '../../base';
-import config from '../../../config';
-import getTransferEvents from './getTransferEvents';
+import { Context } from '../../../../utils/iterateWithContext';
 import sleep from '../../../../utils/sleep';
 import toDecimals from '../../../../utils/toDecimals';
+import config from '../../../config';
+import { getWalletBalance } from '../../base';
+import { getProjectByProjectId } from '../../projects';
+import { createOrUpdateHolder, getHolder } from '../holders';
+import getTransferEvents from './getTransferEvents';
 
 type ExtendedContext = Context & {
   decimals: number;

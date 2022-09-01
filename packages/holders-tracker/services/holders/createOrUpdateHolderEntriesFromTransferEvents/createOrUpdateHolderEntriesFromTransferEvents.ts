@@ -1,12 +1,12 @@
 import type { Contract } from 'web3-eth-contract';
-import config from '../../../config';
-import { getDecimals } from '../../base';
-import getPaginationFor from '../../../../utils/getPaginationFor';
-import getTransferEventsCount from './getTransferEventsCount';
-import createOrUpdateHolderEntriesCallback from './createOrUpdateHolderEntriesCallback';
-import iterateWithContext from '../../../../utils/iterateWithContext';
 import { updateProjectInitializedStatus } from '../../../../graphql/mutations';
 import { Project } from '../../../../types';
+import getPaginationFor from '../../../../utils/getPaginationFor';
+import iterateWithContext from '../../../../utils/iterateWithContext';
+import config from '../../../config';
+import { getDecimals } from '../../base';
+import createOrUpdateHolderEntriesCallback from './createOrUpdateHolderEntriesCallback';
+import getTransferEventsCount from './getTransferEventsCount';
 
 type createOrUpdateHolderEntriesFromTransferEvents = {
   project: Project;

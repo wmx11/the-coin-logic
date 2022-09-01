@@ -13,28 +13,26 @@ generator client {
 }
 
 model User {
-  id                         String    @id @default(cuid())
-  name                       String    @default("")
-  firstName                  String    @default("")
-  lastName                   String    @default("")
-  email                      String    @unique @default("")
-  roles                      Role[]    @relation("Role_users")
-  password                   String
-  isAdmin                    Boolean   @default(false)
-  isSubscribedToEmail        Boolean   @default(false)
-  isNotChargeable            Boolean   @default(false)
-  isVerified                 Boolean   @default(true)
-  subscribedTill             DateTime?
-  referrer                   String    @default("")
-  referralCode               String    @default("")
-  projects                   Project[] @relation("Project_user")
-  payments                   Payment[] @relation("Payment_billedTo")
-  dateCreated                DateTime? @default(now())
-  emailVerificationString    String    @default("")
-  emailVerificationExpiresIn DateTime?
-  passwordResetToken         String?
-  passwordResetIssuedAt      DateTime?
-  passwordResetRedeemedAt    DateTime?
+  id                      String    @id @default(cuid())
+  name                    String    @default("")
+  firstName               String    @default("")
+  lastName                String    @default("")
+  email                   String    @unique @default("")
+  roles                   Role[]    @relation("Role_users")
+  password                String
+  isAdmin                 Boolean   @default(false)
+  isSubscribedToEmail     Boolean   @default(false)
+  isNotChargeable         Boolean   @default(false)
+  isVerified              Boolean   @default(true)
+  subscribedTill          DateTime?
+  referrer                String    @default("")
+  referralCode            String    @default("")
+  projects                Project[] @relation("Project_user")
+  payments                Payment[] @relation("Payment_billedTo")
+  dateCreated             DateTime? @default(now())
+  passwordResetToken      String?
+  passwordResetIssuedAt   DateTime?
+  passwordResetRedeemedAt DateTime?
 }
 
 model Payment {
@@ -295,6 +293,7 @@ model ContentBlock {
 model ContentType {
   id                       String    @id @default(cuid())
   title                    String    @default("")
+  typeName                 String    @default("")
   dateAdded                DateTime? @default(now())
   from_Content_contentType Content[] @relation("Content_contentType")
 }

@@ -37,8 +37,6 @@ type User {
   ): [Payment!]
   paymentsCount(where: PaymentWhereInput! = {}): Int
   dateCreated: DateTime
-  emailVerificationString: String
-  emailVerificationExpiresIn: DateTime
   passwordResetToken: PasswordState
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -76,8 +74,6 @@ input UserWhereInput {
   projects: ProjectManyRelationFilter
   payments: PaymentManyRelationFilter
   dateCreated: DateTimeNullableFilter
-  emailVerificationString: StringFilter
-  emailVerificationExpiresIn: DateTimeNullableFilter
   passwordResetToken: PasswordFilter
   passwordResetIssuedAt: DateTimeNullableFilter
   passwordResetRedeemedAt: DateTimeNullableFilter
@@ -180,8 +176,6 @@ input UserOrderByInput {
   referrer: OrderDirection
   referralCode: OrderDirection
   dateCreated: OrderDirection
-  emailVerificationString: OrderDirection
-  emailVerificationExpiresIn: OrderDirection
   passwordResetIssuedAt: OrderDirection
   passwordResetRedeemedAt: OrderDirection
 }
@@ -208,8 +202,6 @@ input UserUpdateInput {
   projects: ProjectRelateToManyForUpdateInput
   payments: PaymentRelateToManyForUpdateInput
   dateCreated: DateTime
-  emailVerificationString: String
-  emailVerificationExpiresIn: DateTime
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -258,8 +250,6 @@ input UserCreateInput {
   projects: ProjectRelateToManyForCreateInput
   payments: PaymentRelateToManyForCreateInput
   dateCreated: DateTime
-  emailVerificationString: String
-  emailVerificationExpiresIn: DateTime
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -1647,6 +1637,7 @@ input ContentBlockCreateInput {
 type ContentType {
   id: ID!
   title: String
+  typeName: String
   dateAdded: DateTime
 }
 
@@ -1660,17 +1651,20 @@ input ContentTypeWhereInput {
   NOT: [ContentTypeWhereInput!]
   id: IDFilter
   title: StringFilter
+  typeName: StringFilter
   dateAdded: DateTimeNullableFilter
 }
 
 input ContentTypeOrderByInput {
   id: OrderDirection
   title: OrderDirection
+  typeName: OrderDirection
   dateAdded: OrderDirection
 }
 
 input ContentTypeUpdateInput {
   title: String
+  typeName: String
   dateAdded: DateTime
 }
 
@@ -1681,6 +1675,7 @@ input ContentTypeUpdateArgs {
 
 input ContentTypeCreateInput {
   title: String
+  typeName: String
   dateAdded: DateTime
 }
 

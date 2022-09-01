@@ -2,9 +2,10 @@ import { Container } from '@mantine/core';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import routes from 'utils/routes';
+import routes from 'routes';
 import tclLogo from 'public/images/tcl_logo.png';
 import { FaDiscord, FaTwitter } from 'react-icons/fa';
+import { Discord, Twitter } from 'components/Socials/Socials';
 
 function Footer() {
   return (
@@ -38,7 +39,7 @@ function Footer() {
               <a className="link link-hover">About us</a>
             </Link>
             <Link href={routes.contact}>
-              <a className="link link-hover">Contact</a>
+              <a className="link link-hover">Contact us</a>
             </Link>
             <a className="link link-hover" href="https://docs.thecoinlogic.com/" target="_blank">
               Whitepaper
@@ -63,7 +64,6 @@ function Footer() {
         <footer className="footer px-10 py-10 border-t text-white border-base-300">
           <div className="items-center grid-flow-col">
             <Image src={tclLogo} alt="TCL Logo" width={30} height={35} />
-
             <p>
               The Coin Logic <br />
               Owned and Created by MB Modiggo
@@ -71,16 +71,8 @@ function Footer() {
           </div>
           <div className="md:place-self-center md:justify-self-end">
             <div className="grid grid-flow-col gap-4">
-              <Link href="https://discord.gg/mBHYuJKfEX">
-                <a>
-                  <FaDiscord size={30} />
-                </a>
-              </Link>
-              <Link href="https://twitter.com/TheCoinLogic">
-                <a>
-                  <FaTwitter size={28} />
-                </a>
-              </Link>
+              <Discord />
+              <Twitter />
             </div>
           </div>
         </footer>

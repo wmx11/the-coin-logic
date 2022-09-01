@@ -1,0 +1,36 @@
+---
+- name: Prepare servers
+  remote_user: root
+  hosts: all
+
+  tasks:
+    - name: Install the gpg key for Nodejs LTS
+      apt_key:
+        url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
+        state: present
+
+    - name: Install Nodejs LTS repos
+      apt_repository:
+        repo: 'deb https://deb.nodesource.com/node_16.x {{ ansible_lsb.codename }} main'
+        state: present
+        update_cache: yes
+
+    - name: Install Nodejs
+      apt:
+        name: nodejs
+        state: present
+
+    - name: Install PM2
+      npm:
+        name: pm2
+        global: yes
+
+    - name: Install Typescript
+      npm:
+        name: typescript
+        global: yes
+
+    - name: Install Yarn
+      npm:
+        name: yarn
+        global: yes
