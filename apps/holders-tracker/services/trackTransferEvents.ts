@@ -37,6 +37,4 @@ const trackTransferEvents = async (initial = false) => {
   isRunning = false;
 };
 
-trackTransferEvents()
-
 export default trackTransferEvents;

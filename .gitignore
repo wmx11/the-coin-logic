@@ -1,3 +1,4 @@
+## Node modules
 node_modules
 
 # ENV files
@@ -6,6 +7,8 @@ node_modules
 # JS files
 *.js
 
-holders.db
+## Don't ignore ecosystems JS files
+!ecosystems/*.js
 
+## Error logs
 yarn-error.log
