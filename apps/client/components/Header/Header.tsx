@@ -12,7 +12,7 @@ function Header() {
   const { isMobileScreen } = useMobileScreen();
 
   return (
-    <div className="bg-lightBlue sticky top-0 z-20 bg-[url('../public/images/wave4.svg')] bg-no-repeat bg-cover bg-bottom w-full">
+    <div className="bg-lightBlue sticky top-0 z-20 bg-[url('../public/images/wave.svg')] bg-no-repeat bg-cover bg-bottom w-full">
       <Container className={`${isMobileScreen && 'flex items-center justify-end py-4 w-full'}`}>
         {isMobileScreen && (
           <Drawer
