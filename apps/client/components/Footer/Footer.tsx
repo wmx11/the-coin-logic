@@ -9,7 +9,7 @@ import { Discord, Twitter } from 'components/Socials/Socials';
 
 function Footer() {
   return (
-    <div className="bg-[url('../public/images/wave4.svg')] bg-no-repeat bg-cover bg-bottom w-full">
+    <div className="bg-[url('../public/images/wave.svg')] bg-no-repeat bg-cover bg-bottom w-full">
       <Container>
         <footer className="footer p-10 text-white">
           <div>

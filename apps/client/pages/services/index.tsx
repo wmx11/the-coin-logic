@@ -3,7 +3,7 @@ import Meta from 'components/Meta';
 import TextContent from 'components/TextContent';
 import { getContentBySlug } from 'data/getters';
 import Image, { StaticImageData } from 'next/image';
-import auditing from 'public/images/Auditing.png';
+import auditing from 'public/images/auditing.png';
 import { FC, ReactNode } from 'react';
 import { AiOutlineBarChart } from 'react-icons/ai';
 import { FiTarget, FiUserCheck } from 'react-icons/fi';
