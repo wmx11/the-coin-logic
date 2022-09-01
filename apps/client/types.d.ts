@@ -181,17 +181,20 @@ export type ContentType = {
   dateAdded?: Maybe<Scalars['DateTime']>;
   id: Scalars['ID'];
   title?: Maybe<Scalars['String']>;
+  typeName?: Maybe<Scalars['String']>;
 };
 
 export type ContentTypeCreateInput = {
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   title?: InputMaybe<Scalars['String']>;
+  typeName?: InputMaybe<Scalars['String']>;
 };
 
 export type ContentTypeOrderByInput = {
   dateAdded?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   title?: InputMaybe<OrderDirection>;
+  typeName?: InputMaybe<OrderDirection>;
 };
 
 export type ContentTypeRelateToOneForCreateInput = {
@@ -213,6 +216,7 @@ export type ContentTypeUpdateArgs = {
 export type ContentTypeUpdateInput = {
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   title?: InputMaybe<Scalars['String']>;
+  typeName?: InputMaybe<Scalars['String']>;
 };
 
 export type ContentTypeWhereInput = {
@@ -222,6 +226,7 @@ export type ContentTypeWhereInput = {
   dateAdded?: InputMaybe<DateTimeNullableFilter>;
   id?: InputMaybe<IdFilter>;
   title?: InputMaybe<StringFilter>;
+  typeName?: InputMaybe<StringFilter>;
 };
 
 export type ContentTypeWhereUniqueInput = {
@@ -3228,8 +3233,6 @@ export type User = {
   __typename?: 'User';
   dateCreated?: Maybe<Scalars['DateTime']>;
   email?: Maybe<Scalars['String']>;
-  emailVerificationExpiresIn?: Maybe<Scalars['DateTime']>;
-  emailVerificationString?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   isAdmin?: Maybe<Scalars['Boolean']>;
@@ -3308,8 +3311,6 @@ export type UserAuthenticationWithPasswordSuccess = {
 export type UserCreateInput = {
   dateCreated?: InputMaybe<Scalars['DateTime']>;
   email?: InputMaybe<Scalars['String']>;
-  emailVerificationExpiresIn?: InputMaybe<Scalars['DateTime']>;
-  emailVerificationString?: InputMaybe<Scalars['String']>;
   firstName?: InputMaybe<Scalars['String']>;
   isAdmin?: InputMaybe<Scalars['Boolean']>;
   isNotChargeable?: InputMaybe<Scalars['Boolean']>;
@@ -3338,8 +3339,6 @@ export type UserManyRelationFilter = {
 export type UserOrderByInput = {
   dateCreated?: InputMaybe<OrderDirection>;
   email?: InputMaybe<OrderDirection>;
-  emailVerificationExpiresIn?: InputMaybe<OrderDirection>;
-  emailVerificationString?: InputMaybe<OrderDirection>;
   firstName?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   isAdmin?: InputMaybe<OrderDirection>;
@@ -3386,8 +3385,6 @@ export type UserUpdateArgs = {
 export type UserUpdateInput = {
   dateCreated?: InputMaybe<Scalars['DateTime']>;
   email?: InputMaybe<Scalars['String']>;
-  emailVerificationExpiresIn?: InputMaybe<Scalars['DateTime']>;
-  emailVerificationString?: InputMaybe<Scalars['String']>;
   firstName?: InputMaybe<Scalars['String']>;
   isAdmin?: InputMaybe<Scalars['Boolean']>;
   isNotChargeable?: InputMaybe<Scalars['Boolean']>;
@@ -3413,8 +3410,6 @@ export type UserWhereInput = {
   OR?: InputMaybe<Array<UserWhereInput>>;
   dateCreated?: InputMaybe<DateTimeNullableFilter>;
   email?: InputMaybe<StringFilter>;
-  emailVerificationExpiresIn?: InputMaybe<DateTimeNullableFilter>;
-  emailVerificationString?: InputMaybe<StringFilter>;
   firstName?: InputMaybe<StringFilter>;
   id?: InputMaybe<IdFilter>;
   isAdmin?: InputMaybe<BooleanFilter>;
