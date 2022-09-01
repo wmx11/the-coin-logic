@@ -10,7 +10,7 @@ const RecaptchaDisclaimer = () => {
       </Text>{' '}
       and{' '}
       <Text size="xs" variant="link" component="a" href="https://policies.google.com/terms">
-        Privacy Policy
+        Terms
       </Text>{' '}
       apply.
     </Text>

@@ -6,7 +6,7 @@ import { FaRegEdit } from 'react-icons/fa';
 import useUserStore from 'store/useUserStore';
 import { User } from 'types';
 import { formatDate } from 'utils/formatters';
-import routes from 'utils/routes';
+import routes from 'routes';
 import ChangePassword from './ChangePassword';
 import DeleteAccount from './DeleteAccount';
 import PersonalInformation from './PersonalInformation';

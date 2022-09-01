@@ -14,4 +14,6 @@ const trackHoldingsForRebasingTokens = async () => {
   isRunning = false;
 };
 
+trackHoldingsForRebasingTokens()
+
 export default trackHoldingsForRebasingTokens;

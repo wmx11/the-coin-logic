@@ -2,7 +2,7 @@ import config from '../config';
 import emailClient from '../emailClient';
 
 const message = {
-  from: config.sender,
+  from: config.tclEmail,
   subject: 'TCL - Password Reset Request',
 };
 

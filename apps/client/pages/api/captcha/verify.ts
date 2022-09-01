@@ -2,10 +2,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 
-type Data = {
-  success: boolean;
-};
-
 const RECAPTHA_SCORE = 0.5;
 
 const verifyRecaptcha = (token: string) => {
@@ -14,7 +10,7 @@ const verifyRecaptcha = (token: string) => {
   return axios.post(url);
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { token } = req.body;
 
   const recaptchaResponse = await verifyRecaptcha(token);

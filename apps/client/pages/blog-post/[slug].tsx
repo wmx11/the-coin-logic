@@ -54,7 +54,7 @@ const index: FC<ContentTypes> = ({ content }) => {
               src={image ? image.url : ''}
               alt={title as string}
               width="800px"
-              height="350px"
+              height="450px"
               layout="intrinsic"
               loading="lazy"
             />

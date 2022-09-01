@@ -1,10 +1,6 @@
-import type { Pagination } from '../types';
-import { prismaClient, PrismaSchema } from '../../../prismaClient';
 import { subDays } from 'date-fns';
-
-export const getHolderPosition = (address: string) => {
-  return;
-};
+import { prismaClient, PrismaSchema } from '../../../prismaClient';
+import type { Pagination } from '../types';
 
 export const getHoldersCountByProjectIdFrom = (projectId: string, from: number) => {
   try {
@@ -141,6 +137,8 @@ export const getHoldersWithEnabledAndRebasingProjectsFromDateLowerThan = (date: 
     },
   });
 };
+
+export type HoldersWithEnabledAndRebasingProjects = typeof getHoldersWithEnabledAndRebasingProjectsFromDateLowerThan;
 
 export const getNewHoldersCountByProjectId = async (projectId: string, tokenAmount = 0) => {
   try {

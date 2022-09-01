@@ -1,10 +1,8 @@
-import { Button, Container, Paper, Space, Text, Title } from '@mantine/core';
-import Image from 'next/image';
-import React from 'react';
-import marketStatsImage from 'public/images/data_animation_2.json';
+import { Button, Container, Space, Text, Title } from '@mantine/core';
+import useMobileScreen from 'hooks/useMobileScreen';
 import Lottie from 'lottie-react';
 import Link from 'next/link';
-import useMobileScreen from 'hooks/useMobileScreen';
+import marketStatsImage from 'public/images/data_animation_4.json';
 
 function Hero() {
   const { isMobileScreen } = useMobileScreen();
@@ -14,22 +12,23 @@ function Hero() {
         <div className="flex justify-between items-center gap-8 flex-wrap">
           <div className="text-white flex-1 z-10">
             <Title order={1} className="text-5xl md:text-7xl mb-8">
-              Track your project vitals.
+              Stay in the loop.
               <Space h="xl" />
-              Make your community happy.
+              Monitor your DeFi journey.
             </Title>
-            <Title order={4}>Transparency Through Data</Title>
+            <Title order={3}>Transparency Through Data</Title>
           </div>
 
           <div className="relative z-10 w-full md:min-w-[320px] md:max-w-[590px]">
             <div className="bg-darkBlue/60 backdrop-blur-md text-white p-10 rounded-md">
-              <Text weight={700} size="xl" className="text-3xl mb-4">
-                LOG-X
+              <Text weight={700} size="xl" className="text-4xl mb-4">
+                COIN LOGIC
               </Text>
               <Text className="mb-8">
-                Actively monitor your on-chain applications in realt time. Present transparent, comprehensive data
-                insights with historical data to your community. Get access to personalized KPIs, marketing, sentiment
-                analysis, bots, and more.
+                Active, transparent real-time data monitoring, and tracking for your DeFi and cryptocurrency projects.
+                Track general market data, custom data such as treasury, insurance, utility wallets. Track the number of
+                holders from your specified token amount and see how it changes over time. Become transparent through
+                data and leverage analytics to make better decisions!
               </Text>
               <Link href="/pricing" passHref>
                 <Button color="violet" size="md" component="a">
@@ -40,7 +39,7 @@ function Hero() {
           </div>
 
           {!isMobileScreen && (
-            <div className="absolute bottom-[-25px] right-0 z-[0] max-w-[700px]">
+            <div className="absolute bottom-[-25px] right-0 z-[0] max-w-[950px]">
               <Lottie animationData={marketStatsImage} />
             </div>
           )}

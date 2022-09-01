@@ -2,26 +2,38 @@ import { Lists } from '.keystone/types';
 import { list } from '@keystone-6/core';
 import { checkbox, float, image, integer, json, relationship, select, text, timestamp } from '@keystone-6/core/fields';
 import slugify from '../utils/slugify';
+import { isAdmin } from '../utils/rbac';
 
 const Project: Lists = {
   Project: list({
     fields: {
       name: text({ validation: { isRequired: true } }),
       slug: text({
+        ui: { description: 'Project slug. Automatically filled in upon creating/saving.' },
         hooks: {
           resolveInput: async (data) => slugify('slug', 'name')(data),
         },
       }),
       logo: image({ storage: 'localLogos' }),
-      enabled: checkbox({ defaultValue: false }),
-      isListed: checkbox({ defaultValue: false }),
-      trackData: checkbox({ defaultValue: false }),
-      trackHolders: checkbox({ defaultValue: false }),
-      isRebasing: checkbox({ defaultValue: false }),
-      initialized: checkbox({ defaultValue: false }),
+      enabled: checkbox({
+        defaultValue: false,
+        ui: { description: 'Is the project enabled and ready for data tracking.' },
+      }),
+      isListed: checkbox({ defaultValue: false, ui: { description: 'Is the project listed on the leaderboard.' } }),
+      trackData: checkbox({ defaultValue: false, ui: { description: 'Is the project tracking market data.' } }),
+      trackHolders: checkbox({ defaultValue: false, ui: { description: 'Is the project tracking holders data.' } }),
+      isRebasing: checkbox({
+        defaultValue: false,
+        ui: { description: 'Is the project rebasing. Used for periodical wallet balance updates.' },
+      }),
+      initialized: checkbox({
+        defaultValue: false,
+        ui: { description: 'Is the project fully synced with the holders data.' },
+      }),
       status: select({
         ui: {
           displayMode: 'segmented-control',
+          description: 'Tracking status of the project',
         },
         options: [
           { label: 'Idle', value: 'idle' },
@@ -69,6 +81,13 @@ const Project: Lists = {
           displayMode: 'count',
         },
       }),
+    },
+    access: {
+      operation: {
+        create: (data) => isAdmin(data),
+        delete: (data) => isAdmin(data),
+        update: (data) => isAdmin(data),
+      },
     },
   }),
 };

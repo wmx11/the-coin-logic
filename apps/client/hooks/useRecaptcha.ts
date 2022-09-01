@@ -6,6 +6,7 @@ const ERROR_MESSAGE = 'Recaptcha has failed. Please try again later.';
 
 const useRecaptcha = () => {
   const [isValid, setIsValid] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const { executeRecaptcha } = useGoogleReCaptcha();
 
@@ -23,7 +24,7 @@ const useRecaptcha = () => {
       setErrorMessage(ERROR_MESSAGE);
       return false;
     }
-
+    setCaptchaToken(token);
     const result = await axios.post('/api/captcha/verify', { token });
 
     if (!result.data.success) {
@@ -37,7 +38,7 @@ const useRecaptcha = () => {
     return true;
   };
 
-  return { validate, executeRecaptcha, isValid, errorMessage };
+  return { validate, executeRecaptcha, isValid, errorMessage, captchaToken };
 };
 
 export default useRecaptcha;

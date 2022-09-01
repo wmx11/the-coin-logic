@@ -1,6 +1,6 @@
 import TextContent from 'components/TextContent';
 import TextContentWrapper from 'components/TextContent/TextContentWrapper';
-import { getContentBySlug } from 'data/getters';
+import { getTextContentBySlug } from 'data/getters';
 import { FC } from 'react';
 import { ContentProps } from 'types/TextContent';
 
@@ -22,7 +22,7 @@ type Params = {
 
 export const getServerSideProps = async ({ params }: Params) => {
   const slug = params.slug;
-  const content = await getContentBySlug(slug);
+  const content = await getTextContentBySlug(slug);
 
   return {
     props: {

@@ -7,7 +7,7 @@ import { useForm, zodResolver } from '@mantine/form';
 import { useMemo } from 'react';
 import { User, userSchema } from '../../../schemas/user';
 import ErrorMessage from 'components/ErrorMessage';
-import routes from 'utils/routes';
+import routes from 'routes';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 import useRecaptcha from 'hooks/useRecaptcha';
 
@@ -55,16 +55,6 @@ const SignUpModalForm = () => {
     <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
       <Stack spacing="md">
         <div>
-          <Text size="sm" color="dimmed">
-            Project owners! Gain access to features such as Project Listing, Project Analytics Dashboard, Historical
-            Data, Holders List, Insights, and more.
-          </Text>
-          <Space h="md" />
-          <Text size="sm" color="dimmed">
-            Investors! Gain access to features such ass Watchlist, Alerts, Events, and more.
-          </Text>
-          <Space h="md" />
-
           <Button
             variant="subtle"
             color="violet"

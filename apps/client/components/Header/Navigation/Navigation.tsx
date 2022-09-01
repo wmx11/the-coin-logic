@@ -2,7 +2,7 @@ import { Divider } from '@mantine/core';
 import useMobileScreen from 'hooks/useMobileScreen';
 import Link from 'next/link';
 import { FC } from 'react';
-import routes from 'utils/routes';
+import routes from 'routes';
 
 type NavLinkProps = {
   href: string;

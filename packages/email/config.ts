@@ -1,5 +1,5 @@
 const config = {
-  sender: 'info@thecoinlogic.com',
+  tclEmail: 'info@thecoinlogic.com',
 };
 
 export default config;
