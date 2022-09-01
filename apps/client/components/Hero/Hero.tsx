@@ -7,7 +7,7 @@ import marketStatsImage from 'public/images/data_animation_4.json';
 function Hero() {
   const { isMobileScreen } = useMobileScreen();
   return (
-    <div className="bg-[url('../public/images/wave4.svg')] bg-no-repeat bg-cover bg-bottom w-full min-h-screen py-10 flex items-center relative">
+    <div className="bg-[url('../public/images/wave.svg')] bg-no-repeat bg-cover bg-bottom w-full min-h-screen py-10 flex items-center relative">
       <Container>
         <div className="flex justify-between items-center gap-8 flex-wrap">
           <div className="text-white flex-1 z-10">
