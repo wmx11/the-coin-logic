@@ -36,12 +36,12 @@ server {
 
   location /_next/static {
     proxy_cache STATIC;
-    proxy_pass http://localhost:3000;
+    proxy_pass http://localhost:3500;
   }
 
   location /static {
     proxy_cache STATIC;
-    proxy_pass http://localhost:3000;
+    proxy_pass http://localhost:3500;
   }
 
   location / {
