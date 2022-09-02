@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import sendContactUsEmail from 'tcl-packages/email/sendContactUsEmail';
+import sendContactUsEmail from 'tcl-packages/email/dist/packages/email/sendContactUsEmail';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method, body } = req;

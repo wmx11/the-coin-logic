@@ -3,5 +3,5 @@
   "compilerOptions": {
     "outDir": "./dist"                        /* Redirect output structure to the directory. */
   },
-  "include": ["../../packages/**/*"]
+  "exclude": ["packages/**/*"]
 }

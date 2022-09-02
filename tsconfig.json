@@ -64,5 +64,4 @@
     "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
   },
   "exclude": ["apps/admin/*", "apps/client/*"],
-  "include": ["packages/**/*"]
 }

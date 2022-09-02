@@ -59,7 +59,7 @@ export default withAuth(
     },
     server: {
       port: 3500,
-      cors: { origin: '*' },
+      cors: { origin: ['localhost', 'thecoinlogic.com', 'cms.thecoinlogic.com'] },
     },
     lists,
     session,
