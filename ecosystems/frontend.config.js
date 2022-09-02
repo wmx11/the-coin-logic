@@ -4,12 +4,12 @@ module.exports = {
     {
       name: 'admin',
       script: 'npm',
-      args: 'admin:start',
+      args: 'run admin:start',
     },
     {
       name: 'client',
       script: 'npm',
-      args: 'client:start',
+      args: 'run client:start',
     },
   ],
 };
