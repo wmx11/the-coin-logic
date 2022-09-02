@@ -3,10 +3,10 @@ import React, { FC } from 'react';
 import { AiFillAlert } from 'react-icons/ai';
 import { FiInfo } from 'react-icons/fi';
 import { IoWarningOutline } from 'react-icons/io5';
-import { ProjectNotification } from 'types';
+import { Notification } from 'types';
 
 type NotificationBarProps = {
-  notification: ProjectNotification;
+  notification: Notification;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   mb?: '0' | '1' | '2' | '4';
 };
