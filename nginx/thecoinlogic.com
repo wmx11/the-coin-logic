@@ -3,6 +3,16 @@ server {
 
   listen 80;
 
+  location /_next/static {
+    proxy_cache STATIC;
+    proxy_pass http://localhost:3000;
+  }
+
+  location /static {
+    proxy_cache STATIC;
+    proxy_pass http://localhost:3000;
+  }
+
   location / {
     proxy_pass http://localhost:3000;
     proxy_http_version 1.1;
@@ -21,6 +31,16 @@ server {
   server_name cms.thecoinlogic.com www.cms.thecoinlogic.com;
 
   listen 80;
+
+  location /_next/static {
+    proxy_cache STATIC;
+    proxy_pass http://localhost:3000;
+  }
+
+  location /static {
+    proxy_cache STATIC;
+    proxy_pass http://localhost:3000;
+  }
 
   location / {
     proxy_pass http://localhost:3500;
