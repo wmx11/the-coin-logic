@@ -20,13 +20,14 @@
     "admin:start": "yarn workspace admin start",
     "admin:production": "pm2 start ecosystems/frontend.config.js --only 'admin'",
     "production:start": "pm2 start ecosystems/frontend.config.js",
-    "holders-tracker:build": "npx tsc -p apps/holders-tracker/tsconfig.json",
-    "market-tracker:build": "npx tsc -p apps/market-tracker/tsconfig.json",
+    "holders-tracker:build": "npx tsc -b apps/holders-tracker/tsconfig.json",
+    "market-tracker:build": "npx tsc -b apps/market-tracker/tsconfig.json",
     "holders-tracker-initial:start":"pm2 start ecosystems/holdersTracker.config.js --only 'holders-tracker-initial'",
     "holders-tracker:start":"pm2 start ecosystems/holdersTracker.config.js --only 'holders-tracker'",
     "market-tracker:start":"pm2 start ecosystems/marketTracker.config.js",
+    "prisma:copy": "cp -r apps/admin/node_modules/.prisma ./node_modules",
     "generate": "graphql-code-generator",
-    "postinstall": "yarn generate"
+    "postinstall": "yarn generate && yarn prisma:copy"
   },
   "dependencies": {
     "@graphql-codegen/cli": "^2.11.5",

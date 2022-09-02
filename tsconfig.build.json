@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "allowJs": true,
+    "target": "es6",
+    "lib": ["es6"],
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noEmitOnError": true,
+    "skipLibCheck": true,
+    "types": [],
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,   
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": false,
+    "composite": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "apps/admin/*", 
+    "apps/client/*", 
+    "ecosystems/*"
+  ]
+}
