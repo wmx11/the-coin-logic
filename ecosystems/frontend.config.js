@@ -3,12 +3,12 @@ module.exports = {
   apps: [
     {
       name: 'admin',
-      script: 'yarn',
+      script: 'npm',
       args: 'admin:start',
     },
     {
       name: 'client',
-      script: 'yarn',
+      script: 'npm',
       args: 'client:start',
     },
   ],
