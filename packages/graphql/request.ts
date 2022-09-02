@@ -1,4 +1,8 @@
+import dotenv from 'dotenv';
+import root from 'find-yarn-workspace-root';
 import axios from 'axios';
+
+dotenv.config({ path: `${root()}/.env` });
 
 const request = async <T>(query: string, variables?: T) => {
   try {
