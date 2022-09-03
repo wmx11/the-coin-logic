@@ -15,6 +15,8 @@ import sendPasswordResetEmail from 'tcl-packages/email/sendPasswordResetEmail';
 import jwt from 'jsonwebtoken';
 
 let sessionSecret = process.env.SESSION_SECRET;
+const passwordResetJwtSecret = process.env.PASSWORD_RESET_JWT_SECRET;
+const passwordResetLink = process.env.PASSWORD_RESET_LINK;
 
 // Here is a best practice! It's fine to not have provided a session secret in dev,
 // however it should always be there in production.
@@ -51,9 +53,9 @@ const { withAuth } = createAuth({
         token
       };
       
-      const signedToken = jwt.sign(passwordResetData, process.env.PASSWORD_RESET_JWT_SECRET as string);
+      const signedToken = jwt.sign(passwordResetData, passwordResetJwtSecret as string);
 
-      await sendPasswordResetEmail(identity, `${process.env.PASSWORD_RESET_LINK}/${signedToken}`);
+      await sendPasswordResetEmail(identity, `${passwordResetLink}/${signedToken}`);
       return;
     },
     tokensValidForMins: 10,
