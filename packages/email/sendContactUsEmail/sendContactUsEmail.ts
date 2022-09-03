@@ -10,7 +10,7 @@ type SendContactUsEmail = {
 const sendContactUsEmail = async ({ from, name, message }: SendContactUsEmail) => {
   try {
     await emailClient.send({
-      to: config.tclEmail,
+      to: config.tclContactEmail,
       from: { email: config.tclEmail, name: 'TCL Contact Form' },
       replyTo: from,
       subject: `${name} - I'd like to contact`,
