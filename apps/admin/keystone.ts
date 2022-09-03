@@ -60,7 +60,7 @@ export default withAuth(
     },
     server: {
       port: 3500,
-      cors: { origin: ['localhost', 'thecoinlogic.com', 'www.thecoinlogic.com', 'cms.thecoinlogic.com', 'www.cms.thecoinlogic.com'] },
+      cors: { origin: ['localhost', 'https://thecoinlogic.com', 'https://www.thecoinlogic.com', 'https://cms.thecoinlogic.com', 'https://www.cms.thecoinlogic.com'] },
     },
     graphql: {
       apolloConfig: {
@@ -71,7 +71,7 @@ export default withAuth(
         })
       },
       cors: {
-        origin: ['localhost', 'thecoinlogic.com', 'www.thecoinlogic.com', 'cms.thecoinlogic.com', 'www.cms.thecoinlogic.com']
+        origin: ['localhost', 'https://thecoinlogic.com', 'https://www.thecoinlogic.com', 'https://cms.thecoinlogic.com', 'https://www.cms.thecoinlogic.com']
       }      
     },
     lists,
