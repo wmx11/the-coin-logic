@@ -1,10 +1,10 @@
 import type { Contract } from 'web3-eth-contract';
-import { updateProjectInitializedStatus } from '../../../../graphql/mutations';
 import { Project } from '../../../../types';
 import getPaginationFor from '../../../../utils/getPaginationFor';
 import iterateWithContext from '../../../../utils/iterateWithContext';
 import config from '../../../config';
 import { getDecimals } from '../../base';
+import { setProjectInitialized } from '../../projects';
 import createOrUpdateHolderEntriesCallback from './createOrUpdateHolderEntriesCallback';
 import getTransferEventsCount from './getTransferEventsCount';
 
@@ -46,8 +46,8 @@ const createOrUpdateHolderEntriesFromTransferEvents = async ({
 
   await iterateWithContext(context, createOrUpdateHolderEntriesCallback);
 
-  if ((!hasHolders && !project.initialized) || (hasHolders && !project.initialized)) {
-    await updateProjectInitializedStatus({ id: projectId, initialized: true });
+  if (!project.initialized || !hasHolders) {
+    await setProjectInitialized(projectId, true);
   }
 };
 
