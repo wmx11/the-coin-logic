@@ -7,6 +7,7 @@ import auditing from 'public/images/auditing.png';
 import { FC, ReactNode } from 'react';
 import { AiOutlineBarChart } from 'react-icons/ai';
 import { FiTarget, FiUserCheck } from 'react-icons/fi';
+import { GiNestBirds } from 'react-icons/gi';
 import { IoMicSharp } from 'react-icons/io5';
 import { MdEmojiEvents } from 'react-icons/md';
 import { ContentProps } from 'types/TextContent';
@@ -27,7 +28,7 @@ const ServiceCard: FC<ServiceCardProps> = ({ title, description, image, alt, ico
       withBorder
       className="flex justify-between items-center hover:shadow-lg transition-shadow"
     >
-      <div className="flex-1 md:max-w-[80%]">
+      <div className="flex-1 md:max-w-[78%]">
         <Title order={2} className="text-violet mb-2">
           {title}
         </Title>
@@ -58,7 +59,7 @@ const index: FC<ContentProps> = ({ content }) => {
           />
           <ServiceCard
             title="Contract Audits"
-            description="Smart contract audits are one of the best ways to ensure your project is secure and free of logic errors. Audits can help you spot bugs way before the project grows to sizes where migrations are a headache to handle. Audit your project smart contract with one of the most competitive prices in the space through our partners at Cardinal House!"
+            description="Smart contract audits are one of the best ways to ensure your project is secure and free of logic errors. Audits can help you spot bugs way before the project grows to sizes where migrations are a headache to handle. Audit your project smart contract with one of the most competitive prices in the space through our partners at Cardinal House! They are revolutionizing the space in a couple key ways in addition to all audit standards. Firstly, Cardinal House Audits do a manual review of the smart contracts to ensure that all intended functionalities are present. Secondly, they also do Unit/Integration Testing as a secondary service to dive deeper into all the edge cases."
             image={auditing}
             alt="Auditing logo"
           />
@@ -74,13 +75,18 @@ const index: FC<ContentProps> = ({ content }) => {
           />
           <ServiceCard
             title="Community Events"
-            description="A strong project has a strong community. We understand the importance of a well informed, active, and proactive communities. Our partners at Cardinal House provide the best community event management for DeFi projects. Get your community closer through game nights, giveaways, challenges, surprises, and more!"
+            description="A strong project has a strong community. We understand the importance of a well informed, active, and proactive communities. Our partners at Cardinal House provide the best community event management for DeFi projects. Build your community through game nights, giveaways, challenges, surprises, and more!"
             icon={<MdEmojiEvents size={35} className="text-violet" />}
           />
           <ServiceCard
             title="AMAs (Ask Me Anything)"
-            description="AMAs are a great way to keep the community up to date with what’s happening on the inside. Also, it’s an amazing marketing tool when you conduct AMAs on different social media platforms. It brings in new people, raises questions, and gives you new ideas. Cardinal House will take care of your AMA management."
+            description="AMAs are a great way to reach new potential investors and get fresh eyes on your project. They serve as a very useful tool in sharing what your project is about and who the team is around the project. Contact Cardinal House to schedule an AMA!"
             icon={<IoMicSharp size={35} className="text-violet" />}
+          />
+          <ServiceCard
+            title="Ivy Nest (Coming Soon!)"
+            description="You wont want to be late to this once its out!"
+            icon={<GiNestBirds size={35} className="text-violet" />}
           />
         </div>
 
