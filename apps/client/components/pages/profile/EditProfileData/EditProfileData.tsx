@@ -20,8 +20,8 @@ const EditProfileData = () => {
     validate: zodResolver(userProfileSchema),
     initialValues: {
       username: user?.name || '',
-      firstName: user?.firstName || null,
-      lastName: user?.lastName || null,
+      firstName: user?.firstName || '',
+      lastName: user?.lastName || '',
       subscribeToEmail: user?.isSubscribedToEmail,
     },
   });
@@ -44,6 +44,7 @@ const EditProfileData = () => {
         form.resetDirty();
       }
     } catch (e) {
+      toast.error('Looks like there has been an issue updating your profile information!');
       console.log(e);
     }
   };
