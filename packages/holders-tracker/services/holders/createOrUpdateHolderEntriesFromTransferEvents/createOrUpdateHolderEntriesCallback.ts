@@ -31,10 +31,6 @@ const createOrUpdateHolderEntriesCallback = async (context: ExtendedContext) => 
     getPagination(perPage, iteration).offset,
   );
 
-  if (!transferEvents) {
-    return null;
-  }
-
   for (const event of transferEvents) {
     const wallet = await getHolder(event.toAddress);
     const project = await getProjectByProjectId(event.projectId as string);
@@ -66,11 +62,11 @@ const createOrUpdateHolderEntriesCallback = async (context: ExtendedContext) => 
     );
 
     console.log(result);
-
+    
     await sleep(config.timeouts.createOrUpdateHolderEntriesCallback);
   }
 
-  return null;
+  return context;
 };
 
 export default createOrUpdateHolderEntriesCallback;
