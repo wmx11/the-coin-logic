@@ -25,7 +25,8 @@ const trackHoldings = async (initial = false) => {
         throw new Error('Project does not have an RPC endpoint.');
       }
 
-      const hasHolders = !!(await getHoldersCountByProjectId(project?.id));
+      const holdersCountByProjectId = await getHoldersCountByProjectId(project?.id);
+      const hasHolders = !!holdersCountByProjectId;
 
       const web3 = new Web3(project.network?.url as string);
       const contract = new web3.eth.Contract(baseAbi, project.contractAddress as string);
