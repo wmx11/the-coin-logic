@@ -15,17 +15,17 @@ import {
 import { getData } from './getters';
 
 export const getProjectsList = async () => {
-  const { projects } = await getData(GET_PROJECTS_LIST);
+  const { projects } = await getData(GET_PROJECTS_LIST, undefined, 'network-only');
   return projects;
 };
 
 export const getProjectsByUserEmail = async (email: string) => {
-  const { user } = await getData(GET_PROJECTS_BY_USER_EMAIL, { email });
+  const { user } = await getData(GET_PROJECTS_BY_USER_EMAIL, { email }, 'network-only');
   return user?.projects || null;
 };
 
 export const getProjectsCount = async () => {
-  const { projectsCount } = await getData(GET_PROJECTS_COUNT);
+  const { projectsCount } = await getData(GET_PROJECTS_COUNT, undefined, 'network-only');
   return projectsCount;
 };
 
@@ -34,12 +34,12 @@ export const getProjectPreviousDayMarketStatsBySlugAndDate = async (slug: string
     return null;
   }
   const lastDay = formatISO(new Date(setHours(new Date(date), 0).toString()));
-  const { marketStats } = await getData(GET_PREVIOUS_DAY_MARKET_STATS, { slug, lastDay });
+  const { marketStats } = await getData(GET_PREVIOUS_DAY_MARKET_STATS, { slug, lastDay }, 'network-only');
   return marketStats[0];
 };
 
 export const getProjectsForHomepageList = async () => {
-  const { projects } = await getData(GET_ENABLED_AND_LISTED_PROJECTS_ID_AND_SLUG);
+  const { projects } = await getData(GET_ENABLED_AND_LISTED_PROJECTS_ID_AND_SLUG, undefined, 'network-only');
 
   if (!projects) {
     return null;
@@ -50,7 +50,7 @@ export const getProjectsForHomepageList = async () => {
   };
 
   const projectsPromises = projects.map(async (project: ProjectId) => {
-    const { marketStats } = await getData(GET_MARKET_STATS_BY_PROJECT_ID_FOR_HOMEPAGE, { id: project.id });
+    const { marketStats } = await getData(GET_MARKET_STATS_BY_PROJECT_ID_FOR_HOMEPAGE, { id: project.id }, 'network-only');
     return marketStats[0] || null;
   });
 
@@ -85,7 +85,7 @@ export const getProjectsForHomepageList = async () => {
 export const getProjectAndMarketStatsBySlug = async (
   slug: string,
 ): Promise<ProjectWithMarketStatsAndChanges | null> => {
-  const marketStatsArray = await getData(GET_PROJECT_AND_MARKET_STATS_BY_SLUG, { slug });
+  const marketStatsArray = await getData(GET_PROJECT_AND_MARKET_STATS_BY_SLUG, { slug }, 'network-only');
 
   const marketStats = marketStatsArray.marketStats[0] || null;
 
