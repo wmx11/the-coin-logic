@@ -14,6 +14,7 @@ import { lists } from './schema';
 // Keystone auth is configured separately - check out the basic auth setup we are importing from our auth file.
 import { withAuth, session } from './auth';
 import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache';
+import { default as devConfig } from './config/config';
 
 export default withAuth(
   // Using the config function helps typescript guide you to the available options.
@@ -60,15 +61,7 @@ export default withAuth(
     },
     server: {
       port: 3500,
-      cors: {
-        origin: [
-          'localhost',
-          'https://thecoinlogic.com',
-          'https://www.thecoinlogic.com',
-          'https://cms.thecoinlogic.com',
-          'https://www.cms.thecoinlogic.com',
-        ],
-      },
+      cors: devConfig.cors,
     },
     graphql: {
       debug: process.env.NODE_ENV !== 'production',
@@ -80,15 +73,7 @@ export default withAuth(
           ttl: 1000 * 60 * 5,
         }),
       },
-      cors: {
-        origin: [
-          'localhost',
-          'https://thecoinlogic.com',
-          'https://www.thecoinlogic.com',
-          'https://cms.thecoinlogic.com',
-          'https://www.cms.thecoinlogic.com',
-        ],
-      },
+      cors: devConfig.cors,
     },
     lists,
     session,
