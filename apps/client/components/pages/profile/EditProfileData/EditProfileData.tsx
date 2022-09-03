@@ -20,8 +20,8 @@ const EditProfileData = () => {
     validate: zodResolver(userProfileSchema),
     initialValues: {
       username: user?.name || '',
-      firstName: user?.firstName || '',
-      lastName: user?.lastName || '',
+      firstName: user?.firstName || null,
+      lastName: user?.lastName || null,
       subscribeToEmail: user?.isSubscribedToEmail,
     },
   });
@@ -35,7 +35,7 @@ const EditProfileData = () => {
       }
 
       const updatedUser = await updateUser({
-        variables: { email: user.email, name: username, firstName, lastName, isSubscribedToEmail: subscribeToEmail },
+        variables: { email: user.email, name: username, firstName: firstName || '', lastName: lastName || '', isSubscribedToEmail: subscribeToEmail },
       });
 
       if (updatedUser) {
