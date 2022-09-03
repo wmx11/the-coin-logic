@@ -6,14 +6,15 @@ import { Discord, Twitter } from 'components/Socials/Socials';
 import TextContent from 'components/TextContent';
 import { getContentBySlug } from 'data/getters';
 import useRecaptcha from 'hooks/useRecaptcha';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { toast } from 'react-toastify';
 import { commons } from 'schemas/user';
 import { ContentProps } from 'types/TextContent';
 import { z } from 'zod';
 
 const index: FC<ContentProps> = ({ content }) => {
-  const { validate, errorMessage, captchaToken } = useRecaptcha();
+  const { validate, errorMessage } = useRecaptcha();
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const contactUsSchema = z.object({
     email: commons.email,
@@ -43,15 +44,17 @@ const index: FC<ContentProps> = ({ content }) => {
         return null;
       }
 
+      setIsDisabled(true);
+
       await axios.post('/api/email/contactUs', {
         email,
         message,
         name,
-        captchaToken,
       });
 
       toast.success('Thank you for contacting us. We will get back to you within 24 hours.');
     } catch (error) {
+      setIsDisabled(false);
       console.log(error);
     }
   };
@@ -88,7 +91,7 @@ const index: FC<ContentProps> = ({ content }) => {
                 {...form.getInputProps('message')}
               />
               <div className="flex w-full justify-end">
-                <Button type="submit" color="violet">
+                <Button type="submit" color="violet" disabled={isDisabled}>
                   Send a message
                 </Button>
               </div>

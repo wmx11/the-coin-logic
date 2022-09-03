@@ -5,13 +5,9 @@ import sendContactUsEmail from 'tcl-packages/email/sendContactUsEmail';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method, body } = req;
 
-  const { email, message, name, captchaToken } = body;
+  const { email, message, name } = body;
 
   const sendEmail = async () => {
-    if (!captchaToken) {
-      return;
-    }
-
     if (!email || !message || !name) {
       return;
     }
