@@ -6,7 +6,7 @@ const config = {
     return subHours(new Date(), 0);
   },
   timeouts: {
-    iterateTransferEventsAndCreateNewEntriesCallback: 25,
+    iterateTransferEventsAndCreateNewEntriesCallback: 35,
     updateBalancesForRebasingTokens: 75,
     createOrUpdateHolderEntriesCallback: 75,
   },

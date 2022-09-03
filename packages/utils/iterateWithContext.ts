@@ -3,7 +3,7 @@ export type Context = {
   iteration: number;
 };
 
-type Callback<T> = (context: Context & T) => Promise<T | null>;
+type Callback<T> = (context: Context & T) => Promise<(Context & T) | null>;
 
 const iterateWithContext = async <T>(context: Context & T, cb: Callback<T>): Promise<void | null> => {
   if (!context || !cb) {
@@ -16,9 +16,9 @@ const iterateWithContext = async <T>(context: Context & T, cb: Callback<T>): Pro
 
   const cbContext = await cb(context);
 
-  const newContext = { ...context, ...cbContext };
+  const newContext = { ...cbContext, iteration: cbContext.iteration + 1 };
 
-  await iterateWithContext({ ...newContext, iteration: newContext.iteration + 1 }, cb);
+  await iterateWithContext(newContext, cb);
 };
 
 export default iterateWithContext;
