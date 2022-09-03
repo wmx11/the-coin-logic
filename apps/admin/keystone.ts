@@ -60,19 +60,35 @@ export default withAuth(
     },
     server: {
       port: 3500,
-      cors: { origin: ['localhost', 'https://thecoinlogic.com', 'https://www.thecoinlogic.com', 'https://cms.thecoinlogic.com', 'https://www.cms.thecoinlogic.com'] },
+      cors: {
+        origin: [
+          'localhost',
+          'https://thecoinlogic.com',
+          'https://www.thecoinlogic.com',
+          'https://cms.thecoinlogic.com',
+          'https://www.cms.thecoinlogic.com',
+        ],
+      },
     },
     graphql: {
+      debug: process.env.NODE_ENV !== 'production',
+      playground: process.env.NODE_ENV !== 'production',
       apolloConfig: {
         cache: new InMemoryLRUCache({
           max: 500,
           maxSize: Math.pow(2, 20) * 100,
-          ttl: 1000 * 60 * 5
-        })
+          ttl: 1000 * 60 * 5,
+        }),
       },
       cors: {
-        origin: ['localhost', 'https://thecoinlogic.com', 'https://www.thecoinlogic.com', 'https://cms.thecoinlogic.com', 'https://www.cms.thecoinlogic.com']
-      }      
+        origin: [
+          'localhost',
+          'https://thecoinlogic.com',
+          'https://www.thecoinlogic.com',
+          'https://cms.thecoinlogic.com',
+          'https://www.cms.thecoinlogic.com',
+        ],
+      },
     },
     lists,
     session,
