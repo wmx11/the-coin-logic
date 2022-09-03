@@ -46,7 +46,7 @@ const createOrUpdateHolderEntriesFromTransferEvents = async ({
 
   await iterateWithContext(context, createOrUpdateHolderEntriesCallback);
 
-  if (!hasHolders || !project.initialized) {
+  if ((!hasHolders && !project.initialized) || (hasHolders && !project.initialized)) {
     await updateProjectInitializedStatus({ id: projectId, initialized: true });
   }
 };
