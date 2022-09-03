@@ -24,22 +24,20 @@ type ExtendedContext = Context & {
 const iterateTransferEventsAndCreateNewEntriesCallback = async (context: ExtendedContext) => {
   const { iteration, iterations, contract, project, decimals, projectBlock, from, to, config } = context;
 
-  if (iteration >= iterations) {
-    return null;
-  }
-
   const pastTransferEvents = await getPastTransferEvents({
     contract,
     fromBlock: from,
     toBlock: to,
   });
 
-  if (!pastTransferEvents || !pastTransferEvents.length) {
-    return null;
-  }
+  console.log(from, to);
+
+  let lastBlock = from;
 
   for (const event of pastTransferEvents) {
     const { from: fromAddress, to: toAddress, value } = event.returnValues;
+
+    lastBlock = event.blockNumber;
 
     const result = await addTransferEvent({
       project: { connect: { id: project.id } },
@@ -52,15 +50,15 @@ const iterateTransferEventsAndCreateNewEntriesCallback = async (context: Extende
       hash: event.transactionHash,
     });
 
-    if (projectBlock) {
-      await updateBlock(projectBlock.id, {
-        lastBlock: event.blockNumber,
-      });
-    }
-
     console.log(iteration + ' ===>', iterations, result);
 
     await sleep(holdersTrackerConfig.timeouts.iterateTransferEventsAndCreateNewEntriesCallback);
+  }
+
+  if (projectBlock) {
+    await updateBlock(projectBlock.id, {
+      lastBlock,
+    });
   }
 
   const newFromBlock = from + config.chunks;

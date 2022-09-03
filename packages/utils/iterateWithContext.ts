@@ -1,3 +1,5 @@
+import sleep from './sleep';
+
 export type Context = {
   iterations: number;
   iteration: number;
@@ -16,7 +18,9 @@ const iterateWithContext = async <T>(context: Context & T, cb: Callback<T>): Pro
 
   const cbContext = await cb(context);
 
-  const newContext = { ...cbContext, iteration: cbContext.iteration + 1 };
+  await sleep(10);
+
+  const newContext = { ...cbContext, iteration: context.iteration + 1 };
 
   await iterateWithContext(newContext, cb);
 };
