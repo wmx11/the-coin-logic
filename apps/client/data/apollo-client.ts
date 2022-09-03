@@ -8,6 +8,11 @@ const client = new ApolloClient({
       timeToLive: 1000 * 60 * 5,
     },
   }),
+  defaultOptions: {
+    watchQuery: {
+      nextFetchPolicy: 'cache-and-network',
+    },
+  },
 });
 
 export default client;
