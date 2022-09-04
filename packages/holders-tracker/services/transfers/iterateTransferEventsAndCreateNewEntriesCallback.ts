@@ -9,8 +9,8 @@ import { updateBlock } from '../base';
 import {
   addTransferEvent,
   getPastTransferEvents,
-  getTransferEventByHashAndProjectId,
-  getTransferType
+  getTransferEventByHashAmountAndProjectId,
+  getTransferType,
 } from './transfers';
 
 type ExtendedContext = Context & {
@@ -44,10 +44,14 @@ const iterateTransferEventsAndCreateNewEntriesCallback = async (context: Extende
 
     const { from: fromAddress, to: toAddress, value } = event.returnValues;
     const amount = toDecimals(value, decimals) || 0;
-    const existingTransferEvent = await getTransferEventByHashAndProjectId(event.transactionHash, project.id);
+    const existingTransferEvent = await getTransferEventByHashAmountAndProjectId(
+      event.transactionHash,
+      amount,
+      project.id,
+    );
 
     // If the hash and the amount is the same, continue to the next event. Prevent duplicates
-    if (existingTransferEvent && existingTransferEvent.amount === amount) {
+    if (existingTransferEvent) {
       continue;
     }
 
