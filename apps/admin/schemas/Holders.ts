@@ -10,6 +10,11 @@ const Holders: Lists = {
       previousBlock: integer({ defaultValue: 0 }),
       lastBlock: integer({ defaultValue: 0 }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
+      updatedAt: timestamp({
+        db: {
+          updatedAt: true,
+        },
+      }),
     },
   }),
   Transfer: list({
@@ -19,10 +24,10 @@ const Holders: Lists = {
       type: integer(),
       address: text(),
       fromAddress: text(),
-      toAddress: text(),
-      hash: text(),
+      toAddress: text({ isIndexed: true }),
+      hash: text({ isIndexed: true }),
       block: integer(),
-      createdAt: timestamp({ defaultValue: { kind: 'now' } }),
+      createdAt: timestamp({ defaultValue: { kind: 'now' }, isIndexed: true }),
       updatedAt: timestamp({
         db: {
           updatedAt: true,
@@ -32,13 +37,13 @@ const Holders: Lists = {
   }),
   Holder: list({
     fields: {
-      address: text(),
+      address: text({ isIndexed: true }),
       balance: float({ defaultValue: 0 }),
       note: text(),
       isContract: checkbox({ defaultValue: false }),
       projects: relationship({ ref: 'Project', many: true }),
       transfers: relationship({ ref: 'Transfer', many: true, ui: { displayMode: 'count' } }),
-      dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
+      dateAdded: timestamp({ defaultValue: { kind: 'now' }, isIndexed: true }),
       updatedAt: timestamp({
         db: {
           updatedAt: true,

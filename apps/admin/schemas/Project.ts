@@ -30,6 +30,10 @@ const Project: Lists = {
         defaultValue: false,
         ui: { description: 'Is the project fully synced with the holders data.' },
       }),
+      markForDeletion: checkbox({
+        defaultValue: false,
+        ui: { description: 'Is the project marked for deletion.' },
+      }),
       status: select({
         ui: {
           displayMode: 'segmented-control',
