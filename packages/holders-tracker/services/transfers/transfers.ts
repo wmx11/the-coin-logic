@@ -120,3 +120,18 @@ export const getTransferEventsFromPreviousBlock = async (projectId: string, pagi
     return null;
   }
 };
+
+export const getTransferEventByHashAndProjectId = async (hash: string, projectId: string) => {
+  try {
+    const transferEvent = await prismaClient.transfer.findFirst({
+      where: {
+        hash,
+        projectId,
+      },
+    });
+    return transferEvent;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};

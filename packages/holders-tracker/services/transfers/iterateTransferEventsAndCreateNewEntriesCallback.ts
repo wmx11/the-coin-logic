@@ -1,12 +1,17 @@
-import { Context } from '../../../utils/iterateWithContext';
 import { Contract } from 'web3-eth-contract';
+import { Context } from '../../../utils/iterateWithContext';
 
+import type { Block, Project } from '../../../types';
 import sleep from '../../../utils/sleep';
 import toDecimals from '../../../utils/toDecimals';
-import { updateBlock } from '../base';
-import { addTransferEvent, getPastTransferEvents, getTransferType } from './transfers';
-import type { Block, Project } from '../../../types';
 import { default as holdersTrackerConfig } from '../../config';
+import { updateBlock } from '../base';
+import {
+  addTransferEvent,
+  getPastTransferEvents,
+  getTransferEventByHashAndProjectId,
+  getTransferType
+} from './transfers';
 
 type ExtendedContext = Context & {
   decimals: number;
@@ -35,13 +40,20 @@ const iterateTransferEventsAndCreateNewEntriesCallback = async (context: Extende
   let lastBlock = from;
 
   for (const event of pastTransferEvents) {
-    const { from: fromAddress, to: toAddress, value } = event.returnValues;
-
     lastBlock = event.blockNumber;
+
+    const { from: fromAddress, to: toAddress, value } = event.returnValues;
+    const amount = toDecimals(value, decimals) || 0;
+    const existingTransferEvent = await getTransferEventByHashAndProjectId(event.transactionHash, project.id);
+
+    // If the hash and the amount is the same, continue to the next event. Prevent duplicates
+    if (existingTransferEvent && existingTransferEvent.amount === amount) {
+      continue;
+    }
 
     const result = await addTransferEvent({
       project: { connect: { id: project.id } },
-      amount: toDecimals(value, decimals) || 0,
+      amount,
       block: event.blockNumber,
       type: getTransferType({ project, fromAddress, toAddress }) as number,
       address: event.address,
