@@ -1,5 +1,6 @@
-import { subDays } from 'date-fns';
+import { subDays, set } from 'date-fns';
 import { prismaClient, PrismaSchema } from '../../../prismaClient';
+import { getMidnightToday } from '../../../utils/dates';
 import type { Pagination } from '../types';
 
 export const getHoldersCountByProjectIdFrom = (projectId: string, from: number) => {
@@ -151,7 +152,7 @@ export const getNewHoldersCountByProjectId = async (projectId: string, tokenAmou
           gte: tokenAmount,
         },
         dateAdded: {
-          gte: subDays(new Date(), 1),
+          gte: getMidnightToday(),
         },
       },
     });
@@ -172,7 +173,7 @@ export const getLeavingHoldersCountByProjectId = async (projectId: string, token
           lte: tokenAmount,
         },
         updatedAt: {
-          gte: subDays(new Date(), 1),
+          gte: getMidnightToday(),
         },
       },
     });
@@ -193,13 +194,13 @@ export const getRecurringHoldersCountByProjectId = async (projectId: string, tok
           gte: tokenAmount,
         },
         dateAdded: {
-          lt: subDays(new Date(), 1),
+          lt: getMidnightToday(),
         },
         updatedAt: {
-          gte: subDays(new Date(), 1),
+          gte: getMidnightToday(),
         },
         transfers: {
-          every: { createdAt: { gte: subDays(new Date(), 1) } },
+          every: { createdAt: { gte: getMidnightToday() } },
         },
       },
     });
