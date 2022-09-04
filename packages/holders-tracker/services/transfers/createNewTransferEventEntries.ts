@@ -28,7 +28,7 @@ const createNewTransferEventEntries = async ({
     decimals,
     projectBlock,
     from: fromBlock,
-    to: fromBlock + config.chunks,
+    to: fromBlock + (project.initialized ? config.chunks : config.initialChunks),
     contract,
     project,
     config,

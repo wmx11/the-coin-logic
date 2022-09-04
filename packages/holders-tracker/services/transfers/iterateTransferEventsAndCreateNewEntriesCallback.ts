@@ -23,11 +23,13 @@ type ExtendedContext = Context & {
   config: {
     caller: string;
     chunks: number;
+    initialChunks: number;
   };
 };
 
 const iterateTransferEventsAndCreateNewEntriesCallback = async (context: ExtendedContext) => {
   const { iteration, iterations, contract, project, decimals, projectBlock, from, to, config } = context;
+  const chunks = project.initialized ? config.chunks : config.initialChunks;
 
   const pastTransferEvents = await getPastTransferEvents({
     contract,
@@ -77,8 +79,8 @@ const iterateTransferEventsAndCreateNewEntriesCallback = async (context: Extende
     });
   }
 
-  const newFromBlock = from + config.chunks;
-  const newToBlock = newFromBlock + config.chunks;
+  const newFromBlock = from + chunks;
+  const newToBlock = newFromBlock + chunks;
 
   const updatedContext = { ...context, from: newFromBlock, to: newToBlock };
 
