@@ -27,7 +27,7 @@ const trackTransferEventsByProject = async (project: Project) => {
 
   const fromBlock = (lastBlock?.lastBlock || project.launchBlock) as number;
 
-  const iterations = getIterations(fromBlock as number, toBlock);
+  const iterations = getIterations(fromBlock as number, toBlock, project.initialized);
 
   await createOrUpdateBlock(
     lastBlock?.id as string,

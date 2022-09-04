@@ -3,7 +3,8 @@ import type { Contract } from 'web3-eth-contract';
 import { prismaClient, PrismaSchema } from '../../../prismaClient';
 import config from '../../../web3/config';
 
-export const getIterations = (from: number, to: number) => Math.ceil((to - from) / 2000);
+export const getIterations = (from: number, to: number, isProjectInitialized: boolean) =>
+  Math.ceil((to - from) / (isProjectInitialized ? config.chunks : config.initialChunks));
 
 export const getDecimals = (contract: Contract) => {
   return contract.methods.decimals().call({ from: config.caller });

@@ -45,7 +45,9 @@ const iterateTransferEventsAndCreateNewEntriesCallback = async (context: Extende
     lastBlock = event.blockNumber;
 
     const { from: fromAddress, to: toAddress, value } = event.returnValues;
+
     const amount = toDecimals(value, decimals) || 0;
+
     const existingTransferEvent = await getTransferEventByHashAmountAndProjectId(
       event.transactionHash,
       amount,
@@ -81,8 +83,9 @@ const iterateTransferEventsAndCreateNewEntriesCallback = async (context: Extende
 
   const newFromBlock = from + chunks;
   const newToBlock = newFromBlock + chunks;
-
   const updatedContext = { ...context, from: newFromBlock, to: newToBlock };
+  
+  await sleep(holdersTrackerConfig.timeouts.iterateTransferEventsAndCreateNewEntriesCallback);
 
   return updatedContext;
 };
