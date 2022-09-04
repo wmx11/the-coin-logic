@@ -83,6 +83,7 @@ model Project {
   trackHolders                Boolean         @default(false)
   isRebasing                  Boolean         @default(false)
   initialized                 Boolean         @default(false)
+  markForDeletion             Boolean         @default(false)
   status                      String?
   tags                        Tag[]           @relation("Project_tags")
   contractAddress             String          @default("")
@@ -319,6 +320,7 @@ model Block {
   previousBlock Int?      @default(0)
   lastBlock     Int?      @default(0)
   dateAdded     DateTime? @default(now())
+  updatedAt     DateTime? @updatedAt
 
   @@index([projectId])
 }
@@ -339,6 +341,9 @@ model Transfer {
   from_Holder_transfers Holder[]  @relation("Holder_transfers")
 
   @@index([projectId])
+  @@index([toAddress])
+  @@index([hash])
+  @@index([createdAt])
 }
 
 model Holder {
@@ -352,4 +357,7 @@ model Holder {
   dateAdded            DateTime?  @default(now())
   updatedAt            DateTime?  @updatedAt
   from_Project_holders Project[]  @relation("Project_holders")
+
+  @@index([address])
+  @@index([dateAdded])
 }
