@@ -38,7 +38,7 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
     {
       value: recurringHolders as number,
       previousValue: recurringHoldersChange as PreviousValueTypes,
-      title: 'Recurring Holders',
+      title: 'Recurring Buys',
       isCurrency: false,
     },
     {
