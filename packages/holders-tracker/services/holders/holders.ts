@@ -172,8 +172,19 @@ export const getLeavingHoldersCountByProjectId = async (projectId: string, token
         balance: {
           lte: tokenAmount,
         },
+        dateAdded: {
+          lt: getMidnightToday(),
+        },
         updatedAt: {
           gte: getMidnightToday(),
+        },
+        transfers: {
+          some: {
+            projectId,
+            createdAt: {
+              gte: getMidnightToday(),
+            },
+          },
         },
       },
     });
@@ -200,7 +211,12 @@ export const getRecurringHoldersCountByProjectId = async (projectId: string, tok
           gte: getMidnightToday(),
         },
         transfers: {
-          every: { createdAt: { gte: getMidnightToday() } },
+          some: {
+            projectId,
+            createdAt: {
+              gte: getMidnightToday(),
+            },
+          },
         },
       },
     });

@@ -124,9 +124,9 @@ const generateMarketStats = async (project: Project, cache: Map<string, Cache>) 
     pairPrice,
     holders: holders || prevHoldersData?.holders,
     avgHoldings: avgHoldings || prevHoldersData?.avgHoldings,
-    newHolders: newHolders || prevHoldersData?.newHolders,
-    recurringHolders: recurringHolders || prevHoldersData?.recurringHolders,
-    leavingHolders: leavingHolders || prevHoldersData?.leavingHolders,
+    newHolders: newHolders || 0,
+    recurringHolders: recurringHolders || 0,
+    leavingHolders: leavingHolders || 0,
     customData,
   };
 

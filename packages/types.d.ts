@@ -27,6 +27,7 @@ export type Block = {
   lastBlock?: Maybe<Scalars['Int']>;
   previousBlock?: Maybe<Scalars['Int']>;
   project?: Maybe<Project>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type BlockCreateInput = {
@@ -35,6 +36,7 @@ export type BlockCreateInput = {
   lastBlock?: InputMaybe<Scalars['Int']>;
   previousBlock?: InputMaybe<Scalars['Int']>;
   project?: InputMaybe<ProjectRelateToOneForCreateInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type BlockOrderByInput = {
@@ -43,6 +45,7 @@ export type BlockOrderByInput = {
   id?: InputMaybe<OrderDirection>;
   lastBlock?: InputMaybe<OrderDirection>;
   previousBlock?: InputMaybe<OrderDirection>;
+  updatedAt?: InputMaybe<OrderDirection>;
 };
 
 export type BlockUpdateArgs = {
@@ -56,6 +59,7 @@ export type BlockUpdateInput = {
   lastBlock?: InputMaybe<Scalars['Int']>;
   previousBlock?: InputMaybe<Scalars['Int']>;
   project?: InputMaybe<ProjectRelateToOneForUpdateInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type BlockWhereInput = {
@@ -68,6 +72,7 @@ export type BlockWhereInput = {
   lastBlock?: InputMaybe<IntNullableFilter>;
   previousBlock?: InputMaybe<IntNullableFilter>;
   project?: InputMaybe<ProjectWhereInput>;
+  updatedAt?: InputMaybe<DateTimeNullableFilter>;
 };
 
 export type BlockWhereUniqueInput = {
@@ -2049,6 +2054,7 @@ export type Project = {
   liquidityPair?: Maybe<Array<LiquidityPair>>;
   liquidityPairCount?: Maybe<Scalars['Int']>;
   logo?: Maybe<ImageFieldOutput>;
+  markForDeletion?: Maybe<Scalars['Boolean']>;
   medium?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   network?: Maybe<Network>;
@@ -2146,6 +2152,7 @@ export type ProjectCreateInput = {
   launchDate?: InputMaybe<Scalars['DateTime']>;
   liquidityPair?: InputMaybe<LiquidityPairRelateToManyForCreateInput>;
   logo?: InputMaybe<ImageFieldInput>;
+  markForDeletion?: InputMaybe<Scalars['Boolean']>;
   medium?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   network?: InputMaybe<NetworkRelateToOneForCreateInput>;
@@ -2191,6 +2198,7 @@ export type ProjectOrderByInput = {
   isRebasing?: InputMaybe<OrderDirection>;
   launchBlock?: InputMaybe<OrderDirection>;
   launchDate?: InputMaybe<OrderDirection>;
+  markForDeletion?: InputMaybe<OrderDirection>;
   medium?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
   pairAddress?: InputMaybe<OrderDirection>;
@@ -2258,6 +2266,7 @@ export type ProjectUpdateInput = {
   launchDate?: InputMaybe<Scalars['DateTime']>;
   liquidityPair?: InputMaybe<LiquidityPairRelateToManyForUpdateInput>;
   logo?: InputMaybe<ImageFieldInput>;
+  markForDeletion?: InputMaybe<Scalars['Boolean']>;
   medium?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   network?: InputMaybe<NetworkRelateToOneForUpdateInput>;
@@ -2302,6 +2311,7 @@ export type ProjectWhereInput = {
   launchBlock?: InputMaybe<IntNullableFilter>;
   launchDate?: InputMaybe<DateTimeNullableFilter>;
   liquidityPair?: InputMaybe<LiquidityPairManyRelationFilter>;
+  markForDeletion?: InputMaybe<BooleanFilter>;
   medium?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
   network?: InputMaybe<NetworkWhereInput>;
