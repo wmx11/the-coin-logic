@@ -1,8 +1,10 @@
-import { Container, Paper, Text, Title } from '@mantine/core';
+import { Button, Container, Text, Title } from '@mantine/core';
 import Meta from 'components/Meta';
+import SmallHero from 'components/SmallHero';
 import TextContent from 'components/TextContent';
 import { getContentBySlug } from 'data/getters';
 import Image, { StaticImageData } from 'next/image';
+import { useRouter } from 'next/router';
 import auditing from 'public/images/auditing.png';
 import { FC, ReactNode } from 'react';
 import { AiOutlineBarChart } from 'react-icons/ai';
@@ -22,40 +24,44 @@ type ServiceCardProps = {
 
 const ServiceCard: FC<ServiceCardProps> = ({ title, description, image, alt, icon }) => {
   return (
-    <Paper
-      p="lg"
-      shadow="sm"
-      withBorder
-      className="flex justify-between items-center hover:shadow-lg transition-shadow"
-    >
-      <div className="flex-1 md:max-w-[78%]">
-        <Title order={2} className="text-violet mb-2">
-          {title}
+    <div className="flex items-stretch p-10">
+      <div className="flex-1">
+        <Title order={2} className="text-violet mb-2 flex justify-between items-end">
+          <div className="flex-1">{title}</div>
+          <div className="flex-0 flex justify-end ml-5">
+            {image && <Image src={image} alt={alt as string} width="80px" height="80px" layout="intrinsic" />}
+            {icon && icon}
+          </div>
         </Title>
         <Text size="sm">{description}</Text>
       </div>
-      <div className="flex-0 flex justify-end">
-        {image && <Image src={image} alt={alt as string} width="100px" height="100px" layout="intrinsic" />}
-        {icon && icon}
-      </div>
-    </Paper>
+    </div>
   );
 };
 
 const index: FC<ContentProps> = ({ content }) => {
+  const router = useRouter();
+
   return (
     <>
       <Meta title="Listing, tracking, audits, KYC, and other services | Coin Logic" />
-      <Container className="py-10">
-        <Title order={1} className="text-center mb-16">
-          Our Features & Services
+      <SmallHero>
+        <Title order={1} className="text-5xl mb-4">
+          Changing DeFi One Step at a Time
         </Title>
-
+        <Title order={4} className="mb-4">
+          Leverage our services to boost your success!
+        </Title>
+        <Button variant="white" color="violet" onClick={() => router.push('/contact-us')}>
+          Contact Us
+        </Button>
+      </SmallHero>
+      <Container className="py-10">
         <div className="grid md:grid-cols-2 gap-8">
           <ServiceCard
             title="Listing & Tracking"
             description="List and track your project data in real-time. Bring transparency through data right to your community! General market data such as price, market cap, supply, liquidity, custom data like treasury, insurance, and utility wallets. Track holders from a specified token amount. Never be out of the loop with what’s happening with your project."
-            icon={<AiOutlineBarChart size={35} className="text-violet" />}
+            icon={<AiOutlineBarChart size={80} className="text-violet" />}
           />
           <ServiceCard
             title="Contract Audits"
@@ -66,27 +72,27 @@ const index: FC<ContentProps> = ({ content }) => {
           <ServiceCard
             title="K.Y.C (Know Your Customer)"
             description="K.Y.C is one way to make you and your project transparent. Having you and your team complete a full K.Y.C will bring trust to the community and will set a certain mindframe for future actions and management of the project. Our partners at K.C Consulting provide the best legal K.Y.C services!"
-            icon={<FiUserCheck size={35} className="text-violet" />}
+            icon={<FiUserCheck size={80} className="text-violet" />}
           />
           <ServiceCard
             title="Marketing"
             description="Marketing is the best way to reach the masses and potential customers. Our partners at Cardinal House have great resources to help you market your project. Reach thousands of interested people through digital marketing, YouTube reviews, AMAs, community events, and more!"
-            icon={<FiTarget size={35} className="text-violet" />}
+            icon={<FiTarget size={80} className="text-violet" />}
           />
           <ServiceCard
             title="Community Events"
             description="A strong project has a strong community. We understand the importance of a well informed, active, and proactive communities. Our partners at Cardinal House provide the best community event management for DeFi projects. Build your community through game nights, giveaways, challenges, surprises, and more!"
-            icon={<MdEmojiEvents size={35} className="text-violet" />}
+            icon={<MdEmojiEvents size={80} className="text-violet" />}
           />
           <ServiceCard
             title="AMAs (Ask Me Anything)"
             description="AMAs are a great way to reach new potential investors and get fresh eyes on your project. They serve as a very useful tool in sharing what your project is about and who the team is around the project. Contact Cardinal House to schedule an AMA!"
-            icon={<IoMicSharp size={35} className="text-violet" />}
+            icon={<IoMicSharp size={80} className="text-violet" />}
           />
           <ServiceCard
             title="Ivy Nest (Coming Soon!)"
             description="You wont want to be late to this once its out!"
-            icon={<GiNestBirds size={35} className="text-violet" />}
+            icon={<GiNestBirds size={80} className="text-violet" />}
           />
         </div>
 
