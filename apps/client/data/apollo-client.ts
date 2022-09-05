@@ -1,18 +1,11 @@
-import { ApolloClient } from '@apollo/client';
-import { InvalidationPolicyCache } from '@nerdwallet/apollo-cache-policies';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 
-const client = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
-  cache: new InvalidationPolicyCache({
-    invalidationPolicies: {
-      timeToLive: 1000 * 60 * 5,
-    },
-  }),
-  defaultOptions: {
-    watchQuery: {
-      nextFetchPolicy: 'cache-and-network',
-    },
-  },
-});
+export const initializeApollo = () =>
+  new ApolloClient({
+    uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
+    cache: new InMemoryCache(),
+  });
+
+const client = initializeApollo();
 
 export default client;
