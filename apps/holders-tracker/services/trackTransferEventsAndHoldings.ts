@@ -5,9 +5,9 @@ import trackTransferEvents from './trackTransferEvents';
  * @param initial - Whether this call is initial (first time for new projects) or a regular call (tracking starts from a previous block)
  */
 
-const trackTransferEventsAndHoldings = async (initial?: boolean) => {
+const trackTransferEventsAndHoldings = async (initial?: boolean, reset?: boolean) => {
   await trackTransferEvents(initial);
-  await trackHoldings(initial);
+  await trackHoldings(initial, reset);
 };
 
 export default trackTransferEventsAndHoldings;

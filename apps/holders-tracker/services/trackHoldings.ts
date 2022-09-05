@@ -6,7 +6,7 @@ import { getProjects, setProjectStatus } from 'tcl-packages/holders-tracker/serv
 
 let isRunning = false;
 
-const trackHoldings = async (initial = false) => {
+const trackHoldings = async (initial = false, reset = false) => {
   if (isRunning) {
     return null;
   }
@@ -33,7 +33,11 @@ const trackHoldings = async (initial = false) => {
 
       await setProjectStatus(project.id, 'tracking_holdings');
 
-      await createOrUpdateHolderEntriesFromTransferEvents({ project, hasHolders, contract });
+      await createOrUpdateHolderEntriesFromTransferEvents({
+        project,
+        hasHolders: reset ? false : hasHolders,
+        contract,
+      });
 
       await setProjectStatus(project.id, 'idle');
     } catch (error) {
