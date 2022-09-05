@@ -1,3 +1,6 @@
 import trackTransferEventsAndHoldings from './trackTransferEventsAndHoldings';
 
-trackTransferEventsAndHoldings(true);
+(async () => {
+  await trackTransferEventsAndHoldings(true);
+  console.log('Init Done');
+})();
