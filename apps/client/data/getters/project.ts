@@ -1,3 +1,4 @@
+import { initializeApollo } from 'data/apollo-client';
 import { formatISO, setHours } from 'date-fns';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import getChangesPartial from 'utils/getChangesPartial';
@@ -20,7 +21,11 @@ export const getProjectsList = async () => {
 };
 
 export const getProjectsByUserEmail = async (email: string) => {
-  const { user } = await getData({ query: GET_PROJECTS_BY_USER_EMAIL, variables: { email }, fetchPolicy: 'network-only' });
+  const { user } = await getData({
+    query: GET_PROJECTS_BY_USER_EMAIL,
+    variables: { email },
+    fetchPolicy: 'network-only',
+  });
   return user?.projects || null;
 };
 
@@ -33,13 +38,27 @@ export const getProjectPreviousDayMarketStatsBySlugAndDate = async (slug: string
   if (!slug || !date) {
     return null;
   }
+  const client = initializeApollo();
+
   const lastDay = formatISO(new Date(setHours(new Date(date), 0).toString()));
-  const { marketStats } = await getData({ query: GET_PREVIOUS_DAY_MARKET_STATS, variables: { slug, lastDay }, fetchPolicy: 'network-only' });
+
+  const { marketStats } = await getData({
+    query: GET_PREVIOUS_DAY_MARKET_STATS,
+    variables: { slug, lastDay },
+    fetchPolicy: 'network-only',
+    client,
+  });
   return marketStats[0];
 };
 
 export const getProjectsForHomepageList = async () => {
-  const { projects } = await getData({ query: GET_ENABLED_AND_LISTED_PROJECTS_ID_AND_SLUG, fetchPolicy: 'network-only' });
+  const client = initializeApollo();
+
+  const { projects } = await getData({
+    query: GET_ENABLED_AND_LISTED_PROJECTS_ID_AND_SLUG,
+    fetchPolicy: 'network-only',
+    client,
+  });
 
   if (!projects) {
     return null;
@@ -50,7 +69,12 @@ export const getProjectsForHomepageList = async () => {
   };
 
   const projectsPromises = projects.map(async (project: ProjectId) => {
-    const { marketStats } = await getData({ query: GET_MARKET_STATS_BY_PROJECT_ID_FOR_HOMEPAGE, variables: { id: project.id }, fetchPolicy: 'network-only' });
+    const { marketStats } = await getData({
+      query: GET_MARKET_STATS_BY_PROJECT_ID_FOR_HOMEPAGE,
+      variables: { id: project.id },
+      fetchPolicy: 'network-only',
+      client,
+    });
     return marketStats[0] || null;
   });
 
@@ -85,7 +109,13 @@ export const getProjectsForHomepageList = async () => {
 export const getProjectAndMarketStatsBySlug = async (
   slug: string,
 ): Promise<ProjectWithMarketStatsAndChanges | null> => {
-  const marketStatsArray = await getData({ query: GET_PROJECT_AND_MARKET_STATS_BY_SLUG, variables: { slug }, fetchPolicy: 'network-only' });
+  const client = initializeApollo();
+  const marketStatsArray = await getData({
+    query: GET_PROJECT_AND_MARKET_STATS_BY_SLUG,
+    variables: { slug },
+    fetchPolicy: 'network-only',
+    client,
+  });
 
   const marketStats = marketStatsArray.marketStats[0] || null;
 
