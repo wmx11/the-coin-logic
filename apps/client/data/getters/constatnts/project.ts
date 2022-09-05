@@ -72,7 +72,7 @@ query($id: ID) {
     where: {
       project: { id: { equals: $id }, isListed: { equals: true } }
     }
-    orderBy: { dateAdded: desc }
+    orderBy: { marketCap: desc }
     take: 1
   ) {
     price
