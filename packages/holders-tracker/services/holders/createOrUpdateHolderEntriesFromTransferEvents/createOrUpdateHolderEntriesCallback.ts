@@ -5,7 +5,7 @@ import toDecimals from '../../../../utils/toDecimals';
 import config from '../../../config';
 import { getWalletBalance } from '../../base';
 import { getProjectByProjectId } from '../../projects';
-import { createOrUpdateHolder, getHolder } from '../holders';
+import { createOrUpdateHolder, getHolderByProjectIdAndAddress } from '../holders';
 import getTransferEvents from './getTransferEvents';
 
 type ExtendedContext = Context & {
@@ -32,7 +32,7 @@ const createOrUpdateHolderEntriesCallback = async (context: ExtendedContext) => 
   );
 
   for (const event of transferEvents) {
-    const wallet = await getHolder(event.toAddress);
+    const wallet = await getHolderByProjectIdAndAddress(event.projectId, event.toAddress);
     const project = await getProjectByProjectId(event.projectId as string);
 
     if (!cache.has(event.toAddress)) {
@@ -62,7 +62,7 @@ const createOrUpdateHolderEntriesCallback = async (context: ExtendedContext) => 
     );
 
     console.log(result);
-    
+
     await sleep(config.timeouts.createOrUpdateHolderEntriesCallback);
   }
 

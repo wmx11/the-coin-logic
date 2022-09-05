@@ -44,6 +44,10 @@ export const getHolder = (address: string) => {
   return prismaClient.holder.findFirst({ where: { address } });
 };
 
+export const getHolderByProjectIdAndAddress = (projectId: string, address: string) => {
+  return prismaClient.holder.findFirst({ where: { address, projects: { some: { id: projectId } } } });
+};
+
 export const getHoldersByProjectId = (projectId: string, pagination?: Pagination) => {
   return prismaClient.holder.findMany({
     ...pagination,
