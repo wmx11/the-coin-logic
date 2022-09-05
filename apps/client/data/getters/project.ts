@@ -60,7 +60,7 @@ export const getProjectsForHomepageList = async () => {
     const data = await project;
 
     if (!data) {
-      continue;
+      return null;
     }
 
     const previousDayMarketStats = await getProjectPreviousDayMarketStatsBySlugAndDate(
