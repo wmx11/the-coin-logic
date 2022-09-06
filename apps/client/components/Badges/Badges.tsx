@@ -15,7 +15,7 @@ const Badges: FC<BadgesProps> = ({ badges }) => {
     <div className="flex flex-wrap gap-2">
       {badges.map(({ name }, index: number) => {
         return (
-          <Badge key={`${name}_${index}`} color="violet">
+          <Badge key={`${name}_${index}`} color="violet" size="sm">
             {name}
           </Badge>
         );

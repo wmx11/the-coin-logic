@@ -1,9 +1,9 @@
 const commonBefore = 'md:before:hidden before:block before:mr-2 before:font-bold';
-const commonSpacing = 'mr-2 mb-2 md:mb-0 w-full font-semibold';
+const commonSpacing = 'mr-4 mb-2 md:mb-0 w-full text-sm';
 
 export const TABLE_DATA = {
   rank: { styles: `${commonSpacing} w-full md:max-w-[25px]`, label: '#' },
-  name: { styles: `${commonSpacing} w-full md:max-w-[180px] font-bold`, label: 'Name' },
+  name: { styles: `${commonSpacing} w-full md:max-w-[140px]`, label: 'Name' },
   price: {
     styles: `${commonSpacing} ${commonBefore} md:max-w-[150px] before:content-["Price:"]`,
     label: 'Price',

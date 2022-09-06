@@ -54,47 +54,31 @@ const TableBody: FC<TableBodyProps> = ({ data }) => {
               <a className="flex flex-col md:flex-row p-5 items-center hover:shadow-md transition-shadow">
                 <div className={`${TABLE_DATA.rank.styles} text-xs text-slate-500`}>{index + 1}</div>
                 <div className={`${TABLE_DATA.name.styles} text-sm `}>
-                  <ProjectTitle
-                    title={name as string}
-                    size="sm"
-                    avatar={logo ? logo.url : ''}
-                  />
+                  <ProjectTitle title={name as string} size="sm" avatar={logo ? logo.url : ''} />
                 </div>
                 <div className={`${TABLE_DATA.price.styles}`}>
-                  {
-                    <Trend
-                      previousValue={priceChange as PreviousValueTypes}
-                      inline={true}
-                      value={toCurrency(price as number)}
-                    />
-                  }
+                  <div>
+                    {toCurrency(price as number)}
+                    {<Trend previousValue={priceChange as PreviousValueTypes} inline={true} />}
+                  </div>
                 </div>
                 <div className={`${TABLE_DATA.holders.styles}`}>
-                  {
-                    <Trend
-                      previousValue={holdersChange as PreviousValueTypes}
-                      inline={true}
-                      value={toLocaleString(holders as number)}
-                    />
-                  }
+                  <div>
+                    {toLocaleString(holders as number)}
+                    {<Trend previousValue={holdersChange as PreviousValueTypes} inline={true} />}
+                  </div>
                 </div>
                 <div className={`${TABLE_DATA.avgHoldings.styles}`}>
-                  {
-                    <Trend
-                      previousValue={avgHoldingsChange as PreviousValueTypes}
-                      inline={true}
-                      value={toLocaleString(avgHoldings as number)}
-                    />
-                  }
+                  <div>
+                    {toLocaleString(avgHoldings as number)}
+                    {<Trend previousValue={avgHoldingsChange as PreviousValueTypes} inline={true} />}
+                  </div>
                 </div>
                 <div className={`${TABLE_DATA.marketCap.styles}`}>
-                  {
-                    <Trend
-                      previousValue={marketCapChange as PreviousValueTypes}
-                      inline={true}
-                      value={toCurrency(marketCap as number)}
-                    />
-                  }
+                  <div>
+                    {toCurrency(marketCap as number)}
+                    {<Trend previousValue={marketCapChange as PreviousValueTypes} inline={true} />}
+                  </div>
                 </div>
                 <div className={`${TABLE_DATA.tags.styles}`}>
                   <Badges badges={tags as Tag[]} />

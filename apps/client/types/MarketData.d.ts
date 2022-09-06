@@ -29,6 +29,7 @@ export type StatsData = PreviousValue & {
   title?: string;
   value?: number;
   isCurrency?: boolean;
+  tooltip?: string;
   subGroup?: SubGroup;
 };
 

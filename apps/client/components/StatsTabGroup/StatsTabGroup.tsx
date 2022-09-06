@@ -2,7 +2,7 @@ import { Center, Divider, Text, Title } from '@mantine/core';
 import React, { FC } from 'react';
 import { StatsData } from 'types/MarketData';
 import StatTab from '../StatTab';
-import { StatsTabGroupProps, SubGroup } from './types'; 
+import { StatsTabGroupProps, SubGroup } from './types';
 
 const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untrackedMessage, data }) => {
   const StatTabsComponent = () => {
@@ -25,7 +25,7 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
         <div>
           <div className="flex items-stretch justify-center md:justify-start flex-wrap gap-4">
             {data &&
-              data.map(({ value, title, previousValue, isCurrency }, index: number) => {
+              data.map(({ value, title, previousValue, isCurrency, tooltip }, index: number) => {
                 return (
                   <StatTab
                     key={`${title}_${index}`}
@@ -33,6 +33,7 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
                     value={value}
                     previousValue={previousValue}
                     isCurrency={isCurrency}
+                    tooltip={tooltip}
                   />
                 );
               })}
@@ -73,9 +74,7 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
       {title && (
         <div className={`flex gap-2 items-center ${!subtitle && 'mb-4'}`}>
           {Icon && <Icon className="text-xl" />}
-          <Title order={2}>
-            {title}
-          </Title>
+          <Title order={2}>{title}</Title>
         </div>
       )}
 

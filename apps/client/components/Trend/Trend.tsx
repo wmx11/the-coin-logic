@@ -20,12 +20,14 @@ const Trend: FC<TrendProps> = ({ value, previousValue, inline }) => {
   const InlineComponent = () => {
     if (previousValue?.percentage) {
       return (
-        <div className="flex flex-col justify-center">
+        <div className="flex">
           <span className={`${trendColor} flex items-center`}>
             {trendIndicator}
             {value}
           </span>
-          <div className={`${trendColor} text-xs`}>({toLocaleString(percentage)}%)</div>
+          <div className={`${trendColor} text-xs`}>
+            <div>({toLocaleString(percentage)}%)</div>
+          </div>
         </div>
       );
     }
