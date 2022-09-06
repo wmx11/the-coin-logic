@@ -40,7 +40,9 @@ const StatTab: FC<StatTabProps> = ({ title, value, previousValue, isCurrency, to
             shadow="md"
             target={<FaInfoCircle onClick={() => setOpened(true)} className="text-violet" />}
           >
-            <Text size="sm">{tooltip}</Text>
+            <Text size="sm" pt='xs'>
+              {tooltip}
+            </Text>
           </Popover>
         </div>
       </div>
