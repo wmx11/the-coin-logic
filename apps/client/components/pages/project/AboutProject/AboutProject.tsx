@@ -1,5 +1,5 @@
 import { Project, Network } from 'types';
-import { Badge, Paper, Space, Spoiler, Text } from '@mantine/core';
+import { Anchor, Badge, Paper, Space, Spoiler, Text } from '@mantine/core';
 import React, { FC } from 'react';
 import { FaDiscord, FaGithub, FaReddit, FaTelegram, FaTwitter } from 'react-icons/fa';
 import { FiLink, FiExternalLink } from 'react-icons/fi';
@@ -29,6 +29,10 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
     discord,
     reddit,
     github,
+    sellTax,
+    buyTax,
+    rebasePeriod,
+    apy,
   } = data;
 
   const socials = [
@@ -41,67 +45,95 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
 
   return (
     <Paper p="md" shadow="sm" withBorder>
-      <div className="mb-4">
+      <div className="mb-4 flex flex-col md:flex-row md:gap-8">
+        <div>
+          {website && whitepaper && (
+            <div className="flex gap-2 flex-wrap mb-4">
+              {website && (
+                <Badge
+                  className="cursor-pointer"
+                  variant="outline"
+                  color="violet"
+                  component="a"
+                  href={website as string}
+                  target="_blank"
+                  leftSection={<FiLink />}
+                  rightSection={<FiExternalLink />}
+                >
+                  Website
+                </Badge>
+              )}
 
-        {website && whitepaper && (
-          <div className="flex gap-2 flex-wrap mb-4">
-            {website && (
-              <Badge
-                className="cursor-pointer"
-                variant="outline"
-                color="violet"
-                component="a"
-                href={website as string}
-                target="_blank"
-                leftSection={<FiLink />}
-                rightSection={<FiExternalLink />}
-              >
-                Website
-              </Badge>
-            )}
+              {whitepaper && (
+                <Badge
+                  className="cursor-pointer"
+                  variant="outline"
+                  color="violet"
+                  component="a"
+                  href={whitepaper as string}
+                  target="_blank"
+                  leftSection={<IoDocumentText />}
+                  rightSection={<FiExternalLink />}
+                >
+                  Whitepaper
+                </Badge>
+              )}
+            </div>
+          )}
 
-            {whitepaper && (
-              <Badge
-                className="cursor-pointer"
-                variant="outline"
-                color="violet"
-                component="a"
-                href={whitepaper as string}
-                target="_blank"
-                leftSection={<IoDocumentText />}
-                rightSection={<FiExternalLink />}
-              >
-                Whitepaper
-              </Badge>
-            )}
-          </div>
-        )}
+          <Text size="sm" className="mb-2">
+            <strong>Contract Address:</strong>
+            <Space />
+            <div className="flex items-center gap-1 break-all">
+              <Anchor href={`${network?.tokenScanner}/${contractAddress}`} target="_blank" size="sm" color="violet">
+                {contractAddress}
+              </Anchor>
+              <ClipboardButton copy={contractAddress as string} />
+            </div>
+          </Text>
 
-        <Text size="sm" className="mb-2">
-          <strong>Contract Address:</strong>
-          <Space />
-          <div className="flex items-center gap-1 break-all">
-            {contractAddress}
-            <ClipboardButton copy={contractAddress as string} />
-          </div>
-        </Text>
+          <Text size="sm">
+            <strong>Pair Address:</strong>
+            <Space />
+            <div className="flex items-center gap-1 break-all">
+              {pairAddress}
+              <ClipboardButton copy={pairAddress as string} />
+            </div>
+          </Text>
 
-        <Text size="sm">
-          <strong>Pair Address:</strong>
-          <Space />
-          <div className="flex items-center gap-1 break-all">
-            {pairAddress}
-            <ClipboardButton copy={pairAddress as string} />
-          </div>
-        </Text>
+          <Text size="sm">
+            <strong>Network:</strong>
+            <div className="my-2">
+              <NetworkBadge network={network as Network} showName />
+            </div>
+          </Text>
+        </div>
 
-        <Text size="sm">
-          <strong>Network:</strong>
-          <div className="my-2">
-            <NetworkBadge network={network as Network} showName />
-          </div>
-        </Text>
-        
+        <div>
+          {buyTax && (
+            <Text size="sm" className="mb-2">
+              <strong>Buy Tax:</strong>
+              <Space />
+              <div className="flex items-center gap-1 break-all">{buyTax}%</div>
+            </Text>
+          )}
+
+          {sellTax && (
+            <Text size="sm" className="mb-2">
+              <strong>Sell Tax:</strong>
+              <Space />
+              <div className="flex items-center gap-1 break-all">{sellTax}%</div>
+            </Text>
+          )}
+
+          {apy && (
+            <Text size="sm" className="mb-2">
+              <strong>APY:</strong>
+              <Space />
+              <div className="flex items-center gap-1 break-all">{apy}%</div>
+            </Text>
+          )}
+        </div>
       </div>
 
       {description && (

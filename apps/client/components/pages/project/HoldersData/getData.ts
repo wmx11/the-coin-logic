@@ -23,6 +23,7 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
       title: `Holders (from ${trackHoldersFromTokenAmount} tokens)`,
       isCurrency: false,
       tooltip: `Current ${name} holders amount counting from ${trackHoldersFromTokenAmount} tokens.`,
+      chartEntry: 'getHolders',
     },
     {
       value: avgHoldings as number,
@@ -30,6 +31,7 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
       title: 'Average Holdings',
       isCurrency: false,
       tooltip: `Calculates (adds up all holder wallets tokens and divides by the number of holder wallets) the average wallet token holding.`,
+      chartEntry: 'getAvgHoldings',
     },
     {
       value: newHolders as number,
@@ -37,6 +39,7 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
       title: 'New Holders',
       isCurrency: false,
       tooltip: `Amount of new holders onboarding ${name}.`,
+      chartEntry: 'getNewHolders',
     },
     {
       value: recurringHolders as number,
@@ -44,6 +47,7 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
       title: 'Recurring Buys',
       isCurrency: false,
       tooltip: `Amount of already existing holders purchasing or transacting ${name} tokens.`,
+      chartEntry: 'getRecurringHolders',
     },
     {
       value: leavingHolders as number,
@@ -51,6 +55,7 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
       title: 'Leaving Holders',
       isCurrency: false,
       tooltip: `Amount of holders that have sold their ${name} tokens and have less than ${trackHoldersFromTokenAmount} tokens in their wallet.`,
+      chartEntry: 'getLeavingHolders',
     },
   ];
 };

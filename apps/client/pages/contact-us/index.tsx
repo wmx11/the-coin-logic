@@ -61,7 +61,7 @@ const index: FC<ContentProps> = ({ content }) => {
 
   return (
     <Container className="py-10">
-      <div className="bg-violet p-5 md:p-16 rounded-md flex flex-wrap justify-between gap-8 w-full mb-8">
+      <div className="bg-[url('../public/images/small_hero_wave.svg')] bg-no-repeat bg-cover bg-center p-5 md:p-16 rounded-md flex flex-wrap justify-between gap-8 w-full mb-8">
         <div className="text-white flex-1">
           <Title order={1}>Contact us</Title>
           <Text size="md">Leave your email and we will get back to you within 24 hours</Text>

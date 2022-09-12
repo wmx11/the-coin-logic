@@ -1,4 +1,4 @@
-import { Avatar, Button, Paper, Text, Title } from '@mantine/core';
+import { Avatar, Button, Divider, Paper, Text, Title } from '@mantine/core';
 import React, { FC } from 'react';
 import { Project } from 'types';
 
@@ -46,10 +46,13 @@ const Markets: FC<MarketsProps> = ({ data }) => {
 
   return (
     <Paper p="md" shadow="sm" withBorder>
-      <Title order={4} className="mb-4">
+      <Title order={4}>
         Markets
       </Title>
-      {(alerts && alerts.length > 0) ? (
+
+      <Divider size={1} my={8} />
+
+      {alerts && alerts.length > 0 ? (
         <Text size="xs" color="dimmed">
           We have turned off available markets data until the alerts and issues with the project have been resolved.
         </Text>

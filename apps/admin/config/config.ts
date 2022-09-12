@@ -3,7 +3,8 @@ import { default as prodConfig } from './prod.config';
 const config = {
   cors: {
     origin: [
-      'localhost',
+      'http://localhost',
+      'http://localhost:3000',
       'https://thecoinlogic.com',
       'https://www.thecoinlogic.com',
       'https://cms.thecoinlogic.com',

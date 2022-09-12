@@ -1,9 +1,11 @@
 import { Button, Center, Container, Divider, Paper, Stack, Text } from '@mantine/core';
 import { useScrollIntoView } from '@mantine/hooks';
+import AreaChartGroup from 'components/Charts/AreaChartGroup';
 import Meta from 'components/Meta';
 import NotificationBar from 'components/NotificationBar';
 import Markets from 'components/pages/project/Markets';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
+import useChartStore from 'store/useChartStore';
 import { Tag } from 'types';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import { Badges } from '../../components/Badges';
@@ -20,10 +22,11 @@ type ProjectProps = {
 };
 
 const project: FC<ProjectProps> = ({ projectData }) => {
+  const chartStore = useChartStore((state) => state);
   const { project } = projectData;
   const { notifications } = project;
   const { scrollIntoView: scrollMarket, targetRef: targetMarket } = useScrollIntoView<HTMLDivElement>({ offset: 60 });
-  const { scrollIntoView: scrollHolders, targetRef: targetHolders } = useScrollIntoView<HTMLDivElement>({ offset: 60 });  
+  const { scrollIntoView: scrollHolders, targetRef: targetHolders } = useScrollIntoView<HTMLDivElement>({ offset: 60 });
 
   if (!project) {
     return (
@@ -35,10 +38,14 @@ const project: FC<ProjectProps> = ({ projectData }) => {
     );
   }
 
+  // Clear all charts data on unmount
+  useEffect(() => () => chartStore.clearAll(), []);
+
   return (
     <>
       <Meta
         title={`${project.name} Price today, analytics, holders, charts | Coin Logic`}
+        image={project.logo?.url}
         description={`Get the latest ${project.name} price, market cap, analytics, holders, charts from Coin Logic - The Trusted and Transparent DeFi Analytics Platform.`}
       />
       <div className="bg-zinc-50">
@@ -51,7 +58,7 @@ const project: FC<ProjectProps> = ({ projectData }) => {
             </div>
           )}
           <Paper p="md" shadow="sm" withBorder className="w-full flex flex-wrap gap-4 mb-8 items-center">
-            <div className="md:max-w-[320px] w-full md:border-r">
+            <div className="md:max-w-[320px] w-full md:border-r mr-4">
               <ProjectTitle title={project.name as string} size="md" avatar={project.logo ? project.logo.url : ''} />
               <div>
                 <Text color="dimmed" size="xs" className="mb-2">
@@ -72,7 +79,7 @@ const project: FC<ProjectProps> = ({ projectData }) => {
             </div>
           </Paper>
 
-          <div className="mb-8">
+          <div className="mb-4">
             <div className={`flex gap-4 flex-wrap md:flex-nowrap md:justify-between`}>
               <div className={`w-full md:w-[69%]`}>
                 <AboutProject data={project} />
@@ -82,16 +89,30 @@ const project: FC<ProjectProps> = ({ projectData }) => {
               </div>
             </div>
           </div>
+
+          <div>
+            <Text size="xs" color="dimmed">
+              You can open the scanner page by clicking on the contract address.
+            </Text>
+            <Text size="xs" color="dimmed">
+              You can view the charts by clicking the chart icon in the lower right corner.
+            </Text>
+            <Text size="xs" color="dimmed">
+              You can read an explanation about a particular data piece by clicking on the icon in the lower left corner.
+            </Text>
+          </div>
         </Container>
       </div>
 
       <Container className="py-10">
         <div className="my-16" ref={targetMarket}>
           <MarketData data={projectData} />
+          <div className="my-4">{chartStore.chartSection === 'marketData' && <AreaChartGroup />}</div>
         </div>
 
         <div className="mb-16" ref={targetHolders}>
           <HoldersData data={projectData} />
+          <div className="my-4">{chartStore.chartSection === 'holdersData' && <AreaChartGroup />}</div>
         </div>
 
         <Divider />
