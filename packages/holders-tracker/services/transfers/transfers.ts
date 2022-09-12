@@ -40,7 +40,7 @@ export const getTransferType = ({ project, fromAddress, toAddress }: GetTransfer
   }
 
   // Sell
-  if (to === contract && from !== exchange) {
+  if (to === exchange && from !== contract) {
     return 0;
   }
 
