@@ -115,6 +115,7 @@ query($slug: String) {
     ${COMMON_MARKET_STATS}
     project {
       name
+      slug
       website
       whitepaper
       contractAddress
