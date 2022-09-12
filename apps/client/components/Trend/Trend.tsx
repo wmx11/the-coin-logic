@@ -1,4 +1,4 @@
-import { Text } from '@mantine/core';
+import { Text, Tooltip } from '@mantine/core';
 import React, { FC } from 'react';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import { GoTriangleDown, GoTriangleUp } from 'react-icons/go';
@@ -51,7 +51,15 @@ const Trend: FC<TrendProps> = ({ value, previousValue, inline }) => {
     <div className={trendColor}>
       <div className="absolute top-2 left-2 text-xs">{trendIndicator}</div>
       <Text className="text-xs font-semibold">
-        {trendText} {percentage !== 0 ? `(${toLocaleString(percentage)}%)` : ''}
+        <Tooltip
+          label="Change from last 24 hours"
+          withArrow
+          transition="pop"
+          color="violet"
+          position="bottom"
+        >
+          {trendText} {percentage !== 0 ? `(${toLocaleString(percentage)}%)` : ''}
+        </Tooltip>
       </Text>
     </div>
   );
