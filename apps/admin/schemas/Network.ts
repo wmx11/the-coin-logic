@@ -9,6 +9,8 @@ const Network: Lists = {
       slug: text({ validation: { isRequired: true } }),
       logo: image({ storage: 'localLogos' }),
       url: text({ validation: { isRequired: true } }),
+      scanner: text(),
+      tokenScanner: text(),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
     },
   }),

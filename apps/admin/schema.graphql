@@ -1296,6 +1296,8 @@ type Network {
   slug: String
   logo: ImageFieldOutput
   url: String
+  scanner: String
+  tokenScanner: String
   dateAdded: DateTime
 }
 
@@ -1311,6 +1313,8 @@ input NetworkWhereInput {
   name: StringFilter
   slug: StringFilter
   url: StringFilter
+  scanner: StringFilter
+  tokenScanner: StringFilter
   dateAdded: DateTimeNullableFilter
 }
 
@@ -1319,6 +1323,8 @@ input NetworkOrderByInput {
   name: OrderDirection
   slug: OrderDirection
   url: OrderDirection
+  scanner: OrderDirection
+  tokenScanner: OrderDirection
   dateAdded: OrderDirection
 }
 
@@ -1327,6 +1333,8 @@ input NetworkUpdateInput {
   slug: String
   logo: ImageFieldInput
   url: String
+  scanner: String
+  tokenScanner: String
   dateAdded: DateTime
 }
 
@@ -1340,6 +1348,8 @@ input NetworkCreateInput {
   slug: String
   logo: ImageFieldInput
   url: String
+  scanner: String
+  tokenScanner: String
   dateAdded: DateTime
 }
 

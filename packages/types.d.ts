@@ -1754,7 +1754,9 @@ export type Network = {
   id: Scalars['ID'];
   logo?: Maybe<ImageFieldOutput>;
   name?: Maybe<Scalars['String']>;
+  scanner?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
+  tokenScanner?: Maybe<Scalars['String']>;
   url?: Maybe<Scalars['String']>;
 };
 
@@ -1762,7 +1764,9 @@ export type NetworkCreateInput = {
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   logo?: InputMaybe<ImageFieldInput>;
   name?: InputMaybe<Scalars['String']>;
+  scanner?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
+  tokenScanner?: InputMaybe<Scalars['String']>;
   url?: InputMaybe<Scalars['String']>;
 };
 
@@ -1770,7 +1774,9 @@ export type NetworkOrderByInput = {
   dateAdded?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
+  scanner?: InputMaybe<OrderDirection>;
   slug?: InputMaybe<OrderDirection>;
+  tokenScanner?: InputMaybe<OrderDirection>;
   url?: InputMaybe<OrderDirection>;
 };
 
@@ -1794,7 +1800,9 @@ export type NetworkUpdateInput = {
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   logo?: InputMaybe<ImageFieldInput>;
   name?: InputMaybe<Scalars['String']>;
+  scanner?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
+  tokenScanner?: InputMaybe<Scalars['String']>;
   url?: InputMaybe<Scalars['String']>;
 };
 
@@ -1805,7 +1813,9 @@ export type NetworkWhereInput = {
   dateAdded?: InputMaybe<DateTimeNullableFilter>;
   id?: InputMaybe<IdFilter>;
   name?: InputMaybe<StringFilter>;
+  scanner?: InputMaybe<StringFilter>;
   slug?: InputMaybe<StringFilter>;
+  tokenScanner?: InputMaybe<StringFilter>;
   url?: InputMaybe<StringFilter>;
 };
 

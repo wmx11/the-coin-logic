@@ -224,6 +224,8 @@ model Network {
   logo_height                      Int?
   logo_id                          String?
   url                              String                @default("")
+  scanner                          String                @default("")
+  tokenScanner                     String                @default("")
   dateAdded                        DateTime?             @default(now())
   from_Project_network             Project[]             @relation("Project_network")
   from_LiquidityPair_network       LiquidityPair[]       @relation("LiquidityPair_network")
