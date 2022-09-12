@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { BsBarChartLineFill } from 'react-icons/bs';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import { formateDateWithHours } from '../../../../utils/formatters';
@@ -9,17 +9,22 @@ type MarketDataTypes = { data: ProjectWithMarketStatsAndChanges };
 
 const MarketData: FC<MarketDataTypes> = ({ data }) => {
   const { dateAdded } = data;
+  const { slug } = data.project;
 
   const marketData = getData(data);
 
   return (
-    <StatsTabGroup
-      title="Market Data"
-      untrackedMessage="Market Data is untracked."
-      Icon={BsBarChartLineFill}
-      subtitle={`Last updated ${formateDateWithHours(dateAdded as string)}`}
-      data={marketData}
-    />
+    <>
+      <StatsTabGroup
+        title="Market Data"
+        section="marketData"
+        untrackedMessage="Market Data is untracked."
+        Icon={BsBarChartLineFill}
+        subtitle={`Last updated ${formateDateWithHours(dateAdded as string)}`}
+        data={marketData}
+        slug={slug as string}
+      />
+    </>
   );
 };
 

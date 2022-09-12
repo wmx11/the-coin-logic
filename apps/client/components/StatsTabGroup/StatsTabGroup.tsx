@@ -4,7 +4,7 @@ import { StatsData } from 'types/MarketData';
 import StatTab from '../StatTab';
 import { StatsTabGroupProps, SubGroup } from './types';
 
-const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untrackedMessage, data }) => {
+const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untrackedMessage, data, slug, section }) => {
   const StatTabsComponent = () => {
     if (!data || !data.length) {
       return (
@@ -25,7 +25,7 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
         <div>
           <div className="flex items-stretch justify-center md:justify-start flex-wrap gap-4">
             {data &&
-              data.map(({ value, title, previousValue, isCurrency, tooltip }, index: number) => {
+              data.map(({ value, title, previousValue, isCurrency, tooltip, chartEntry }, index: number) => {
                 return (
                   <StatTab
                     key={`${title}_${index}`}
@@ -34,6 +34,9 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
                     previousValue={previousValue}
                     isCurrency={isCurrency}
                     tooltip={tooltip}
+                    chartEntry={chartEntry}
+                    slug={slug}
+                    section={section}
                   />
                 );
               })}

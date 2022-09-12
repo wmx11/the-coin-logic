@@ -9,7 +9,7 @@ type HoldersDataTypes = { data: ProjectWithMarketStatsAndChanges };
 
 const HoldersData: FC<HoldersDataTypes> = ({ data }) => {
   const { dateAdded } = data;
-  const { initialized, trackHolders } = data.project;
+  const { initialized, trackHolders, slug } = data.project;
 
   const holdersData = getData(data);
 
@@ -29,9 +29,11 @@ const HoldersData: FC<HoldersDataTypes> = ({ data }) => {
     <StatsTabGroup
       title="Holders Data"
       untrackedMessage={getUntrackedMessage()}
+      section="holdersData"
       Icon={FaWallet}
       subtitle={`Last updated ${formateDateWithHours(dateAdded)}`}
       data={initialized && trackHolders ? holdersData : []}
+      slug={slug as string}
     />
   );
 };
