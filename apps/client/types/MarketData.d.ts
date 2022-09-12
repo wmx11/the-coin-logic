@@ -30,6 +30,7 @@ export type StatsData = PreviousValue & {
   value?: number;
   isCurrency?: boolean;
   tooltip?: string;
+  chartEntry?: string;
   subGroup?: SubGroup;
 };
 

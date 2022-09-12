@@ -123,6 +123,10 @@ query($slug: String) {
       trackHoldersFromTokenAmount
       initialized
       trackData
+      sellTax
+      buyTax
+      rebasePeriod
+      apy
       notifications(where: { enabled: { equals: true } }) {
         title
         content
@@ -147,6 +151,8 @@ query($slug: String) {
       }
       network {
         name
+        scanner
+        tokenScanner
         logo {
           url
         }
