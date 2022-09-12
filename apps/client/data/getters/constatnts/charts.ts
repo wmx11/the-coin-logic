@@ -1,5 +1,5 @@
 const withBase = (selector: string) => `query($slug: String) {
-  marketStats(where: { project: { slug: { equals: $slug } } }) {
+  marketStats(where: { project: { slug: { equals: $slug } } }, orderBy: { dateAdded: asc }) {
     value: ${selector}
     date: dateAdded
   }
