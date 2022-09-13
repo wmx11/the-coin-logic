@@ -41,7 +41,7 @@ const index: FC<ContentProps> = ({ content }) => {
           />
           <PricingCard
             label="Owner"
-            price="From $1,000"
+            price="From $1,000, one-time"
             description="Our owner plan is used by project owners or associates to list their project on TCL and reap the
             benefits of transparent, real-time data tracking. All this is further augmented with analytics tools
             that make tracking data, marketing, release efforts that much easier."
