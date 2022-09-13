@@ -136,6 +136,7 @@ query($slug: String) {
       }
       liquidityPair {
         name
+        tokenAddress
         address
         stablePair {
           pairToken(take: 1) {

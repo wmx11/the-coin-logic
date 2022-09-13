@@ -1061,6 +1061,7 @@ type LiquidityPair {
   id: ID!
   name: String
   address: String
+  tokenAddress: String
   stablePair: StableLiquidityPair
   network: Network
   project: Project
@@ -1079,6 +1080,7 @@ input LiquidityPairWhereInput {
   id: IDFilter
   name: StringFilter
   address: StringFilter
+  tokenAddress: StringFilter
   stablePair: StableLiquidityPairWhereInput
   network: NetworkWhereInput
   project: ProjectWhereInput
@@ -1090,12 +1092,14 @@ input LiquidityPairOrderByInput {
   id: OrderDirection
   name: OrderDirection
   address: OrderDirection
+  tokenAddress: OrderDirection
   dateAdded: OrderDirection
 }
 
 input LiquidityPairUpdateInput {
   name: String
   address: String
+  tokenAddress: String
   stablePair: StableLiquidityPairRelateToOneForUpdateInput
   network: NetworkRelateToOneForUpdateInput
   project: ProjectRelateToOneForUpdateInput
@@ -1123,6 +1127,7 @@ input LiquidityPairUpdateArgs {
 input LiquidityPairCreateInput {
   name: String
   address: String
+  tokenAddress: String
   stablePair: StableLiquidityPairRelateToOneForCreateInput
   network: NetworkRelateToOneForCreateInput
   project: ProjectRelateToOneForCreateInput

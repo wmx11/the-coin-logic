@@ -165,6 +165,7 @@ model LiquidityPair {
   id           String               @id @default(cuid())
   name         String               @default("")
   address      String               @default("")
+  tokenAddress String               @default("")
   stablePair   StableLiquidityPair? @relation("LiquidityPair_stablePair", fields: [stablePairId], references: [id])
   stablePairId String?              @map("stablePair")
   network      Network?             @relation("LiquidityPair_network", fields: [networkId], references: [id])

@@ -7,6 +7,7 @@ const LiquidityPair: Lists = {
     fields: {
       name: text({ validation: { isRequired: true } }),
       address: text(),
+      tokenAddress: text(),
       stablePair: relationship({ ref: 'StableLiquidityPair' }),
       network: relationship({ ref: 'Network' }),
       project: relationship({ ref: 'Project.liquidityPair' }),
