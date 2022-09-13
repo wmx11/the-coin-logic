@@ -3,6 +3,7 @@ import { useScrollIntoView } from '@mantine/hooks';
 import AreaChartGroup from 'components/Charts/AreaChartGroup';
 import Meta from 'components/Meta';
 import NotificationBar from 'components/NotificationBar';
+import Events from 'components/pages/project/Events';
 import Markets from 'components/pages/project/Markets';
 import { FC, useEffect } from 'react';
 import useChartStore from 'store/useChartStore';
@@ -81,25 +82,16 @@ const project: FC<ProjectProps> = ({ projectData }) => {
 
           <div className="mb-4">
             <div className={`flex gap-4 flex-wrap md:flex-nowrap md:justify-between`}>
-              <div className={`w-full md:w-[69%]`}>
+              <div className={`w-full md:w-[66%]`}>
                 <AboutProject data={project} />
               </div>
-              <div className={`w-full md:w-[29%]`}>
+              <div className={`w-full md:w-[34%]`}>
                 <Markets data={project} />
+                <div className="mt-4">
+                  <Events data={project} />
+                </div>
               </div>
             </div>
-          </div>
-
-          <div>
-            <Text size="xs" color="dimmed">
-              You can open the scanner page by clicking on the contract address.
-            </Text>
-            <Text size="xs" color="dimmed">
-              You can view the charts by clicking the chart icon in the lower right corner.
-            </Text>
-            <Text size="xs" color="dimmed">
-              You can read an explanation about a particular data piece by clicking on the icon in the lower left corner.
-            </Text>
           </div>
         </Container>
       </div>

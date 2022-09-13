@@ -2045,6 +2045,7 @@ export type Project = {
   apy?: Maybe<Scalars['Float']>;
   burnAddress?: Maybe<Scalars['String']>;
   buyTax?: Maybe<Scalars['Float']>;
+  calendar?: Maybe<Scalars['String']>;
   contractAddress?: Maybe<Scalars['String']>;
   customData?: Maybe<Scalars['JSON']>;
   dailyApy?: Maybe<Scalars['Float']>;
@@ -2146,6 +2147,7 @@ export type ProjectCreateInput = {
   apy?: InputMaybe<Scalars['Float']>;
   burnAddress?: InputMaybe<Scalars['String']>;
   buyTax?: InputMaybe<Scalars['Float']>;
+  calendar?: InputMaybe<Scalars['String']>;
   contractAddress?: InputMaybe<Scalars['String']>;
   customData?: InputMaybe<Scalars['JSON']>;
   dailyApy?: InputMaybe<Scalars['Float']>;
@@ -2195,6 +2197,7 @@ export type ProjectOrderByInput = {
   apy?: InputMaybe<OrderDirection>;
   burnAddress?: InputMaybe<OrderDirection>;
   buyTax?: InputMaybe<OrderDirection>;
+  calendar?: InputMaybe<OrderDirection>;
   contractAddress?: InputMaybe<OrderDirection>;
   dailyApy?: InputMaybe<OrderDirection>;
   dateAdded?: InputMaybe<OrderDirection>;
@@ -2260,6 +2263,7 @@ export type ProjectUpdateInput = {
   apy?: InputMaybe<Scalars['Float']>;
   burnAddress?: InputMaybe<Scalars['String']>;
   buyTax?: InputMaybe<Scalars['Float']>;
+  calendar?: InputMaybe<Scalars['String']>;
   contractAddress?: InputMaybe<Scalars['String']>;
   customData?: InputMaybe<Scalars['JSON']>;
   dailyApy?: InputMaybe<Scalars['Float']>;
@@ -2306,6 +2310,7 @@ export type ProjectWhereInput = {
   apy?: InputMaybe<FloatNullableFilter>;
   burnAddress?: InputMaybe<StringFilter>;
   buyTax?: InputMaybe<FloatNullableFilter>;
+  calendar?: InputMaybe<StringFilter>;
   contractAddress?: InputMaybe<StringFilter>;
   dailyApy?: InputMaybe<FloatNullableFilter>;
   dateAdded?: InputMaybe<DateTimeNullableFilter>;

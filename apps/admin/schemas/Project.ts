@@ -68,6 +68,7 @@ const Project: Lists = {
       rebasePeriod: text(),
       apy: float(),
       dailyApy: float(),
+      calendar: text(),
       website: text(),
       whitepaper: text(),
       twitter: text(),
