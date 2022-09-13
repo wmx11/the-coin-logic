@@ -15,7 +15,7 @@ const Markets: FC<MarketsProps> = ({ data }) => {
 
   const alerts = notifications?.filter(({ type }) => type === 'alert');
 
-  const liquidityPairs = liquidityPair.map(({ name, exchange, address }, index) => {
+  const liquidityPairs = liquidityPair.map(({ name, exchange, tokenAddress }, index) => {
     return (
       <div className="mb-4" key={`market_${index}`}>
         <Title order={6} className="mb-2">
@@ -24,7 +24,7 @@ const Markets: FC<MarketsProps> = ({ data }) => {
         {exchange ? (
           <Button
             component="a"
-            href={`${exchange?.tradeUrl}${address}`}
+            href={`${exchange?.tradeUrl}${tokenAddress}`}
             target="_blank"
             color="violet"
             variant="outline"

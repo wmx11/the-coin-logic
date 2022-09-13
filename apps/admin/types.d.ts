@@ -785,6 +785,7 @@ export type LiquidityPair = {
   network?: Maybe<Network>;
   project?: Maybe<Project>;
   stablePair?: Maybe<StableLiquidityPair>;
+  tokenAddress?: Maybe<Scalars['String']>;
 };
 
 export type LiquidityPairCreateInput = {
@@ -795,6 +796,7 @@ export type LiquidityPairCreateInput = {
   network?: InputMaybe<NetworkRelateToOneForCreateInput>;
   project?: InputMaybe<ProjectRelateToOneForCreateInput>;
   stablePair?: InputMaybe<StableLiquidityPairRelateToOneForCreateInput>;
+  tokenAddress?: InputMaybe<Scalars['String']>;
 };
 
 export type LiquidityPairManyRelationFilter = {
@@ -808,6 +810,7 @@ export type LiquidityPairOrderByInput = {
   dateAdded?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
+  tokenAddress?: InputMaybe<OrderDirection>;
 };
 
 export type LiquidityPairRelateToManyForCreateInput = {
@@ -835,6 +838,7 @@ export type LiquidityPairUpdateInput = {
   network?: InputMaybe<NetworkRelateToOneForUpdateInput>;
   project?: InputMaybe<ProjectRelateToOneForUpdateInput>;
   stablePair?: InputMaybe<StableLiquidityPairRelateToOneForUpdateInput>;
+  tokenAddress?: InputMaybe<Scalars['String']>;
 };
 
 export type LiquidityPairWhereInput = {
@@ -849,6 +853,7 @@ export type LiquidityPairWhereInput = {
   network?: InputMaybe<NetworkWhereInput>;
   project?: InputMaybe<ProjectWhereInput>;
   stablePair?: InputMaybe<StableLiquidityPairWhereInput>;
+  tokenAddress?: InputMaybe<StringFilter>;
 };
 
 export type LiquidityPairWhereUniqueInput = {
