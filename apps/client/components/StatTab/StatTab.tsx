@@ -1,4 +1,4 @@
-import { Paper, Popover, Text, Tooltip } from '@mantine/core';
+import { Loader, Paper, Popover, Text, Tooltip } from '@mantine/core';
 import { FC, useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { HiChartSquareBar } from 'react-icons/hi';
@@ -80,15 +80,13 @@ const StatTab: FC<StatTabProps> = ({ title, value, previousValue, isCurrency, to
         </div>
         {chartEntry && (
           <div className="cursor-pointer flex gap-4 md:gap-2 items-center">
-            <Tooltip
-              label={`View ${title} chart`}
-              withArrow
-              transition="pop"
-              color="violet"
-              wrapLines={true}
-            >
-              <HiChartSquareBar className="text-violet" onClick={() => handleChartEntry(chartEntry)} size={20} />
-            </Tooltip>
+            {chartStore.chartData.length === 0 && chartStore.loading ? (
+              <Loader color="violet" size={15} />
+            ) : (
+              <Tooltip label={`View ${title} chart`} withArrow transition="pop" color="violet" wrapLines={true}>
+                <HiChartSquareBar className="text-violet" onClick={() => handleChartEntry(chartEntry)} size={20} />
+              </Tooltip>
+            )}
             {chartStore.chartData.length > 0 && chartStore.chartTitle !== title && (
               <Tooltip
                 label={`Compare ${chartStore.chartTitle} with ${title} chart`}

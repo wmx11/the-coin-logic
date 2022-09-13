@@ -9,10 +9,10 @@ function TrackVitalsDisclaimer() {
       <Container>
         <Center>
           <div className="text-center">
-            <Title order={2} className="mb-4">
-              Track your project vitals today
+            <Title order={2} className="mb-2">
+              Monitor your DeFi journey today!
             </Title>
-            <Text className="mb-4">
+            <Text size="sm" color="dimmed" className="mb-4">
               Sign up now and we will help you set up your analytics dashboard on The Coin Logic
             </Text>
             <Button

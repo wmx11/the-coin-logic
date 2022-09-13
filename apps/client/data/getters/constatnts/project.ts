@@ -128,6 +128,7 @@ query($slug: String) {
       buyTax
       rebasePeriod
       apy
+      calendar
       notifications(where: { enabled: { equals: true } }) {
         title
         content
