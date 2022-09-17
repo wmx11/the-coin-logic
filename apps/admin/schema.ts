@@ -19,6 +19,7 @@ import {
   User,
   Image,
   Holders,
+  CustomTracker,
 } from './schemas';
 
 export const lists: Lists = {
@@ -28,6 +29,7 @@ export const lists: Lists = {
   ...Project,
   ...Notification,
   ...MarketStat,
+  ...CustomTracker,
   ...LiquidityPair,
   ...Tag,
   ...Exchange,

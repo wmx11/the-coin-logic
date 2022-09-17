@@ -9,6 +9,8 @@ export const MARKET_STAT_CHANGES = [
   'newHolders',
   'leavingHolders',
   'recurringHolders',
+  'fdv',
+  'burnedTokens',
 ];
 
 const COMMON_MARKET_STATS = `    
@@ -22,7 +24,11 @@ avgHoldings
 newHolders
 leavingHolders
 recurringHolders
-customData
+fdv
+burnedTokens
+txns
+volume
+customTrackers
 dateAdded`;
 
 export const GET_PROJECTS_LIST = `
@@ -174,6 +180,22 @@ query($slug: String) {
       tags {
         name
       }
+      parentProject {
+        name
+        slug
+        logo {
+          url
+        }
+      }
+    }
+  }
+  relatedProjects: projects(
+    where: { parentProject: { some: { slug: { equals: $slug } } } }
+  ) {
+    name
+    slug
+    logo {
+      url
     }
   }
 }

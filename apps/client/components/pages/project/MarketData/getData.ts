@@ -1,6 +1,6 @@
-import { CustomDataResponse, PreviousValueTypes, StatsData } from 'types/MarketData';
+import { CustomTrackersResponse, PreviousValueTypes, StatsData } from 'types/MarketData';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
-import { getCustomDataChangeLabels, getCustomDataLabels } from 'utils/prepareCustomData';
+import { getCustomTrackersChangeLabels, getCustomTrackersLabels } from 'utils/prepareCustomTrackers';
 
 export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => {
   const {
@@ -9,13 +9,17 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
     marketCap,
     pairPrice,
     totalSupply,
+    burnedTokens,
+    fdv,
     project: { name, liquidityPair, trackData },
     priceChange,
     marketCapChange,
     liquidityChange,
     pairPriceChange,
     totalSupplyChange,
-    customData,
+    burnedTokensChange,
+    fdvChange,
+    customTrackers,
   } = data;
 
   if (!trackData) {
@@ -24,16 +28,15 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
 
   const pairToken = liquidityPair && liquidityPair[0].stablePair?.pairToken;
 
-  const customDataChangeLabels = getCustomDataChangeLabels(getCustomDataLabels(customData));
+  const customDataChangeLabels = getCustomTrackersChangeLabels(getCustomTrackersLabels(customTrackers));
 
-  const resolvedCustomData = customData.map(
-    ({ label, value, withPairPrice, withPrice, ticker }: CustomDataResponse, index: number) => ({
-      value: withPairPrice || withPrice || value,
-      previousValue: data[customDataChangeLabels[index]],
-      title: withPairPrice || withPrice ? label : `${label} (${ticker})`,
-      isCurrency: withPairPrice || withPrice,
-    }),
-  );
+  const resolvedCustomData = customTrackers.map(({ label, value, description }: CustomTrackersResponse, index: number) => ({
+    value,
+    previousValue: data[customDataChangeLabels[index]],
+    title: label,
+    tooltip: description,
+    isCurrency: false,
+  }));
 
   return [
     {
@@ -75,6 +78,22 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
       chartEntry: 'getTotalSupply',
       isCurrency: false,
       tooltip: `Current ${name} token total supply.`,
+    },
+    {
+      value: burnedTokens as number,
+      previousValue: burnedTokensChange as PreviousValueTypes,
+      title: 'Burned Tokens',
+      chartEntry: 'getBurnedTokens',
+      isCurrency: false,
+      tooltip: `Current burned ${name} tokens amount.`,
+    },
+    {
+      value: fdv as number,
+      previousValue: fdvChange as PreviousValueTypes,
+      title: 'Fully Diluted Valuation',
+      chartEntry: 'getFdv',
+      isCurrency: true,
+      tooltip: `(Total supply - burned supply) * price.`,
     },
     ...resolvedCustomData,
   ];

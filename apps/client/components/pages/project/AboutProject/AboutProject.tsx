@@ -1,5 +1,5 @@
 import { Project, Network } from 'types';
-import { Anchor, Badge, Paper, Space, Spoiler, Text } from '@mantine/core';
+import { Anchor, Badge, Paper, Space, Spoiler, Text, Tooltip } from '@mantine/core';
 import React, { FC } from 'react';
 import { FaDiscord, FaGithub, FaReddit, FaTelegram, FaTwitter } from 'react-icons/fa';
 import { FiLink, FiExternalLink } from 'react-icons/fi';
@@ -9,6 +9,7 @@ import { BiUserCheck } from 'react-icons/bi';
 import { formatDate } from '../../../../utils/formatters';
 import { ClipboardButton } from '../../../ClipboardButton';
 import { NetworkBadge } from '../../../NetworkBadge';
+import toLocaleString from 'utils/toLocaleString';
 
 type AboutProjectProps = {
   data: Project;
@@ -97,7 +98,9 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
               <strong>Pair Address:</strong>
               <Space />
               <div className="flex items-center gap-1 break-all">
-                {pairAddress}
+                <Tooltip label={pairAddress} withArrow wrapLines styles={{ body: { maxWidth: '400px' } }}>
+                  <div className="truncate max-w-[200px] md:max-w-[350px]">{pairAddress}</div>
+                </Tooltip>
                 <ClipboardButton copy={pairAddress as string} />
               </div>
             </Text>
@@ -115,7 +118,7 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
               <Text size="sm" className="mb-2">
                 <strong>Buy Tax:</strong>
                 <Space />
-                <div className="flex items-center gap-1 break-all">{buyTax}%</div>
+                <div className="flex items-center gap-1 break-all">{toLocaleString(buyTax)}%</div>
               </Text>
             )}
 
@@ -123,7 +126,7 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
               <Text size="sm" className="mb-2">
                 <strong>Sell Tax:</strong>
                 <Space />
-                <div className="flex items-center gap-1 break-all">{sellTax}%</div>
+                <div className="flex items-center gap-1 break-all">{toLocaleString(sellTax)}%</div>
               </Text>
             )}
 
@@ -131,7 +134,7 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
               <Text size="sm" className="mb-2">
                 <strong>APY:</strong>
                 <Space />
-                <div className="flex items-center gap-1 break-all">{apy}%</div>
+                <div className="flex items-center gap-1 break-all">{toLocaleString(apy)}%</div>
               </Text>
             )}
           </div>

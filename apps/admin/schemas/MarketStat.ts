@@ -1,6 +1,6 @@
 import { list } from '@keystone-6/core';
 import { Lists } from '.keystone/types';
-import { float, json, relationship, timestamp } from '@keystone-6/core/fields';
+import { float, json, relationship, timestamp, text } from '@keystone-6/core/fields';
 
 const MarketStat: Lists = {
   MarketStat: list({
@@ -10,12 +10,17 @@ const MarketStat: Lists = {
       totalSupply: float(),
       liquidity: float(),
       pairPrice: float(),
+      burnedTokens: float(),
+      txns: json(),
+      volume: json(),
+      fdv: float(),
       holders: float(),
       avgHoldings: float(),
       newHolders: float(),
       leavingHolders: float(),
       recurringHolders: float(),
-      customData: json({ defaultValue: [] }),
+      annotation: text(),
+      customTrackers: json({ defaultValue: [] }),
       project: relationship({ ref: 'Project' }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
     },

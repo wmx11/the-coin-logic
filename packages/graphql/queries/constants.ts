@@ -4,9 +4,16 @@ export const GET_ENABLED_PROJECTS = `
     id
     contractAddress
     pairAddress
+    burnAddress
     trackHoldersFromTokenAmount
+    useDexScreener
     liquidityPair {
       address
+      useDexScreener
+      isPrimary
+      network {
+        slug
+      }
       stablePair {
         address
         pairToken {
@@ -16,8 +23,23 @@ export const GET_ENABLED_PROJECTS = `
     }
     network {
       url
+      slug
     }
-    customData
+    customTrackers(where: { enabled: { equals: true } }) {
+      label
+      description
+      address
+      pairAddress
+      getBalanceOf
+      decimals
+      enabled
+      useDexScreener
+      method
+      network {
+        slug
+        url
+      }
+    }
   }
 }`;
 

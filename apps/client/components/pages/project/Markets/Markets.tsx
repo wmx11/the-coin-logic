@@ -18,9 +18,11 @@ const Markets: FC<MarketsProps> = ({ data }) => {
   const liquidityPairs = liquidityPair.map(({ name, exchange, tokenAddress }, index) => {
     return (
       <div className="mb-4" key={`market_${index}`}>
-        <Title order={6} className="mb-2">
-          {name}
-        </Title>
+        <div className="flex justify-between items-center">
+          <Title order={6} className="mb-2">
+            {name}
+          </Title>
+        </div>
         {exchange ? (
           <Button
             component="a"
@@ -46,15 +48,13 @@ const Markets: FC<MarketsProps> = ({ data }) => {
 
   return (
     <Paper p="md" shadow="sm" withBorder>
-      <Title order={4}>
-        Markets
-      </Title>
+      <Title order={4}>Markets</Title>
 
       <Divider size={1} my={8} />
 
       {alerts && alerts.length > 0 ? (
         <Text size="xs" color="dimmed">
-          We have turned off available markets data until the alerts and issues with the project have been resolved.
+          We have turned off available markets data until the issues with the project have been resolved.
         </Text>
       ) : (
         liquidityPairs

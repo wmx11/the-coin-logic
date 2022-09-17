@@ -76,7 +76,7 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
     <>
       {title && (
         <div className={`flex gap-2 items-center ${!subtitle && 'mb-4'}`}>
-          {Icon && <Icon className="text-xl" />}
+          {Icon && <Icon className="text-md" />}
           <Title order={2}>{title}</Title>
         </div>
       )}

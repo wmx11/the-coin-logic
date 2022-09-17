@@ -2,7 +2,7 @@ import { initializeApollo } from 'data/apollo-client';
 import { formatISO, setHours } from 'date-fns';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import getChangesPartial from 'utils/getChangesPartial';
-import { prepareCustomData } from 'utils/prepareCustomData';
+import { prepareCustomTrackers } from 'utils/prepareCustomTrackers';
 import {
   GET_ENABLED_AND_LISTED_PROJECTS_ID_AND_SLUG,
   GET_MARKET_STATS_BY_PROJECT_ID_FOR_HOMEPAGE,
@@ -126,12 +126,12 @@ export const getProjectAndMarketStatsBySlug = async (
   const marketStatsLastDay = await getProjectPreviousDayMarketStatsBySlugAndDate(slug, marketStats.dateAdded);
 
   if (!marketStatsLastDay) {
-    return marketStats;
+    return { ...marketStats, relatedProjects: marketStatsArray.relatedProjects };
   }
 
   // Extract customData labels and their appropriate values
-  const marketStatsCustomData = prepareCustomData(marketStats.customData);
-  const marketStatsLastDayCustomData = prepareCustomData(marketStatsLastDay.customData);
+  const marketStatsCustomData = prepareCustomTrackers(marketStats.customData);
+  const marketStatsLastDayCustomData = prepareCustomTrackers(marketStatsLastDay.customData);
 
   // push the customData labels to the MARKET_STAT_CHANGES array so it gets picked up by the getChanges functions
   Object.keys(marketStatsLastDayCustomData).forEach((key) => MARKET_STAT_CHANGES.push(key));
@@ -142,7 +142,7 @@ export const getProjectAndMarketStatsBySlug = async (
     { ...marketStatsLastDay, ...marketStatsLastDayCustomData },
   );
 
-  const newMarketStats = { ...marketStats };
+  const newMarketStats = { ...marketStats, relatedProjects: marketStatsArray.relatedProjects };
 
   MARKET_STAT_CHANGES.forEach((value) => Object.assign(newMarketStats, getChanges(value)));
 

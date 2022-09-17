@@ -17,3 +17,4 @@ export { default as Notification } from './Notification';
 export { default as Payment } from './Payment';
 export { default as Image } from './Image';
 export { default as Holders } from './Holders';
+export { default as CustomTracker } from './CustomTracker';
