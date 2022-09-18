@@ -195,6 +195,7 @@ model LiquidityPair {
   name           String               @default("")
   address        String               @default("")
   tokenAddress   String               @default("")
+  order          Int?                 @default(1)
   isPrimary      Boolean              @default(false)
   useDexScreener Boolean              @default(false)
   stablePair     StableLiquidityPair? @relation("LiquidityPair_stablePair", fields: [stablePairId], references: [id])

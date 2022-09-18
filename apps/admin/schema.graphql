@@ -1220,6 +1220,7 @@ type LiquidityPair {
   name: String
   address: String
   tokenAddress: String
+  order: Int
   isPrimary: Boolean
   useDexScreener: Boolean
   stablePair: StableLiquidityPair
@@ -1247,6 +1248,7 @@ input LiquidityPairWhereInput {
   name: StringFilter
   address: StringFilter
   tokenAddress: StringFilter
+  order: IntNullableFilter
   isPrimary: BooleanFilter
   useDexScreener: BooleanFilter
   stablePair: StableLiquidityPairWhereInput
@@ -1261,6 +1263,7 @@ input LiquidityPairOrderByInput {
   name: OrderDirection
   address: OrderDirection
   tokenAddress: OrderDirection
+  order: OrderDirection
   isPrimary: OrderDirection
   useDexScreener: OrderDirection
   dateAdded: OrderDirection
@@ -1270,6 +1273,7 @@ input LiquidityPairUpdateInput {
   name: String
   address: String
   tokenAddress: String
+  order: Int
   isPrimary: Boolean
   useDexScreener: Boolean
   stablePair: StableLiquidityPairRelateToOneForUpdateInput
@@ -1300,6 +1304,7 @@ input LiquidityPairCreateInput {
   name: String
   address: String
   tokenAddress: String
+  order: Int
   isPrimary: Boolean
   useDexScreener: Boolean
   stablePair: StableLiquidityPairRelateToOneForCreateInput

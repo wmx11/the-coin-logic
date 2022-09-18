@@ -902,6 +902,7 @@ export type LiquidityPair = {
   isPrimary?: Maybe<Scalars['Boolean']>;
   name?: Maybe<Scalars['String']>;
   network?: Maybe<Network>;
+  order?: Maybe<Scalars['Int']>;
   project?: Maybe<Array<Project>>;
   projectCount?: Maybe<Scalars['Int']>;
   stablePair?: Maybe<StableLiquidityPair>;
@@ -929,6 +930,7 @@ export type LiquidityPairCreateInput = {
   isPrimary?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   network?: InputMaybe<NetworkRelateToOneForCreateInput>;
+  order?: InputMaybe<Scalars['Int']>;
   project?: InputMaybe<ProjectRelateToManyForCreateInput>;
   stablePair?: InputMaybe<StableLiquidityPairRelateToOneForCreateInput>;
   tokenAddress?: InputMaybe<Scalars['String']>;
@@ -947,6 +949,7 @@ export type LiquidityPairOrderByInput = {
   id?: InputMaybe<OrderDirection>;
   isPrimary?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
+  order?: InputMaybe<OrderDirection>;
   tokenAddress?: InputMaybe<OrderDirection>;
   useDexScreener?: InputMaybe<OrderDirection>;
 };
@@ -975,6 +978,7 @@ export type LiquidityPairUpdateInput = {
   isPrimary?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   network?: InputMaybe<NetworkRelateToOneForUpdateInput>;
+  order?: InputMaybe<Scalars['Int']>;
   project?: InputMaybe<ProjectRelateToManyForUpdateInput>;
   stablePair?: InputMaybe<StableLiquidityPairRelateToOneForUpdateInput>;
   tokenAddress?: InputMaybe<Scalars['String']>;
@@ -992,6 +996,7 @@ export type LiquidityPairWhereInput = {
   isPrimary?: InputMaybe<BooleanFilter>;
   name?: InputMaybe<StringFilter>;
   network?: InputMaybe<NetworkWhereInput>;
+  order?: InputMaybe<IntNullableFilter>;
   project?: InputMaybe<ProjectManyRelationFilter>;
   stablePair?: InputMaybe<StableLiquidityPairWhereInput>;
   tokenAddress?: InputMaybe<StringFilter>;

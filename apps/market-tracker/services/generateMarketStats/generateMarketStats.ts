@@ -22,7 +22,9 @@ const generateMarketStats = async (project: Project): Promise<MarketStats> => {
     throw new Error('Some data is missing to initialize the contract. Please check the RPC address or project data');
   }
 
-  const primaryPairAddress = project.liquidityPair.filter((pair) => pair.isPrimary);
+  const primaryPairAddress = project.liquidityPair.filter(
+    (pair) => pair.isPrimary && pair.order === 1 && pair.address === project.pairAddress,
+  );
 
   if (!primaryPairAddress.length) {
     throw new Error(`No primary liquidity pair found for ${project.name}.`);
