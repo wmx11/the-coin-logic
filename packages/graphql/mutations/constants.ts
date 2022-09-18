@@ -11,7 +11,11 @@ mutation createMarketStats(
   $newHolders: Float
   $recurringHolders: Float
   $leavingHolders: Float
-  $customData: JSON
+  $customTrackers: JSON
+  $burnedTokens: Float
+  $txns: JSON
+  $volume: JSON
+  $fdv: Float
 ) {
   createMarketStat(
     data: {
@@ -20,12 +24,16 @@ mutation createMarketStats(
       totalSupply: $totalSupply
       liquidity: $liquidity
       pairPrice: $pairPrice
+      burnedTokens: $burnedTokens
+      txns: $txns
+      volume: $volume
+      fdv: $fdv
       holders: $holders
       avgHoldings: $avgHoldings
       newHolders: $newHolders
       recurringHolders: $recurringHolders
       leavingHolders: $leavingHolders
-      customData: $customData
+      customTrackers: $customTrackers
       project: { connect: { id: $id } }
     }
   ) {

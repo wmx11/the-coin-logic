@@ -5,6 +5,8 @@ import Meta from 'components/Meta';
 import NotificationBar from 'components/NotificationBar';
 import Events from 'components/pages/project/Events';
 import Markets from 'components/pages/project/Markets';
+import RelatedProjects from 'components/pages/project/RelatedProjects';
+import TransactionVolume from 'components/pages/project/TransactionVolume';
 import { FC, useEffect } from 'react';
 import useChartStore from 'store/useChartStore';
 import { Tag } from 'types';
@@ -58,7 +60,8 @@ const project: FC<ProjectProps> = ({ projectData }) => {
               ))}
             </div>
           )}
-          <Paper p="md" shadow="sm" withBorder className="w-full flex flex-wrap gap-4 mb-8 items-center">
+
+          <Paper p="md" shadow="sm" withBorder className="w-full flex flex-wrap gap-4 mb-4 items-center">
             <div className="md:max-w-[320px] w-full md:border-r mr-4">
               <ProjectTitle title={project.name as string} size="md" avatar={project.logo ? project.logo.url : ''} />
               <div>
@@ -80,6 +83,8 @@ const project: FC<ProjectProps> = ({ projectData }) => {
             </div>
           </Paper>
 
+          <RelatedProjects data={projectData} />
+
           <div className="mb-4">
             <div className={`flex gap-4 flex-wrap md:flex-nowrap md:justify-between`}>
               <div className={`w-full md:w-[66%]`}>
@@ -97,6 +102,10 @@ const project: FC<ProjectProps> = ({ projectData }) => {
       </div>
 
       <Container className="py-10">
+        <div className="my-16">
+          <TransactionVolume data={projectData} />
+        </div>
+
         <div className="my-16" ref={targetMarket}>
           <MarketData data={projectData} />
           <div className="my-4">{chartStore.chartSection === 'marketData' && <AreaChartGroup />}</div>

@@ -1,21 +1,21 @@
-import { CustomDataResponse } from 'types/MarketData';
+import { CustomTrackersResponse } from 'types/MarketData';
 
 const getFormattedLabel = (label: string) => label.replace(' ', '').toLowerCase();
 
-export const prepareCustomData = (customData: CustomDataResponse[]) => {
+export const prepareCustomTrackers = (customData: CustomTrackersResponse[]) => {
   if (!customData || !customData.length) {
     return {};
   }
 
   return customData.reduce((obj, currValue) => {
     const label = getFormattedLabel(currValue.label);
-    const value = currValue.withPairPrice || currValue.withPrice || currValue.value;
+    const value = currValue.value;
     Object.assign(obj, { [label]: value });
     return obj;
   }, {});
 };
 
-export const getCustomDataLabels = (customData: CustomDataResponse[]) => {
+export const getCustomTrackersLabels = (customData: CustomTrackersResponse[]) => {
   if (!customData || !customData.length) {
     return [];
   }
@@ -27,7 +27,7 @@ export const getCustomDataLabels = (customData: CustomDataResponse[]) => {
   }, []);
 };
 
-export const getCustomDataChangeLabels = (labels: string[]) => {
+export const getCustomTrackersChangeLabels = (labels: string[]) => {
   if (!labels || !labels.length) {
     return [];
   }

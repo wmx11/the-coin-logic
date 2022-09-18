@@ -34,6 +34,7 @@ const Project: Lists = {
         defaultValue: false,
         ui: { description: 'Is the project marked for deletion.' },
       }),
+      useDexScreener: checkbox({ defaultValue: false, ui: { description: 'Use Dex Screener API to track data.' } }),
       status: select({
         ui: {
           displayMode: 'segmented-control',
@@ -59,10 +60,10 @@ const Project: Lists = {
       description: text({ ui: { displayMode: 'textarea' } }),
       launchDate: timestamp(),
       launchBlock: integer(),
-      user: relationship({ ref: 'User.projects' }),
+      user: relationship({ ref: 'User.projects', many: true }),
       notifications: relationship({ ref: 'Notification.project', many: true }),
       ABI: json(),
-      customData: json({ defaultValue: [] }),
+      customTrackers: relationship({ ref: 'CustomTracker.project', many: true }),
       sellTax: float(),
       buyTax: float(),
       rebasePeriod: text(),
@@ -79,12 +80,13 @@ const Project: Lists = {
       github: text(),
       medium: text(),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
-      holders: relationship({
-        ref: 'Holder',
+      parentProject: relationship({
+        ref: 'Project',
         many: true,
-        ui: {
-          displayMode: 'count',
-        },
+      }),
+      relatedProjects: relationship({
+        ref: 'Project',
+        many: true,
       }),
     },
     access: {

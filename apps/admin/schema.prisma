@@ -69,63 +69,65 @@ model Role {
 }
 
 model Project {
-  id                          String          @id @default(cuid())
-  name                        String          @default("")
-  slug                        String          @default("")
-  logo_filesize               Int?
-  logo_extension              String?
-  logo_width                  Int?
-  logo_height                 Int?
-  logo_id                     String?
-  enabled                     Boolean         @default(false)
-  isListed                    Boolean         @default(false)
-  trackData                   Boolean         @default(false)
-  trackHolders                Boolean         @default(false)
-  isRebasing                  Boolean         @default(false)
-  initialized                 Boolean         @default(false)
-  markForDeletion             Boolean         @default(false)
-  status                      String?
-  tags                        Tag[]           @relation("Project_tags")
-  contractAddress             String          @default("")
-  pairAddress                 String          @default("")
-  burnAddress                 String          @default("0x000000000000000000000000000000000000dead")
-  liquidityPair               LiquidityPair[] @relation("LiquidityPair_project")
-  network                     Network?        @relation("Project_network", fields: [networkId], references: [id])
-  networkId                   String?         @map("network")
-  trackHoldersFromTokenAmount Float?          @default(0)
-  description                 String          @default("")
-  launchDate                  DateTime?
-  launchBlock                 Int?
-  user                        User?           @relation("Project_user", fields: [userId], references: [id])
-  userId                      String?         @map("user")
-  notifications               Notification[]  @relation("Notification_project")
-  ABI                         Json?
-  customData                  Json?           @default("[]")
-  sellTax                     Float?
-  buyTax                      Float?
-  rebasePeriod                String          @default("")
-  apy                         Float?
-  dailyApy                    Float?
-  calendar                    String          @default("")
-  website                     String          @default("")
-  whitepaper                  String          @default("")
-  twitter                     String          @default("")
-  telegram                    String          @default("")
-  discord                     String          @default("")
-  reddit                      String          @default("")
-  youtube                     String          @default("")
-  github                      String          @default("")
-  medium                      String          @default("")
-  dateAdded                   DateTime?       @default(now())
-  holders                     Holder[]        @relation("Project_holders")
-  from_MarketStat_project     MarketStat[]    @relation("MarketStat_project")
-  from_DiscordBot_project     DiscordBot[]    @relation("DiscordBot_project")
-  from_Block_project          Block[]         @relation("Block_project")
-  from_Transfer_project       Transfer[]      @relation("Transfer_project")
-  from_Holder_projects        Holder[]        @relation("Holder_projects")
+  id                           String          @id @default(cuid())
+  name                         String          @default("")
+  slug                         String          @default("")
+  logo_filesize                Int?
+  logo_extension               String?
+  logo_width                   Int?
+  logo_height                  Int?
+  logo_id                      String?
+  enabled                      Boolean         @default(false)
+  isListed                     Boolean         @default(false)
+  trackData                    Boolean         @default(false)
+  trackHolders                 Boolean         @default(false)
+  isRebasing                   Boolean         @default(false)
+  initialized                  Boolean         @default(false)
+  markForDeletion              Boolean         @default(false)
+  useDexScreener               Boolean         @default(false)
+  status                       String?
+  tags                         Tag[]           @relation("Project_tags")
+  contractAddress              String          @default("")
+  pairAddress                  String          @default("")
+  burnAddress                  String          @default("0x000000000000000000000000000000000000dead")
+  liquidityPair                LiquidityPair[] @relation("LiquidityPair_project")
+  network                      Network?        @relation("Project_network", fields: [networkId], references: [id])
+  networkId                    String?         @map("network")
+  trackHoldersFromTokenAmount  Float?          @default(0)
+  description                  String          @default("")
+  launchDate                   DateTime?
+  launchBlock                  Int?
+  user                         User[]          @relation("Project_user")
+  notifications                Notification[]  @relation("Notification_project")
+  ABI                          Json?
+  customTrackers               CustomTracker[] @relation("CustomTracker_project")
+  sellTax                      Float?
+  buyTax                       Float?
+  rebasePeriod                 String          @default("")
+  apy                          Float?
+  dailyApy                     Float?
+  calendar                     String          @default("")
+  website                      String          @default("")
+  whitepaper                   String          @default("")
+  twitter                      String          @default("")
+  telegram                     String          @default("")
+  discord                      String          @default("")
+  reddit                       String          @default("")
+  youtube                      String          @default("")
+  github                       String          @default("")
+  medium                       String          @default("")
+  dateAdded                    DateTime?       @default(now())
+  parentProject                Project[]       @relation("Project_parentProject")
+  relatedProjects              Project[]       @relation("Project_relatedProjects")
+  from_Project_parentProject   Project[]       @relation("Project_parentProject")
+  from_Project_relatedProjects Project[]       @relation("Project_relatedProjects")
+  from_MarketStat_project      MarketStat[]    @relation("MarketStat_project")
+  from_DiscordBot_project      DiscordBot[]    @relation("DiscordBot_project")
+  from_Block_project           Block[]         @relation("Block_project")
+  from_Transfer_project        Transfer[]      @relation("Transfer_project")
+  from_Holder_projects         Holder[]        @relation("Holder_projects")
 
   @@index([networkId])
-  @@index([userId])
 }
 
 model Notification {
@@ -148,12 +150,17 @@ model MarketStat {
   totalSupply      Float?
   liquidity        Float?
   pairPrice        Float?
+  burnedTokens     Float?
+  txns             Json?
+  volume           Json?
+  fdv              Float?
   holders          Float?
   avgHoldings      Float?
   newHolders       Float?
   leavingHolders   Float?
   recurringHolders Float?
-  customData       Json?     @default("[]")
+  annotation       String    @default("")
+  customTrackers   Json?     @default("[]")
   project          Project?  @relation("MarketStat_project", fields: [projectId], references: [id])
   projectId        String?   @map("project")
   dateAdded        DateTime? @default(now())
@@ -161,24 +168,46 @@ model MarketStat {
   @@index([projectId])
 }
 
+model CustomTracker {
+  id                           String    @id @default(cuid())
+  label                        String    @default("")
+  description                  String    @default("")
+  address                      String    @default("")
+  pairAddress                  String    @default("")
+  getBalanceOf                 String    @default("")
+  decimals                     Float?    @default(18)
+  enabled                      Boolean   @default(false)
+  useDexScreener               Boolean   @default(false)
+  isCurrency                   Boolean   @default(false)
+  applyProjectNativeTokenPrice Boolean   @default(false)
+  applyProjectTokenPrice       Boolean   @default(false)
+  method                       String?
+  network                      Network?  @relation("CustomTracker_network", fields: [networkId], references: [id])
+  networkId                    String?   @map("network")
+  project                      Project[] @relation("CustomTracker_project")
+  dateAdded                    DateTime? @default(now())
+
+  @@index([networkId])
+}
+
 model LiquidityPair {
-  id           String               @id @default(cuid())
-  name         String               @default("")
-  address      String               @default("")
-  tokenAddress String               @default("")
-  stablePair   StableLiquidityPair? @relation("LiquidityPair_stablePair", fields: [stablePairId], references: [id])
-  stablePairId String?              @map("stablePair")
-  network      Network?             @relation("LiquidityPair_network", fields: [networkId], references: [id])
-  networkId    String?              @map("network")
-  project      Project?             @relation("LiquidityPair_project", fields: [projectId], references: [id])
-  projectId    String?              @map("project")
-  exchange     Exchange?            @relation("LiquidityPair_exchange", fields: [exchangeId], references: [id])
-  exchangeId   String?              @map("exchange")
-  dateAdded    DateTime?            @default(now())
+  id             String               @id @default(cuid())
+  name           String               @default("")
+  address        String               @default("")
+  tokenAddress   String               @default("")
+  isPrimary      Boolean              @default(false)
+  useDexScreener Boolean              @default(false)
+  stablePair     StableLiquidityPair? @relation("LiquidityPair_stablePair", fields: [stablePairId], references: [id])
+  stablePairId   String?              @map("stablePair")
+  network        Network?             @relation("LiquidityPair_network", fields: [networkId], references: [id])
+  networkId      String?              @map("network")
+  project        Project[]            @relation("LiquidityPair_project")
+  exchange       Exchange?            @relation("LiquidityPair_exchange", fields: [exchangeId], references: [id])
+  exchangeId     String?              @map("exchange")
+  dateAdded      DateTime?            @default(now())
 
   @@index([stablePairId])
   @@index([networkId])
-  @@index([projectId])
   @@index([exchangeId])
 }
 
@@ -230,6 +259,7 @@ model Network {
   tokenScanner                     String                @default("")
   dateAdded                        DateTime?             @default(now())
   from_Project_network             Project[]             @relation("Project_network")
+  from_CustomTracker_network       CustomTracker[]       @relation("CustomTracker_network")
   from_LiquidityPair_network       LiquidityPair[]       @relation("LiquidityPair_network")
   from_Token_network               Token[]               @relation("Token_network")
   from_StableLiquidityPair_network StableLiquidityPair[] @relation("StableLiquidityPair_network")
@@ -351,16 +381,15 @@ model Transfer {
 }
 
 model Holder {
-  id                   String     @id @default(cuid())
-  address              String     @default("")
-  balance              Float?     @default(0)
-  note                 String     @default("")
-  isContract           Boolean    @default(false)
-  projects             Project[]  @relation("Holder_projects")
-  transfers            Transfer[] @relation("Holder_transfers")
-  dateAdded            DateTime?  @default(now())
-  updatedAt            DateTime?  @updatedAt
-  from_Project_holders Project[]  @relation("Project_holders")
+  id         String     @id @default(cuid())
+  address    String     @default("")
+  balance    Float?     @default(0)
+  note       String     @default("")
+  isContract Boolean    @default(false)
+  projects   Project[]  @relation("Holder_projects")
+  transfers  Transfer[] @relation("Holder_transfers")
+  dateAdded  DateTime?  @default(now())
+  updatedAt  DateTime?  @updatedAt
 
   @@index([address])
   @@index([dateAdded])

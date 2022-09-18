@@ -536,6 +536,7 @@ type Project {
   isRebasing: Boolean
   initialized: Boolean
   markForDeletion: Boolean
+  useDexScreener: Boolean
   status: String
   tags(
     where: TagWhereInput! = {}
@@ -559,7 +560,13 @@ type Project {
   description: String
   launchDate: DateTime
   launchBlock: Int
-  user: User
+  user(
+    where: UserWhereInput! = {}
+    orderBy: [UserOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [User!]
+  userCount(where: UserWhereInput! = {}): Int
   notifications(
     where: NotificationWhereInput! = {}
     orderBy: [NotificationOrderByInput!]! = []
@@ -568,7 +575,13 @@ type Project {
   ): [Notification!]
   notificationsCount(where: NotificationWhereInput! = {}): Int
   ABI: JSON
-  customData: JSON
+  customTrackers(
+    where: CustomTrackerWhereInput! = {}
+    orderBy: [CustomTrackerOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [CustomTracker!]
+  customTrackersCount(where: CustomTrackerWhereInput! = {}): Int
   sellTax: Float
   buyTax: Float
   rebasePeriod: String
@@ -585,13 +598,20 @@ type Project {
   github: String
   medium: String
   dateAdded: DateTime
-  holders(
-    where: HolderWhereInput! = {}
-    orderBy: [HolderOrderByInput!]! = []
+  parentProject(
+    where: ProjectWhereInput! = {}
+    orderBy: [ProjectOrderByInput!]! = []
     take: Int
     skip: Int! = 0
-  ): [Holder!]
-  holdersCount(where: HolderWhereInput! = {}): Int
+  ): [Project!]
+  parentProjectCount(where: ProjectWhereInput! = {}): Int
+  relatedProjects(
+    where: ProjectWhereInput! = {}
+    orderBy: [ProjectOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Project!]
+  relatedProjectsCount(where: ProjectWhereInput! = {}): Int
 }
 
 type ImageFieldOutput {
@@ -628,6 +648,7 @@ input ProjectWhereInput {
   isRebasing: BooleanFilter
   initialized: BooleanFilter
   markForDeletion: BooleanFilter
+  useDexScreener: BooleanFilter
   status: StringNullableFilter
   tags: TagManyRelationFilter
   contractAddress: StringFilter
@@ -639,8 +660,9 @@ input ProjectWhereInput {
   description: StringFilter
   launchDate: DateTimeNullableFilter
   launchBlock: IntNullableFilter
-  user: UserWhereInput
+  user: UserManyRelationFilter
   notifications: NotificationManyRelationFilter
+  customTrackers: CustomTrackerManyRelationFilter
   sellTax: FloatNullableFilter
   buyTax: FloatNullableFilter
   rebasePeriod: StringFilter
@@ -657,7 +679,8 @@ input ProjectWhereInput {
   github: StringFilter
   medium: StringFilter
   dateAdded: DateTimeNullableFilter
-  holders: HolderManyRelationFilter
+  parentProject: ProjectManyRelationFilter
+  relatedProjects: ProjectManyRelationFilter
 }
 
 input TagManyRelationFilter {
@@ -689,10 +712,10 @@ input NotificationManyRelationFilter {
   none: NotificationWhereInput
 }
 
-input HolderManyRelationFilter {
-  every: HolderWhereInput
-  some: HolderWhereInput
-  none: HolderWhereInput
+input CustomTrackerManyRelationFilter {
+  every: CustomTrackerWhereInput
+  some: CustomTrackerWhereInput
+  none: CustomTrackerWhereInput
 }
 
 input ProjectOrderByInput {
@@ -706,6 +729,7 @@ input ProjectOrderByInput {
   isRebasing: OrderDirection
   initialized: OrderDirection
   markForDeletion: OrderDirection
+  useDexScreener: OrderDirection
   status: OrderDirection
   contractAddress: OrderDirection
   pairAddress: OrderDirection
@@ -743,6 +767,7 @@ input ProjectUpdateInput {
   isRebasing: Boolean
   initialized: Boolean
   markForDeletion: Boolean
+  useDexScreener: Boolean
   status: String
   tags: TagRelateToManyForUpdateInput
   contractAddress: String
@@ -754,10 +779,10 @@ input ProjectUpdateInput {
   description: String
   launchDate: DateTime
   launchBlock: Int
-  user: UserRelateToOneForUpdateInput
+  user: UserRelateToManyForUpdateInput
   notifications: NotificationRelateToManyForUpdateInput
   ABI: JSON
-  customData: JSON
+  customTrackers: CustomTrackerRelateToManyForUpdateInput
   sellTax: Float
   buyTax: Float
   rebasePeriod: String
@@ -774,7 +799,8 @@ input ProjectUpdateInput {
   github: String
   medium: String
   dateAdded: DateTime
-  holders: HolderRelateToManyForUpdateInput
+  parentProject: ProjectRelateToManyForUpdateInput
+  relatedProjects: ProjectRelateToManyForUpdateInput
 }
 
 input ImageFieldInput {
@@ -813,11 +839,11 @@ input NotificationRelateToManyForUpdateInput {
   connect: [NotificationWhereUniqueInput!]
 }
 
-input HolderRelateToManyForUpdateInput {
-  disconnect: [HolderWhereUniqueInput!]
-  set: [HolderWhereUniqueInput!]
-  create: [HolderCreateInput!]
-  connect: [HolderWhereUniqueInput!]
+input CustomTrackerRelateToManyForUpdateInput {
+  disconnect: [CustomTrackerWhereUniqueInput!]
+  set: [CustomTrackerWhereUniqueInput!]
+  create: [CustomTrackerCreateInput!]
+  connect: [CustomTrackerWhereUniqueInput!]
 }
 
 input ProjectUpdateArgs {
@@ -836,6 +862,7 @@ input ProjectCreateInput {
   isRebasing: Boolean
   initialized: Boolean
   markForDeletion: Boolean
+  useDexScreener: Boolean
   status: String
   tags: TagRelateToManyForCreateInput
   contractAddress: String
@@ -847,10 +874,10 @@ input ProjectCreateInput {
   description: String
   launchDate: DateTime
   launchBlock: Int
-  user: UserRelateToOneForCreateInput
+  user: UserRelateToManyForCreateInput
   notifications: NotificationRelateToManyForCreateInput
   ABI: JSON
-  customData: JSON
+  customTrackers: CustomTrackerRelateToManyForCreateInput
   sellTax: Float
   buyTax: Float
   rebasePeriod: String
@@ -867,7 +894,8 @@ input ProjectCreateInput {
   github: String
   medium: String
   dateAdded: DateTime
-  holders: HolderRelateToManyForCreateInput
+  parentProject: ProjectRelateToManyForCreateInput
+  relatedProjects: ProjectRelateToManyForCreateInput
 }
 
 input TagRelateToManyForCreateInput {
@@ -890,9 +918,9 @@ input NotificationRelateToManyForCreateInput {
   connect: [NotificationWhereUniqueInput!]
 }
 
-input HolderRelateToManyForCreateInput {
-  create: [HolderCreateInput!]
-  connect: [HolderWhereUniqueInput!]
+input CustomTrackerRelateToManyForCreateInput {
+  create: [CustomTrackerCreateInput!]
+  connect: [CustomTrackerWhereUniqueInput!]
 }
 
 type Notification {
@@ -972,12 +1000,17 @@ type MarketStat {
   totalSupply: Float
   liquidity: Float
   pairPrice: Float
+  burnedTokens: Float
+  txns: JSON
+  volume: JSON
+  fdv: Float
   holders: Float
   avgHoldings: Float
   newHolders: Float
   leavingHolders: Float
   recurringHolders: Float
-  customData: JSON
+  annotation: String
+  customTrackers: JSON
   project: Project
   dateAdded: DateTime
 }
@@ -996,11 +1029,14 @@ input MarketStatWhereInput {
   totalSupply: FloatNullableFilter
   liquidity: FloatNullableFilter
   pairPrice: FloatNullableFilter
+  burnedTokens: FloatNullableFilter
+  fdv: FloatNullableFilter
   holders: FloatNullableFilter
   avgHoldings: FloatNullableFilter
   newHolders: FloatNullableFilter
   leavingHolders: FloatNullableFilter
   recurringHolders: FloatNullableFilter
+  annotation: StringFilter
   project: ProjectWhereInput
   dateAdded: DateTimeNullableFilter
 }
@@ -1012,11 +1048,14 @@ input MarketStatOrderByInput {
   totalSupply: OrderDirection
   liquidity: OrderDirection
   pairPrice: OrderDirection
+  burnedTokens: OrderDirection
+  fdv: OrderDirection
   holders: OrderDirection
   avgHoldings: OrderDirection
   newHolders: OrderDirection
   leavingHolders: OrderDirection
   recurringHolders: OrderDirection
+  annotation: OrderDirection
   dateAdded: OrderDirection
 }
 
@@ -1026,12 +1065,17 @@ input MarketStatUpdateInput {
   totalSupply: Float
   liquidity: Float
   pairPrice: Float
+  burnedTokens: Float
+  txns: JSON
+  volume: JSON
+  fdv: Float
   holders: Float
   avgHoldings: Float
   newHolders: Float
   leavingHolders: Float
   recurringHolders: Float
-  customData: JSON
+  annotation: String
+  customTrackers: JSON
   project: ProjectRelateToOneForUpdateInput
   dateAdded: DateTime
 }
@@ -1047,13 +1091,127 @@ input MarketStatCreateInput {
   totalSupply: Float
   liquidity: Float
   pairPrice: Float
+  burnedTokens: Float
+  txns: JSON
+  volume: JSON
+  fdv: Float
   holders: Float
   avgHoldings: Float
   newHolders: Float
   leavingHolders: Float
   recurringHolders: Float
-  customData: JSON
+  annotation: String
+  customTrackers: JSON
   project: ProjectRelateToOneForCreateInput
+  dateAdded: DateTime
+}
+
+type CustomTracker {
+  id: ID!
+  label: String
+  description: String
+  address: String
+  pairAddress: String
+  getBalanceOf: String
+  decimals: Float
+  enabled: Boolean
+  useDexScreener: Boolean
+  isCurrency: Boolean
+  applyProjectNativeTokenPrice: Boolean
+  applyProjectTokenPrice: Boolean
+  method: String
+  network: Network
+  project(
+    where: ProjectWhereInput! = {}
+    orderBy: [ProjectOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Project!]
+  projectCount(where: ProjectWhereInput! = {}): Int
+  dateAdded: DateTime
+}
+
+input CustomTrackerWhereUniqueInput {
+  id: ID
+}
+
+input CustomTrackerWhereInput {
+  AND: [CustomTrackerWhereInput!]
+  OR: [CustomTrackerWhereInput!]
+  NOT: [CustomTrackerWhereInput!]
+  id: IDFilter
+  label: StringFilter
+  description: StringFilter
+  address: StringFilter
+  pairAddress: StringFilter
+  getBalanceOf: StringFilter
+  decimals: FloatNullableFilter
+  enabled: BooleanFilter
+  useDexScreener: BooleanFilter
+  isCurrency: BooleanFilter
+  applyProjectNativeTokenPrice: BooleanFilter
+  applyProjectTokenPrice: BooleanFilter
+  method: StringNullableFilter
+  network: NetworkWhereInput
+  project: ProjectManyRelationFilter
+  dateAdded: DateTimeNullableFilter
+}
+
+input CustomTrackerOrderByInput {
+  id: OrderDirection
+  label: OrderDirection
+  description: OrderDirection
+  address: OrderDirection
+  pairAddress: OrderDirection
+  getBalanceOf: OrderDirection
+  decimals: OrderDirection
+  enabled: OrderDirection
+  useDexScreener: OrderDirection
+  isCurrency: OrderDirection
+  applyProjectNativeTokenPrice: OrderDirection
+  applyProjectTokenPrice: OrderDirection
+  method: OrderDirection
+  dateAdded: OrderDirection
+}
+
+input CustomTrackerUpdateInput {
+  label: String
+  description: String
+  address: String
+  pairAddress: String
+  getBalanceOf: String
+  decimals: Float
+  enabled: Boolean
+  useDexScreener: Boolean
+  isCurrency: Boolean
+  applyProjectNativeTokenPrice: Boolean
+  applyProjectTokenPrice: Boolean
+  method: String
+  network: NetworkRelateToOneForUpdateInput
+  project: ProjectRelateToManyForUpdateInput
+  dateAdded: DateTime
+}
+
+input CustomTrackerUpdateArgs {
+  where: CustomTrackerWhereUniqueInput!
+  data: CustomTrackerUpdateInput!
+}
+
+input CustomTrackerCreateInput {
+  label: String
+  description: String
+  address: String
+  pairAddress: String
+  getBalanceOf: String
+  decimals: Float
+  enabled: Boolean
+  useDexScreener: Boolean
+  isCurrency: Boolean
+  applyProjectNativeTokenPrice: Boolean
+  applyProjectTokenPrice: Boolean
+  method: String
+  network: NetworkRelateToOneForCreateInput
+  project: ProjectRelateToManyForCreateInput
   dateAdded: DateTime
 }
 
@@ -1062,9 +1220,17 @@ type LiquidityPair {
   name: String
   address: String
   tokenAddress: String
+  isPrimary: Boolean
+  useDexScreener: Boolean
   stablePair: StableLiquidityPair
   network: Network
-  project: Project
+  project(
+    where: ProjectWhereInput! = {}
+    orderBy: [ProjectOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Project!]
+  projectCount(where: ProjectWhereInput! = {}): Int
   exchange: Exchange
   dateAdded: DateTime
 }
@@ -1081,9 +1247,11 @@ input LiquidityPairWhereInput {
   name: StringFilter
   address: StringFilter
   tokenAddress: StringFilter
+  isPrimary: BooleanFilter
+  useDexScreener: BooleanFilter
   stablePair: StableLiquidityPairWhereInput
   network: NetworkWhereInput
-  project: ProjectWhereInput
+  project: ProjectManyRelationFilter
   exchange: ExchangeWhereInput
   dateAdded: DateTimeNullableFilter
 }
@@ -1093,6 +1261,8 @@ input LiquidityPairOrderByInput {
   name: OrderDirection
   address: OrderDirection
   tokenAddress: OrderDirection
+  isPrimary: OrderDirection
+  useDexScreener: OrderDirection
   dateAdded: OrderDirection
 }
 
@@ -1100,9 +1270,11 @@ input LiquidityPairUpdateInput {
   name: String
   address: String
   tokenAddress: String
+  isPrimary: Boolean
+  useDexScreener: Boolean
   stablePair: StableLiquidityPairRelateToOneForUpdateInput
   network: NetworkRelateToOneForUpdateInput
-  project: ProjectRelateToOneForUpdateInput
+  project: ProjectRelateToManyForUpdateInput
   exchange: ExchangeRelateToOneForUpdateInput
   dateAdded: DateTime
 }
@@ -1128,9 +1300,11 @@ input LiquidityPairCreateInput {
   name: String
   address: String
   tokenAddress: String
+  isPrimary: Boolean
+  useDexScreener: Boolean
   stablePair: StableLiquidityPairRelateToOneForCreateInput
   network: NetworkRelateToOneForCreateInput
-  project: ProjectRelateToOneForCreateInput
+  project: ProjectRelateToManyForCreateInput
   exchange: ExchangeRelateToOneForCreateInput
   dateAdded: DateTime
 }
@@ -2050,6 +2224,17 @@ type Mutation {
   updateMarketStats(data: [MarketStatUpdateArgs!]!): [MarketStat]
   deleteMarketStat(where: MarketStatWhereUniqueInput!): MarketStat
   deleteMarketStats(where: [MarketStatWhereUniqueInput!]!): [MarketStat]
+  createCustomTracker(data: CustomTrackerCreateInput!): CustomTracker
+  createCustomTrackers(data: [CustomTrackerCreateInput!]!): [CustomTracker]
+  updateCustomTracker(
+    where: CustomTrackerWhereUniqueInput!
+    data: CustomTrackerUpdateInput!
+  ): CustomTracker
+  updateCustomTrackers(data: [CustomTrackerUpdateArgs!]!): [CustomTracker]
+  deleteCustomTracker(where: CustomTrackerWhereUniqueInput!): CustomTracker
+  deleteCustomTrackers(
+    where: [CustomTrackerWhereUniqueInput!]!
+  ): [CustomTracker]
   createLiquidityPair(data: LiquidityPairCreateInput!): LiquidityPair
   createLiquidityPairs(data: [LiquidityPairCreateInput!]!): [LiquidityPair]
   updateLiquidityPair(
@@ -2268,6 +2453,14 @@ type Query {
   ): [MarketStat!]
   marketStat(where: MarketStatWhereUniqueInput!): MarketStat
   marketStatsCount(where: MarketStatWhereInput! = {}): Int
+  customTrackers(
+    where: CustomTrackerWhereInput! = {}
+    orderBy: [CustomTrackerOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [CustomTracker!]
+  customTracker(where: CustomTrackerWhereUniqueInput!): CustomTracker
+  customTrackersCount(where: CustomTrackerWhereInput! = {}): Int
   liquidityPairs(
     where: LiquidityPairWhereInput! = {}
     orderBy: [LiquidityPairOrderByInput!]! = []

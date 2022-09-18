@@ -40,7 +40,6 @@ const marketStatsContract = ({ rpc, project }: ContractProps) => {
   const projectContract = new web3.eth.Contract(baseAbi, project?.contractAddress as string);
 
   /** Initiates the Project Pair Contract (TITANO/BNB) */
-
   const projectPairContract = new web3.eth.Contract(baseAbi, resolvePairTokenAddress(0) as string);
 
   /** Initiates the Pair Stable (BNB/BUSD) */

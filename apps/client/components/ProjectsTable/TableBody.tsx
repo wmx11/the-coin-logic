@@ -6,6 +6,7 @@ import { ProjectTitle } from 'components/ProjectTitle';
 import { Trend } from 'components/Trend';
 import Link from 'next/link';
 import React, { FC } from 'react';
+import { AiOutlineEllipsis } from 'react-icons/ai';
 import { Tag, Network } from 'types';
 import { PreviousValueTypes } from 'types/MarketData';
 import toCurrency from 'utils/toCurrency';
@@ -64,13 +65,13 @@ const TableBody: FC<TableBodyProps> = ({ data }) => {
                 </div>
                 <div className={`${TABLE_DATA.holders.styles}`}>
                   <div>
-                    {toLocaleString(holders as number)}
+                    {toLocaleString(holders as number) || <AiOutlineEllipsis />}
                     {<Trend previousValue={holdersChange as PreviousValueTypes} inline={true} />}
                   </div>
                 </div>
                 <div className={`${TABLE_DATA.avgHoldings.styles}`}>
                   <div>
-                    {toLocaleString(avgHoldings as number)}
+                    {toLocaleString(avgHoldings as number) || <AiOutlineEllipsis />}
                     {<Trend previousValue={avgHoldingsChange as PreviousValueTypes} inline={true} />}
                   </div>
                 </div>
