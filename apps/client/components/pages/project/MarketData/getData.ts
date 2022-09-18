@@ -71,7 +71,7 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
     {
       value: pairPrice as number,
       previousValue: pairPriceChange as PreviousValueTypes,
-      title: `Pair Price (${pairToken.length > 0 && pairToken[0].name?.split('/')[1]})`,
+      title: `Pair Price (${pairToken && pairToken.length > 0 && pairToken[0].name?.split('/')[1]})`,
       chartEntry: 'getPairPrice',
       isCurrency: true,
       tooltip: `Current ${name} main pair token valuation in $USD.`,
