@@ -29,7 +29,7 @@ const RelatedProjects: FC<RelatedProjectsProps> = ({ data }) => {
   return (
     <Paper p="md" shadow="sm" withBorder className="mb-4">
       <Title order={4} className="mb-4">
-        Related Projects
+        Related Projects and Tokens
       </Title>
       <div className="w-full flex flex-wrap gap-4 items-center">
         {projects.map((item) => {
