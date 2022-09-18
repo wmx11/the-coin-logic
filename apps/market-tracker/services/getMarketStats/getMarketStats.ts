@@ -6,7 +6,7 @@ import resolveCustomTrackers from '../resolveCustomTrackers';
 const getMarketStats = async (project: Project) => {
   const marketStats = await generateMarketStats(project);
   const holders = await generateHoldersStats(project);
-  const customTrackers = await resolveCustomTrackers(project);
+  const customTrackers = await resolveCustomTrackers(project, marketStats);
 
   return {
     id: project.id,

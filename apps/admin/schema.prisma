@@ -169,20 +169,23 @@ model MarketStat {
 }
 
 model CustomTracker {
-  id             String    @id @default(cuid())
-  label          String    @default("")
-  description    String    @default("")
-  address        String    @default("")
-  pairAddress    String    @default("")
-  getBalanceOf   String    @default("")
-  decimals       Float?    @default(18)
-  enabled        Boolean   @default(false)
-  useDexScreener Boolean   @default(false)
-  method         String?
-  network        Network?  @relation("CustomTracker_network", fields: [networkId], references: [id])
-  networkId      String?   @map("network")
-  project        Project[] @relation("CustomTracker_project")
-  dateAdded      DateTime? @default(now())
+  id                           String    @id @default(cuid())
+  label                        String    @default("")
+  description                  String    @default("")
+  address                      String    @default("")
+  pairAddress                  String    @default("")
+  getBalanceOf                 String    @default("")
+  decimals                     Float?    @default(18)
+  enabled                      Boolean   @default(false)
+  useDexScreener               Boolean   @default(false)
+  isCurrency                   Boolean   @default(false)
+  applyProjectNativeTokenPrice Boolean   @default(false)
+  applyProjectTokenPrice       Boolean   @default(false)
+  method                       String?
+  network                      Network?  @relation("CustomTracker_network", fields: [networkId], references: [id])
+  networkId                    String?   @map("network")
+  project                      Project[] @relation("CustomTracker_project")
+  dateAdded                    DateTime? @default(now())
 
   @@index([networkId])
 }

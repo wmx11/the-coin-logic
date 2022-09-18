@@ -292,12 +292,15 @@ export type CreateInitialUserInput = {
 export type CustomTracker = {
   __typename?: 'CustomTracker';
   address?: Maybe<Scalars['String']>;
+  applyProjectNativeTokenPrice?: Maybe<Scalars['Boolean']>;
+  applyProjectTokenPrice?: Maybe<Scalars['Boolean']>;
   dateAdded?: Maybe<Scalars['DateTime']>;
   decimals?: Maybe<Scalars['Float']>;
   description?: Maybe<Scalars['String']>;
   enabled?: Maybe<Scalars['Boolean']>;
   getBalanceOf?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  isCurrency?: Maybe<Scalars['Boolean']>;
   label?: Maybe<Scalars['String']>;
   method?: Maybe<Scalars['String']>;
   network?: Maybe<Network>;
@@ -322,11 +325,14 @@ export type CustomTrackerProjectCountArgs = {
 
 export type CustomTrackerCreateInput = {
   address?: InputMaybe<Scalars['String']>;
+  applyProjectNativeTokenPrice?: InputMaybe<Scalars['Boolean']>;
+  applyProjectTokenPrice?: InputMaybe<Scalars['Boolean']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   decimals?: InputMaybe<Scalars['Float']>;
   description?: InputMaybe<Scalars['String']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
   getBalanceOf?: InputMaybe<Scalars['String']>;
+  isCurrency?: InputMaybe<Scalars['Boolean']>;
   label?: InputMaybe<Scalars['String']>;
   method?: InputMaybe<Scalars['String']>;
   network?: InputMaybe<NetworkRelateToOneForCreateInput>;
@@ -343,12 +349,15 @@ export type CustomTrackerManyRelationFilter = {
 
 export type CustomTrackerOrderByInput = {
   address?: InputMaybe<OrderDirection>;
+  applyProjectNativeTokenPrice?: InputMaybe<OrderDirection>;
+  applyProjectTokenPrice?: InputMaybe<OrderDirection>;
   dateAdded?: InputMaybe<OrderDirection>;
   decimals?: InputMaybe<OrderDirection>;
   description?: InputMaybe<OrderDirection>;
   enabled?: InputMaybe<OrderDirection>;
   getBalanceOf?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
+  isCurrency?: InputMaybe<OrderDirection>;
   label?: InputMaybe<OrderDirection>;
   method?: InputMaybe<OrderDirection>;
   pairAddress?: InputMaybe<OrderDirection>;
@@ -374,11 +383,14 @@ export type CustomTrackerUpdateArgs = {
 
 export type CustomTrackerUpdateInput = {
   address?: InputMaybe<Scalars['String']>;
+  applyProjectNativeTokenPrice?: InputMaybe<Scalars['Boolean']>;
+  applyProjectTokenPrice?: InputMaybe<Scalars['Boolean']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   decimals?: InputMaybe<Scalars['Float']>;
   description?: InputMaybe<Scalars['String']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
   getBalanceOf?: InputMaybe<Scalars['String']>;
+  isCurrency?: InputMaybe<Scalars['Boolean']>;
   label?: InputMaybe<Scalars['String']>;
   method?: InputMaybe<Scalars['String']>;
   network?: InputMaybe<NetworkRelateToOneForUpdateInput>;
@@ -392,12 +404,15 @@ export type CustomTrackerWhereInput = {
   NOT?: InputMaybe<Array<CustomTrackerWhereInput>>;
   OR?: InputMaybe<Array<CustomTrackerWhereInput>>;
   address?: InputMaybe<StringFilter>;
+  applyProjectNativeTokenPrice?: InputMaybe<BooleanFilter>;
+  applyProjectTokenPrice?: InputMaybe<BooleanFilter>;
   dateAdded?: InputMaybe<DateTimeNullableFilter>;
   decimals?: InputMaybe<FloatNullableFilter>;
   description?: InputMaybe<StringFilter>;
   enabled?: InputMaybe<BooleanFilter>;
   getBalanceOf?: InputMaybe<StringFilter>;
   id?: InputMaybe<IdFilter>;
+  isCurrency?: InputMaybe<BooleanFilter>;
   label?: InputMaybe<StringFilter>;
   method?: InputMaybe<StringNullableFilter>;
   network?: InputMaybe<NetworkWhereInput>;

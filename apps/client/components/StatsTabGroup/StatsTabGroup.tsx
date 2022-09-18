@@ -25,7 +25,7 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
         <div>
           <div className="flex items-stretch justify-center md:justify-start flex-wrap gap-4">
             {data &&
-              data.map(({ value, title, previousValue, isCurrency, tooltip, chartEntry }, index: number) => {
+              data.map(({ value, title, previousValue, isCurrency, tooltip, chartEntry, id }, index: number) => {
                 return (
                   <StatTab
                     key={`${title}_${index}`}
@@ -37,6 +37,7 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
                     chartEntry={chartEntry}
                     slug={slug}
                     section={section}
+                    id={id}
                   />
                 );
               })}

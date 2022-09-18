@@ -13,6 +13,18 @@ const CustomTracker: Lists = {
       decimals: float({ defaultValue: 18 }),
       enabled: checkbox({ defaultValue: false }),
       useDexScreener: checkbox({ defaultValue: false, ui: { description: 'Use Dex Screener API to track data.' } }),
+      isCurrency: checkbox({
+        defaultValue: false,
+        ui: { description: 'Is the final value a currency ($)? Used for Stats Tab display.' },
+      }),
+      applyProjectNativeTokenPrice: checkbox({
+        defaultValue: false,
+        ui: { description: 'Should the project native token price be applied to final value.' },
+      }),
+      applyProjectTokenPrice: checkbox({
+        defaultValue: false,
+        ui: { description: 'Should the project token price be applied to final value.' },
+      }),
       method: select({
         options: [
           { label: 'Get native token balance', value: 'getBalance' },

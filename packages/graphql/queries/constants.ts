@@ -26,6 +26,7 @@ export const GET_ENABLED_PROJECTS = `
       slug
     }
     customTrackers(where: { enabled: { equals: true } }) {
+      id
       label
       description
       address
@@ -34,6 +35,8 @@ export const GET_ENABLED_PROJECTS = `
       decimals
       enabled
       useDexScreener
+      isCurrency
+      applyProjectNativeTokenPrice
       method
       network {
         slug

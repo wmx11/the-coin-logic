@@ -1116,6 +1116,9 @@ type CustomTracker {
   decimals: Float
   enabled: Boolean
   useDexScreener: Boolean
+  isCurrency: Boolean
+  applyProjectNativeTokenPrice: Boolean
+  applyProjectTokenPrice: Boolean
   method: String
   network: Network
   project(
@@ -1145,6 +1148,9 @@ input CustomTrackerWhereInput {
   decimals: FloatNullableFilter
   enabled: BooleanFilter
   useDexScreener: BooleanFilter
+  isCurrency: BooleanFilter
+  applyProjectNativeTokenPrice: BooleanFilter
+  applyProjectTokenPrice: BooleanFilter
   method: StringNullableFilter
   network: NetworkWhereInput
   project: ProjectManyRelationFilter
@@ -1161,6 +1167,9 @@ input CustomTrackerOrderByInput {
   decimals: OrderDirection
   enabled: OrderDirection
   useDexScreener: OrderDirection
+  isCurrency: OrderDirection
+  applyProjectNativeTokenPrice: OrderDirection
+  applyProjectTokenPrice: OrderDirection
   method: OrderDirection
   dateAdded: OrderDirection
 }
@@ -1174,6 +1183,9 @@ input CustomTrackerUpdateInput {
   decimals: Float
   enabled: Boolean
   useDexScreener: Boolean
+  isCurrency: Boolean
+  applyProjectNativeTokenPrice: Boolean
+  applyProjectTokenPrice: Boolean
   method: String
   network: NetworkRelateToOneForUpdateInput
   project: ProjectRelateToManyForUpdateInput
@@ -1194,6 +1206,9 @@ input CustomTrackerCreateInput {
   decimals: Float
   enabled: Boolean
   useDexScreener: Boolean
+  isCurrency: Boolean
+  applyProjectNativeTokenPrice: Boolean
+  applyProjectTokenPrice: Boolean
   method: String
   network: NetworkRelateToOneForCreateInput
   project: ProjectRelateToManyForCreateInput

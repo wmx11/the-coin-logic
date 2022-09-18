@@ -18,6 +18,7 @@ export const GET_LIQUIDITY = withBase('liquidity');
 export const GET_PAIR_PRICE = withBase('pairPrice');
 export const GET_BURNED_TOKENS = withBase('burnedTokens');
 export const GET_FDV = withBase('fdv');
+export const GET_CUSTOM_TRACKERS = withBase('customTrackers');
 
 export const GET_HOLDERS = withBase('holders');
 export const GET_AVERAGE_HOLDINGS = withBase('avgHoldings');

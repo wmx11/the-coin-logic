@@ -26,7 +26,9 @@ export type StatsData = PreviousValue & {
 };
 
 export type CustomTrackersResponse = {
+  id: string;
   label: string;
   value: number | string | undefined;
   description: string;
+  isCurrency: boolean;
 };
