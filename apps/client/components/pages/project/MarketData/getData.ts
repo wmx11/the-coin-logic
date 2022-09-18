@@ -1,6 +1,7 @@
 import { CustomTrackersResponse, PreviousValueTypes, StatsData } from 'types/MarketData';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import { getCustomTrackersChangeLabels, getCustomTrackersLabels } from 'utils/prepareCustomTrackers';
+import getPrimaryPairAddress from 'tcl-packages/utils/getPrimaryPairAddress';
 
 export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => {
   const {
@@ -11,7 +12,7 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
     totalSupply,
     burnedTokens,
     fdv,
-    project: { name, liquidityPair, trackData },
+    project: { name, trackData },
     priceChange,
     marketCapChange,
     liquidityChange,
@@ -26,7 +27,7 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
     return [];
   }
 
-  const pairToken = liquidityPair && liquidityPair[0].stablePair?.pairToken;
+  const pairToken = getPrimaryPairAddress(data.project);  
 
   const customDataChangeLabels = getCustomTrackersChangeLabels(getCustomTrackersLabels(customTrackers));
 
@@ -70,7 +71,7 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
     {
       value: pairPrice as number,
       previousValue: pairPriceChange as PreviousValueTypes,
-      title: `Pair Price (${pairToken && pairToken[0].name})`,
+      title: `Pair Price (${pairToken.length > 0 && pairToken[0].name?.split('/')[1]})`,
       chartEntry: 'getPairPrice',
       isCurrency: true,
       tooltip: `Current ${name} main pair token valuation in $USD.`,

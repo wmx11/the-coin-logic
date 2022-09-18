@@ -144,9 +144,12 @@ query($slug: String) {
         name
         tokenAddress
         address
+        isPrimary
+        order
         stablePair {
-          pairToken(take: 1) {
+          pairToken {
             name
+            order
           }
         }
         exchange {
