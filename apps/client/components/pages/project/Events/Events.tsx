@@ -21,7 +21,9 @@ const Events: FC<EventsProps> = ({ data }) => {
         <div className="mb-4">
           <iframe
             className="w-full min-h-[400px]"
-            src={`${data.calendar}&ctz=UTC%2FLagos&mode=AGENDA&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=1&showTitle=1`}
+            src={`${data.calendar}&ctz=${encodeURIComponent(
+              Intl.DateTimeFormat().resolvedOptions().timeZone,
+            )}&mode=AGENDA&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=1&showTitle=1`}
           ></iframe>
         </div>
 
