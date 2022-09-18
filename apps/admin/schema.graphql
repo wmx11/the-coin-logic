@@ -1431,6 +1431,7 @@ type Token {
   id: ID!
   name: String
   address: String
+  order: Int
   ABI: JSON
   network: Network
   dateAdded: DateTime
@@ -1447,6 +1448,7 @@ input TokenWhereInput {
   id: IDFilter
   name: StringFilter
   address: StringFilter
+  order: IntNullableFilter
   network: NetworkWhereInput
   dateAdded: DateTimeNullableFilter
 }
@@ -1455,12 +1457,14 @@ input TokenOrderByInput {
   id: OrderDirection
   name: OrderDirection
   address: OrderDirection
+  order: OrderDirection
   dateAdded: OrderDirection
 }
 
 input TokenUpdateInput {
   name: String
   address: String
+  order: Int
   ABI: JSON
   network: NetworkRelateToOneForUpdateInput
   dateAdded: DateTime
@@ -1474,6 +1478,7 @@ input TokenUpdateArgs {
 input TokenCreateInput {
   name: String
   address: String
+  order: Int
   ABI: JSON
   network: NetworkRelateToOneForCreateInput
   dateAdded: DateTime

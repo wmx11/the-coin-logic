@@ -3376,6 +3376,7 @@ export type Token = {
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   network?: Maybe<Network>;
+  order?: Maybe<Scalars['Int']>;
 };
 
 export type TokenCreateInput = {
@@ -3384,6 +3385,7 @@ export type TokenCreateInput = {
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   name?: InputMaybe<Scalars['String']>;
   network?: InputMaybe<NetworkRelateToOneForCreateInput>;
+  order?: InputMaybe<Scalars['Int']>;
 };
 
 export type TokenManyRelationFilter = {
@@ -3397,6 +3399,7 @@ export type TokenOrderByInput = {
   dateAdded?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
+  order?: InputMaybe<OrderDirection>;
 };
 
 export type TokenRelateToManyForCreateInput = {
@@ -3422,6 +3425,7 @@ export type TokenUpdateInput = {
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   name?: InputMaybe<Scalars['String']>;
   network?: InputMaybe<NetworkRelateToOneForUpdateInput>;
+  order?: InputMaybe<Scalars['Int']>;
 };
 
 export type TokenWhereInput = {
@@ -3433,6 +3437,7 @@ export type TokenWhereInput = {
   id?: InputMaybe<IdFilter>;
   name?: InputMaybe<StringFilter>;
   network?: InputMaybe<NetworkWhereInput>;
+  order?: InputMaybe<IntNullableFilter>;
 };
 
 export type TokenWhereUniqueInput = {
