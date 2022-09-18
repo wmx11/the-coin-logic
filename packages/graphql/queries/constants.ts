@@ -11,6 +11,7 @@ export const GET_ENABLED_PROJECTS = `
       address
       useDexScreener
       isPrimary
+      order
       network {
         slug
       }

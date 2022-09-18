@@ -1,6 +1,6 @@
 import { list } from '@keystone-6/core';
 import { Lists } from '.keystone/types';
-import { checkbox, relationship, text, timestamp } from '@keystone-6/core/fields';
+import { checkbox, integer, relationship, text, timestamp } from '@keystone-6/core/fields';
 
 const LiquidityPair: Lists = {
   LiquidityPair: list({
@@ -8,6 +8,7 @@ const LiquidityPair: Lists = {
       name: text({ validation: { isRequired: true } }),
       address: text(),
       tokenAddress: text(),
+      order: integer({ defaultValue: 1 }),
       isPrimary: checkbox({ defaultValue: false }),
       useDexScreener: checkbox({ defaultValue: false }),
       stablePair: relationship({ ref: 'StableLiquidityPair' }),
