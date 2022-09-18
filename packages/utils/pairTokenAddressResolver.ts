@@ -1,9 +1,10 @@
 import { Project } from '../types';
+import getPrimaryPairAddress from './getPrimaryPairAddress';
 
 const pairTokenAddressResolver =
   (project: Project) =>
   (key: number): string | null => {
-    const pair = project?.liquidityPair;
+    const pair = getPrimaryPairAddress(project);
 
     if (!pair || !pair.length) {
       return null;
@@ -14,6 +15,8 @@ const pairTokenAddressResolver =
     if (!pairTokens || !pairTokens.length) {
       return null;
     }
+
+    pairTokens.sort((a, b) => a.order - b.order);
 
     return pairTokens[key].address || null;
   };

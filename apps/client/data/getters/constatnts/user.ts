@@ -18,7 +18,7 @@ export const GET_USER_REFERALS = `
 query($referralCode: String) {
   referredUsers: usersCount(where: { referrer: { equals: $referralCode } })
   onboardedProjects: projectsCount(
-    where: { user: { referrer: { equals: $referralCode } } }
+    where: { user: { some: { referrer: { equals: $referralCode } } } }
   )
 }`;
 

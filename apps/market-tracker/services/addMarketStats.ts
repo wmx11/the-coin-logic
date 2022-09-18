@@ -13,12 +13,14 @@ const addMarketStats = async (): Promise<void> => {
   for (const project of projects) {
     try {
       const marketStats = await getMarketStats(project);
-      await createMarketStats(marketStats);
+      // await createMarketStats(marketStats);
       await sleep(1000);
     } catch (error) {
       console.log(error);
     }
   }
 };
+
+addMarketStats();
 
 export default addMarketStats;

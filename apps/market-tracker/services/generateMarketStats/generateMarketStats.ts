@@ -3,6 +3,7 @@ import { Project } from 'tcl-packages/types';
 import marketStatsContract from 'tcl-packages/web3/marketStatsContract';
 import generateMarketStatsDefault from './generateMarketStatsDefault';
 import generateMarketStatsDexScreener from './generateMarketStatsDexScreener';
+import getPrimaryPairAddress from 'tcl-packages/utils/getPrimaryPairAddress';
 import { MarketStats } from './types';
 
 const generateMarketStats = async (project: Project): Promise<MarketStats> => {
@@ -22,9 +23,7 @@ const generateMarketStats = async (project: Project): Promise<MarketStats> => {
     throw new Error('Some data is missing to initialize the contract. Please check the RPC address or project data');
   }
 
-  const primaryPairAddress = project.liquidityPair.filter(
-    (pair) => pair.isPrimary && pair.order === 1 && pair.address === project.pairAddress,
-  );
+  const primaryPairAddress = getPrimaryPairAddress(project);
 
   if (!primaryPairAddress.length) {
     throw new Error(`No primary liquidity pair found for ${project.name}.`);

@@ -19,6 +19,7 @@ export const GET_ENABLED_PROJECTS = `
         address
         pairToken {
           address
+          order
         }
       }
     }
