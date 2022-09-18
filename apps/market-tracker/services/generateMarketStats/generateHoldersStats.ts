@@ -24,11 +24,11 @@ const generateHoldersStats = async (project: Project): Promise<HoldersStats> => 
   );
 
   return {
-    holders: holders ? prevHoldersData?.holders : 0,
-    avgHoldings: avgHoldings ? prevHoldersData?.avgHoldings : 0,
-    newHolders: newHolders ? prevHoldersData?.newHolders : 0,
-    recurringHolders: recurringHolders ? prevHoldersData?.recurringHolders : 0,
-    leavingHolders: leavingHolders ? prevHoldersData?.leavingHolders : 0,
+    holders: holders ? holders : prevHoldersData?.holders || 0,
+    avgHoldings: avgHoldings ? avgHoldings : prevHoldersData?.avgHoldings || 0,
+    newHolders: newHolders ? newHolders : prevHoldersData?.newHolders || 0,
+    recurringHolders: recurringHolders ? recurringHolders : prevHoldersData?.recurringHolders || 0,
+    leavingHolders: leavingHolders ? leavingHolders : prevHoldersData?.leavingHolders || 0,
   };
 };
 
