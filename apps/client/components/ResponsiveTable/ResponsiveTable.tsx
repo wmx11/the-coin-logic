@@ -29,7 +29,7 @@ const ResponsiveTable: FC<ResponsiveTableProps> = ({ data }) => {
     }
 
     return (
-      <div className="hidden md:flex gap-4 p-4 mb-4 border rounded-md items-center font-semibold text-xs">
+      <div className="hidden md:flex gap-4 p-4 border-b items-center font-semibold text-xs">
         {head.map(({ width, name }, index) => {
           return (
             <div style={{ maxWidth: width, width: '100%' }} key={`${width}_${index}`}>
@@ -50,9 +50,9 @@ const ResponsiveTable: FC<ResponsiveTableProps> = ({ data }) => {
       <>
         {rows.map(({ row, additionalData }, rowsIndex) => {
           return (
-            <div className="mb-4">
+            <div>
               <div
-                className="flex-wrap md:flex-nowrap md:flex-row flex gap-4 p-4 border rounded-md text-xs hover:shadow-md transition-shadow"
+                className="flex-wrap md:flex-nowrap md:flex-row flex gap-4 p-4 border text-xs hover:shadow-md transition-shadow"
                 key={`rows_${rowsIndex}`}
               >
                 {row.map(({ value, truncate }, rowIndex) => {

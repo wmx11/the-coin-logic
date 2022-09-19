@@ -51,13 +51,7 @@ const Trend: FC<TrendProps> = ({ value, previousValue, inline }) => {
     <div className={trendColor}>
       <div className="absolute top-2 left-2 text-xs">{trendIndicator}</div>
       <Text className="text-xs font-semibold">
-        <Tooltip
-          label="Change from last 24 hours"
-          withArrow
-          transition="pop"
-          color="violet"
-          position="bottom"
-        >
+        <Tooltip label="Change from last 24 hours" withArrow transition="pop" color="violet" position="bottom">
           {trendText} {percentage !== 0 ? `(${toLocaleString(percentage)}%)` : ''}
         </Tooltip>
       </Text>
