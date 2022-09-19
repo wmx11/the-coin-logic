@@ -1,11 +1,9 @@
-import AddProject from 'components/pages/profile/AddProject';
 import MyProjects from 'components/pages/profile/MyProjects';
 import UserLayout from 'components/pages/profile/ProfileLayout';
-import { TextContentProps } from 'components/TextContent/TextContent';
-import { getContentByBlock, getProjectsByUserEmail } from 'data/getters';
+import { getProjectsByUserEmail } from 'data/getters';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
-import { FC, ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { Project } from 'types';
 
 type MyProjectsPageProps = {
