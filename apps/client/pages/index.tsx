@@ -1,3 +1,5 @@
+import CryptocurrenciesTable from 'components/CryptocurrenciesTable';
+import { getTopCoins } from 'data/cryptoData/getters';
 import useResetToken from 'hooks/useResetToken';
 import type { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -5,21 +7,23 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 import { Content } from 'types';
+import { CryptocurrencyDataResponse } from 'types/CryptocurrencyData';
 import setRefCookie from 'utils/setRefCookie';
 import { BlogPosts } from '../components/BlogPosts';
 import { Hero } from '../components/Hero';
 import { JoinOurCommunity } from '../components/JoinOurCommunity';
 import { ProjectsTable } from '../components/ProjectsTable';
 import TrackVitalsDisclaimer from '../components/TrackVitalsDisclaimer';
-import { getBlogPosts, getProjectsCount, getProjectsForHomepageList } from '../data/getters';
+import { getBlogPosts, getProjectsCount, getProjectsForTable } from '../data/getters';
 
 type HomeProps = {
   projects: [];
   projectsCount: number;
   blogPosts: Content[];
+  topCoins: CryptocurrencyDataResponse[];
 };
 
-const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts }) => {
+const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts, topCoins }) => {
   const { token } = useResetToken();
   const [projectData, setProjectData] = useState({ projects: [], projectsCount: 0 });
   const { setResetPassword, setLogin } = useLoginFlowStore((state) => state);
@@ -48,6 +52,7 @@ const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts }) => {
     <div>
       <div>
         <Hero />
+        <CryptocurrenciesTable data={topCoins} />
         <ProjectsTable data={projectData.projects} projectsCount={projectData.projectsCount} />
         <JoinOurCommunity />
         <BlogPosts data={blogPosts} />
@@ -60,9 +65,10 @@ const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts }) => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async ({ res, query }) => {
-  const projects = await getProjectsForHomepageList();
+  const projects = await getProjectsForTable();
   const projectsCount = await getProjectsCount();
   const blogPosts = await getBlogPosts(8);
+  const topCoins = await getTopCoins();
   setRefCookie({ res, query });
 
   return {
@@ -70,6 +76,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, query }) => 
       projects,
       projectsCount,
       blogPosts,
+      topCoins,
     },
   };
 };
