@@ -37,7 +37,3 @@ html, body {
   left: 0;
   border: 0;
 }
-
-[data-table-library_table] {
-  display: grid;
-}
