@@ -12,6 +12,7 @@ import {
   getTransferEventByHashAmountAndProjectId,
   getTransferType,
 } from './transfers';
+import withRetry from '../../../utils/withRetry';
 
 type ExtendedContext = Context & {
   decimals: number;
@@ -31,11 +32,13 @@ const iterateTransferEventsAndCreateNewEntriesCallback = async (context: Extende
   const { iteration, iterations, contract, project, decimals, projectBlock, from, to, config } = context;
   const chunks = project.initialized ? config.chunks : config.initialChunks;
 
-  const pastTransferEvents = await getPastTransferEvents({
-    contract,
-    fromBlock: from,
-    toBlock: to,
-  });
+  const pastTransferEvents = await withRetry(() =>
+    getPastTransferEvents({
+      contract,
+      fromBlock: from,
+      toBlock: to,
+    }),
+  );
 
   console.log(from, to);
 
@@ -84,7 +87,7 @@ const iterateTransferEventsAndCreateNewEntriesCallback = async (context: Extende
   const newFromBlock = from + chunks;
   const newToBlock = newFromBlock + chunks;
   const updatedContext = { ...context, from: newFromBlock, to: newToBlock };
-  
+
   await sleep(holdersTrackerConfig.timeouts.iterateTransferEventsAndCreateNewEntriesCallback);
 
   return updatedContext;

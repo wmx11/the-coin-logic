@@ -44,9 +44,9 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
     {
       value: recurringHolders as number,
       previousValue: recurringHoldersChange as PreviousValueTypes,
-      title: 'Recurring Buys',
+      title: 'Recurring Buys or Transfers',
       isCurrency: false,
-      tooltip: `Amount of already existing holders purchasing or transacting ${name} tokens.`,
+      tooltip: `Amount of already existing holders purchasing, transacting, or transfering ${name} tokens.`,
       chartEntry: 'getRecurringHolders',
     },
     {

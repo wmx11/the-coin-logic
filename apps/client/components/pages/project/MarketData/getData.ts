@@ -27,7 +27,8 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
     return [];
   }
 
-  const pairToken = getPrimaryPairAddress(data.project);  
+  const pairToken = getPrimaryPairAddress(data.project);
+  const pairTokenName = pairToken && pairToken.length > 0 && pairToken[0].name?.split('/')[1];
 
   const customDataChangeLabels = getCustomTrackersChangeLabels(getCustomTrackersLabels(customTrackers));
 
@@ -66,12 +67,12 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
       title: 'Liquidity',
       chartEntry: 'getLiquidity',
       isCurrency: true,
-      tooltip: `Current ${name} liquidity valuation in $USD.`,
+      tooltip: `Current ${name} liquidity valuation in $USD. Liquidity is displayed in ${pairTokenName}`,
     },
     {
       value: pairPrice as number,
       previousValue: pairPriceChange as PreviousValueTypes,
-      title: `Pair Price (${pairToken && pairToken.length > 0 && pairToken[0].name?.split('/')[1]})`,
+      title: `Pair Price (${pairTokenName})`,
       chartEntry: 'getPairPrice',
       isCurrency: true,
       tooltip: `Current ${name} main pair token valuation in $USD.`,
