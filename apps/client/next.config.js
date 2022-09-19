@@ -6,7 +6,7 @@ const nextConfig = {
     externalDir: true,
   },
   images: {
-    domains: ['localhost', 'thecoinlogic.com', 'cms.thecoinlogic.com'],
+    domains: ['localhost', 'thecoinlogic.com', 'cms.thecoinlogic.com', 'https://assets.coingecko.com'],
   },
 };
 
