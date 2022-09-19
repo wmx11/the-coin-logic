@@ -52,7 +52,7 @@ const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, h
             inline
             size={15}
           >
-            <Avatar src={avatar} alt="Project logo" size="md" />
+            <Avatar src={avatar} alt="Project logo" size="sm" />
           </Indicator>
           <TitleComponent />
         </div>
