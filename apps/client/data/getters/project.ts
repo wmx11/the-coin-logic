@@ -5,7 +5,7 @@ import getChangesPartial from 'utils/getChangesPartial';
 import { prepareCustomTrackers } from 'utils/prepareCustomTrackers';
 import {
   GET_ENABLED_AND_LISTED_PROJECTS_ID_AND_SLUG,
-  GET_MARKET_STATS_BY_PROJECT_ID_FOR_HOMEPAGE,
+  GET_MARKET_STATS_BY_PROJECT_ID_FOR_TABLE,
   GET_PREVIOUS_DAY_MARKET_STATS,
   GET_PROJECTS_BY_USER_EMAIL,
   GET_PROJECTS_COUNT,
@@ -51,7 +51,7 @@ export const getProjectPreviousDayMarketStatsBySlugAndDate = async (slug: string
   return marketStats[0];
 };
 
-export const getProjectsForHomepageList = async () => {
+export const getProjectsForTable = async () => {
   const client = initializeApollo();
 
   const { projects } = await getData({
@@ -70,7 +70,7 @@ export const getProjectsForHomepageList = async () => {
 
   const projectsPromises = projects.map(async (project: ProjectId) => {
     const { marketStats } = await getData({
-      query: GET_MARKET_STATS_BY_PROJECT_ID_FOR_HOMEPAGE,
+      query: GET_MARKET_STATS_BY_PROJECT_ID_FOR_TABLE,
       variables: { id: project.id },
       fetchPolicy: 'network-only',
       client,
@@ -102,6 +102,9 @@ export const getProjectsForHomepageList = async () => {
       projectsArray.push(marketStatsWithChanges);
     }
   }
+
+  projectsArray.sort((a, b) => b.marketCap - a.marketCap);
+  projectsArray.forEach((item, index) => (item.order = index + 1));
 
   return projectsArray;
 };

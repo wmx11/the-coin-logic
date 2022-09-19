@@ -72,7 +72,7 @@ export const GET_ENABLED_AND_LISTED_PROJECTS_ID_AND_SLUG = `{
   projectsCount(where: { enabled: { equals: true }, isListed: { equals: true }})
 }`;
 
-export const GET_MARKET_STATS_BY_PROJECT_ID_FOR_HOMEPAGE = `
+export const GET_MARKET_STATS_BY_PROJECT_ID_FOR_TABLE = `
 query($id: ID) {
   marketStats(
     where: {
