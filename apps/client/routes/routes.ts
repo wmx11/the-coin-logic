@@ -10,6 +10,7 @@ const routes = {
   marketing: `${TEXT_CONTENT}/marketing`,
   pricing: `/pricing`,
   privacyPolicy: `/privacy-policy`,
+  projects: `/projects`,
   referAProject: `${TEXT_CONTENT}/refer-a-project`,
   referral: `${process.env.NEXT_PUBLIC_BASE_URL}?ref=`,
   resources: `/resources`,
