@@ -1,6 +1,7 @@
-import { Avatar, Title } from '@mantine/core';
+import { Avatar, Indicator, Title, TitleOrder } from '@mantine/core';
 import React, { FC, HTMLAttributeAnchorTarget } from 'react';
 import Link from 'next/link';
+import { Notification } from 'types';
 
 type ProjectTitleProps = {
   size: string;
@@ -8,23 +9,27 @@ type ProjectTitleProps = {
   title: string;
   component?: string;
   href?: string;
+  notifications?: Notification[];
 };
 
-const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, href }) => {
+const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, href, notifications }) => {
   const TitleComponent = () => {
     if (component === 'a') {
       return (
         <Link href={href as HTMLAttributeAnchorTarget}>
-          <a className="hover:text-violet transition-colors">{title}</a>
+          <a className="hover:text-violet transition-colors font-semibold">{title}</a>
         </Link>
       );
     }
 
-    return (
-      <Title order={size === 'md' ? 1 : 5}>
-        {title}
-      </Title>
-    );
+    const sizes = {
+      xs: 8,
+      sm: 6,
+      md: 2,
+      lg: 1,
+    };
+
+    return <Title order={sizes[size as keyof typeof sizes] as TitleOrder}>{title}</Title>;
   };
 
   const TitleWithLogoComponent = () => {
@@ -39,7 +44,16 @@ const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, h
     if (size === 'sm') {
       return (
         <div className="flex gap-x-2 items-center">
-          <Avatar src={avatar} alt="Project logo" size="sm" />
+          <Indicator
+            color="violet"
+            disabled={notifications && notifications?.length < 1}
+            position="middle-end"
+            label={notifications?.length}
+            inline
+            size={15}
+          >
+            <Avatar src={avatar} alt="Project logo" size="md" />
+          </Indicator>
           <TitleComponent />
         </div>
       );
