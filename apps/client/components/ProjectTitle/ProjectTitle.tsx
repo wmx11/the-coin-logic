@@ -46,7 +46,7 @@ const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, h
         <div className="flex gap-x-2 items-center">
           <Indicator
             color="violet"
-            disabled={notifications && notifications?.length < 1}
+            disabled={(notifications && notifications?.length < 1) || !notifications ? true : false}
             position="middle-end"
             label={notifications?.length}
             inline

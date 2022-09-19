@@ -32,6 +32,7 @@ const MyProjects = ({ projects }: MyProjectsProps) => {
           title={project.name as string}
           component="a"
           href={`/project/${project.slug}`}
+          notifications={project.notifications}
         />
       ),
     },
