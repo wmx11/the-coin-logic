@@ -1,4 +1,3 @@
-import { subDays, set } from 'date-fns';
 import { prismaClient, PrismaSchema } from '../../../prismaClient';
 import { getMidnightToday } from '../../../utils/dates';
 import type { Pagination } from '../types';
@@ -123,7 +122,7 @@ export const getHoldersWithEnabledAndRebasingProjectsFromDateLowerThan = (date: 
         lte: date,
       },
       projects: {
-        some: { enabled: true, isRebasing: true, trackHolders: true },
+        some: { enabled: true, periodicWalletUpdates: true, trackHolders: true },
         none: { initialized: false, trackData: false },
       },
     },
@@ -133,7 +132,7 @@ export const getHoldersWithEnabledAndRebasingProjectsFromDateLowerThan = (date: 
           contractAddress: true,
           network: { select: { url: true } },
           id: true,
-          isRebasing: true,
+          periodicWalletUpdates: true,
           enabled: true,
           trackHolders: true,
           initialized: true,

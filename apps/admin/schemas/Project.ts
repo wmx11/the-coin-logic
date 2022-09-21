@@ -22,9 +22,9 @@ const Project: Lists = {
       isListed: checkbox({ defaultValue: false, ui: { description: 'Is the project listed on the leaderboard.' } }),
       trackData: checkbox({ defaultValue: false, ui: { description: 'Is the project tracking market data.' } }),
       trackHolders: checkbox({ defaultValue: false, ui: { description: 'Is the project tracking holders data.' } }),
-      isRebasing: checkbox({
+      periodicWalletUpdates: checkbox({
         defaultValue: false,
-        ui: { description: 'Is the project rebasing. Used for periodical wallet balance updates.' },
+        ui: { description: 'Used for periodical wallet balance updates. Typically for rebasing projects.' },
       }),
       initialized: checkbox({
         defaultValue: false,
@@ -53,10 +53,23 @@ const Project: Lists = {
       }),
       contractAddress: text(),
       pairAddress: text(),
+      exhangeAddress: text({
+        ui: {
+          description:
+            "The pair address used by the exchange contract. Can be the same as pairAddress or different if it's a custom LP.",
+        },
+      }),
       burnAddress: text({ defaultValue: '0x000000000000000000000000000000000000dead' }),
       liquidityPair: relationship({ ref: 'LiquidityPair.project', many: true }),
       network: relationship({ ref: 'Network' }),
-      trackHoldersFromTokenAmount: float({ defaultValue: 0 }),
+      trackHoldersFromTokenAmount: float({
+        defaultValue: 0,
+        ui: { description: 'Specify the token amount for tracking wallets.' },
+      }),
+      trackHoldersFromDollarAmount: float({
+        defaultValue: 0,
+        ui: { description: 'Specify the dollar value for tracking wallets.' },
+      }),
       description: text({ ui: { displayMode: 'textarea' } }),
       launchDate: timestamp(),
       launchBlock: integer(),

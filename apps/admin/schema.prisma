@@ -81,7 +81,7 @@ model Project {
   isListed                     Boolean         @default(false)
   trackData                    Boolean         @default(false)
   trackHolders                 Boolean         @default(false)
-  isRebasing                   Boolean         @default(false)
+  periodicWalletUpdates        Boolean         @default(false)
   initialized                  Boolean         @default(false)
   markForDeletion              Boolean         @default(false)
   useDexScreener               Boolean         @default(false)
@@ -89,11 +89,13 @@ model Project {
   tags                         Tag[]           @relation("Project_tags")
   contractAddress              String          @default("")
   pairAddress                  String          @default("")
+  exhangeAddress               String          @default("")
   burnAddress                  String          @default("0x000000000000000000000000000000000000dead")
   liquidityPair                LiquidityPair[] @relation("LiquidityPair_project")
   network                      Network?        @relation("Project_network", fields: [networkId], references: [id])
   networkId                    String?         @map("network")
   trackHoldersFromTokenAmount  Float?          @default(0)
+  trackHoldersFromDollarAmount Float?          @default(0)
   description                  String          @default("")
   launchDate                   DateTime?
   launchBlock                  Int?

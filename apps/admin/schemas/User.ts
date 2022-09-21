@@ -38,13 +38,22 @@ const User: Lists = {
           update: isAdmin,
         },
       }),
-      isSubscribedToEmail: checkbox({ defaultValue: false }), // Is the user subscribed to the email notifications
-      isNotChargeable: checkbox({ defaultValue: false }), // Allows to use the services without paying
-      isVerified: checkbox({ defaultValue: true }), // Is user's email verified
-      subscribedTill: timestamp(), // Shows the subscription date of the services
-      referrer: text(), // The person who referred code
+      isSubscribedToEmail: checkbox({
+        defaultValue: false,
+        ui: { description: 'Is the user subscribed to the email notifications' },
+      }),
+      isNotChargeable: checkbox({
+        defaultValue: false,
+        ui: { description: 'Allows to use the services without paying' },
+      }),
+      isVerified: checkbox({
+        defaultValue: true,
+        ui: { description: "Is user's email verified" },
+      }),
+      subscribedTill: timestamp({ ui: { description: 'Shows the subscription date of the services' } }),
+      referrer: text({ ui: { description: 'Refferring person' } }),
       referralCode: text({
-        // The personal referal code
+        ui: { description: 'Personal referral code' },
         hooks: {
           resolveInput: async (data) => generateInputData('referralCode', `tcl_${nanoid()}`)(data),
         },

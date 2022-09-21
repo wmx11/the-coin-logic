@@ -212,7 +212,7 @@ query($email: String) {
       enabled
       isListed
       trackHolders
-      isRebasing
+      periodicWalletUpdates
       initialized
       contractAddress
       pairAddress

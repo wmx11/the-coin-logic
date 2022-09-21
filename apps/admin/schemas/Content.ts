@@ -14,7 +14,7 @@ const Content: Lists = {
           resolveInput: async (data) => slugify('slug', 'title')(data),
         },
       }),
-      image: image({ storage: 'localImages' }),
+      image: image({ storage: 'localImages', ui: { description: '800px x 450px'}}),
       contentType: relationship({ ref: 'ContentType' }),
       enabled: checkbox({ defaultValue: false }),
       summary: text({ ui: { displayMode: 'textarea' } }),
@@ -35,7 +35,7 @@ const Content: Lists = {
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
     },
     ui: {
-      description: 'Images are 800px x 250px'
+      description: 'Images are 800px x 450px'
     }
   }),
 };

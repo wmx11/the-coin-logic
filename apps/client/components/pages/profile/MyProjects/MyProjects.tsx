@@ -41,7 +41,7 @@ const MyProjects = ({ projects }: MyProjectsProps) => {
     { label: 'Listed', renderCell: (project) => project.isListed?.toString() },
     { label: 'Track Holders', renderCell: (project) => project.trackHolders?.toString() },
     { label: 'Initialized', renderCell: (project) => project.initialized?.toString() },
-    { label: 'Rebasing', renderCell: (project) => project.isRebasing?.toString() },
+    { label: 'Periodic Walelt Updates', renderCell: (project) => project.periodicWalletUpdates?.toString() },
   ];
 
   return (
