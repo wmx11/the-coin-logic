@@ -20,6 +20,26 @@ export const getProjectByProjectId = (projectId: string) => {
   });
 };
 
+export const getProjectsForPeriodicalWalletBalanceUpdate = () => {
+  try {
+    return prismaClient.project.findMany({
+      where: {
+        enabled: true,
+        periodicWalletUpdates: true,
+        trackHolders: true,
+        initialized: true,
+        trackData: true,
+      },
+      include: {
+        network: true,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
 export const setProjectInitialized = async (projectId: string, initialized: boolean) => {
   try {
     const project = await getProjectByProjectId(projectId);

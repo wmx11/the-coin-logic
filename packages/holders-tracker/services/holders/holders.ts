@@ -115,34 +115,23 @@ export const createOrUpdateHolder = (
   });
 };
 
-export const getHoldersWithEnabledAndRebasingProjectsFromDateLowerThan = (date: Date) => {
-  return prismaClient.holder.findMany({
-    where: {
-      updatedAt: {
-        lte: date,
-      },
-      projects: {
-        some: { enabled: true, periodicWalletUpdates: true, trackHolders: true },
-        none: { initialized: false, trackData: false },
-      },
-    },
-    include: {
-      projects: {
-        select: {
-          contractAddress: true,
-          network: { select: { url: true } },
-          id: true,
-          periodicWalletUpdates: true,
-          enabled: true,
-          trackHolders: true,
-          initialized: true,
+export const getHoldersByProjectIdFromDateLowerThan = (projectId: string, date: Date) => {
+  try {
+    return prismaClient.holder.findMany({
+      where: {
+        projects: {
+          every: { id: projectId },
+        },
+        updatedAt: {
+          lt: date,
         },
       },
-    },
-  });
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
-
-export type HoldersWithEnabledAndRebasingProjects = typeof getHoldersWithEnabledAndRebasingProjectsFromDateLowerThan;
 
 export const getNewHoldersCountByProjectId = async (projectId: string, tokenAmount = 0) => {
   try {
