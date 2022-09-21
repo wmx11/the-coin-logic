@@ -533,7 +533,7 @@ type Project {
   isListed: Boolean
   trackData: Boolean
   trackHolders: Boolean
-  isRebasing: Boolean
+  periodicWalletUpdates: Boolean
   initialized: Boolean
   markForDeletion: Boolean
   useDexScreener: Boolean
@@ -547,6 +547,7 @@ type Project {
   tagsCount(where: TagWhereInput! = {}): Int
   contractAddress: String
   pairAddress: String
+  exhangeAddress: String
   burnAddress: String
   liquidityPair(
     where: LiquidityPairWhereInput! = {}
@@ -557,6 +558,7 @@ type Project {
   liquidityPairCount(where: LiquidityPairWhereInput! = {}): Int
   network: Network
   trackHoldersFromTokenAmount: Float
+  trackHoldersFromDollarAmount: Float
   description: String
   launchDate: DateTime
   launchBlock: Int
@@ -645,7 +647,7 @@ input ProjectWhereInput {
   isListed: BooleanFilter
   trackData: BooleanFilter
   trackHolders: BooleanFilter
-  isRebasing: BooleanFilter
+  periodicWalletUpdates: BooleanFilter
   initialized: BooleanFilter
   markForDeletion: BooleanFilter
   useDexScreener: BooleanFilter
@@ -653,10 +655,12 @@ input ProjectWhereInput {
   tags: TagManyRelationFilter
   contractAddress: StringFilter
   pairAddress: StringFilter
+  exhangeAddress: StringFilter
   burnAddress: StringFilter
   liquidityPair: LiquidityPairManyRelationFilter
   network: NetworkWhereInput
   trackHoldersFromTokenAmount: FloatNullableFilter
+  trackHoldersFromDollarAmount: FloatNullableFilter
   description: StringFilter
   launchDate: DateTimeNullableFilter
   launchBlock: IntNullableFilter
@@ -726,15 +730,17 @@ input ProjectOrderByInput {
   isListed: OrderDirection
   trackData: OrderDirection
   trackHolders: OrderDirection
-  isRebasing: OrderDirection
+  periodicWalletUpdates: OrderDirection
   initialized: OrderDirection
   markForDeletion: OrderDirection
   useDexScreener: OrderDirection
   status: OrderDirection
   contractAddress: OrderDirection
   pairAddress: OrderDirection
+  exhangeAddress: OrderDirection
   burnAddress: OrderDirection
   trackHoldersFromTokenAmount: OrderDirection
+  trackHoldersFromDollarAmount: OrderDirection
   description: OrderDirection
   launchDate: OrderDirection
   launchBlock: OrderDirection
@@ -764,7 +770,7 @@ input ProjectUpdateInput {
   isListed: Boolean
   trackData: Boolean
   trackHolders: Boolean
-  isRebasing: Boolean
+  periodicWalletUpdates: Boolean
   initialized: Boolean
   markForDeletion: Boolean
   useDexScreener: Boolean
@@ -772,10 +778,12 @@ input ProjectUpdateInput {
   tags: TagRelateToManyForUpdateInput
   contractAddress: String
   pairAddress: String
+  exhangeAddress: String
   burnAddress: String
   liquidityPair: LiquidityPairRelateToManyForUpdateInput
   network: NetworkRelateToOneForUpdateInput
   trackHoldersFromTokenAmount: Float
+  trackHoldersFromDollarAmount: Float
   description: String
   launchDate: DateTime
   launchBlock: Int
@@ -859,7 +867,7 @@ input ProjectCreateInput {
   isListed: Boolean
   trackData: Boolean
   trackHolders: Boolean
-  isRebasing: Boolean
+  periodicWalletUpdates: Boolean
   initialized: Boolean
   markForDeletion: Boolean
   useDexScreener: Boolean
@@ -867,10 +875,12 @@ input ProjectCreateInput {
   tags: TagRelateToManyForCreateInput
   contractAddress: String
   pairAddress: String
+  exhangeAddress: String
   burnAddress: String
   liquidityPair: LiquidityPairRelateToManyForCreateInput
   network: NetworkRelateToOneForCreateInput
   trackHoldersFromTokenAmount: Float
+  trackHoldersFromDollarAmount: Float
   description: String
   launchDate: DateTime
   launchBlock: Int

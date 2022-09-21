@@ -21,7 +21,7 @@ type ProjectsTableProps = {
 
 const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
   const theme = {
-    Table: `--data-table-library_grid-template-columns: 40px 180px repeat(6, 1fr);`,
+    Table: `--data-table-library_grid-template-columns: 40px 180px repeat(7, 1fr);`,
     BaseCell: `
     &:nth-of-type(2) {
       left: 0px;
@@ -90,7 +90,10 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
         </>
       ),
     },
-
+    {
+      label: 'Avg. Holdings (USD)',
+      renderCell: ({ avgHoldings, price }) => <>{toCurrency(avgHoldings * price) || <AiOutlineEllipsis />}</>,
+    },
     { label: 'Tags', renderCell: ({ project }) => <Badges badges={project.tags as Tag[]} /> },
     {
       label: 'Network',

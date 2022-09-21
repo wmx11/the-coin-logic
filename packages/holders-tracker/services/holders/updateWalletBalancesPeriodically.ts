@@ -41,13 +41,13 @@ const updateHoldersWalletBalanceByProject = async ({ cache, holder }: UpdateHold
         balance: toDecimals(balance, cache.get(projectId)?.decimals) || 0,
       });
       console.log(result);
-      await sleep(config.timeouts.updateBalancesForRebasingTokens);
+      await sleep(config.timeouts.updateWalletBalancesPeriodically);
       return result;
     }
   }
 };
 
-const updateBalancesForRebasingTokens = async () => {
+const updateWalletBalancesPeriodically = async () => {
   const holders = (await getHoldersWithEnabledAndRebasingProjectsFromDateLowerThan(
     config.getDateForRebasingTokens(),
   )) as Holder[];
@@ -57,8 +57,8 @@ const updateBalancesForRebasingTokens = async () => {
   for (const holder of holders) {
     await updateHoldersWalletBalanceByProject({ holder, cache });
 
-    await sleep(config.timeouts.updateBalancesForRebasingTokens);
+    await sleep(config.timeouts.updateWalletBalancesPeriodically);
   }
 };
 
-export default updateBalancesForRebasingTokens;
+export default updateWalletBalancesPeriodically;

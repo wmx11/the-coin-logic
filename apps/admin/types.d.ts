@@ -2264,11 +2264,11 @@ export type Project = {
   description?: Maybe<Scalars['String']>;
   discord?: Maybe<Scalars['String']>;
   enabled?: Maybe<Scalars['Boolean']>;
+  exhangeAddress?: Maybe<Scalars['String']>;
   github?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   initialized?: Maybe<Scalars['Boolean']>;
   isListed?: Maybe<Scalars['Boolean']>;
-  isRebasing?: Maybe<Scalars['Boolean']>;
   launchBlock?: Maybe<Scalars['Int']>;
   launchDate?: Maybe<Scalars['DateTime']>;
   liquidityPair?: Maybe<Array<LiquidityPair>>;
@@ -2283,6 +2283,7 @@ export type Project = {
   pairAddress?: Maybe<Scalars['String']>;
   parentProject?: Maybe<Array<Project>>;
   parentProjectCount?: Maybe<Scalars['Int']>;
+  periodicWalletUpdates?: Maybe<Scalars['Boolean']>;
   rebasePeriod?: Maybe<Scalars['String']>;
   reddit?: Maybe<Scalars['String']>;
   relatedProjects?: Maybe<Array<Project>>;
@@ -2295,6 +2296,7 @@ export type Project = {
   telegram?: Maybe<Scalars['String']>;
   trackData?: Maybe<Scalars['Boolean']>;
   trackHolders?: Maybe<Scalars['Boolean']>;
+  trackHoldersFromDollarAmount?: Maybe<Scalars['Float']>;
   trackHoldersFromTokenAmount?: Maybe<Scalars['Float']>;
   twitter?: Maybe<Scalars['String']>;
   useDexScreener?: Maybe<Scalars['Boolean']>;
@@ -2409,10 +2411,10 @@ export type ProjectCreateInput = {
   description?: InputMaybe<Scalars['String']>;
   discord?: InputMaybe<Scalars['String']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
+  exhangeAddress?: InputMaybe<Scalars['String']>;
   github?: InputMaybe<Scalars['String']>;
   initialized?: InputMaybe<Scalars['Boolean']>;
   isListed?: InputMaybe<Scalars['Boolean']>;
-  isRebasing?: InputMaybe<Scalars['Boolean']>;
   launchBlock?: InputMaybe<Scalars['Int']>;
   launchDate?: InputMaybe<Scalars['DateTime']>;
   liquidityPair?: InputMaybe<LiquidityPairRelateToManyForCreateInput>;
@@ -2424,6 +2426,7 @@ export type ProjectCreateInput = {
   notifications?: InputMaybe<NotificationRelateToManyForCreateInput>;
   pairAddress?: InputMaybe<Scalars['String']>;
   parentProject?: InputMaybe<ProjectRelateToManyForCreateInput>;
+  periodicWalletUpdates?: InputMaybe<Scalars['Boolean']>;
   rebasePeriod?: InputMaybe<Scalars['String']>;
   reddit?: InputMaybe<Scalars['String']>;
   relatedProjects?: InputMaybe<ProjectRelateToManyForCreateInput>;
@@ -2434,6 +2437,7 @@ export type ProjectCreateInput = {
   telegram?: InputMaybe<Scalars['String']>;
   trackData?: InputMaybe<Scalars['Boolean']>;
   trackHolders?: InputMaybe<Scalars['Boolean']>;
+  trackHoldersFromDollarAmount?: InputMaybe<Scalars['Float']>;
   trackHoldersFromTokenAmount?: InputMaybe<Scalars['Float']>;
   twitter?: InputMaybe<Scalars['String']>;
   useDexScreener?: InputMaybe<Scalars['Boolean']>;
@@ -2460,17 +2464,18 @@ export type ProjectOrderByInput = {
   description?: InputMaybe<OrderDirection>;
   discord?: InputMaybe<OrderDirection>;
   enabled?: InputMaybe<OrderDirection>;
+  exhangeAddress?: InputMaybe<OrderDirection>;
   github?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   initialized?: InputMaybe<OrderDirection>;
   isListed?: InputMaybe<OrderDirection>;
-  isRebasing?: InputMaybe<OrderDirection>;
   launchBlock?: InputMaybe<OrderDirection>;
   launchDate?: InputMaybe<OrderDirection>;
   markForDeletion?: InputMaybe<OrderDirection>;
   medium?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
   pairAddress?: InputMaybe<OrderDirection>;
+  periodicWalletUpdates?: InputMaybe<OrderDirection>;
   rebasePeriod?: InputMaybe<OrderDirection>;
   reddit?: InputMaybe<OrderDirection>;
   sellTax?: InputMaybe<OrderDirection>;
@@ -2479,6 +2484,7 @@ export type ProjectOrderByInput = {
   telegram?: InputMaybe<OrderDirection>;
   trackData?: InputMaybe<OrderDirection>;
   trackHolders?: InputMaybe<OrderDirection>;
+  trackHoldersFromDollarAmount?: InputMaybe<OrderDirection>;
   trackHoldersFromTokenAmount?: InputMaybe<OrderDirection>;
   twitter?: InputMaybe<OrderDirection>;
   useDexScreener?: InputMaybe<OrderDirection>;
@@ -2528,10 +2534,10 @@ export type ProjectUpdateInput = {
   description?: InputMaybe<Scalars['String']>;
   discord?: InputMaybe<Scalars['String']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
+  exhangeAddress?: InputMaybe<Scalars['String']>;
   github?: InputMaybe<Scalars['String']>;
   initialized?: InputMaybe<Scalars['Boolean']>;
   isListed?: InputMaybe<Scalars['Boolean']>;
-  isRebasing?: InputMaybe<Scalars['Boolean']>;
   launchBlock?: InputMaybe<Scalars['Int']>;
   launchDate?: InputMaybe<Scalars['DateTime']>;
   liquidityPair?: InputMaybe<LiquidityPairRelateToManyForUpdateInput>;
@@ -2543,6 +2549,7 @@ export type ProjectUpdateInput = {
   notifications?: InputMaybe<NotificationRelateToManyForUpdateInput>;
   pairAddress?: InputMaybe<Scalars['String']>;
   parentProject?: InputMaybe<ProjectRelateToManyForUpdateInput>;
+  periodicWalletUpdates?: InputMaybe<Scalars['Boolean']>;
   rebasePeriod?: InputMaybe<Scalars['String']>;
   reddit?: InputMaybe<Scalars['String']>;
   relatedProjects?: InputMaybe<ProjectRelateToManyForUpdateInput>;
@@ -2553,6 +2560,7 @@ export type ProjectUpdateInput = {
   telegram?: InputMaybe<Scalars['String']>;
   trackData?: InputMaybe<Scalars['Boolean']>;
   trackHolders?: InputMaybe<Scalars['Boolean']>;
+  trackHoldersFromDollarAmount?: InputMaybe<Scalars['Float']>;
   trackHoldersFromTokenAmount?: InputMaybe<Scalars['Float']>;
   twitter?: InputMaybe<Scalars['String']>;
   useDexScreener?: InputMaybe<Scalars['Boolean']>;
@@ -2577,11 +2585,11 @@ export type ProjectWhereInput = {
   description?: InputMaybe<StringFilter>;
   discord?: InputMaybe<StringFilter>;
   enabled?: InputMaybe<BooleanFilter>;
+  exhangeAddress?: InputMaybe<StringFilter>;
   github?: InputMaybe<StringFilter>;
   id?: InputMaybe<IdFilter>;
   initialized?: InputMaybe<BooleanFilter>;
   isListed?: InputMaybe<BooleanFilter>;
-  isRebasing?: InputMaybe<BooleanFilter>;
   launchBlock?: InputMaybe<IntNullableFilter>;
   launchDate?: InputMaybe<DateTimeNullableFilter>;
   liquidityPair?: InputMaybe<LiquidityPairManyRelationFilter>;
@@ -2592,6 +2600,7 @@ export type ProjectWhereInput = {
   notifications?: InputMaybe<NotificationManyRelationFilter>;
   pairAddress?: InputMaybe<StringFilter>;
   parentProject?: InputMaybe<ProjectManyRelationFilter>;
+  periodicWalletUpdates?: InputMaybe<BooleanFilter>;
   rebasePeriod?: InputMaybe<StringFilter>;
   reddit?: InputMaybe<StringFilter>;
   relatedProjects?: InputMaybe<ProjectManyRelationFilter>;
@@ -2602,6 +2611,7 @@ export type ProjectWhereInput = {
   telegram?: InputMaybe<StringFilter>;
   trackData?: InputMaybe<BooleanFilter>;
   trackHolders?: InputMaybe<BooleanFilter>;
+  trackHoldersFromDollarAmount?: InputMaybe<FloatNullableFilter>;
   trackHoldersFromTokenAmount?: InputMaybe<FloatNullableFilter>;
   twitter?: InputMaybe<StringFilter>;
   useDexScreener?: InputMaybe<BooleanFilter>;
