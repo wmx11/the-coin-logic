@@ -17,6 +17,7 @@ const updateWalletBalancesPeriodically = async () => {
   const cache: Map<string, Cache> = new Map();
 
   const projects = await getProjectsForPeriodicalWalletBalanceUpdate();
+  const date = config.getDateForRebasingTokens();
 
   for (const project of projects) {
     const { network, contractAddress, id: projectId } = project;
@@ -28,16 +29,18 @@ const updateWalletBalancesPeriodically = async () => {
       cache.set(projectId, { decimals, contract });
     }
 
-    const wallets = await getHoldersByProjectIdFromDateLowerThan(projectId, config.getDateForRebasingTokens());
+    const wallets = await getHoldersByProjectIdFromDateLowerThan(projectId, date);
+    let iteration = 0;
 
     for (const wallet of wallets) {
+      iteration++;
       const balance = await getWalletBalance(cache.get(projectId)?.contract as Contract, wallet?.address as string);
 
       const result = await updateHolder(wallet?.id as string, {
         balance: toDecimals(balance, cache.get(projectId)?.decimals) || 0,
       });
 
-      console.log(project.name, '===>', result);
+      console.log(iteration, wallets.length, project.name, '===>', result);
       await sleep(config.timeouts.updateWalletBalancesPeriodically);
     }
   }

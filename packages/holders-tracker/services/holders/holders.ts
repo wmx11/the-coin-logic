@@ -126,6 +126,9 @@ export const getHoldersByProjectIdFromDateLowerThan = (projectId: string, date: 
           lt: date,
         },
       },
+      orderBy: {
+        updatedAt: 'asc'
+      }
     });
   } catch (error) {
     console.log(error);
