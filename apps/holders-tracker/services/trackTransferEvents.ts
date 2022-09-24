@@ -28,8 +28,9 @@ const trackTransferEvents = async (initial = false) => {
       await setProjectStatus(project.id, 'idle');
       await sleep(500);
     } catch (error) {
-      console.log(error);
       await setProjectStatus(project.id, 'failed');
+      isRunning = false;
+      console.log(error);
       return null;
     }
   }

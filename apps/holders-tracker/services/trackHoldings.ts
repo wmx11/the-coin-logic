@@ -41,8 +41,9 @@ const trackHoldings = async (initial = false, reset = false) => {
 
       await setProjectStatus(project.id, 'idle');
     } catch (error) {
-      console.log(error);
       await setProjectStatus(project.id, 'failed');
+      console.log(error);
+      isRunning = false;
       return null;
     }
   }

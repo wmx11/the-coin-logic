@@ -13,10 +13,15 @@ const trackTransferEventsAndHoldings = async (initial?: boolean, reset?: boolean
 
   isRunning = true;
 
-  await trackTransferEvents(initial);
-  await trackHoldings(initial, reset);
+  try {
+    await trackTransferEvents(initial);
+    await trackHoldings(initial, reset);
+  } catch (error) {
+    isRunning = false;
+    console.log(error);
+  }
 
-  isRunning = false
+  isRunning = false;
 };
 
 export default trackTransferEventsAndHoldings;

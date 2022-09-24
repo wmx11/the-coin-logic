@@ -9,7 +9,12 @@ const trackAndPeriodicallyUpdateWalletBalances = async () => {
 
   isRunning = true;
 
-  await updateWalletBalancesPeriodically();
+  try {
+    await updateWalletBalancesPeriodically();
+  } catch (error) {
+    isRunning = false;
+    console.log(error);
+  }
 
   isRunning = false;
 };
