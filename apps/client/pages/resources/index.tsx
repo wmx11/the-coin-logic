@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import CardinalHouse from 'public/images/cardinal_house.jpg';
 import KCConsulting from 'public/images/kc_consulting.jpg';
+import TMG from 'public/images/tmg_logo.png';
 import { FC } from 'react';
 import { ContentProps } from 'types/TextContent';
 
@@ -25,7 +26,7 @@ const index: FC<ContentProps> = ({ content }) => {
         </Button>
       </SmallHero>
 
-      <Container className="py-10">
+      <Container className="py-16">
         <Title order={1} className="text-5xl mb-4" align="center">
           Our Partners
         </Title>
@@ -55,7 +56,7 @@ const index: FC<ContentProps> = ({ content }) => {
             </Link>
           </div>
           <div className="rounded-md relative group p-2 flex items-center">
-            <Title order={1}>schedule.me</Title>
+            <Title order={1}>Schedule.me</Title>
             <Link href="/text-content/schedule-me">
               <a>
                 <div className="bg-violet text-white absolute inset-0 justify-center items-center flex opacity-0 group-hover:opacity-90 transition-all rounded-md shadow-md">
@@ -63,6 +64,9 @@ const index: FC<ContentProps> = ({ content }) => {
                 </div>
               </a>
             </Link>
+          </div>
+          <div className="rounded-md relative group p-2 flex items-center">
+            <Image src={TMG} width={110} height={110} layout="intrinsic" />
           </div>
         </div>
       </Container>
