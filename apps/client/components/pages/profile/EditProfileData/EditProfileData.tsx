@@ -23,10 +23,11 @@ const EditProfileData = () => {
       firstName: user?.firstName || null,
       lastName: user?.lastName || null,
       subscribeToEmail: user?.isSubscribedToEmail,
+      walletAddress: user?.walletAddress,
     },
   });
 
-  const handleSubmit = async ({ username, firstName, lastName, subscribeToEmail }: UserProfile) => {
+  const handleSubmit = async ({ username, firstName, lastName, subscribeToEmail, walletAddress }: UserProfile) => {
     try {
       const isValid = await validate();
 
@@ -35,7 +36,14 @@ const EditProfileData = () => {
       }
 
       const updatedUser = await updateUser({
-        variables: { email: user.email, name: username, firstName: firstName || '', lastName: lastName || '', isSubscribedToEmail: subscribeToEmail },
+        variables: {
+          email: user.email,
+          name: username,
+          firstName: firstName || '',
+          lastName: lastName || '',
+          isSubscribedToEmail: subscribeToEmail,
+          walletAddress: walletAddress || '',
+        },
       });
 
       if (updatedUser) {
@@ -62,6 +70,13 @@ const EditProfileData = () => {
         <TextInput {...form.getInputProps('firstName')} placeholder="First Name" label="First Name" size="md" />
 
         <TextInput {...form.getInputProps('lastName')} placeholder="Last Name" label="Last Name" size="md" />
+
+        <TextInput
+          {...form.getInputProps('walletAddress')}
+          placeholder="Wallet Address"
+          label="Wallet Address"
+          size="md"
+        />
 
         <Checkbox
           {...form.getInputProps('subscribeToEmail', { type: 'checkbox' })}

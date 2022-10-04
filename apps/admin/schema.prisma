@@ -27,6 +27,7 @@ model User {
   subscribedTill          DateTime?
   referrer                String    @default("")
   referralCode            String    @default("")
+  walletAddress           String    @default("")
   projects                Project[] @relation("Project_user")
   payments                Payment[] @relation("Payment_billedTo")
   dateCreated             DateTime? @default(now())

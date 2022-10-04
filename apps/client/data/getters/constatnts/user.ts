@@ -7,6 +7,7 @@ query($id: ID) {
     email
     isVerified
     isSubscribedToEmail
+    walletAddress
     projectsCount
     subscribedTill
     referralCode

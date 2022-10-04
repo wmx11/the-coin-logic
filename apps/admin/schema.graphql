@@ -22,6 +22,7 @@ type User {
   subscribedTill: DateTime
   referrer: String
   referralCode: String
+  walletAddress: String
   projects(
     where: ProjectWhereInput! = {}
     orderBy: [ProjectOrderByInput!]! = []
@@ -71,6 +72,7 @@ input UserWhereInput {
   subscribedTill: DateTimeNullableFilter
   referrer: StringFilter
   referralCode: StringFilter
+  walletAddress: StringFilter
   projects: ProjectManyRelationFilter
   payments: PaymentManyRelationFilter
   dateCreated: DateTimeNullableFilter
@@ -175,6 +177,7 @@ input UserOrderByInput {
   subscribedTill: OrderDirection
   referrer: OrderDirection
   referralCode: OrderDirection
+  walletAddress: OrderDirection
   dateCreated: OrderDirection
   passwordResetIssuedAt: OrderDirection
   passwordResetRedeemedAt: OrderDirection
@@ -199,6 +202,7 @@ input UserUpdateInput {
   subscribedTill: DateTime
   referrer: String
   referralCode: String
+  walletAddress: String
   projects: ProjectRelateToManyForUpdateInput
   payments: PaymentRelateToManyForUpdateInput
   dateCreated: DateTime
@@ -247,6 +251,7 @@ input UserCreateInput {
   subscribedTill: DateTime
   referrer: String
   referralCode: String
+  walletAddress: String
   projects: ProjectRelateToManyForCreateInput
   payments: PaymentRelateToManyForCreateInput
   dateCreated: DateTime

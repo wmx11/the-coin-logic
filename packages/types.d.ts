@@ -3577,6 +3577,7 @@ export type User = {
   roles?: Maybe<Array<Role>>;
   rolesCount?: Maybe<Scalars['Int']>;
   subscribedTill?: Maybe<Scalars['DateTime']>;
+  walletAddress?: Maybe<Scalars['String']>;
 };
 
 
@@ -3651,6 +3652,7 @@ export type UserCreateInput = {
   referrer?: InputMaybe<Scalars['String']>;
   roles?: InputMaybe<RoleRelateToManyForCreateInput>;
   subscribedTill?: InputMaybe<Scalars['DateTime']>;
+  walletAddress?: InputMaybe<Scalars['String']>;
 };
 
 export type UserManyRelationFilter = {
@@ -3675,6 +3677,7 @@ export type UserOrderByInput = {
   referralCode?: InputMaybe<OrderDirection>;
   referrer?: InputMaybe<OrderDirection>;
   subscribedTill?: InputMaybe<OrderDirection>;
+  walletAddress?: InputMaybe<OrderDirection>;
 };
 
 export type UserRelateToManyForCreateInput = {
@@ -3725,6 +3728,7 @@ export type UserUpdateInput = {
   referrer?: InputMaybe<Scalars['String']>;
   roles?: InputMaybe<RoleRelateToManyForUpdateInput>;
   subscribedTill?: InputMaybe<Scalars['DateTime']>;
+  walletAddress?: InputMaybe<Scalars['String']>;
 };
 
 export type UserWhereInput = {
@@ -3750,6 +3754,7 @@ export type UserWhereInput = {
   referrer?: InputMaybe<StringFilter>;
   roles?: InputMaybe<RoleManyRelationFilter>;
   subscribedTill?: InputMaybe<DateTimeNullableFilter>;
+  walletAddress?: InputMaybe<StringFilter>;
 };
 
 export type UserWhereUniqueInput = {

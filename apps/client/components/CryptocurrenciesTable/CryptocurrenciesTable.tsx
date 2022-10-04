@@ -14,6 +14,10 @@ type CryptocurrenciesTableProps = {
 };
 
 const CryptocurrenciesTable: FC<CryptocurrenciesTableProps> = ({ data }) => {
+  if (!data || !data.length) {
+    return null;
+  }
+
   const theme = {
     Table: `--data-table-library_grid-template-columns: 40px 195px repeat(6, 1fr);`,
     BaseCell: `

@@ -8,7 +8,7 @@ type PersonalInformationProps = {
 };
 
 const PersonalInformation: FC<PersonalInformationProps> = ({ user }) => {
-  const { firstName, lastName, email, projectsCount, isSubscribedToEmail, isVerified } = user;
+  const { firstName, lastName, email, projectsCount, isSubscribedToEmail, isVerified, walletAddress } = user;
   return (
     <div className="mb-14">
       <Title order={3} className="flex gap-2 items-center mb-2 text-violet">
@@ -23,6 +23,9 @@ const PersonalInformation: FC<PersonalInformationProps> = ({ user }) => {
       </Text>
       <Text className="mb-2">
         <strong>Email:</strong> {email || '...'}
+      </Text>
+      <Text className="mb-2">
+        <strong>Wallet Address:</strong> {walletAddress || '...'}
       </Text>
       <Text className="mb-2">
         <strong>Projects:</strong> {projectsCount}

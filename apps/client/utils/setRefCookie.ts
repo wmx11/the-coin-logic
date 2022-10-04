@@ -11,7 +11,7 @@ type SetRefCookie = {
 const DAYS = 15;
 
 const setRefCookie = ({ query, res }: SetRefCookie) => {
-  if (!query.ref) {
+  if (!query || !query.ref) {
     return null;
   }
 

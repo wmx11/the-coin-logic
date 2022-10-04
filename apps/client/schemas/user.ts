@@ -28,6 +28,12 @@ export const userProfileSchema = z.object({
   firstName: z.nullable(z.string().min(2, { message: 'First Name must be at least 2 characters long.' }).max(24)),
   lastName: z.nullable(z.string().min(2, { message: 'Last Name must be at least 2 characters long.' }).max(24)),
   subscribeToEmail: commons.subscribeToEmail,
+  walletAddress: z.nullable(
+    z
+      .string()
+      .min(42, { message: "Invalid wallet address. Make sure it's 42 characters long and has no spaces." })
+      .max(42),
+  ),
 });
 
 export type User = z.infer<typeof userSchema>;

@@ -58,6 +58,7 @@ const User: Lists = {
           resolveInput: async (data) => generateInputData('referralCode', `tcl_${nanoid()}`)(data),
         },
       }),
+      walletAddress: text({ ui: { description: 'Wallet address of the user. Used for referral rewards.' } }),
       projects: relationship({ ref: 'Project.user', many: true }),
       payments: relationship({ ref: 'Payment.billedTo', many: true }),
       dateCreated: timestamp({ defaultValue: { kind: 'now' } }),

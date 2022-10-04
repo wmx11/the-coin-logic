@@ -25,16 +25,28 @@ export const CREATE_USER = gql`
 `;
 
 export const UPDATE_USER_BY_EMAIL = gql`
-  mutation UpdateUser($email: String, $firstName: String, $lastName: String, $isSubscribedToEmail: Boolean) {
+  mutation UpdateUser(
+    $email: String
+    $firstName: String
+    $lastName: String
+    $isSubscribedToEmail: Boolean
+    $walletAddress: String
+  ) {
     updateUser(
       where: { email: $email }
-      data: { firstName: $firstName, lastName: $lastName, isSubscribedToEmail: $isSubscribedToEmail }
+      data: {
+        firstName: $firstName
+        lastName: $lastName
+        isSubscribedToEmail: $isSubscribedToEmail
+        walletAddress: $walletAddress
+      }
     ) {
       name
       email
       firstName
       lastName
       isSubscribedToEmail
+      walletAddress
     }
   }
 `;
