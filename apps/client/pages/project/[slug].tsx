@@ -7,6 +7,7 @@ import Events from 'components/pages/project/Events';
 import Markets from 'components/pages/project/Markets';
 import RelatedProjects from 'components/pages/project/RelatedProjects';
 import TransactionVolume from 'components/pages/project/TransactionVolume';
+import withRedisCache from 'data/withRedisCache';
 import { FC, useEffect } from 'react';
 import useChartStore from 'store/useChartStore';
 import { Tag } from 'types';
@@ -134,7 +135,7 @@ type Params = {
 
 export const getServerSideProps = async ({ params }: Params) => {
   const slug = params.slug;
-  const projectData = await getProjectAndMarketStatsBySlug(slug);
+  const projectData = await withRedisCache(`projectData_${slug}`, () => getProjectAndMarketStatsBySlug(slug));
 
   return {
     props: {

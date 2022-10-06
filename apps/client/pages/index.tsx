@@ -1,5 +1,6 @@
 import CryptocurrenciesTable from 'components/CryptocurrenciesTable';
 import { getTopCoins } from 'data/cryptoData/getters';
+import withRedisCache from 'data/withRedisCache';
 import useResetToken from 'hooks/useResetToken';
 import type { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -24,9 +25,9 @@ type HomeProps = {
 };
 
 const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts, topCoins }) => {
-  const { token } = useResetToken();
   const [projectData, setProjectData] = useState({ projects: [], projectsCount: 0 });
   const { setResetPassword, setLogin } = useLoginFlowStore((state) => state);
+  const { token } = useResetToken();
 
   const router = useRouter();
   const { query } = router;
@@ -52,8 +53,8 @@ const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts, topCoin
     <div>
       <div>
         <Hero />
-        <CryptocurrenciesTable data={topCoins} />
         <ProjectsTable data={projectData.projects} projectsCount={projectData.projectsCount} />
+        <CryptocurrenciesTable data={topCoins} />
         <JoinOurCommunity />
         <BlogPosts data={blogPosts} />
         <TrackVitalsDisclaimer />
@@ -65,10 +66,10 @@ const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts, topCoin
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async ({ res, query }) => {
-  const projects = await getProjectsForTable();
-  const projectsCount = await getProjectsCount();
-  const blogPosts = await getBlogPosts(8);
-  const topCoins = await getTopCoins();
+  const projects = await withRedisCache('projects', getProjectsForTable);
+  const topCoins = await withRedisCache('topCoins', getTopCoins, 10 * 60);
+  const projectsCount = await withRedisCache('projectsCount', getProjectsCount);
+  const blogPosts = await withRedisCache('blogPosts', () => getBlogPosts(8));
   setRefCookie({ res, query });
 
   return {

@@ -8,6 +8,10 @@ type NetworkBadgeProps = {
 };
 
 const NetworkBadge: FC<NetworkBadgeProps> = ({ network, showName }) => {
+  if (!network) {
+    return null;
+  }
+
   return showName ? (
     <Badge
       color="violet"

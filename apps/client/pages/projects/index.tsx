@@ -2,6 +2,7 @@ import { Container } from '@mantine/core';
 import { TableNode } from '@table-library/react-table-library/types/table';
 import { ProjectsTable, TableData } from 'components/ProjectsTable';
 import { getProjectsCount, getProjectsForTable } from 'data/getters';
+import withRedisCache from 'data/withRedisCache';
 import { FC } from 'react';
 
 type ProjectsPageProps = {
@@ -20,8 +21,8 @@ const ProjectsPage: FC<ProjectsPageProps> = ({ projects, projectsCount }) => {
 export default ProjectsPage;
 
 export const getServerSideProps = async () => {
-  const projects = await getProjectsForTable();
-  const projectsCount = await getProjectsCount();
+  const projects = await withRedisCache('projects', getProjectsForTable);
+  const projectsCount = await withRedisCache('projectsCount', getProjectsCount);
 
   return {
     props: {

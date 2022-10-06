@@ -2,6 +2,7 @@ import { Avatar, Indicator, Title, TitleOrder } from '@mantine/core';
 import React, { FC, HTMLAttributeAnchorTarget } from 'react';
 import Link from 'next/link';
 import { Notification } from 'types';
+import Image from 'next/image';
 
 type ProjectTitleProps = {
   size: string;
@@ -36,7 +37,7 @@ const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, h
     if (size === 'md') {
       return (
         <div className="flex gap-4 items-center mb-2">
-          <Avatar src={avatar} alt="Project logo" size="md" />
+          <Image src={avatar} alt="project logo" height={38} width={38} style={{ verticalAlign: 'middle' }} />
           <TitleComponent />
         </div>
       );
@@ -51,8 +52,9 @@ const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, h
             label={notifications?.length}
             inline
             size={15}
+            className="items-center flex"
           >
-            <Avatar src={avatar} alt="Project logo" size="sm" />
+            <Image src={avatar} alt="project logo" height={26} width={26} style={{ verticalAlign: 'middle' }} />
           </Indicator>
           <TitleComponent />
         </div>
