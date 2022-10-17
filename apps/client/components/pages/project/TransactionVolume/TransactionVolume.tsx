@@ -55,23 +55,26 @@ const TransactionVolume: FC<TransactionVolumeTypes> = ({ data }) => {
   return (
     <>
       <Title order={2}>Transactions Data</Title>
-      <Tabs
-        onTabChange={(tabIndex: number, tabKey?: string) => setActiveTab(tabKey as string)}
-        className="my-4"
-        color="violet"
-      >
-        <Tabs.Tab tabKey="h24" label="24 hours">
+      <Tabs value={activeTab} onTabChange={setActiveTab} className="my-4" color="violet">
+        <Tabs.List>
+          <Tabs.Tab value="h24">24 hours</Tabs.Tab>
+          <Tabs.Tab value="h6">6 hours</Tabs.Tab>
+          <Tabs.Tab value="h1">1 hour</Tabs.Tab>
+          <Tabs.Tab value="m5">5 minutes</Tabs.Tab>
+        </Tabs.List>
+
+        <Tabs.Panel value="h24">
           <TabContent />
-        </Tabs.Tab>
-        <Tabs.Tab tabKey="h6" label="6 hours">
+        </Tabs.Panel>
+        <Tabs.Panel value="h6">
           <TabContent />
-        </Tabs.Tab>
-        <Tabs.Tab tabKey="h1" label="1 hour">
+        </Tabs.Panel>
+        <Tabs.Panel value="h1">
           <TabContent />
-        </Tabs.Tab>
-        <Tabs.Tab tabKey="m5" label="5 minutes">
+        </Tabs.Panel>
+        <Tabs.Panel value="m5">
           <TabContent />
-        </Tabs.Tab>
+        </Tabs.Panel>
       </Tabs>
       <Progress
         value={50}

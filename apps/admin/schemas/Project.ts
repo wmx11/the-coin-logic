@@ -1,8 +1,18 @@
 import { Lists } from '.keystone/types';
 import { list } from '@keystone-6/core';
-import { checkbox, float, image, integer, json, relationship, select, text, timestamp } from '@keystone-6/core/fields';
-import slugify from '../utils/slugify';
+import {
+  checkbox,
+  float,
+  image,
+  integer,
+  json,
+  relationship,
+  select,
+  text,
+  timestamp
+} from '@keystone-6/core/fields';
 import { isAdmin } from '../utils/rbac';
+import slugify from '../utils/slugify';
 
 const Project: Lists = {
   Project: list({

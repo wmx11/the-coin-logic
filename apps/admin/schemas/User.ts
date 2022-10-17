@@ -60,6 +60,7 @@ const User: Lists = {
       }),
       walletAddress: text({ ui: { description: 'Wallet address of the user. Used for referral rewards.' } }),
       projects: relationship({ ref: 'Project.user', many: true }),
+      marketingCampaigns: relationship({ ref: 'MarketingCampaign.users', many: true }),
       payments: relationship({ ref: 'Payment.billedTo', many: true }),
       dateCreated: timestamp({ defaultValue: { kind: 'now' } }),
     },

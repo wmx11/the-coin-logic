@@ -18,3 +18,8 @@ export { default as Payment } from './Payment';
 export { default as Image } from './Image';
 export { default as Holders } from './Holders';
 export { default as CustomTracker } from './CustomTracker';
+export { default as Creator } from './Creator';
+export { default as CreatorRating } from './CreatorRating';
+export { default as CreatorReview } from './CreatorReview';
+export { default as MarketingCampaign } from './MarketingCampaign';
+export { default as MarketingTrackerResult } from './MarketingTrackerResult';

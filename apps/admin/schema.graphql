@@ -30,6 +30,13 @@ type User {
     skip: Int! = 0
   ): [Project!]
   projectsCount(where: ProjectWhereInput! = {}): Int
+  marketingCampaigns(
+    where: MarketingCampaignWhereInput! = {}
+    orderBy: [MarketingCampaignOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [MarketingCampaign!]
+  marketingCampaignsCount(where: MarketingCampaignWhereInput! = {}): Int
   payments(
     where: PaymentWhereInput! = {}
     orderBy: [PaymentOrderByInput!]! = []
@@ -74,6 +81,7 @@ input UserWhereInput {
   referralCode: StringFilter
   walletAddress: StringFilter
   projects: ProjectManyRelationFilter
+  marketingCampaigns: MarketingCampaignManyRelationFilter
   payments: PaymentManyRelationFilter
   dateCreated: DateTimeNullableFilter
   passwordResetToken: PasswordFilter
@@ -154,6 +162,12 @@ input ProjectManyRelationFilter {
   none: ProjectWhereInput
 }
 
+input MarketingCampaignManyRelationFilter {
+  every: MarketingCampaignWhereInput
+  some: MarketingCampaignWhereInput
+  none: MarketingCampaignWhereInput
+}
+
 input PaymentManyRelationFilter {
   every: PaymentWhereInput
   some: PaymentWhereInput
@@ -204,6 +218,7 @@ input UserUpdateInput {
   referralCode: String
   walletAddress: String
   projects: ProjectRelateToManyForUpdateInput
+  marketingCampaigns: MarketingCampaignRelateToManyForUpdateInput
   payments: PaymentRelateToManyForUpdateInput
   dateCreated: DateTime
   passwordResetToken: String
@@ -223,6 +238,13 @@ input ProjectRelateToManyForUpdateInput {
   set: [ProjectWhereUniqueInput!]
   create: [ProjectCreateInput!]
   connect: [ProjectWhereUniqueInput!]
+}
+
+input MarketingCampaignRelateToManyForUpdateInput {
+  disconnect: [MarketingCampaignWhereUniqueInput!]
+  set: [MarketingCampaignWhereUniqueInput!]
+  create: [MarketingCampaignCreateInput!]
+  connect: [MarketingCampaignWhereUniqueInput!]
 }
 
 input PaymentRelateToManyForUpdateInput {
@@ -253,6 +275,7 @@ input UserCreateInput {
   referralCode: String
   walletAddress: String
   projects: ProjectRelateToManyForCreateInput
+  marketingCampaigns: MarketingCampaignRelateToManyForCreateInput
   payments: PaymentRelateToManyForCreateInput
   dateCreated: DateTime
   passwordResetToken: String
@@ -268,6 +291,11 @@ input RoleRelateToManyForCreateInput {
 input ProjectRelateToManyForCreateInput {
   create: [ProjectCreateInput!]
   connect: [ProjectWhereUniqueInput!]
+}
+
+input MarketingCampaignRelateToManyForCreateInput {
+  create: [MarketingCampaignCreateInput!]
+  connect: [MarketingCampaignWhereUniqueInput!]
 }
 
 input PaymentRelateToManyForCreateInput {
@@ -2192,6 +2220,587 @@ input TransferRelateToManyForCreateInput {
   connect: [TransferWhereUniqueInput!]
 }
 
+type Creator {
+  id: ID!
+  name: String
+  slug: String
+  enabled: Boolean
+  isListed: Boolean
+  nickname: String
+  image: ImageFieldOutput
+  description: String
+  website: String
+  twitter: String
+  telegram: String
+  discord: String
+  reddit: String
+  youtube: String
+  priceFrom: Float
+  priceTo: Float
+  marketingCampaigns(
+    where: MarketingCampaignWhereInput! = {}
+    orderBy: [MarketingCampaignOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [MarketingCampaign!]
+  marketingCampaignsCount(where: MarketingCampaignWhereInput! = {}): Int
+  ratings(
+    where: CreatorRatingWhereInput! = {}
+    orderBy: [CreatorRatingOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [CreatorRating!]
+  ratingsCount(where: CreatorRatingWhereInput! = {}): Int
+  reviews(
+    where: CreatorReviewWhereInput! = {}
+    orderBy: [CreatorReviewOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [CreatorReview!]
+  reviewsCount(where: CreatorReviewWhereInput! = {}): Int
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CreatorWhereUniqueInput {
+  id: ID
+}
+
+input CreatorWhereInput {
+  AND: [CreatorWhereInput!]
+  OR: [CreatorWhereInput!]
+  NOT: [CreatorWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  slug: StringFilter
+  enabled: BooleanFilter
+  isListed: BooleanFilter
+  nickname: StringFilter
+  description: StringFilter
+  website: StringFilter
+  twitter: StringFilter
+  telegram: StringFilter
+  discord: StringFilter
+  reddit: StringFilter
+  youtube: StringFilter
+  priceFrom: FloatNullableFilter
+  priceTo: FloatNullableFilter
+  marketingCampaigns: MarketingCampaignManyRelationFilter
+  ratings: CreatorRatingManyRelationFilter
+  reviews: CreatorReviewManyRelationFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CreatorRatingManyRelationFilter {
+  every: CreatorRatingWhereInput
+  some: CreatorRatingWhereInput
+  none: CreatorRatingWhereInput
+}
+
+input CreatorReviewManyRelationFilter {
+  every: CreatorReviewWhereInput
+  some: CreatorReviewWhereInput
+  none: CreatorReviewWhereInput
+}
+
+input CreatorOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  slug: OrderDirection
+  enabled: OrderDirection
+  isListed: OrderDirection
+  nickname: OrderDirection
+  description: OrderDirection
+  website: OrderDirection
+  twitter: OrderDirection
+  telegram: OrderDirection
+  discord: OrderDirection
+  reddit: OrderDirection
+  youtube: OrderDirection
+  priceFrom: OrderDirection
+  priceTo: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CreatorUpdateInput {
+  name: String
+  slug: String
+  enabled: Boolean
+  isListed: Boolean
+  nickname: String
+  image: ImageFieldInput
+  description: String
+  website: String
+  twitter: String
+  telegram: String
+  discord: String
+  reddit: String
+  youtube: String
+  priceFrom: Float
+  priceTo: Float
+  marketingCampaigns: MarketingCampaignRelateToManyForUpdateInput
+  ratings: CreatorRatingRelateToManyForUpdateInput
+  reviews: CreatorReviewRelateToManyForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CreatorRatingRelateToManyForUpdateInput {
+  disconnect: [CreatorRatingWhereUniqueInput!]
+  set: [CreatorRatingWhereUniqueInput!]
+  create: [CreatorRatingCreateInput!]
+  connect: [CreatorRatingWhereUniqueInput!]
+}
+
+input CreatorReviewRelateToManyForUpdateInput {
+  disconnect: [CreatorReviewWhereUniqueInput!]
+  set: [CreatorReviewWhereUniqueInput!]
+  create: [CreatorReviewCreateInput!]
+  connect: [CreatorReviewWhereUniqueInput!]
+}
+
+input CreatorUpdateArgs {
+  where: CreatorWhereUniqueInput!
+  data: CreatorUpdateInput!
+}
+
+input CreatorCreateInput {
+  name: String
+  slug: String
+  enabled: Boolean
+  isListed: Boolean
+  nickname: String
+  image: ImageFieldInput
+  description: String
+  website: String
+  twitter: String
+  telegram: String
+  discord: String
+  reddit: String
+  youtube: String
+  priceFrom: Float
+  priceTo: Float
+  marketingCampaigns: MarketingCampaignRelateToManyForCreateInput
+  ratings: CreatorRatingRelateToManyForCreateInput
+  reviews: CreatorReviewRelateToManyForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CreatorRatingRelateToManyForCreateInput {
+  create: [CreatorRatingCreateInput!]
+  connect: [CreatorRatingWhereUniqueInput!]
+}
+
+input CreatorReviewRelateToManyForCreateInput {
+  create: [CreatorReviewCreateInput!]
+  connect: [CreatorReviewWhereUniqueInput!]
+}
+
+type CreatorRating {
+  id: ID!
+  rating: Int
+  creator: Creator
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CreatorRatingWhereUniqueInput {
+  id: ID
+}
+
+input CreatorRatingWhereInput {
+  AND: [CreatorRatingWhereInput!]
+  OR: [CreatorRatingWhereInput!]
+  NOT: [CreatorRatingWhereInput!]
+  id: IDFilter
+  rating: IntNullableFilter
+  creator: CreatorWhereInput
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CreatorRatingOrderByInput {
+  id: OrderDirection
+  rating: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CreatorRatingUpdateInput {
+  rating: Int
+  creator: CreatorRelateToOneForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CreatorRelateToOneForUpdateInput {
+  create: CreatorCreateInput
+  connect: CreatorWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CreatorRatingUpdateArgs {
+  where: CreatorRatingWhereUniqueInput!
+  data: CreatorRatingUpdateInput!
+}
+
+input CreatorRatingCreateInput {
+  rating: Int
+  creator: CreatorRelateToOneForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CreatorRelateToOneForCreateInput {
+  create: CreatorCreateInput
+  connect: CreatorWhereUniqueInput
+}
+
+type CreatorReview {
+  id: ID!
+  review: String
+  creator: Creator
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CreatorReviewWhereUniqueInput {
+  id: ID
+}
+
+input CreatorReviewWhereInput {
+  AND: [CreatorReviewWhereInput!]
+  OR: [CreatorReviewWhereInput!]
+  NOT: [CreatorReviewWhereInput!]
+  id: IDFilter
+  review: StringFilter
+  creator: CreatorWhereInput
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CreatorReviewOrderByInput {
+  id: OrderDirection
+  review: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CreatorReviewUpdateInput {
+  review: String
+  creator: CreatorRelateToOneForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CreatorReviewUpdateArgs {
+  where: CreatorReviewWhereUniqueInput!
+  data: CreatorReviewUpdateInput!
+}
+
+input CreatorReviewCreateInput {
+  review: String
+  creator: CreatorRelateToOneForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+type MarketingCampaign {
+  id: ID!
+  name: String
+  campaignId: String
+  users(
+    where: UserWhereInput! = {}
+    orderBy: [UserOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [User!]
+  usersCount(where: UserWhereInput! = {}): Int
+  status: String
+  enabled: Boolean
+  isPercentage: Boolean
+  isInternal: Boolean
+  startDate: CalendarDay
+  endDate: CalendarDay
+  budget: Float
+  description: String
+  notes: String
+  agency: String
+  agencyUrl: String
+  creator: Creator
+  project: Project
+  marketBudget: Float
+  socialsBudget: Float
+  priceGoal: Float
+  marketCapGoal: Float
+  volumeGoal: Float
+  holdersGoal: Float
+  twitterGoal: Float
+  discordGoal: Float
+  telegramGoal: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+scalar CalendarDay
+  @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
+
+input MarketingCampaignWhereUniqueInput {
+  id: ID
+}
+
+input MarketingCampaignWhereInput {
+  AND: [MarketingCampaignWhereInput!]
+  OR: [MarketingCampaignWhereInput!]
+  NOT: [MarketingCampaignWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  campaignId: StringFilter
+  users: UserManyRelationFilter
+  status: StringNullableFilter
+  enabled: BooleanFilter
+  isPercentage: BooleanFilter
+  isInternal: BooleanFilter
+  startDate: CalendarDayNullableFilter
+  endDate: CalendarDayNullableFilter
+  budget: FloatNullableFilter
+  description: StringFilter
+  notes: StringFilter
+  agency: StringFilter
+  agencyUrl: StringFilter
+  creator: CreatorWhereInput
+  project: ProjectWhereInput
+  marketBudget: FloatNullableFilter
+  socialsBudget: FloatNullableFilter
+  priceGoal: FloatNullableFilter
+  marketCapGoal: FloatNullableFilter
+  volumeGoal: FloatNullableFilter
+  holdersGoal: FloatNullableFilter
+  twitterGoal: FloatNullableFilter
+  discordGoal: FloatNullableFilter
+  telegramGoal: FloatNullableFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CalendarDayNullableFilter {
+  equals: CalendarDay
+  in: [CalendarDay!]
+  notIn: [CalendarDay!]
+  lt: CalendarDay
+  lte: CalendarDay
+  gt: CalendarDay
+  gte: CalendarDay
+  not: CalendarDayNullableFilter
+}
+
+input MarketingCampaignOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  campaignId: OrderDirection
+  status: OrderDirection
+  enabled: OrderDirection
+  isPercentage: OrderDirection
+  isInternal: OrderDirection
+  startDate: OrderDirection
+  endDate: OrderDirection
+  budget: OrderDirection
+  description: OrderDirection
+  notes: OrderDirection
+  agency: OrderDirection
+  agencyUrl: OrderDirection
+  marketBudget: OrderDirection
+  socialsBudget: OrderDirection
+  priceGoal: OrderDirection
+  marketCapGoal: OrderDirection
+  volumeGoal: OrderDirection
+  holdersGoal: OrderDirection
+  twitterGoal: OrderDirection
+  discordGoal: OrderDirection
+  telegramGoal: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input MarketingCampaignUpdateInput {
+  name: String
+  campaignId: String
+  users: UserRelateToManyForUpdateInput
+  status: String
+  enabled: Boolean
+  isPercentage: Boolean
+  isInternal: Boolean
+  startDate: CalendarDay
+  endDate: CalendarDay
+  budget: Float
+  description: String
+  notes: String
+  agency: String
+  agencyUrl: String
+  creator: CreatorRelateToOneForUpdateInput
+  project: ProjectRelateToOneForUpdateInput
+  marketBudget: Float
+  socialsBudget: Float
+  priceGoal: Float
+  marketCapGoal: Float
+  volumeGoal: Float
+  holdersGoal: Float
+  twitterGoal: Float
+  discordGoal: Float
+  telegramGoal: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input MarketingCampaignUpdateArgs {
+  where: MarketingCampaignWhereUniqueInput!
+  data: MarketingCampaignUpdateInput!
+}
+
+input MarketingCampaignCreateInput {
+  name: String
+  campaignId: String
+  users: UserRelateToManyForCreateInput
+  status: String
+  enabled: Boolean
+  isPercentage: Boolean
+  isInternal: Boolean
+  startDate: CalendarDay
+  endDate: CalendarDay
+  budget: Float
+  description: String
+  notes: String
+  agency: String
+  agencyUrl: String
+  creator: CreatorRelateToOneForCreateInput
+  project: ProjectRelateToOneForCreateInput
+  marketBudget: Float
+  socialsBudget: Float
+  priceGoal: Float
+  marketCapGoal: Float
+  volumeGoal: Float
+  holdersGoal: Float
+  twitterGoal: Float
+  discordGoal: Float
+  telegramGoal: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+type MarketingTrackerResult {
+  id: ID!
+  referer: String
+  ipAddress: String
+  userAgent: String
+  device: String
+  os: String
+  timezone: String
+  city: String
+  country: String
+  countryCode: String
+  target: String
+  marketingCampaign: MarketingCampaign
+  dateAdded: DateTime
+  updatedAt: DateTime
+  totalClicks(campaignId: String): JSON
+  countryResults(campaignId: String): JSON
+  deviceResults(campaignId: String): JSON
+  refererResults(campaignId: String): JSON
+  uniqueClicks(campaignId: String): Int
+  socialClicks(campaignId: String): JSON
+}
+
+input MarketingTrackerResultWhereUniqueInput {
+  id: ID
+}
+
+input MarketingTrackerResultWhereInput {
+  AND: [MarketingTrackerResultWhereInput!]
+  OR: [MarketingTrackerResultWhereInput!]
+  NOT: [MarketingTrackerResultWhereInput!]
+  id: IDFilter
+  referer: StringFilter
+  ipAddress: StringFilter
+  userAgent: StringFilter
+  device: StringFilter
+  os: StringFilter
+  timezone: StringFilter
+  city: StringFilter
+  country: StringFilter
+  countryCode: StringFilter
+  target: StringFilter
+  marketingCampaign: MarketingCampaignWhereInput
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input MarketingTrackerResultOrderByInput {
+  id: OrderDirection
+  referer: OrderDirection
+  ipAddress: OrderDirection
+  userAgent: OrderDirection
+  device: OrderDirection
+  os: OrderDirection
+  timezone: OrderDirection
+  city: OrderDirection
+  country: OrderDirection
+  countryCode: OrderDirection
+  target: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input MarketingTrackerResultUpdateInput {
+  referer: String
+  ipAddress: String
+  userAgent: String
+  device: String
+  os: String
+  timezone: String
+  city: String
+  country: String
+  countryCode: String
+  target: String
+  marketingCampaign: MarketingCampaignRelateToOneForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input MarketingCampaignRelateToOneForUpdateInput {
+  create: MarketingCampaignCreateInput
+  connect: MarketingCampaignWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MarketingTrackerResultUpdateArgs {
+  where: MarketingTrackerResultWhereUniqueInput!
+  data: MarketingTrackerResultUpdateInput!
+}
+
+input MarketingTrackerResultCreateInput {
+  referer: String
+  ipAddress: String
+  userAgent: String
+  device: String
+  os: String
+  timezone: String
+  city: String
+  country: String
+  countryCode: String
+  target: String
+  marketingCampaign: MarketingCampaignRelateToOneForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input MarketingCampaignRelateToOneForCreateInput {
+  create: MarketingCampaignCreateInput
+  connect: MarketingCampaignWhereUniqueInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -2383,6 +2992,75 @@ type Mutation {
   updateHolders(data: [HolderUpdateArgs!]!): [Holder]
   deleteHolder(where: HolderWhereUniqueInput!): Holder
   deleteHolders(where: [HolderWhereUniqueInput!]!): [Holder]
+  createCreator(data: CreatorCreateInput!): Creator
+  createCreators(data: [CreatorCreateInput!]!): [Creator]
+  updateCreator(
+    where: CreatorWhereUniqueInput!
+    data: CreatorUpdateInput!
+  ): Creator
+  updateCreators(data: [CreatorUpdateArgs!]!): [Creator]
+  deleteCreator(where: CreatorWhereUniqueInput!): Creator
+  deleteCreators(where: [CreatorWhereUniqueInput!]!): [Creator]
+  createCreatorRating(data: CreatorRatingCreateInput!): CreatorRating
+  createCreatorRatings(data: [CreatorRatingCreateInput!]!): [CreatorRating]
+  updateCreatorRating(
+    where: CreatorRatingWhereUniqueInput!
+    data: CreatorRatingUpdateInput!
+  ): CreatorRating
+  updateCreatorRatings(data: [CreatorRatingUpdateArgs!]!): [CreatorRating]
+  deleteCreatorRating(where: CreatorRatingWhereUniqueInput!): CreatorRating
+  deleteCreatorRatings(
+    where: [CreatorRatingWhereUniqueInput!]!
+  ): [CreatorRating]
+  createCreatorReview(data: CreatorReviewCreateInput!): CreatorReview
+  createCreatorReviews(data: [CreatorReviewCreateInput!]!): [CreatorReview]
+  updateCreatorReview(
+    where: CreatorReviewWhereUniqueInput!
+    data: CreatorReviewUpdateInput!
+  ): CreatorReview
+  updateCreatorReviews(data: [CreatorReviewUpdateArgs!]!): [CreatorReview]
+  deleteCreatorReview(where: CreatorReviewWhereUniqueInput!): CreatorReview
+  deleteCreatorReviews(
+    where: [CreatorReviewWhereUniqueInput!]!
+  ): [CreatorReview]
+  createMarketingCampaign(
+    data: MarketingCampaignCreateInput!
+  ): MarketingCampaign
+  createMarketingCampaigns(
+    data: [MarketingCampaignCreateInput!]!
+  ): [MarketingCampaign]
+  updateMarketingCampaign(
+    where: MarketingCampaignWhereUniqueInput!
+    data: MarketingCampaignUpdateInput!
+  ): MarketingCampaign
+  updateMarketingCampaigns(
+    data: [MarketingCampaignUpdateArgs!]!
+  ): [MarketingCampaign]
+  deleteMarketingCampaign(
+    where: MarketingCampaignWhereUniqueInput!
+  ): MarketingCampaign
+  deleteMarketingCampaigns(
+    where: [MarketingCampaignWhereUniqueInput!]!
+  ): [MarketingCampaign]
+  createMarketingTrackerResult(
+    data: MarketingTrackerResultCreateInput!
+  ): MarketingTrackerResult
+  createMarketingTrackerResults(
+    data: [MarketingTrackerResultCreateInput!]!
+  ): [MarketingTrackerResult]
+  updateMarketingTrackerResult(
+    where: MarketingTrackerResultWhereUniqueInput!
+    data: MarketingTrackerResultUpdateInput!
+  ): MarketingTrackerResult
+  updateMarketingTrackerResults(
+    data: [MarketingTrackerResultUpdateArgs!]!
+  ): [MarketingTrackerResult]
+  deleteMarketingTrackerResult(
+    where: MarketingTrackerResultWhereUniqueInput!
+  ): MarketingTrackerResult
+  deleteMarketingTrackerResults(
+    where: [MarketingTrackerResultWhereUniqueInput!]!
+  ): [MarketingTrackerResult]
   endSession: Boolean!
   authenticateUserWithPassword(
     email: String!
@@ -2600,6 +3278,52 @@ type Query {
   ): [Holder!]
   holder(where: HolderWhereUniqueInput!): Holder
   holdersCount(where: HolderWhereInput! = {}): Int
+  creators(
+    where: CreatorWhereInput! = {}
+    orderBy: [CreatorOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Creator!]
+  creator(where: CreatorWhereUniqueInput!): Creator
+  creatorsCount(where: CreatorWhereInput! = {}): Int
+  creatorRatings(
+    where: CreatorRatingWhereInput! = {}
+    orderBy: [CreatorRatingOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [CreatorRating!]
+  creatorRating(where: CreatorRatingWhereUniqueInput!): CreatorRating
+  creatorRatingsCount(where: CreatorRatingWhereInput! = {}): Int
+  creatorReviews(
+    where: CreatorReviewWhereInput! = {}
+    orderBy: [CreatorReviewOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [CreatorReview!]
+  creatorReview(where: CreatorReviewWhereUniqueInput!): CreatorReview
+  creatorReviewsCount(where: CreatorReviewWhereInput! = {}): Int
+  marketingCampaigns(
+    where: MarketingCampaignWhereInput! = {}
+    orderBy: [MarketingCampaignOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [MarketingCampaign!]
+  marketingCampaign(
+    where: MarketingCampaignWhereUniqueInput!
+  ): MarketingCampaign
+  marketingCampaignsCount(where: MarketingCampaignWhereInput! = {}): Int
+  marketingTrackerResults(
+    where: MarketingTrackerResultWhereInput! = {}
+    orderBy: [MarketingTrackerResultOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [MarketingTrackerResult!]
+  marketingTrackerResult(
+    where: MarketingTrackerResultWhereUniqueInput!
+  ): MarketingTrackerResult
+  marketingTrackerResultsCount(
+    where: MarketingTrackerResultWhereInput! = {}
+  ): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(

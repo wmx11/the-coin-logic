@@ -2,14 +2,14 @@ import { Badge } from '@mantine/core';
 import React, { FC } from 'react';
 import { BiTimeFive } from 'react-icons/bi';
 import { BsCheck } from 'react-icons/bs';
-import { MdOutlineCancel } from 'react-icons/md';
+import { MdDoneAll, MdOutlineCancel } from 'react-icons/md';
 import { RiDraftFill } from 'react-icons/ri';
 
-type PaymentStatusProps = {
+type StatusPillProps = {
   status: string;
 };
 
-const PaymentStatus: FC<PaymentStatusProps> = ({ status }) => {
+const StatusPill: FC<StatusPillProps> = ({ status }) => {
   if (!status) {
     return null;
   }
@@ -22,9 +22,12 @@ const PaymentStatus: FC<PaymentStatusProps> = ({ status }) => {
         return { color: 'orange', label: 'Pending', icon: <BiTimeFive /> };
       case 'canceled':
         return { color: 'red', label: 'Canceled', icon: <MdOutlineCancel /> };
-
       case 'draft':
         return { color: 'violet', label: 'Draft', icon: <RiDraftFill /> };
+      case 'active':
+        return { color: 'green', label: 'Active', icon: <BsCheck /> };
+      case 'completed':
+        return { color: 'blue', label: 'Done', icon: <MdDoneAll /> };
       default:
         return { color: 'gray', label: 'n/a', icon: '' };
     }
@@ -39,4 +42,4 @@ const PaymentStatus: FC<PaymentStatusProps> = ({ status }) => {
   );
 };
 
-export default PaymentStatus;
+export default StatusPill;

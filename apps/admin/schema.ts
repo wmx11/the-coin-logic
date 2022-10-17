@@ -20,6 +20,11 @@ import {
   Image,
   Holders,
   CustomTracker,
+  Creator,
+  CreatorRating,
+  CreatorReview,
+  MarketingCampaign,
+  MarketingTrackerResult,
 } from './schemas';
 
 export const lists: Lists = {
@@ -42,4 +47,9 @@ export const lists: Lists = {
   ...ContentType,
   ...Image,
   ...Holders,
+  ...Creator,
+  ...CreatorRating,
+  ...CreatorReview,
+  ...MarketingCampaign,
+  ...MarketingTrackerResult,
 };

@@ -11,14 +11,14 @@ import { Trend } from '../Trend';
 
 type StatTabProps = {
   title?: string;
-  value?: number;
+  value?: number | number[];
   isCurrency?: boolean;
   tooltip?: string;
   chartEntry?: string;
   slug?: string;
   section?: '' | 'marketData' | 'holdersData' | 'socialMediaData';
   id?: string;
-  previousValue: PreviousValueTypes;
+  previousValue?: PreviousValueTypes;
 };
 
 const StatTab: FC<StatTabProps> = ({
@@ -60,6 +60,21 @@ const StatTab: FC<StatTabProps> = ({
     chartStore.setCompareChartData(data.marketStats);
   };
 
+  const getTabValue = () => {
+    if (Array.isArray(value)) {
+      return value.map((item, index) => {
+        const color = index > 0 && item > value[0] ? 'text-green-500' : 'text-red-500';
+        return (
+          <div className={index === 0 ? 'text-violet' : color}>
+            {isCurrency ? toCurrency(item) : toLocaleString(item)}
+          </div>
+        );
+      });
+    }
+
+    return isCurrency ? toCurrency(value) : toLocaleString(value);
+  };
+
   return (
     <Paper
       p="md"
@@ -69,45 +84,50 @@ const StatTab: FC<StatTabProps> = ({
     >
       <Text className="text-slate-500 font-semibold text-sm">{title}</Text>
       <Text weight={700} className="text-2xl mb-1">
-        {isCurrency ? toCurrency(value) : toLocaleString(value)}
+        {getTabValue()}
       </Text>
-      <Trend previousValue={previousValue} />
+      {previousValue && <Trend previousValue={previousValue} />}
       <div className="absolute bottom-1 left-0 right-0 px-2 flex justify-between items-center w-full">
-        <div className="cursor-pointer">
-          <Popover
-            opened={opened}
-            onClose={() => setOpened(false)}
-            width={150}
-            withArrow
-            position="top"
-            withCloseButton
-            shadow="md"
-            target={<FaInfoCircle onClick={() => setOpened(true)} className="text-violet" />}
-          >
-            <Text size="sm" pt="xs">
-              {tooltip}
-            </Text>
-          </Popover>
-        </div>
+        {tooltip && (
+          <div className="cursor-pointer">
+            <Popover opened={opened} onClose={() => setOpened(false)} width={150} withArrow position="top" shadow="md">
+              <Popover.Target>
+                <FaInfoCircle onClick={() => setOpened(true)} className="text-violet" />
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Text size="sm" pt="xs">
+                  {tooltip}
+                </Text>
+              </Popover.Dropdown>
+            </Popover>
+          </div>
+        )}
+
         {chartEntry && (
           <div className="cursor-pointer flex gap-4 md:gap-2 items-center">
             {chartStore.chartData.length === 0 && chartStore.loading ? (
               <Loader color="violet" size={15} />
             ) : (
-              <Tooltip label={`View ${title} chart`} withArrow transition="pop" color="violet" wrapLines={true}>
-                <HiChartSquareBar className="text-violet" onClick={() => handleChartEntry(chartEntry)} size={20} />
-              </Tooltip>
+                null
+              // <Tooltip label={`View ${title} chart`} withArrow transition="pop" color="violet" multiline>
+              //   <div>
+              //     <HiChartSquareBar className="text-violet" onClick={() => handleChartEntry(chartEntry)} size={20} />
+              //   </div>
+              // </Tooltip>
             )}
             {chartStore.chartData.length > 0 && chartStore.chartTitle !== title && (
-              <Tooltip
-                label={`Compare ${chartStore.chartTitle} with ${title} chart`}
-                withArrow
-                transition="pop"
-                color="violet"
-                wrapLines={true}
-              >
-                <MdCompare className="text-violet" onClick={() => handleCompareChartEntry(chartEntry)} size={18} />
-              </Tooltip>
+              null
+              // <Tooltip
+              //   label={`Compare ${chartStore.chartTitle} with ${title} chart`}
+              //   withArrow
+              //   transition="pop"
+              //   color="violet"
+              //   multiline
+              // >
+              //   <div>
+              //     <MdCompare className="text-violet" onClick={() => handleCompareChartEntry(chartEntry)} size={18} />
+              //   </div>
+              // </Tooltip>
             )}
           </div>
         )}

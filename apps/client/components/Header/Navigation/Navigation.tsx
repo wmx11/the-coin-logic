@@ -38,8 +38,8 @@ const Navigation: FC<NavigationProps> = ({ setIsOpen }) => {
         <NavLink href={routes.projects} label="Projects" />
         <NavLink href={routes.services} label="Services" />
         <NavLink href={routes.resources} label="Resources" />
-        <NavLink href={routes.aboutUs} label="About Us" />
-        <NavLink href={routes.roadmap} label="Roadmap" />
+        <NavLink href={routes.aboutUs} label="Articles" />
+        <NavLink href={routes.roadmap} label="TCL Tools" />
         <NavLink href={routes.pricing} label="Pricing" />
       </div>
     </div>

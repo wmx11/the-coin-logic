@@ -1,4 +1,4 @@
-import { getUserById, getUserReferrals } from 'data/getters/user';
+import { getUserById, getUserProjects, getUserReferrals } from 'data/getters/user';
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo, useState } from 'react';
 import { User } from 'types';
@@ -12,9 +12,11 @@ const useUser = () => {
     if (!userId) {
       return null;
     }
+
     const user = await getUserById(session.id as string);
     const userReferrals = await getUserReferrals(user.referralCode);
-    return { ...user, ...userReferrals };
+    const projects = await getUserProjects(user.email);
+    return { ...user, ...userReferrals, projects };
   }, [session]);
 
   useEffect(() => {

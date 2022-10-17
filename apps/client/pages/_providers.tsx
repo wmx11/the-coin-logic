@@ -15,9 +15,9 @@ const ProvidersWrapper: FC<ProvidersWrapperTypes> = ({ children }): React.ReactE
     <GoogleReCaptchaProvider
       reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTHA_KEY as string}
       scriptProps={{
-        async: false, // optional, default to false,
+        async: true, // optional, default to false,
         defer: true, // optional, default to false
-        appendTo: 'head', // optional, default to "head", can be "head" or "body",
+        appendTo: 'body', // optional, default to "head", can be "head" or "body",
         nonce: undefined,
       }}
     >

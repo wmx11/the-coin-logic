@@ -4,7 +4,7 @@ import { signOut } from 'next-auth/react';
 import { FC } from 'react';
 import { FaUserCog } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
-import { MdOutlineAddChart, MdPayments } from 'react-icons/md';
+import { MdOutlineAddChart, MdPayments, MdTrackChanges } from 'react-icons/md';
 import { RiFoldersLine } from 'react-icons/ri';
 
 type UserNavigationLinksProps = {
@@ -33,8 +33,12 @@ const UserNavigationLinks: FC<UserNavigationLinksProps> = ({ isInMenuProvider, s
         My projects
       </MenuNavLink>
 
+      <MenuNavLink href="/profile/marketing-tracker" icon={<MdTrackChanges />} isInMenu={isInMenuProvider} onClick={onClick}>
+        Marketing Tracker
+      </MenuNavLink>
+
       <MenuNavLink href="/profile/payments" icon={<MdPayments />} isInMenu={isInMenuProvider} onClick={onClick}>
-        Payments
+        Invoices
       </MenuNavLink>
 
       <Divider className="my-2" />

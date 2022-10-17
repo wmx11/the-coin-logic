@@ -1,4 +1,5 @@
 import { Center, Divider, Text, Title } from '@mantine/core';
+import TitleWithIcon from 'components/TitleWithIcon';
 import React, { FC } from 'react';
 import { StatsData } from 'types/MarketData';
 import StatTab from '../StatTab';
@@ -75,20 +76,7 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
 
   return (
     <>
-      {title && (
-        <div className={`flex gap-2 items-center ${!subtitle && 'mb-4'}`}>
-          {Icon && <Icon className="text-md" />}
-          <Title order={2}>{title}</Title>
-        </div>
-      )}
-
-      {subtitle && (
-        <Text className="text-slate-500 mb-4 font-semibold" size="xs">
-          {subtitle}
-        </Text>
-      )}
-
-      <Divider my="sm" />
+      <TitleWithIcon title={title} Icon={Icon} subtitle={subtitle} />
       <StatTabsComponent />
     </>
   );

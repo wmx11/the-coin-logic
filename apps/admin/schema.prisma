@@ -13,24 +13,25 @@ generator client {
 }
 
 model User {
-  id                      String    @id @default(cuid())
-  name                    String    @default("")
-  firstName               String    @default("")
-  lastName                String    @default("")
-  email                   String    @unique @default("")
-  roles                   Role[]    @relation("Role_users")
+  id                      String              @id @default(cuid())
+  name                    String              @default("")
+  firstName               String              @default("")
+  lastName                String              @default("")
+  email                   String              @unique @default("")
+  roles                   Role[]              @relation("Role_users")
   password                String
-  isAdmin                 Boolean   @default(false)
-  isSubscribedToEmail     Boolean   @default(false)
-  isNotChargeable         Boolean   @default(false)
-  isVerified              Boolean   @default(true)
+  isAdmin                 Boolean             @default(false)
+  isSubscribedToEmail     Boolean             @default(false)
+  isNotChargeable         Boolean             @default(false)
+  isVerified              Boolean             @default(true)
   subscribedTill          DateTime?
-  referrer                String    @default("")
-  referralCode            String    @default("")
-  walletAddress           String    @default("")
-  projects                Project[] @relation("Project_user")
-  payments                Payment[] @relation("Payment_billedTo")
-  dateCreated             DateTime? @default(now())
+  referrer                String              @default("")
+  referralCode            String              @default("")
+  walletAddress           String              @default("")
+  projects                Project[]           @relation("Project_user")
+  marketingCampaigns      MarketingCampaign[] @relation("MarketingCampaign_users")
+  payments                Payment[]           @relation("Payment_billedTo")
+  dateCreated             DateTime?           @default(now())
   passwordResetToken      String?
   passwordResetIssuedAt   DateTime?
   passwordResetRedeemedAt DateTime?
@@ -70,65 +71,66 @@ model Role {
 }
 
 model Project {
-  id                           String          @id @default(cuid())
-  name                         String          @default("")
-  slug                         String          @default("")
-  logo_filesize                Int?
-  logo_extension               String?
-  logo_width                   Int?
-  logo_height                  Int?
-  logo_id                      String?
-  enabled                      Boolean         @default(false)
-  isListed                     Boolean         @default(false)
-  trackData                    Boolean         @default(false)
-  trackHolders                 Boolean         @default(false)
-  periodicWalletUpdates        Boolean         @default(false)
-  initialized                  Boolean         @default(false)
-  markForDeletion              Boolean         @default(false)
-  useDexScreener               Boolean         @default(false)
-  status                       String?
-  tags                         Tag[]           @relation("Project_tags")
-  contractAddress              String          @default("")
-  pairAddress                  String          @default("")
-  exhangeAddress               String          @default("")
-  burnAddress                  String          @default("0x000000000000000000000000000000000000dead")
-  liquidityPair                LiquidityPair[] @relation("LiquidityPair_project")
-  network                      Network?        @relation("Project_network", fields: [networkId], references: [id])
-  networkId                    String?         @map("network")
-  trackHoldersFromTokenAmount  Float?          @default(0)
-  trackHoldersFromDollarAmount Float?          @default(0)
-  description                  String          @default("")
-  launchDate                   DateTime?
-  launchBlock                  Int?
-  user                         User[]          @relation("Project_user")
-  notifications                Notification[]  @relation("Notification_project")
-  ABI                          Json?
-  customTrackers               CustomTracker[] @relation("CustomTracker_project")
-  sellTax                      Float?
-  buyTax                       Float?
-  rebasePeriod                 String          @default("")
-  apy                          Float?
-  dailyApy                     Float?
-  calendar                     String          @default("")
-  website                      String          @default("")
-  whitepaper                   String          @default("")
-  twitter                      String          @default("")
-  telegram                     String          @default("")
-  discord                      String          @default("")
-  reddit                       String          @default("")
-  youtube                      String          @default("")
-  github                       String          @default("")
-  medium                       String          @default("")
-  dateAdded                    DateTime?       @default(now())
-  parentProject                Project[]       @relation("Project_parentProject")
-  relatedProjects              Project[]       @relation("Project_relatedProjects")
-  from_Project_parentProject   Project[]       @relation("Project_parentProject")
-  from_Project_relatedProjects Project[]       @relation("Project_relatedProjects")
-  from_MarketStat_project      MarketStat[]    @relation("MarketStat_project")
-  from_DiscordBot_project      DiscordBot[]    @relation("DiscordBot_project")
-  from_Block_project           Block[]         @relation("Block_project")
-  from_Transfer_project        Transfer[]      @relation("Transfer_project")
-  from_Holder_projects         Holder[]        @relation("Holder_projects")
+  id                             String              @id @default(cuid())
+  name                           String              @default("")
+  slug                           String              @default("")
+  logo_filesize                  Int?
+  logo_extension                 String?
+  logo_width                     Int?
+  logo_height                    Int?
+  logo_id                        String?
+  enabled                        Boolean             @default(false)
+  isListed                       Boolean             @default(false)
+  trackData                      Boolean             @default(false)
+  trackHolders                   Boolean             @default(false)
+  periodicWalletUpdates          Boolean             @default(false)
+  initialized                    Boolean             @default(false)
+  markForDeletion                Boolean             @default(false)
+  useDexScreener                 Boolean             @default(false)
+  status                         String?
+  tags                           Tag[]               @relation("Project_tags")
+  contractAddress                String              @default("")
+  pairAddress                    String              @default("")
+  exhangeAddress                 String              @default("")
+  burnAddress                    String              @default("0x000000000000000000000000000000000000dead")
+  liquidityPair                  LiquidityPair[]     @relation("LiquidityPair_project")
+  network                        Network?            @relation("Project_network", fields: [networkId], references: [id])
+  networkId                      String?             @map("network")
+  trackHoldersFromTokenAmount    Float?              @default(0)
+  trackHoldersFromDollarAmount   Float?              @default(0)
+  description                    String              @default("")
+  launchDate                     DateTime?
+  launchBlock                    Int?
+  user                           User[]              @relation("Project_user")
+  notifications                  Notification[]      @relation("Notification_project")
+  ABI                            Json?
+  customTrackers                 CustomTracker[]     @relation("CustomTracker_project")
+  sellTax                        Float?
+  buyTax                         Float?
+  rebasePeriod                   String              @default("")
+  apy                            Float?
+  dailyApy                       Float?
+  calendar                       String              @default("")
+  website                        String              @default("")
+  whitepaper                     String              @default("")
+  twitter                        String              @default("")
+  telegram                       String              @default("")
+  discord                        String              @default("")
+  reddit                         String              @default("")
+  youtube                        String              @default("")
+  github                         String              @default("")
+  medium                         String              @default("")
+  dateAdded                      DateTime?           @default(now())
+  parentProject                  Project[]           @relation("Project_parentProject")
+  relatedProjects                Project[]           @relation("Project_relatedProjects")
+  from_Project_parentProject     Project[]           @relation("Project_parentProject")
+  from_Project_relatedProjects   Project[]           @relation("Project_relatedProjects")
+  from_MarketStat_project        MarketStat[]        @relation("MarketStat_project")
+  from_DiscordBot_project        DiscordBot[]        @relation("DiscordBot_project")
+  from_Block_project             Block[]             @relation("Block_project")
+  from_Transfer_project          Transfer[]          @relation("Transfer_project")
+  from_Holder_projects           Holder[]            @relation("Holder_projects")
+  from_MarketingCampaign_project MarketingCampaign[] @relation("MarketingCampaign_project")
 
   @@index([networkId])
 }
@@ -398,4 +400,111 @@ model Holder {
 
   @@index([address])
   @@index([dateAdded])
+}
+
+model Creator {
+  id                 String              @id @default(cuid())
+  name               String              @default("")
+  slug               String              @default("")
+  enabled            Boolean             @default(false)
+  isListed           Boolean             @default(false)
+  nickname           String              @default("")
+  image_filesize     Int?
+  image_extension    String?
+  image_width        Int?
+  image_height       Int?
+  image_id           String?
+  description        String              @default("")
+  website            String              @default("")
+  twitter            String              @default("")
+  telegram           String              @default("")
+  discord            String              @default("")
+  reddit             String              @default("")
+  youtube            String              @default("")
+  priceFrom          Float?
+  priceTo            Float?
+  marketingCampaigns MarketingCampaign[] @relation("MarketingCampaign_creator")
+  ratings            CreatorRating[]     @relation("CreatorRating_creator")
+  reviews            CreatorReview[]     @relation("CreatorReview_creator")
+  dateAdded          DateTime?           @default(now())
+  updatedAt          DateTime?           @updatedAt
+}
+
+model CreatorRating {
+  id        String    @id @default(cuid())
+  rating    Int?      @default(0)
+  creator   Creator?  @relation("CreatorRating_creator", fields: [creatorId], references: [id])
+  creatorId String?   @map("creator")
+  dateAdded DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([creatorId])
+}
+
+model CreatorReview {
+  id        String    @id @default(cuid())
+  review    String    @default("")
+  creator   Creator?  @relation("CreatorReview_creator", fields: [creatorId], references: [id])
+  creatorId String?   @map("creator")
+  dateAdded DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([creatorId])
+}
+
+model MarketingCampaign {
+  id                                            String                   @id @default(cuid())
+  name                                          String                   @default("")
+  campaignId                                    String                   @default("")
+  users                                         User[]                   @relation("MarketingCampaign_users")
+  status                                        String?
+  enabled                                       Boolean                  @default(false)
+  isPercentage                                  Boolean                  @default(false)
+  isInternal                                    Boolean                  @default(false)
+  startDate                                     DateTime?                @postgresql.Date
+  endDate                                       DateTime?                @postgresql.Date
+  budget                                        Float?
+  description                                   String                   @default("")
+  notes                                         String                   @default("")
+  agency                                        String                   @default("")
+  agencyUrl                                     String                   @default("")
+  creator                                       Creator?                 @relation("MarketingCampaign_creator", fields: [creatorId], references: [id])
+  creatorId                                     String?                  @map("creator")
+  project                                       Project?                 @relation("MarketingCampaign_project", fields: [projectId], references: [id])
+  projectId                                     String?                  @map("project")
+  marketBudget                                  Float?
+  socialsBudget                                 Float?
+  priceGoal                                     Float?
+  marketCapGoal                                 Float?
+  volumeGoal                                    Float?
+  holdersGoal                                   Float?
+  twitterGoal                                   Float?
+  discordGoal                                   Float?
+  telegramGoal                                  Float?
+  dateAdded                                     DateTime?                @default(now())
+  updatedAt                                     DateTime?                @updatedAt
+  from_MarketingTrackerResult_marketingCampaign MarketingTrackerResult[] @relation("MarketingTrackerResult_marketingCampaign")
+
+  @@index([creatorId])
+  @@index([projectId])
+}
+
+model MarketingTrackerResult {
+  id                  String             @id @default(cuid())
+  referer             String             @default("")
+  ipAddress           String             @default("")
+  userAgent           String             @default("")
+  device              String             @default("")
+  os                  String             @default("")
+  timezone            String             @default("")
+  city                String             @default("")
+  country             String             @default("")
+  countryCode         String             @default("")
+  target              String             @default("")
+  marketingCampaign   MarketingCampaign? @relation("MarketingTrackerResult_marketingCampaign", fields: [marketingCampaignId], references: [id])
+  marketingCampaignId String?            @map("marketingCampaign")
+  dateAdded           DateTime?          @default(now())
+  updatedAt           DateTime?          @updatedAt
+
+  @@index([marketingCampaignId])
 }
