@@ -24,7 +24,7 @@ const SignInContent = () => {
 
   const handleSubmit = async ({ email, password }: UserLogin) => {
     try {
-      const data = await signIn('credentials', { redirect: false, email, password });
+      const data = await signIn('credentials', { redirect: false, email: email.trim().toLowerCase(), password });
       if (data?.status === 401) {
         setErrorMessage(ERROR_MESSAGE);
       }
