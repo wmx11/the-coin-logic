@@ -40,7 +40,13 @@ const SignUpModalForm = () => {
       }
 
       await registeruser({
-        variables: { name: username, email, password, referrer, isSubscribedToEmail: subscribeToEmail },
+        variables: {
+          name: username.trim(),
+          email: email.trim().toLowerCase(),
+          password,
+          referrer,
+          isSubscribedToEmail: subscribeToEmail,
+        },
       });
 
       setSuccess(true);
