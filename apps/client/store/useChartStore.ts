@@ -1,6 +1,6 @@
 import create from 'zustand';
 
-type ChartData = {
+export type ChartData = {
   date: string;
   value: string;
 };
@@ -11,7 +11,7 @@ type ChartDataStore = {
   compareChartData: ChartData[];
   chartTitle: string;
   compareChartTitle: string;
-  chartSection: string | 'marketData' | 'holdersData';
+  chartSection: string | 'marketData' | 'holdersData' | 'socialMediaData';
   network: string;
   pairAddress: string;
   setLoading: (loading: boolean) => void;
