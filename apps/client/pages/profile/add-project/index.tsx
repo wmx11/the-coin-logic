@@ -1,20 +1,30 @@
 import AddProject from 'components/pages/profile/AddProject';
 import UserLayout from 'components/pages/profile/ProfileLayout';
-import { TextContentProps } from 'components/TextContent/TextContent';
-import { getContentByBlock } from 'data/getters';
+import prisma from 'data/prisma';
 import { ReactElement } from 'react';
+import { Network } from 'types';
 
-function AddProjectPage({ content }: TextContentProps) {
-  return <AddProject content={content} />;
-}
+type AddProjectPageProps = {
+  networks: Network[];
+};
+
+const AddProjectPage = ({ networks }: AddProjectPageProps) => {
+  return <AddProject networks={networks} />;
+};
 
 export default AddProjectPage;
 
 export const getServerSideProps = async () => {
-  const content = await getContentByBlock('add-project-block');
+  const networks = await prisma.network.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+
   return {
     props: {
-      content,
+      networks: networks,
     },
   };
 };

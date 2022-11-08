@@ -1,10 +1,11 @@
 import MarketingTracker from 'components/pages/profile/MarketingTracker';
+import UserLayout from 'components/pages/profile/ProfileLayout';
 import { getUserMarketingCampaigns } from 'data/getters/user';
 import useUser from 'hooks/useUser';
-import { useCallback, useEffect, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 
 const MarketingTrackerIndex = () => {
-  const { user, session, status } = useUser();
+  const { user, session } = useUser();
   const [marketingCampaigns, setMarketingCampaigns] = useState([]);
 
   const getMarketingCampaigns = useCallback(async () => {
@@ -23,3 +24,7 @@ const MarketingTrackerIndex = () => {
 };
 
 export default MarketingTrackerIndex;
+
+MarketingTrackerIndex.getLayout = function getLayout(page: ReactElement) {
+  return <UserLayout>{page}</UserLayout>;
+};

@@ -1,8 +1,13 @@
+import HasSubscriptionProvider from 'components/HasSubscriptionProvider';
 import CreateCampaign from 'components/pages/profile/Campaign/CreateCampaign';
-import React from 'react';
+import { hasMarketingTrackerSubscription } from 'utils/utils';
 
 const create = () => {
-  return <CreateCampaign />;
+  return (
+    <HasSubscriptionProvider subscriptionCheck={hasMarketingTrackerSubscription}>
+      <CreateCampaign />
+    </HasSubscriptionProvider>
+  );
 };
 
 export default create;

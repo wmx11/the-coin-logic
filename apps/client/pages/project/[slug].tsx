@@ -1,14 +1,23 @@
-import { Button, Center, Container, Divider, Paper, Stack, Text } from '@mantine/core';
-import { useScrollIntoView } from '@mantine/hooks';
+import { Center, Container, Text } from '@mantine/core';
+import axios from 'axios';
+import GradientButton from 'components/Buttons/GradientButton';
 import AreaChartGroup from 'components/Charts/AreaChartGroup';
 import Meta from 'components/Meta';
 import NotificationBar from 'components/NotificationBar';
+import AuditsAndKyc from 'components/pages/project/AuditsAndKyc';
 import Events from 'components/pages/project/Events';
 import Markets from 'components/pages/project/Markets';
 import RelatedProjects from 'components/pages/project/RelatedProjects';
+import SocialAnalysisData from 'components/pages/project/SocialAnalysisData';
 import TransactionVolume from 'components/pages/project/TransactionVolume';
 import withRedisCache from 'data/withRedisCache';
+import { GetServerSideProps } from 'next';
+import { unstable_getServerSession } from 'next-auth';
+import { authOptions } from 'pages/api/auth/[...nextauth]';
+import { ProjectRatings } from 'pages/api/project/get-rates';
 import { FC, useEffect } from 'react';
+import { FiExternalLink } from 'react-icons/fi';
+import routes from 'routes';
 import useChartStore from 'store/useChartStore';
 import { Tag } from 'types';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
@@ -23,14 +32,14 @@ import { getProjectAndMarketStatsBySlug } from '../../data/getters';
 
 type ProjectProps = {
   projectData: ProjectWithMarketStatsAndChanges;
+  isRatedToday: boolean;
+  ratings: ProjectRatings;
 };
 
-const project: FC<ProjectProps> = ({ projectData }) => {
+const project: FC<ProjectProps> = ({ projectData, isRatedToday, ratings }) => {
   const chartStore = useChartStore((state) => state);
   const { project } = projectData;
   const { notifications } = project;
-  const { scrollIntoView: scrollMarket, targetRef: targetMarket } = useScrollIntoView<HTMLDivElement>({ offset: 60 });
-  const { scrollIntoView: scrollHolders, targetRef: targetHolders } = useScrollIntoView<HTMLDivElement>({ offset: 60 });
 
   if (!project) {
     return (
@@ -55,47 +64,64 @@ const project: FC<ProjectProps> = ({ projectData }) => {
       <div className="bg-zinc-50">
         <Container className="py-10">
           {notifications && (
-            <div className="sticky top-[90px] z-[1]">
+            <div className="sticky top-[10px] z-[1]">
               {notifications?.map((notification, index) => (
                 <NotificationBar notification={notification} key={`notification_${index}`} />
               ))}
             </div>
           )}
 
-          <Paper p="md" shadow="sm" withBorder className="w-full flex flex-wrap gap-4 mb-4 items-center">
-            <div className="md:max-w-[320px] w-full md:border-r mr-4">
-              <ProjectTitle title={project.name as string} size="md" avatar={project.logo ? project.logo.url : ''} />
-              <div>
-                <Text color="dimmed" size="xs" className="mb-2">
-                  Tags:
-                </Text>
-                <Badges badges={project.tags as Tag[]} />
+          <div className="w-full flex flex-wrap gap-4 mb-4 items-start justify-between">
+            <div>
+              <div className="w-full mb-4">
+                <ProjectTitle title={project.name as string} size="md" avatar={project.logo ? project.logo.url : ''} />
+                <div>
+                  <Text color="dimmed" size="xs" className="mb-2">
+                    Tags:
+                  </Text>
+                  <Badges isLimited={false} badges={project.tags as Tag[]} />
+                </div>
               </div>
-            </div>
-            <div className="w-full md:w-auto">
-              <Stack>
-                <Button color="violet" variant="outline" onClick={() => scrollMarket({ alignment: 'center' })}>
-                  View Market Data
-                </Button>
-                <Button color="violet" variant="outline" onClick={() => scrollHolders({ alignment: 'center' })}>
-                  View Holders Data
-                </Button>
-              </Stack>
-            </div>
-          </Paper>
 
-          <RelatedProjects data={projectData} />
+              <div className="flex gap-2 w-full md:w-auto">
+                <GradientButton
+                  component="a"
+                  href={project.website as string}
+                  target="_blank"
+                  rightIcon={<FiExternalLink />}
+                >
+                  Website
+                </GradientButton>
+                <GradientButton
+                  component="a"
+                  href={project.whitepaper as string}
+                  target="_blank"
+                  rightIcon={<FiExternalLink />}
+                >
+                  Whitepaper
+                </GradientButton>
+              </div>
+
+              {projectData.relatedProjects ? (
+                <div className="my-8">
+                  <RelatedProjects data={projectData} />
+                </div>
+              ) : null}
+            </div>
+
+            <div className="">
+              <AuditsAndKyc project={project} />
+            </div>
+          </div>
 
           <div className="mb-4">
             <div className={`flex gap-4 flex-wrap md:flex-nowrap md:justify-between`}>
               <div className={`w-full md:w-[66%]`}>
-                <AboutProject data={project} />
+                <AboutProject data={project} isRatedToday={isRatedToday} ratings={ratings} />
               </div>
-              <div className={`w-full md:w-[34%]`}>
+              <div className="w-full md:w-[34%] flex flex-col gap-4">
                 <Markets data={project} />
-                <div className="mt-4">
-                  <Events data={project} />
-                </div>
+                <Events data={project} />
               </div>
             </div>
           </div>
@@ -107,17 +133,20 @@ const project: FC<ProjectProps> = ({ projectData }) => {
           <TransactionVolume data={projectData} />
         </div>
 
-        <div className="my-16" ref={targetMarket}>
+        <div className="my-16">
           <MarketData data={projectData} />
           <div className="my-4">{chartStore.chartSection === 'marketData' && <AreaChartGroup />}</div>
         </div>
 
-        <div className="mb-16" ref={targetHolders}>
+        <div className="mb-16">
           <HoldersData data={projectData} />
           <div className="my-4">{chartStore.chartSection === 'holdersData' && <AreaChartGroup />}</div>
         </div>
 
-        <Divider />
+        <div className="mb-16">
+          <SocialAnalysisData data={projectData} />
+          <div className="my-4">{chartStore.chartSection === 'socialMediaData' && <AreaChartGroup />}</div>
+        </div>
 
         <TrackVitalsDisclaimer />
       </Container>
@@ -127,19 +156,36 @@ const project: FC<ProjectProps> = ({ projectData }) => {
 
 export default project;
 
-type Params = {
-  params: {
-    slug: string;
-  };
-};
+export const getServerSideProps: GetServerSideProps = async ({ req, res, params }) => {
+  const slug = params?.slug;
 
-export const getServerSideProps = async ({ params }: Params) => {
-  const slug = params.slug;
-  const projectData = await withRedisCache(`projectData_${slug}`, () => getProjectAndMarketStatsBySlug(slug));
+  const session = await unstable_getServerSession(req, res, authOptions);
+
+  const projectData = await withRedisCache(`projectData_${slug}`, () => getProjectAndMarketStatsBySlug(slug as string));
+
+  if (!projectData) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  const { data } = await axios.post(routes.api.project.rateCheck, {
+    project: projectData.project,
+    user: session,
+  });
+
+  const { data: rates } = await axios.post(routes.api.project.getRates, {
+    project: projectData.project,
+  });
 
   return {
     props: {
       projectData,
+      isRatedToday: data.isRatedToday,
+      ratings: rates.ratings,
     },
   };
 };
