@@ -1,0 +1,1 @@
+export const MARKET_STATS_SNAPSHOT_AVERAGE_DAYS = 7;
