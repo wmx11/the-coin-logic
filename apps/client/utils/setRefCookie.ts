@@ -1,3 +1,4 @@
+import { REF_COOKIE_NAME } from 'constants/general';
 import { ServerResponse } from 'http';
 
 type SetRefCookie = {
@@ -17,7 +18,7 @@ const setRefCookie = ({ query, res }: SetRefCookie) => {
 
   const maxAge = DAYS * 24 * 60 * 60;
 
-  res.setHeader('set-cookie', `tcl_ref=${query.ref}; max-age=${maxAge}; path=/;`);
+  res.setHeader('set-cookie', `${REF_COOKIE_NAME}=${query.ref}; max-age=${maxAge}; path=/;`);
 };
 
 export default setRefCookie;
