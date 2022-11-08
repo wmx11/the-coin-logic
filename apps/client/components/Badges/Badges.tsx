@@ -4,18 +4,19 @@ import { Tag } from 'types';
 
 type BadgesProps = {
   badges: Tag[];
+  isLimited?: boolean;
 };
 
-const Badges: FC<BadgesProps> = ({ badges }) => {
+const Badges: FC<BadgesProps> = ({ badges, isLimited = true}) => {
   if (!badges) {
     return null;
   }
 
-  if (badges.length > 2) {
+  if (isLimited && badges.length > 2) {
     return (
       <Tooltip
         withArrow
-        styles={{ body: { maxWidth: 180 } }}
+        styles={{ tooltip: { maxWidth: 180 } }}
         label={
           <Group spacing="xs" position="center">
             {badges.map(({ name }, index: number) => {

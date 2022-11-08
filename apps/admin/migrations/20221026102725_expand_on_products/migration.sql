@@ -1,0 +1,10 @@
+-- AlterTable
+ALTER TABLE "CartItem" ADD COLUMN     "tax" DOUBLE PRECISION;
+
+-- AlterTable
+ALTER TABLE "Product" ADD COLUMN     "enabled" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "label" TEXT NOT NULL DEFAULT E'',
+ADD COLUMN     "offers" TEXT NOT NULL DEFAULT E'',
+ADD COLUMN     "priceLabel" TEXT NOT NULL DEFAULT E'',
+ADD COLUMN     "sku" TEXT NOT NULL DEFAULT E'',
+ADD COLUMN     "styles" JSONB;

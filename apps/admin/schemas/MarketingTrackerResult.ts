@@ -1,11 +1,18 @@
 import { Lists } from '.keystone/types';
 import { graphql, list } from '@keystone-6/core';
 import { relationship, text, timestamp, virtual } from '@keystone-6/core/fields';
+import { CacheScope } from 'apollo-cache-control';
 
 const socials = ['website', 'whitepaper', 'twitter', 'telegram', 'discord', 'reddit', 'youtube', 'medium', 'exchange'];
 
 const MarketingTrackerResult: Lists = {
   MarketingTrackerResult: list({
+    graphql: {
+      cacheHint: {
+        maxAge: 5 * 60,
+        scope: CacheScope.Public,
+      },
+    },
     fields: {
       referer: text(),
       ipAddress: text(),
@@ -17,8 +24,8 @@ const MarketingTrackerResult: Lists = {
       country: text(),
       countryCode: text(),
       target: text(),
-      marketingCampaign: relationship({ ref: 'MarketingCampaign' }),
-      dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
+      marketingCampaign: relationship({ ref: 'MarketingCampaign', db: { foreignKey: true } }),
+      dateAdded: timestamp({ defaultValue: { kind: 'now' }, isIndexed: true }),
       updatedAt: timestamp({
         db: {
           updatedAt: true,

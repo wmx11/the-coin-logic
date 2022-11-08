@@ -5,7 +5,7 @@ import { checkbox, float, integer, relationship, text, timestamp } from '@keysto
 const Holders: Lists = {
   Block: list({
     fields: {
-      project: relationship({ ref: 'Project' }),
+      project: relationship({ ref: 'Project', db: { foreignKey: true } }),
       firstBlock: integer({ defaultValue: 0 }),
       previousBlock: integer({ defaultValue: 0 }),
       lastBlock: integer({ defaultValue: 0 }),
@@ -19,7 +19,7 @@ const Holders: Lists = {
   }),
   Transfer: list({
     fields: {
-      project: relationship({ ref: 'Project' }),
+      project: relationship({ ref: 'Project', db: { foreignKey: true } }),
       amount: float({ defaultValue: 0 }),
       type: integer(),
       address: text(),

@@ -11,6 +11,7 @@ const CreatorRating: Lists = {
           max: 5,
         },
       }),
+      user: relationship({ ref: 'User' }),
       creator: relationship({ ref: 'Creator.ratings' }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
       updatedAt: timestamp({

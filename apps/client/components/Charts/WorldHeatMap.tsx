@@ -1,9 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts/highmaps';
 import HighchartsExporting from 'highcharts/modules/exporting';
-import HighchartsReact from 'highcharts-react-official';
+import { useCallback, useEffect, useState } from 'react';
 
-const WorldMapBubbleChart = (data) => {
+type WorldHeatMapProps<T> = {
+  data: T[];
+  title: string;
+  subtitle?: string;
+  tooltip?: string | Record<string, string>;
+};
+
+const WorldHeatMap = <T,>({ data, title, subtitle, tooltip }: WorldHeatMapProps<T>) => {
   if (typeof Highcharts === 'object') {
     HighchartsExporting(Highcharts);
   }
@@ -32,44 +39,51 @@ const WorldMapBubbleChart = (data) => {
 
   const options = {
     chart: {
-      borderWidth: 1,
       map: topology,
+      borderWidth: 0,
+      height: 800,
     },
-
+    colors: ['#7950f2'],
     title: {
-      text: 'Traffic locations by number of clicks',
+      text: title,
     },
 
     subtitle: {
-      text: 'Explore the traffic locations with the most clicks.',
+      text: subtitle,
     },
 
     legend: {
-      enabled: false,
+      enabled: true,
     },
 
     mapNavigation: {
       enabled: true,
-      buttonOptions: {
-        verticalAlign: 'bottom',
-      },
+      enableDoubleClickZoomTo: true,
+    },
+
+    colorAxis: {
+      min: 1,
+      max: 10000,
+      type: 'logarithmic',
     },
 
     series: [
       {
         name: 'Countries',
-        color: '#E0E0E0',
-        enableMouseTracking: false,
+        color: '#7950f2',
       },
       {
-        type: 'mapbubble',
+        data,
         name: 'Clicks',
         joinBy: ['iso-a2', 'code'],
-        data: data.data,
-        minSize: 4,
-        maxSize: '10%',
+        states: {
+          hover: {
+            color: '#17153A',
+          },
+        },
         tooltip: {
-          pointFormat: '{point.country}: {point.z} Clicks',
+          // pointFormat: '{point.country}: {point.z} Clicks',
+          pointFormat: tooltip,
         },
       },
     ],
@@ -82,4 +96,4 @@ const WorldMapBubbleChart = (data) => {
   );
 };
 
-export default WorldMapBubbleChart;
+export default WorldHeatMap;

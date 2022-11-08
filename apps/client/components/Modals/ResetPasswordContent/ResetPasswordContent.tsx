@@ -1,6 +1,7 @@
 import { DocumentNode, useMutation } from '@apollo/client';
-import { Button, PasswordInput, Stack, Text } from '@mantine/core';
+import { PasswordInput, Stack, Text } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
+import GradientButton from 'components/Buttons/GradientButton';
 import ErrorMessage from 'components/ErrorMessage';
 import { RESET_PASSWORD_WITH_TOKEN } from 'data/mutations';
 import useResetToken from 'hooks/useResetToken';
@@ -85,9 +86,9 @@ const ResetPasswordContent = () => {
           withAsterisk
         />
 
-        <Button type="submit" color="violet" size="md" loading={loading} disabled={!!data || !!error}>
+        <GradientButton type="submit" size="md" loading={loading} disabled={!!data || !!error}>
           Change Password
-        </Button>
+        </GradientButton>
       </Stack>
     </form>
   );

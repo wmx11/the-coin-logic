@@ -7,6 +7,7 @@ type User {
   firstName: String
   lastName: String
   email: String
+  ip: String
   roles(
     where: RoleWhereInput! = {}
     orderBy: [RoleOrderByInput!]! = []
@@ -19,7 +20,7 @@ type User {
   isSubscribedToEmail: Boolean
   isNotChargeable: Boolean
   isVerified: Boolean
-  subscribedTill: DateTime
+  subscription: Subscription
   referrer: String
   referralCode: String
   walletAddress: String
@@ -37,14 +38,8 @@ type User {
     skip: Int! = 0
   ): [MarketingCampaign!]
   marketingCampaignsCount(where: MarketingCampaignWhereInput! = {}): Int
-  payments(
-    where: PaymentWhereInput! = {}
-    orderBy: [PaymentOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Payment!]
-  paymentsCount(where: PaymentWhereInput! = {}): Int
   dateCreated: DateTime
+  subscriptionStatus(userId: ID): subscriptionStatus
   passwordResetToken: PasswordState
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -56,6 +51,13 @@ type PasswordState {
 
 scalar DateTime
   @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
+
+type subscriptionStatus {
+  isValid: Boolean
+  products: JSON
+  dateFrom: DateTime
+  dateTo: DateTime
+}
 
 input UserWhereUniqueInput {
   id: ID
@@ -71,18 +73,18 @@ input UserWhereInput {
   firstName: StringFilter
   lastName: StringFilter
   email: StringFilter
+  ip: StringFilter
   roles: RoleManyRelationFilter
   isAdmin: BooleanFilter
   isSubscribedToEmail: BooleanFilter
   isNotChargeable: BooleanFilter
   isVerified: BooleanFilter
-  subscribedTill: DateTimeNullableFilter
+  subscription: SubscriptionWhereInput
   referrer: StringFilter
   referralCode: StringFilter
   walletAddress: StringFilter
   projects: ProjectManyRelationFilter
   marketingCampaigns: MarketingCampaignManyRelationFilter
-  payments: PaymentManyRelationFilter
   dateCreated: DateTimeNullableFilter
   passwordResetToken: PasswordFilter
   passwordResetIssuedAt: DateTimeNullableFilter
@@ -145,17 +147,6 @@ input BooleanFilter {
   not: BooleanFilter
 }
 
-input DateTimeNullableFilter {
-  equals: DateTime
-  in: [DateTime!]
-  notIn: [DateTime!]
-  lt: DateTime
-  lte: DateTime
-  gt: DateTime
-  gte: DateTime
-  not: DateTimeNullableFilter
-}
-
 input ProjectManyRelationFilter {
   every: ProjectWhereInput
   some: ProjectWhereInput
@@ -168,10 +159,15 @@ input MarketingCampaignManyRelationFilter {
   none: MarketingCampaignWhereInput
 }
 
-input PaymentManyRelationFilter {
-  every: PaymentWhereInput
-  some: PaymentWhereInput
-  none: PaymentWhereInput
+input DateTimeNullableFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: DateTimeNullableFilter
 }
 
 input PasswordFilter {
@@ -184,11 +180,11 @@ input UserOrderByInput {
   firstName: OrderDirection
   lastName: OrderDirection
   email: OrderDirection
+  ip: OrderDirection
   isAdmin: OrderDirection
   isSubscribedToEmail: OrderDirection
   isNotChargeable: OrderDirection
   isVerified: OrderDirection
-  subscribedTill: OrderDirection
   referrer: OrderDirection
   referralCode: OrderDirection
   walletAddress: OrderDirection
@@ -207,19 +203,19 @@ input UserUpdateInput {
   firstName: String
   lastName: String
   email: String
+  ip: String
   roles: RoleRelateToManyForUpdateInput
   password: String
   isAdmin: Boolean
   isSubscribedToEmail: Boolean
   isNotChargeable: Boolean
   isVerified: Boolean
-  subscribedTill: DateTime
+  subscription: SubscriptionRelateToOneForUpdateInput
   referrer: String
   referralCode: String
   walletAddress: String
   projects: ProjectRelateToManyForUpdateInput
   marketingCampaigns: MarketingCampaignRelateToManyForUpdateInput
-  payments: PaymentRelateToManyForUpdateInput
   dateCreated: DateTime
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
@@ -231,6 +227,12 @@ input RoleRelateToManyForUpdateInput {
   set: [RoleWhereUniqueInput!]
   create: [RoleCreateInput!]
   connect: [RoleWhereUniqueInput!]
+}
+
+input SubscriptionRelateToOneForUpdateInput {
+  create: SubscriptionCreateInput
+  connect: SubscriptionWhereUniqueInput
+  disconnect: Boolean
 }
 
 input ProjectRelateToManyForUpdateInput {
@@ -247,13 +249,6 @@ input MarketingCampaignRelateToManyForUpdateInput {
   connect: [MarketingCampaignWhereUniqueInput!]
 }
 
-input PaymentRelateToManyForUpdateInput {
-  disconnect: [PaymentWhereUniqueInput!]
-  set: [PaymentWhereUniqueInput!]
-  create: [PaymentCreateInput!]
-  connect: [PaymentWhereUniqueInput!]
-}
-
 input UserUpdateArgs {
   where: UserWhereUniqueInput!
   data: UserUpdateInput!
@@ -264,19 +259,19 @@ input UserCreateInput {
   firstName: String
   lastName: String
   email: String
+  ip: String
   roles: RoleRelateToManyForCreateInput
   password: String
   isAdmin: Boolean
   isSubscribedToEmail: Boolean
   isNotChargeable: Boolean
   isVerified: Boolean
-  subscribedTill: DateTime
+  subscription: SubscriptionRelateToOneForCreateInput
   referrer: String
   referralCode: String
   walletAddress: String
   projects: ProjectRelateToManyForCreateInput
   marketingCampaigns: MarketingCampaignRelateToManyForCreateInput
-  payments: PaymentRelateToManyForCreateInput
   dateCreated: DateTime
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
@@ -286,6 +281,11 @@ input UserCreateInput {
 input RoleRelateToManyForCreateInput {
   create: [RoleCreateInput!]
   connect: [RoleWhereUniqueInput!]
+}
+
+input SubscriptionRelateToOneForCreateInput {
+  create: SubscriptionCreateInput
+  connect: SubscriptionWhereUniqueInput
 }
 
 input ProjectRelateToManyForCreateInput {
@@ -298,63 +298,165 @@ input MarketingCampaignRelateToManyForCreateInput {
   connect: [MarketingCampaignWhereUniqueInput!]
 }
 
-input PaymentRelateToManyForCreateInput {
-  create: [PaymentCreateInput!]
-  connect: [PaymentWhereUniqueInput!]
-}
-
-type Payment {
+type Subscription {
   id: ID!
-  name: String
-  description: String
-  quantity: Float
-  price: Float
-  discount: Float
-  tax: Float
-  amount: Float
-  billedTo: User
-  paymentMethod: String
-  paymentAddress: String
-  status: String
-  invoiceUrl: String
-  dateIssued: DateTime
-  datePaid: DateTime
+  isActive: Boolean
+  product(
+    where: ProductWhereInput! = {}
+    orderBy: [ProductOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Product!]
+  productCount(where: ProductWhereInput! = {}): Int
+  user: User
+  order: Order
+  dateFrom: DateTime
+  dateTo: DateTime
+  dateAdded: DateTime
+  updatedAt: DateTime
 }
 
-input PaymentWhereUniqueInput {
+input SubscriptionWhereUniqueInput {
   id: ID
 }
 
-input PaymentWhereInput {
-  AND: [PaymentWhereInput!]
-  OR: [PaymentWhereInput!]
-  NOT: [PaymentWhereInput!]
+input SubscriptionWhereInput {
+  AND: [SubscriptionWhereInput!]
+  OR: [SubscriptionWhereInput!]
+  NOT: [SubscriptionWhereInput!]
   id: IDFilter
-  name: StringFilter
-  description: StringFilter
-  quantity: FloatFilter
-  price: FloatFilter
-  discount: FloatNullableFilter
-  tax: FloatNullableFilter
-  amount: FloatFilter
-  billedTo: UserWhereInput
-  paymentMethod: StringFilter
-  paymentAddress: StringFilter
-  status: StringNullableFilter
-  invoiceUrl: StringFilter
-  dateIssued: DateTimeNullableFilter
-  datePaid: DateTimeNullableFilter
+  isActive: BooleanFilter
+  product: ProductManyRelationFilter
+  user: UserWhereInput
+  order: OrderWhereInput
+  dateFrom: DateTimeNullableFilter
+  dateTo: DateTimeNullableFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
 }
 
-input FloatFilter {
-  equals: Float
-  in: [Float!]
-  notIn: [Float!]
-  lt: Float
-  lte: Float
-  gt: Float
-  gte: Float
-  not: FloatFilter
+input ProductManyRelationFilter {
+  every: ProductWhereInput
+  some: ProductWhereInput
+  none: ProductWhereInput
+}
+
+input SubscriptionOrderByInput {
+  id: OrderDirection
+  isActive: OrderDirection
+  dateFrom: OrderDirection
+  dateTo: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input SubscriptionUpdateInput {
+  isActive: Boolean
+  product: ProductRelateToManyForUpdateInput
+  user: UserRelateToOneForUpdateInput
+  order: OrderRelateToOneForUpdateInput
+  dateFrom: DateTime
+  dateTo: DateTime
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ProductRelateToManyForUpdateInput {
+  disconnect: [ProductWhereUniqueInput!]
+  set: [ProductWhereUniqueInput!]
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
+input OrderRelateToOneForUpdateInput {
+  create: OrderCreateInput
+  connect: OrderWhereUniqueInput
+  disconnect: Boolean
+}
+
+input SubscriptionUpdateArgs {
+  where: SubscriptionWhereUniqueInput!
+  data: SubscriptionUpdateInput!
+}
+
+input SubscriptionCreateInput {
+  isActive: Boolean
+  product: ProductRelateToManyForCreateInput
+  user: UserRelateToOneForCreateInput
+  order: OrderRelateToOneForCreateInput
+  dateFrom: DateTime
+  dateTo: DateTime
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ProductRelateToManyForCreateInput {
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input OrderRelateToOneForCreateInput {
+  create: OrderCreateInput
+  connect: OrderWhereUniqueInput
+}
+
+type Product {
+  id: ID!
+  name: String
+  slug: String
+  sku: String
+  enabled: Boolean
+  isForListed: Boolean
+  isForUnlisted: Boolean
+  isOneTime: Boolean
+  isMonthly: Boolean
+  label: String
+  priceLabel: String
+  price: Float
+  discount: Float
+  description: String
+  offers: String
+  styles: JSON
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ProductWhereUniqueInput {
+  id: ID
+}
+
+input ProductWhereInput {
+  AND: [ProductWhereInput!]
+  OR: [ProductWhereInput!]
+  NOT: [ProductWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  slug: StringFilter
+  sku: StringFilter
+  enabled: BooleanFilter
+  isForListed: BooleanFilter
+  isForUnlisted: BooleanFilter
+  isOneTime: BooleanFilter
+  isMonthly: BooleanFilter
+  label: StringFilter
+  priceLabel: StringFilter
+  price: FloatNullableFilter
+  discount: FloatNullableFilter
+  description: StringFilter
+  offers: StringFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
 }
 
 input FloatNullableFilter {
@@ -368,100 +470,69 @@ input FloatNullableFilter {
   not: FloatNullableFilter
 }
 
-input StringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  mode: QueryMode
-  not: NestedStringNullableFilter
-}
-
-input NestedStringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  not: NestedStringNullableFilter
-}
-
-input PaymentOrderByInput {
+input ProductOrderByInput {
   id: OrderDirection
   name: OrderDirection
-  description: OrderDirection
-  quantity: OrderDirection
+  slug: OrderDirection
+  sku: OrderDirection
+  enabled: OrderDirection
+  isForListed: OrderDirection
+  isForUnlisted: OrderDirection
+  isOneTime: OrderDirection
+  isMonthly: OrderDirection
+  label: OrderDirection
+  priceLabel: OrderDirection
   price: OrderDirection
   discount: OrderDirection
-  tax: OrderDirection
-  amount: OrderDirection
-  paymentMethod: OrderDirection
-  paymentAddress: OrderDirection
-  status: OrderDirection
-  invoiceUrl: OrderDirection
-  dateIssued: OrderDirection
-  datePaid: OrderDirection
+  description: OrderDirection
+  offers: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
 }
 
-input PaymentUpdateInput {
+input ProductUpdateInput {
   name: String
-  description: String
-  quantity: Float
+  slug: String
+  sku: String
+  enabled: Boolean
+  isForListed: Boolean
+  isForUnlisted: Boolean
+  isOneTime: Boolean
+  isMonthly: Boolean
+  label: String
+  priceLabel: String
   price: Float
   discount: Float
-  tax: Float
-  amount: Float
-  billedTo: UserRelateToOneForUpdateInput
-  paymentMethod: String
-  paymentAddress: String
-  status: String
-  invoiceUrl: String
-  dateIssued: DateTime
-  datePaid: DateTime
-}
-
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-}
-
-input PaymentUpdateArgs {
-  where: PaymentWhereUniqueInput!
-  data: PaymentUpdateInput!
-}
-
-input PaymentCreateInput {
-  name: String
   description: String
-  quantity: Float
+  offers: String
+  styles: JSON
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ProductUpdateArgs {
+  where: ProductWhereUniqueInput!
+  data: ProductUpdateInput!
+}
+
+input ProductCreateInput {
+  name: String
+  slug: String
+  sku: String
+  enabled: Boolean
+  isForListed: Boolean
+  isForUnlisted: Boolean
+  isOneTime: Boolean
+  isMonthly: Boolean
+  label: String
+  priceLabel: String
   price: Float
   discount: Float
-  tax: Float
-  amount: Float
-  billedTo: UserRelateToOneForCreateInput
-  paymentMethod: String
-  paymentAddress: String
-  status: String
-  invoiceUrl: String
-  dateIssued: DateTime
-  datePaid: DateTime
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
+  description: String
+  offers: String
+  styles: JSON
+  dateAdded: DateTime
+  updatedAt: DateTime
 }
 
 type Role {
@@ -563,8 +634,11 @@ type Project {
   slug: String
   logo: ImageFieldOutput
   enabled: Boolean
+  isPending: Boolean
+  isAwaitingPayment: Boolean
   isListed: Boolean
   trackData: Boolean
+  trackSocials: Boolean
   trackHolders: Boolean
   periodicWalletUpdates: Boolean
   initialized: Boolean
@@ -628,11 +702,42 @@ type Project {
   twitter: String
   telegram: String
   discord: String
+  discordServerId: String
   reddit: String
   youtube: String
   github: String
   medium: String
+  kycLink: String
+  auditLink: String
+  auditBy(
+    where: AuditWhereInput! = {}
+    orderBy: [AuditOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Audit!]
+  auditByCount(where: AuditWhereInput! = {}): Int
+  kycBy(
+    where: KycWhereInput! = {}
+    orderBy: [KycOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Kyc!]
+  kycByCount(where: KycWhereInput! = {}): Int
   dateAdded: DateTime
+  ratings(
+    where: ProjectRatingWhereInput! = {}
+    orderBy: [ProjectRatingOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [ProjectRating!]
+  ratingsCount(where: ProjectRatingWhereInput! = {}): Int
+  reviews(
+    where: ProjectCommentWhereInput! = {}
+    orderBy: [ProjectCommentOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [ProjectComment!]
+  reviewsCount(where: ProjectCommentWhereInput! = {}): Int
   parentProject(
     where: ProjectWhereInput! = {}
     orderBy: [ProjectOrderByInput!]! = []
@@ -677,8 +782,11 @@ input ProjectWhereInput {
   name: StringFilter
   slug: StringFilter
   enabled: BooleanFilter
+  isPending: BooleanFilter
+  isAwaitingPayment: BooleanFilter
   isListed: BooleanFilter
   trackData: BooleanFilter
+  trackSocials: BooleanFilter
   trackHolders: BooleanFilter
   periodicWalletUpdates: BooleanFilter
   initialized: BooleanFilter
@@ -711,13 +819,49 @@ input ProjectWhereInput {
   twitter: StringFilter
   telegram: StringFilter
   discord: StringFilter
+  discordServerId: StringFilter
   reddit: StringFilter
   youtube: StringFilter
   github: StringFilter
   medium: StringFilter
+  kycLink: StringFilter
+  auditLink: StringFilter
+  auditBy: AuditManyRelationFilter
+  kycBy: KycManyRelationFilter
   dateAdded: DateTimeNullableFilter
+  ratings: ProjectRatingManyRelationFilter
+  reviews: ProjectCommentManyRelationFilter
   parentProject: ProjectManyRelationFilter
   relatedProjects: ProjectManyRelationFilter
+}
+
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: NestedStringNullableFilter
+}
+
+input NestedStringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringNullableFilter
 }
 
 input TagManyRelationFilter {
@@ -755,13 +899,40 @@ input CustomTrackerManyRelationFilter {
   none: CustomTrackerWhereInput
 }
 
+input AuditManyRelationFilter {
+  every: AuditWhereInput
+  some: AuditWhereInput
+  none: AuditWhereInput
+}
+
+input KycManyRelationFilter {
+  every: KycWhereInput
+  some: KycWhereInput
+  none: KycWhereInput
+}
+
+input ProjectRatingManyRelationFilter {
+  every: ProjectRatingWhereInput
+  some: ProjectRatingWhereInput
+  none: ProjectRatingWhereInput
+}
+
+input ProjectCommentManyRelationFilter {
+  every: ProjectCommentWhereInput
+  some: ProjectCommentWhereInput
+  none: ProjectCommentWhereInput
+}
+
 input ProjectOrderByInput {
   id: OrderDirection
   name: OrderDirection
   slug: OrderDirection
   enabled: OrderDirection
+  isPending: OrderDirection
+  isAwaitingPayment: OrderDirection
   isListed: OrderDirection
   trackData: OrderDirection
+  trackSocials: OrderDirection
   trackHolders: OrderDirection
   periodicWalletUpdates: OrderDirection
   initialized: OrderDirection
@@ -788,10 +959,13 @@ input ProjectOrderByInput {
   twitter: OrderDirection
   telegram: OrderDirection
   discord: OrderDirection
+  discordServerId: OrderDirection
   reddit: OrderDirection
   youtube: OrderDirection
   github: OrderDirection
   medium: OrderDirection
+  kycLink: OrderDirection
+  auditLink: OrderDirection
   dateAdded: OrderDirection
 }
 
@@ -800,8 +974,11 @@ input ProjectUpdateInput {
   slug: String
   logo: ImageFieldInput
   enabled: Boolean
+  isPending: Boolean
+  isAwaitingPayment: Boolean
   isListed: Boolean
   trackData: Boolean
+  trackSocials: Boolean
   trackHolders: Boolean
   periodicWalletUpdates: Boolean
   initialized: Boolean
@@ -835,11 +1012,18 @@ input ProjectUpdateInput {
   twitter: String
   telegram: String
   discord: String
+  discordServerId: String
   reddit: String
   youtube: String
   github: String
   medium: String
+  kycLink: String
+  auditLink: String
+  auditBy: AuditRelateToManyForUpdateInput
+  kycBy: KycRelateToManyForUpdateInput
   dateAdded: DateTime
+  ratings: ProjectRatingRelateToManyForUpdateInput
+  reviews: ProjectCommentRelateToManyForUpdateInput
   parentProject: ProjectRelateToManyForUpdateInput
   relatedProjects: ProjectRelateToManyForUpdateInput
 }
@@ -887,6 +1071,34 @@ input CustomTrackerRelateToManyForUpdateInput {
   connect: [CustomTrackerWhereUniqueInput!]
 }
 
+input AuditRelateToManyForUpdateInput {
+  disconnect: [AuditWhereUniqueInput!]
+  set: [AuditWhereUniqueInput!]
+  create: [AuditCreateInput!]
+  connect: [AuditWhereUniqueInput!]
+}
+
+input KycRelateToManyForUpdateInput {
+  disconnect: [KycWhereUniqueInput!]
+  set: [KycWhereUniqueInput!]
+  create: [KycCreateInput!]
+  connect: [KycWhereUniqueInput!]
+}
+
+input ProjectRatingRelateToManyForUpdateInput {
+  disconnect: [ProjectRatingWhereUniqueInput!]
+  set: [ProjectRatingWhereUniqueInput!]
+  create: [ProjectRatingCreateInput!]
+  connect: [ProjectRatingWhereUniqueInput!]
+}
+
+input ProjectCommentRelateToManyForUpdateInput {
+  disconnect: [ProjectCommentWhereUniqueInput!]
+  set: [ProjectCommentWhereUniqueInput!]
+  create: [ProjectCommentCreateInput!]
+  connect: [ProjectCommentWhereUniqueInput!]
+}
+
 input ProjectUpdateArgs {
   where: ProjectWhereUniqueInput!
   data: ProjectUpdateInput!
@@ -897,8 +1109,11 @@ input ProjectCreateInput {
   slug: String
   logo: ImageFieldInput
   enabled: Boolean
+  isPending: Boolean
+  isAwaitingPayment: Boolean
   isListed: Boolean
   trackData: Boolean
+  trackSocials: Boolean
   trackHolders: Boolean
   periodicWalletUpdates: Boolean
   initialized: Boolean
@@ -932,11 +1147,18 @@ input ProjectCreateInput {
   twitter: String
   telegram: String
   discord: String
+  discordServerId: String
   reddit: String
   youtube: String
   github: String
   medium: String
+  kycLink: String
+  auditLink: String
+  auditBy: AuditRelateToManyForCreateInput
+  kycBy: KycRelateToManyForCreateInput
   dateAdded: DateTime
+  ratings: ProjectRatingRelateToManyForCreateInput
+  reviews: ProjectCommentRelateToManyForCreateInput
   parentProject: ProjectRelateToManyForCreateInput
   relatedProjects: ProjectRelateToManyForCreateInput
 }
@@ -964,6 +1186,145 @@ input NotificationRelateToManyForCreateInput {
 input CustomTrackerRelateToManyForCreateInput {
   create: [CustomTrackerCreateInput!]
   connect: [CustomTrackerWhereUniqueInput!]
+}
+
+input AuditRelateToManyForCreateInput {
+  create: [AuditCreateInput!]
+  connect: [AuditWhereUniqueInput!]
+}
+
+input KycRelateToManyForCreateInput {
+  create: [KycCreateInput!]
+  connect: [KycWhereUniqueInput!]
+}
+
+input ProjectRatingRelateToManyForCreateInput {
+  create: [ProjectRatingCreateInput!]
+  connect: [ProjectRatingWhereUniqueInput!]
+}
+
+input ProjectCommentRelateToManyForCreateInput {
+  create: [ProjectCommentCreateInput!]
+  connect: [ProjectCommentWhereUniqueInput!]
+}
+
+type Audit {
+  id: ID!
+  project: Project
+  auditor: Auditor
+  url: String
+}
+
+input AuditWhereUniqueInput {
+  id: ID
+}
+
+input AuditWhereInput {
+  AND: [AuditWhereInput!]
+  OR: [AuditWhereInput!]
+  NOT: [AuditWhereInput!]
+  id: IDFilter
+  project: ProjectWhereInput
+  auditor: AuditorWhereInput
+  url: StringFilter
+}
+
+input AuditOrderByInput {
+  id: OrderDirection
+  url: OrderDirection
+}
+
+input AuditUpdateInput {
+  project: ProjectRelateToOneForUpdateInput
+  auditor: AuditorRelateToOneForUpdateInput
+  url: String
+}
+
+input ProjectRelateToOneForUpdateInput {
+  create: ProjectCreateInput
+  connect: ProjectWhereUniqueInput
+  disconnect: Boolean
+}
+
+input AuditorRelateToOneForUpdateInput {
+  create: AuditorCreateInput
+  connect: AuditorWhereUniqueInput
+  disconnect: Boolean
+}
+
+input AuditUpdateArgs {
+  where: AuditWhereUniqueInput!
+  data: AuditUpdateInput!
+}
+
+input AuditCreateInput {
+  project: ProjectRelateToOneForCreateInput
+  auditor: AuditorRelateToOneForCreateInput
+  url: String
+}
+
+input ProjectRelateToOneForCreateInput {
+  create: ProjectCreateInput
+  connect: ProjectWhereUniqueInput
+}
+
+input AuditorRelateToOneForCreateInput {
+  create: AuditorCreateInput
+  connect: AuditorWhereUniqueInput
+}
+
+type Kyc {
+  id: ID!
+  project: Project
+  kycGroup: KycGroup
+  url: String
+}
+
+input KycWhereUniqueInput {
+  id: ID
+}
+
+input KycWhereInput {
+  AND: [KycWhereInput!]
+  OR: [KycWhereInput!]
+  NOT: [KycWhereInput!]
+  id: IDFilter
+  project: ProjectWhereInput
+  kycGroup: KycGroupWhereInput
+  url: StringFilter
+}
+
+input KycOrderByInput {
+  id: OrderDirection
+  url: OrderDirection
+}
+
+input KycUpdateInput {
+  project: ProjectRelateToOneForUpdateInput
+  kycGroup: KycGroupRelateToOneForUpdateInput
+  url: String
+}
+
+input KycGroupRelateToOneForUpdateInput {
+  create: KycGroupCreateInput
+  connect: KycGroupWhereUniqueInput
+  disconnect: Boolean
+}
+
+input KycUpdateArgs {
+  where: KycWhereUniqueInput!
+  data: KycUpdateInput!
+}
+
+input KycCreateInput {
+  project: ProjectRelateToOneForCreateInput
+  kycGroup: KycGroupRelateToOneForCreateInput
+  url: String
+}
+
+input KycGroupRelateToOneForCreateInput {
+  create: KycGroupCreateInput
+  connect: KycGroupWhereUniqueInput
 }
 
 type Notification {
@@ -1011,12 +1372,6 @@ input NotificationUpdateInput {
   dateAdded: DateTime
 }
 
-input ProjectRelateToOneForUpdateInput {
-  create: ProjectCreateInput
-  connect: ProjectWhereUniqueInput
-  disconnect: Boolean
-}
-
 input NotificationUpdateArgs {
   where: NotificationWhereUniqueInput!
   data: NotificationUpdateInput!
@@ -1029,11 +1384,6 @@ input NotificationCreateInput {
   type: String
   project: ProjectRelateToOneForCreateInput
   dateAdded: DateTime
-}
-
-input ProjectRelateToOneForCreateInput {
-  create: ProjectCreateInput
-  connect: ProjectWhereUniqueInput
 }
 
 type MarketStat {
@@ -1145,6 +1495,60 @@ input MarketStatCreateInput {
   recurringHolders: Float
   annotation: String
   customTrackers: JSON
+  project: ProjectRelateToOneForCreateInput
+  dateAdded: DateTime
+}
+
+type SocialStat {
+  id: ID!
+  twitter: Float
+  telegram: Float
+  discord: Float
+  project: Project
+  dateAdded: DateTime
+}
+
+input SocialStatWhereUniqueInput {
+  id: ID
+}
+
+input SocialStatWhereInput {
+  AND: [SocialStatWhereInput!]
+  OR: [SocialStatWhereInput!]
+  NOT: [SocialStatWhereInput!]
+  id: IDFilter
+  twitter: FloatNullableFilter
+  telegram: FloatNullableFilter
+  discord: FloatNullableFilter
+  project: ProjectWhereInput
+  dateAdded: DateTimeNullableFilter
+}
+
+input SocialStatOrderByInput {
+  id: OrderDirection
+  twitter: OrderDirection
+  telegram: OrderDirection
+  discord: OrderDirection
+  dateAdded: OrderDirection
+}
+
+input SocialStatUpdateInput {
+  twitter: Float
+  telegram: Float
+  discord: Float
+  project: ProjectRelateToOneForUpdateInput
+  dateAdded: DateTime
+}
+
+input SocialStatUpdateArgs {
+  where: SocialStatWhereUniqueInput!
+  data: SocialStatUpdateInput!
+}
+
+input SocialStatCreateInput {
+  twitter: Float
+  telegram: Float
+  discord: Float
   project: ProjectRelateToOneForCreateInput
   dateAdded: DateTime
 }
@@ -1535,6 +1939,7 @@ type Network {
   url: String
   scanner: String
   tokenScanner: String
+  txScanner: String
   dateAdded: DateTime
 }
 
@@ -1552,6 +1957,7 @@ input NetworkWhereInput {
   url: StringFilter
   scanner: StringFilter
   tokenScanner: StringFilter
+  txScanner: StringFilter
   dateAdded: DateTimeNullableFilter
 }
 
@@ -1562,6 +1968,7 @@ input NetworkOrderByInput {
   url: OrderDirection
   scanner: OrderDirection
   tokenScanner: OrderDirection
+  txScanner: OrderDirection
   dateAdded: OrderDirection
 }
 
@@ -1572,6 +1979,7 @@ input NetworkUpdateInput {
   url: String
   scanner: String
   tokenScanner: String
+  txScanner: String
   dateAdded: DateTime
 }
 
@@ -1587,6 +1995,7 @@ input NetworkCreateInput {
   url: String
   scanner: String
   tokenScanner: String
+  txScanner: String
   dateAdded: DateTime
 }
 
@@ -2399,9 +2808,226 @@ input CreatorReviewRelateToManyForCreateInput {
   connect: [CreatorReviewWhereUniqueInput!]
 }
 
+type Auditor {
+  id: ID!
+  name: String
+  slug: String
+  enabled: Boolean
+  isListed: Boolean
+  image: ImageFieldOutput
+  description: String
+  website: String
+  twitter: String
+  telegram: String
+  discord: String
+  reddit: String
+  youtube: String
+  priceFrom: Float
+  priceTo: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input AuditorWhereUniqueInput {
+  id: ID
+}
+
+input AuditorWhereInput {
+  AND: [AuditorWhereInput!]
+  OR: [AuditorWhereInput!]
+  NOT: [AuditorWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  slug: StringFilter
+  enabled: BooleanFilter
+  isListed: BooleanFilter
+  description: StringFilter
+  website: StringFilter
+  twitter: StringFilter
+  telegram: StringFilter
+  discord: StringFilter
+  reddit: StringFilter
+  youtube: StringFilter
+  priceFrom: FloatNullableFilter
+  priceTo: FloatNullableFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input AuditorOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  slug: OrderDirection
+  enabled: OrderDirection
+  isListed: OrderDirection
+  description: OrderDirection
+  website: OrderDirection
+  twitter: OrderDirection
+  telegram: OrderDirection
+  discord: OrderDirection
+  reddit: OrderDirection
+  youtube: OrderDirection
+  priceFrom: OrderDirection
+  priceTo: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input AuditorUpdateInput {
+  name: String
+  slug: String
+  enabled: Boolean
+  isListed: Boolean
+  image: ImageFieldInput
+  description: String
+  website: String
+  twitter: String
+  telegram: String
+  discord: String
+  reddit: String
+  youtube: String
+  priceFrom: Float
+  priceTo: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input AuditorUpdateArgs {
+  where: AuditorWhereUniqueInput!
+  data: AuditorUpdateInput!
+}
+
+input AuditorCreateInput {
+  name: String
+  slug: String
+  enabled: Boolean
+  isListed: Boolean
+  image: ImageFieldInput
+  description: String
+  website: String
+  twitter: String
+  telegram: String
+  discord: String
+  reddit: String
+  youtube: String
+  priceFrom: Float
+  priceTo: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+type KycGroup {
+  id: ID!
+  name: String
+  slug: String
+  enabled: Boolean
+  isListed: Boolean
+  image: ImageFieldOutput
+  description: String
+  website: String
+  twitter: String
+  telegram: String
+  discord: String
+  reddit: String
+  youtube: String
+  priceFrom: Float
+  priceTo: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input KycGroupWhereUniqueInput {
+  id: ID
+}
+
+input KycGroupWhereInput {
+  AND: [KycGroupWhereInput!]
+  OR: [KycGroupWhereInput!]
+  NOT: [KycGroupWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  slug: StringFilter
+  enabled: BooleanFilter
+  isListed: BooleanFilter
+  description: StringFilter
+  website: StringFilter
+  twitter: StringFilter
+  telegram: StringFilter
+  discord: StringFilter
+  reddit: StringFilter
+  youtube: StringFilter
+  priceFrom: FloatNullableFilter
+  priceTo: FloatNullableFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input KycGroupOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  slug: OrderDirection
+  enabled: OrderDirection
+  isListed: OrderDirection
+  description: OrderDirection
+  website: OrderDirection
+  twitter: OrderDirection
+  telegram: OrderDirection
+  discord: OrderDirection
+  reddit: OrderDirection
+  youtube: OrderDirection
+  priceFrom: OrderDirection
+  priceTo: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input KycGroupUpdateInput {
+  name: String
+  slug: String
+  enabled: Boolean
+  isListed: Boolean
+  image: ImageFieldInput
+  description: String
+  website: String
+  twitter: String
+  telegram: String
+  discord: String
+  reddit: String
+  youtube: String
+  priceFrom: Float
+  priceTo: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input KycGroupUpdateArgs {
+  where: KycGroupWhereUniqueInput!
+  data: KycGroupUpdateInput!
+}
+
+input KycGroupCreateInput {
+  name: String
+  slug: String
+  enabled: Boolean
+  isListed: Boolean
+  image: ImageFieldInput
+  description: String
+  website: String
+  twitter: String
+  telegram: String
+  discord: String
+  reddit: String
+  youtube: String
+  priceFrom: Float
+  priceTo: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
 type CreatorRating {
   id: ID!
   rating: Int
+  user: User
   creator: Creator
   dateAdded: DateTime
   updatedAt: DateTime
@@ -2417,6 +3043,7 @@ input CreatorRatingWhereInput {
   NOT: [CreatorRatingWhereInput!]
   id: IDFilter
   rating: IntNullableFilter
+  user: UserWhereInput
   creator: CreatorWhereInput
   dateAdded: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -2431,6 +3058,7 @@ input CreatorRatingOrderByInput {
 
 input CreatorRatingUpdateInput {
   rating: Int
+  user: UserRelateToOneForUpdateInput
   creator: CreatorRelateToOneForUpdateInput
   dateAdded: DateTime
   updatedAt: DateTime
@@ -2449,6 +3077,7 @@ input CreatorRatingUpdateArgs {
 
 input CreatorRatingCreateInput {
   rating: Int
+  user: UserRelateToOneForCreateInput
   creator: CreatorRelateToOneForCreateInput
   dateAdded: DateTime
   updatedAt: DateTime
@@ -2462,6 +3091,7 @@ input CreatorRelateToOneForCreateInput {
 type CreatorReview {
   id: ID!
   review: String
+  user: User
   creator: Creator
   dateAdded: DateTime
   updatedAt: DateTime
@@ -2477,6 +3107,7 @@ input CreatorReviewWhereInput {
   NOT: [CreatorReviewWhereInput!]
   id: IDFilter
   review: StringFilter
+  user: UserWhereInput
   creator: CreatorWhereInput
   dateAdded: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -2491,6 +3122,7 @@ input CreatorReviewOrderByInput {
 
 input CreatorReviewUpdateInput {
   review: String
+  user: UserRelateToOneForUpdateInput
   creator: CreatorRelateToOneForUpdateInput
   dateAdded: DateTime
   updatedAt: DateTime
@@ -2503,7 +3135,119 @@ input CreatorReviewUpdateArgs {
 
 input CreatorReviewCreateInput {
   review: String
+  user: UserRelateToOneForCreateInput
   creator: CreatorRelateToOneForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+type ProjectRating {
+  id: ID!
+  rating: Int
+  ip: String
+  user: User
+  project: Project
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ProjectRatingWhereUniqueInput {
+  id: ID
+}
+
+input ProjectRatingWhereInput {
+  AND: [ProjectRatingWhereInput!]
+  OR: [ProjectRatingWhereInput!]
+  NOT: [ProjectRatingWhereInput!]
+  id: IDFilter
+  rating: IntNullableFilter
+  ip: StringFilter
+  user: UserWhereInput
+  project: ProjectWhereInput
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input ProjectRatingOrderByInput {
+  id: OrderDirection
+  rating: OrderDirection
+  ip: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input ProjectRatingUpdateInput {
+  rating: Int
+  ip: String
+  user: UserRelateToOneForUpdateInput
+  project: ProjectRelateToOneForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ProjectRatingUpdateArgs {
+  where: ProjectRatingWhereUniqueInput!
+  data: ProjectRatingUpdateInput!
+}
+
+input ProjectRatingCreateInput {
+  rating: Int
+  ip: String
+  user: UserRelateToOneForCreateInput
+  project: ProjectRelateToOneForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+type ProjectComment {
+  id: ID!
+  comment: String
+  user: User
+  project: Project
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ProjectCommentWhereUniqueInput {
+  id: ID
+}
+
+input ProjectCommentWhereInput {
+  AND: [ProjectCommentWhereInput!]
+  OR: [ProjectCommentWhereInput!]
+  NOT: [ProjectCommentWhereInput!]
+  id: IDFilter
+  comment: StringFilter
+  user: UserWhereInput
+  project: ProjectWhereInput
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input ProjectCommentOrderByInput {
+  id: OrderDirection
+  comment: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input ProjectCommentUpdateInput {
+  comment: String
+  user: UserRelateToOneForUpdateInput
+  project: ProjectRelateToOneForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ProjectCommentUpdateArgs {
+  where: ProjectCommentWhereUniqueInput!
+  data: ProjectCommentUpdateInput!
+}
+
+input ProjectCommentCreateInput {
+  comment: String
+  user: UserRelateToOneForCreateInput
+  project: ProjectRelateToOneForCreateInput
   dateAdded: DateTime
   updatedAt: DateTime
 }
@@ -2519,10 +3263,11 @@ type MarketingCampaign {
     skip: Int! = 0
   ): [User!]
   usersCount(where: UserWhereInput! = {}): Int
-  status: String
   enabled: Boolean
-  isPercentage: Boolean
+  status: String
   isInternal: Boolean
+  trackMarket: Boolean
+  trackSocial: Boolean
   startDate: CalendarDay
   endDate: CalendarDay
   budget: Float
@@ -2532,8 +3277,10 @@ type MarketingCampaign {
   agencyUrl: String
   creator: Creator
   project: Project
+  marketStatSnapshot: JSON
+  finalSnapshot: JSON
   marketBudget: Float
-  socialsBudget: Float
+  socialBudget: Float
   priceGoal: Float
   marketCapGoal: Float
   volumeGoal: Float
@@ -2560,10 +3307,11 @@ input MarketingCampaignWhereInput {
   name: StringFilter
   campaignId: StringFilter
   users: UserManyRelationFilter
-  status: StringNullableFilter
   enabled: BooleanFilter
-  isPercentage: BooleanFilter
+  status: StringNullableFilter
   isInternal: BooleanFilter
+  trackMarket: BooleanFilter
+  trackSocial: BooleanFilter
   startDate: CalendarDayNullableFilter
   endDate: CalendarDayNullableFilter
   budget: FloatNullableFilter
@@ -2574,7 +3322,7 @@ input MarketingCampaignWhereInput {
   creator: CreatorWhereInput
   project: ProjectWhereInput
   marketBudget: FloatNullableFilter
-  socialsBudget: FloatNullableFilter
+  socialBudget: FloatNullableFilter
   priceGoal: FloatNullableFilter
   marketCapGoal: FloatNullableFilter
   volumeGoal: FloatNullableFilter
@@ -2601,10 +3349,11 @@ input MarketingCampaignOrderByInput {
   id: OrderDirection
   name: OrderDirection
   campaignId: OrderDirection
-  status: OrderDirection
   enabled: OrderDirection
-  isPercentage: OrderDirection
+  status: OrderDirection
   isInternal: OrderDirection
+  trackMarket: OrderDirection
+  trackSocial: OrderDirection
   startDate: OrderDirection
   endDate: OrderDirection
   budget: OrderDirection
@@ -2613,7 +3362,7 @@ input MarketingCampaignOrderByInput {
   agency: OrderDirection
   agencyUrl: OrderDirection
   marketBudget: OrderDirection
-  socialsBudget: OrderDirection
+  socialBudget: OrderDirection
   priceGoal: OrderDirection
   marketCapGoal: OrderDirection
   volumeGoal: OrderDirection
@@ -2629,10 +3378,11 @@ input MarketingCampaignUpdateInput {
   name: String
   campaignId: String
   users: UserRelateToManyForUpdateInput
-  status: String
   enabled: Boolean
-  isPercentage: Boolean
+  status: String
   isInternal: Boolean
+  trackMarket: Boolean
+  trackSocial: Boolean
   startDate: CalendarDay
   endDate: CalendarDay
   budget: Float
@@ -2642,8 +3392,10 @@ input MarketingCampaignUpdateInput {
   agencyUrl: String
   creator: CreatorRelateToOneForUpdateInput
   project: ProjectRelateToOneForUpdateInput
+  marketStatSnapshot: JSON
+  finalSnapshot: JSON
   marketBudget: Float
-  socialsBudget: Float
+  socialBudget: Float
   priceGoal: Float
   marketCapGoal: Float
   volumeGoal: Float
@@ -2664,10 +3416,11 @@ input MarketingCampaignCreateInput {
   name: String
   campaignId: String
   users: UserRelateToManyForCreateInput
-  status: String
   enabled: Boolean
-  isPercentage: Boolean
+  status: String
   isInternal: Boolean
+  trackMarket: Boolean
+  trackSocial: Boolean
   startDate: CalendarDay
   endDate: CalendarDay
   budget: Float
@@ -2677,8 +3430,10 @@ input MarketingCampaignCreateInput {
   agencyUrl: String
   creator: CreatorRelateToOneForCreateInput
   project: ProjectRelateToOneForCreateInput
+  marketStatSnapshot: JSON
+  finalSnapshot: JSON
   marketBudget: Float
-  socialsBudget: Float
+  socialBudget: Float
   priceGoal: Float
   marketCapGoal: Float
   volumeGoal: Float
@@ -2801,6 +3556,382 @@ input MarketingCampaignRelateToOneForCreateInput {
   connect: MarketingCampaignWhereUniqueInput
 }
 
+type Cart {
+  id: ID!
+  user: User
+  cartItem(
+    where: CartItemWhereInput! = {}
+    orderBy: [CartItemOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [CartItem!]
+  cartItemCount(where: CartItemWhereInput! = {}): Int
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CartWhereUniqueInput {
+  id: ID
+}
+
+input CartWhereInput {
+  AND: [CartWhereInput!]
+  OR: [CartWhereInput!]
+  NOT: [CartWhereInput!]
+  id: IDFilter
+  user: UserWhereInput
+  cartItem: CartItemManyRelationFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CartItemManyRelationFilter {
+  every: CartItemWhereInput
+  some: CartItemWhereInput
+  none: CartItemWhereInput
+}
+
+input CartOrderByInput {
+  id: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CartUpdateInput {
+  user: UserRelateToOneForUpdateInput
+  cartItem: CartItemRelateToManyForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CartItemRelateToManyForUpdateInput {
+  disconnect: [CartItemWhereUniqueInput!]
+  set: [CartItemWhereUniqueInput!]
+  create: [CartItemCreateInput!]
+  connect: [CartItemWhereUniqueInput!]
+}
+
+input CartUpdateArgs {
+  where: CartWhereUniqueInput!
+  data: CartUpdateInput!
+}
+
+input CartCreateInput {
+  user: UserRelateToOneForCreateInput
+  cartItem: CartItemRelateToManyForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CartItemRelateToManyForCreateInput {
+  create: [CartItemCreateInput!]
+  connect: [CartItemWhereUniqueInput!]
+}
+
+type CartItem {
+  id: ID!
+  product: Product
+  cart: Cart
+  price: Float
+  tax: Float
+  discount: Float
+  quantity: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CartItemWhereUniqueInput {
+  id: ID
+}
+
+input CartItemWhereInput {
+  AND: [CartItemWhereInput!]
+  OR: [CartItemWhereInput!]
+  NOT: [CartItemWhereInput!]
+  id: IDFilter
+  product: ProductWhereInput
+  cart: CartWhereInput
+  price: FloatNullableFilter
+  tax: FloatNullableFilter
+  discount: FloatNullableFilter
+  quantity: FloatNullableFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CartItemOrderByInput {
+  id: OrderDirection
+  price: OrderDirection
+  tax: OrderDirection
+  discount: OrderDirection
+  quantity: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CartItemUpdateInput {
+  product: ProductRelateToOneForUpdateInput
+  cart: CartRelateToOneForUpdateInput
+  price: Float
+  tax: Float
+  discount: Float
+  quantity: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ProductRelateToOneForUpdateInput {
+  create: ProductCreateInput
+  connect: ProductWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CartRelateToOneForUpdateInput {
+  create: CartCreateInput
+  connect: CartWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CartItemUpdateArgs {
+  where: CartItemWhereUniqueInput!
+  data: CartItemUpdateInput!
+}
+
+input CartItemCreateInput {
+  product: ProductRelateToOneForCreateInput
+  cart: CartRelateToOneForCreateInput
+  price: Float
+  tax: Float
+  discount: Float
+  quantity: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ProductRelateToOneForCreateInput {
+  create: ProductCreateInput
+  connect: ProductWhereUniqueInput
+}
+
+input CartRelateToOneForCreateInput {
+  create: CartCreateInput
+  connect: CartWhereUniqueInput
+}
+
+type Order {
+  id: ID!
+  orderNumber: Int
+  user: User
+  orderItem(
+    where: OrderItemWhereInput! = {}
+    orderBy: [OrderItemOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [OrderItem!]
+  orderItemCount(where: OrderItemWhereInput! = {}): Int
+  project: Project
+  walletAddress: String
+  transactionHash: String
+  currency: String
+  currencyPriceEur: Float
+  durationInMonths: Float
+  paymentNetwork: Network
+  discount: Float
+  tax: Float
+  total: Float
+  subTotal: Float
+  grandTotal: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input OrderWhereUniqueInput {
+  id: ID
+}
+
+input OrderWhereInput {
+  AND: [OrderWhereInput!]
+  OR: [OrderWhereInput!]
+  NOT: [OrderWhereInput!]
+  id: IDFilter
+  orderNumber: IntFilter
+  user: UserWhereInput
+  orderItem: OrderItemManyRelationFilter
+  project: ProjectWhereInput
+  walletAddress: StringFilter
+  transactionHash: StringFilter
+  currency: StringFilter
+  currencyPriceEur: FloatNullableFilter
+  durationInMonths: FloatNullableFilter
+  paymentNetwork: NetworkWhereInput
+  discount: FloatNullableFilter
+  tax: FloatNullableFilter
+  total: FloatNullableFilter
+  subTotal: FloatNullableFilter
+  grandTotal: FloatNullableFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input OrderItemManyRelationFilter {
+  every: OrderItemWhereInput
+  some: OrderItemWhereInput
+  none: OrderItemWhereInput
+}
+
+input OrderOrderByInput {
+  id: OrderDirection
+  orderNumber: OrderDirection
+  walletAddress: OrderDirection
+  transactionHash: OrderDirection
+  currency: OrderDirection
+  currencyPriceEur: OrderDirection
+  durationInMonths: OrderDirection
+  discount: OrderDirection
+  tax: OrderDirection
+  total: OrderDirection
+  subTotal: OrderDirection
+  grandTotal: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input OrderUpdateInput {
+  orderNumber: Int
+  user: UserRelateToOneForUpdateInput
+  orderItem: OrderItemRelateToManyForUpdateInput
+  project: ProjectRelateToOneForUpdateInput
+  walletAddress: String
+  transactionHash: String
+  currency: String
+  currencyPriceEur: Float
+  durationInMonths: Float
+  paymentNetwork: NetworkRelateToOneForUpdateInput
+  discount: Float
+  tax: Float
+  total: Float
+  subTotal: Float
+  grandTotal: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input OrderItemRelateToManyForUpdateInput {
+  disconnect: [OrderItemWhereUniqueInput!]
+  set: [OrderItemWhereUniqueInput!]
+  create: [OrderItemCreateInput!]
+  connect: [OrderItemWhereUniqueInput!]
+}
+
+input OrderUpdateArgs {
+  where: OrderWhereUniqueInput!
+  data: OrderUpdateInput!
+}
+
+input OrderCreateInput {
+  orderNumber: Int
+  user: UserRelateToOneForCreateInput
+  orderItem: OrderItemRelateToManyForCreateInput
+  project: ProjectRelateToOneForCreateInput
+  walletAddress: String
+  transactionHash: String
+  currency: String
+  currencyPriceEur: Float
+  durationInMonths: Float
+  paymentNetwork: NetworkRelateToOneForCreateInput
+  discount: Float
+  tax: Float
+  total: Float
+  subTotal: Float
+  grandTotal: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input OrderItemRelateToManyForCreateInput {
+  create: [OrderItemCreateInput!]
+  connect: [OrderItemWhereUniqueInput!]
+}
+
+type OrderItem {
+  id: ID!
+  order: Order
+  product: Product
+  price: Float
+  quantity: Float
+  discount: Float
+  tax: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input OrderItemWhereUniqueInput {
+  id: ID
+}
+
+input OrderItemWhereInput {
+  AND: [OrderItemWhereInput!]
+  OR: [OrderItemWhereInput!]
+  NOT: [OrderItemWhereInput!]
+  id: IDFilter
+  order: OrderWhereInput
+  product: ProductWhereInput
+  price: FloatNullableFilter
+  quantity: FloatNullableFilter
+  discount: FloatNullableFilter
+  tax: FloatNullableFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input OrderItemOrderByInput {
+  id: OrderDirection
+  price: OrderDirection
+  quantity: OrderDirection
+  discount: OrderDirection
+  tax: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input OrderItemUpdateInput {
+  order: OrderRelateToOneForUpdateInput
+  product: ProductRelateToOneForUpdateInput
+  price: Float
+  quantity: Float
+  discount: Float
+  tax: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input OrderItemUpdateArgs {
+  where: OrderItemWhereUniqueInput!
+  data: OrderItemUpdateInput!
+}
+
+input OrderItemCreateInput {
+  order: OrderRelateToOneForCreateInput
+  product: ProductRelateToOneForCreateInput
+  price: Float
+  quantity: Float
+  discount: Float
+  tax: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -2816,15 +3947,24 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
-  createPayment(data: PaymentCreateInput!): Payment
-  createPayments(data: [PaymentCreateInput!]!): [Payment]
-  updatePayment(
-    where: PaymentWhereUniqueInput!
-    data: PaymentUpdateInput!
-  ): Payment
-  updatePayments(data: [PaymentUpdateArgs!]!): [Payment]
-  deletePayment(where: PaymentWhereUniqueInput!): Payment
-  deletePayments(where: [PaymentWhereUniqueInput!]!): [Payment]
+  createSubscription(data: SubscriptionCreateInput!): Subscription
+  createSubscriptions(data: [SubscriptionCreateInput!]!): [Subscription]
+  updateSubscription(
+    where: SubscriptionWhereUniqueInput!
+    data: SubscriptionUpdateInput!
+  ): Subscription
+  updateSubscriptions(data: [SubscriptionUpdateArgs!]!): [Subscription]
+  deleteSubscription(where: SubscriptionWhereUniqueInput!): Subscription
+  deleteSubscriptions(where: [SubscriptionWhereUniqueInput!]!): [Subscription]
+  createProduct(data: ProductCreateInput!): Product
+  createProducts(data: [ProductCreateInput!]!): [Product]
+  updateProduct(
+    where: ProductWhereUniqueInput!
+    data: ProductUpdateInput!
+  ): Product
+  updateProducts(data: [ProductUpdateArgs!]!): [Product]
+  deleteProduct(where: ProductWhereUniqueInput!): Product
+  deleteProducts(where: [ProductWhereUniqueInput!]!): [Product]
   createRole(data: RoleCreateInput!): Role
   createRoles(data: [RoleCreateInput!]!): [Role]
   updateRole(where: RoleWhereUniqueInput!, data: RoleUpdateInput!): Role
@@ -2840,6 +3980,18 @@ type Mutation {
   updateProjects(data: [ProjectUpdateArgs!]!): [Project]
   deleteProject(where: ProjectWhereUniqueInput!): Project
   deleteProjects(where: [ProjectWhereUniqueInput!]!): [Project]
+  createAudit(data: AuditCreateInput!): Audit
+  createAudits(data: [AuditCreateInput!]!): [Audit]
+  updateAudit(where: AuditWhereUniqueInput!, data: AuditUpdateInput!): Audit
+  updateAudits(data: [AuditUpdateArgs!]!): [Audit]
+  deleteAudit(where: AuditWhereUniqueInput!): Audit
+  deleteAudits(where: [AuditWhereUniqueInput!]!): [Audit]
+  createKyc(data: KycCreateInput!): Kyc
+  createKycs(data: [KycCreateInput!]!): [Kyc]
+  updateKyc(where: KycWhereUniqueInput!, data: KycUpdateInput!): Kyc
+  updateKycs(data: [KycUpdateArgs!]!): [Kyc]
+  deleteKyc(where: KycWhereUniqueInput!): Kyc
+  deleteKycs(where: [KycWhereUniqueInput!]!): [Kyc]
   createNotification(data: NotificationCreateInput!): Notification
   createNotifications(data: [NotificationCreateInput!]!): [Notification]
   updateNotification(
@@ -2858,6 +4010,15 @@ type Mutation {
   updateMarketStats(data: [MarketStatUpdateArgs!]!): [MarketStat]
   deleteMarketStat(where: MarketStatWhereUniqueInput!): MarketStat
   deleteMarketStats(where: [MarketStatWhereUniqueInput!]!): [MarketStat]
+  createSocialStat(data: SocialStatCreateInput!): SocialStat
+  createSocialStats(data: [SocialStatCreateInput!]!): [SocialStat]
+  updateSocialStat(
+    where: SocialStatWhereUniqueInput!
+    data: SocialStatUpdateInput!
+  ): SocialStat
+  updateSocialStats(data: [SocialStatUpdateArgs!]!): [SocialStat]
+  deleteSocialStat(where: SocialStatWhereUniqueInput!): SocialStat
+  deleteSocialStats(where: [SocialStatWhereUniqueInput!]!): [SocialStat]
   createCustomTracker(data: CustomTrackerCreateInput!): CustomTracker
   createCustomTrackers(data: [CustomTrackerCreateInput!]!): [CustomTracker]
   updateCustomTracker(
@@ -3001,6 +4162,24 @@ type Mutation {
   updateCreators(data: [CreatorUpdateArgs!]!): [Creator]
   deleteCreator(where: CreatorWhereUniqueInput!): Creator
   deleteCreators(where: [CreatorWhereUniqueInput!]!): [Creator]
+  createAuditor(data: AuditorCreateInput!): Auditor
+  createAuditors(data: [AuditorCreateInput!]!): [Auditor]
+  updateAuditor(
+    where: AuditorWhereUniqueInput!
+    data: AuditorUpdateInput!
+  ): Auditor
+  updateAuditors(data: [AuditorUpdateArgs!]!): [Auditor]
+  deleteAuditor(where: AuditorWhereUniqueInput!): Auditor
+  deleteAuditors(where: [AuditorWhereUniqueInput!]!): [Auditor]
+  createKycGroup(data: KycGroupCreateInput!): KycGroup
+  createKycGroups(data: [KycGroupCreateInput!]!): [KycGroup]
+  updateKycGroup(
+    where: KycGroupWhereUniqueInput!
+    data: KycGroupUpdateInput!
+  ): KycGroup
+  updateKycGroups(data: [KycGroupUpdateArgs!]!): [KycGroup]
+  deleteKycGroup(where: KycGroupWhereUniqueInput!): KycGroup
+  deleteKycGroups(where: [KycGroupWhereUniqueInput!]!): [KycGroup]
   createCreatorRating(data: CreatorRatingCreateInput!): CreatorRating
   createCreatorRatings(data: [CreatorRatingCreateInput!]!): [CreatorRating]
   updateCreatorRating(
@@ -3023,6 +4202,28 @@ type Mutation {
   deleteCreatorReviews(
     where: [CreatorReviewWhereUniqueInput!]!
   ): [CreatorReview]
+  createProjectRating(data: ProjectRatingCreateInput!): ProjectRating
+  createProjectRatings(data: [ProjectRatingCreateInput!]!): [ProjectRating]
+  updateProjectRating(
+    where: ProjectRatingWhereUniqueInput!
+    data: ProjectRatingUpdateInput!
+  ): ProjectRating
+  updateProjectRatings(data: [ProjectRatingUpdateArgs!]!): [ProjectRating]
+  deleteProjectRating(where: ProjectRatingWhereUniqueInput!): ProjectRating
+  deleteProjectRatings(
+    where: [ProjectRatingWhereUniqueInput!]!
+  ): [ProjectRating]
+  createProjectComment(data: ProjectCommentCreateInput!): ProjectComment
+  createProjectComments(data: [ProjectCommentCreateInput!]!): [ProjectComment]
+  updateProjectComment(
+    where: ProjectCommentWhereUniqueInput!
+    data: ProjectCommentUpdateInput!
+  ): ProjectComment
+  updateProjectComments(data: [ProjectCommentUpdateArgs!]!): [ProjectComment]
+  deleteProjectComment(where: ProjectCommentWhereUniqueInput!): ProjectComment
+  deleteProjectComments(
+    where: [ProjectCommentWhereUniqueInput!]!
+  ): [ProjectComment]
   createMarketingCampaign(
     data: MarketingCampaignCreateInput!
   ): MarketingCampaign
@@ -3061,6 +4262,36 @@ type Mutation {
   deleteMarketingTrackerResults(
     where: [MarketingTrackerResultWhereUniqueInput!]!
   ): [MarketingTrackerResult]
+  createCart(data: CartCreateInput!): Cart
+  createCarts(data: [CartCreateInput!]!): [Cart]
+  updateCart(where: CartWhereUniqueInput!, data: CartUpdateInput!): Cart
+  updateCarts(data: [CartUpdateArgs!]!): [Cart]
+  deleteCart(where: CartWhereUniqueInput!): Cart
+  deleteCarts(where: [CartWhereUniqueInput!]!): [Cart]
+  createCartItem(data: CartItemCreateInput!): CartItem
+  createCartItems(data: [CartItemCreateInput!]!): [CartItem]
+  updateCartItem(
+    where: CartItemWhereUniqueInput!
+    data: CartItemUpdateInput!
+  ): CartItem
+  updateCartItems(data: [CartItemUpdateArgs!]!): [CartItem]
+  deleteCartItem(where: CartItemWhereUniqueInput!): CartItem
+  deleteCartItems(where: [CartItemWhereUniqueInput!]!): [CartItem]
+  createOrder(data: OrderCreateInput!): Order
+  createOrders(data: [OrderCreateInput!]!): [Order]
+  updateOrder(where: OrderWhereUniqueInput!, data: OrderUpdateInput!): Order
+  updateOrders(data: [OrderUpdateArgs!]!): [Order]
+  deleteOrder(where: OrderWhereUniqueInput!): Order
+  deleteOrders(where: [OrderWhereUniqueInput!]!): [Order]
+  createOrderItem(data: OrderItemCreateInput!): OrderItem
+  createOrderItems(data: [OrderItemCreateInput!]!): [OrderItem]
+  updateOrderItem(
+    where: OrderItemWhereUniqueInput!
+    data: OrderItemUpdateInput!
+  ): OrderItem
+  updateOrderItems(data: [OrderItemUpdateArgs!]!): [OrderItem]
+  deleteOrderItem(where: OrderItemWhereUniqueInput!): OrderItem
+  deleteOrderItems(where: [OrderItemWhereUniqueInput!]!): [OrderItem]
   endSession: Boolean!
   authenticateUserWithPassword(
     email: String!
@@ -3116,14 +4347,22 @@ type Query {
   ): [User!]
   user(where: UserWhereUniqueInput!): User
   usersCount(where: UserWhereInput! = {}): Int
-  payments(
-    where: PaymentWhereInput! = {}
-    orderBy: [PaymentOrderByInput!]! = []
+  subscriptions(
+    where: SubscriptionWhereInput! = {}
+    orderBy: [SubscriptionOrderByInput!]! = []
     take: Int
     skip: Int! = 0
-  ): [Payment!]
-  payment(where: PaymentWhereUniqueInput!): Payment
-  paymentsCount(where: PaymentWhereInput! = {}): Int
+  ): [Subscription!]
+  subscription(where: SubscriptionWhereUniqueInput!): Subscription
+  subscriptionsCount(where: SubscriptionWhereInput! = {}): Int
+  products(
+    where: ProductWhereInput! = {}
+    orderBy: [ProductOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Product!]
+  product(where: ProductWhereUniqueInput!): Product
+  productsCount(where: ProductWhereInput! = {}): Int
   roles(
     where: RoleWhereInput! = {}
     orderBy: [RoleOrderByInput!]! = []
@@ -3140,6 +4379,22 @@ type Query {
   ): [Project!]
   project(where: ProjectWhereUniqueInput!): Project
   projectsCount(where: ProjectWhereInput! = {}): Int
+  audits(
+    where: AuditWhereInput! = {}
+    orderBy: [AuditOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Audit!]
+  audit(where: AuditWhereUniqueInput!): Audit
+  auditsCount(where: AuditWhereInput! = {}): Int
+  kycs(
+    where: KycWhereInput! = {}
+    orderBy: [KycOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Kyc!]
+  kyc(where: KycWhereUniqueInput!): Kyc
+  kycsCount(where: KycWhereInput! = {}): Int
   notifications(
     where: NotificationWhereInput! = {}
     orderBy: [NotificationOrderByInput!]! = []
@@ -3156,6 +4411,14 @@ type Query {
   ): [MarketStat!]
   marketStat(where: MarketStatWhereUniqueInput!): MarketStat
   marketStatsCount(where: MarketStatWhereInput! = {}): Int
+  socialStats(
+    where: SocialStatWhereInput! = {}
+    orderBy: [SocialStatOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [SocialStat!]
+  socialStat(where: SocialStatWhereUniqueInput!): SocialStat
+  socialStatsCount(where: SocialStatWhereInput! = {}): Int
   customTrackers(
     where: CustomTrackerWhereInput! = {}
     orderBy: [CustomTrackerOrderByInput!]! = []
@@ -3286,6 +4549,22 @@ type Query {
   ): [Creator!]
   creator(where: CreatorWhereUniqueInput!): Creator
   creatorsCount(where: CreatorWhereInput! = {}): Int
+  auditors(
+    where: AuditorWhereInput! = {}
+    orderBy: [AuditorOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Auditor!]
+  auditor(where: AuditorWhereUniqueInput!): Auditor
+  auditorsCount(where: AuditorWhereInput! = {}): Int
+  kycGroups(
+    where: KycGroupWhereInput! = {}
+    orderBy: [KycGroupOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [KycGroup!]
+  kycGroup(where: KycGroupWhereUniqueInput!): KycGroup
+  kycGroupsCount(where: KycGroupWhereInput! = {}): Int
   creatorRatings(
     where: CreatorRatingWhereInput! = {}
     orderBy: [CreatorRatingOrderByInput!]! = []
@@ -3302,6 +4581,22 @@ type Query {
   ): [CreatorReview!]
   creatorReview(where: CreatorReviewWhereUniqueInput!): CreatorReview
   creatorReviewsCount(where: CreatorReviewWhereInput! = {}): Int
+  projectRatings(
+    where: ProjectRatingWhereInput! = {}
+    orderBy: [ProjectRatingOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [ProjectRating!]
+  projectRating(where: ProjectRatingWhereUniqueInput!): ProjectRating
+  projectRatingsCount(where: ProjectRatingWhereInput! = {}): Int
+  projectComments(
+    where: ProjectCommentWhereInput! = {}
+    orderBy: [ProjectCommentOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [ProjectComment!]
+  projectComment(where: ProjectCommentWhereUniqueInput!): ProjectComment
+  projectCommentsCount(where: ProjectCommentWhereInput! = {}): Int
   marketingCampaigns(
     where: MarketingCampaignWhereInput! = {}
     orderBy: [MarketingCampaignOrderByInput!]! = []
@@ -3324,6 +4619,38 @@ type Query {
   marketingTrackerResultsCount(
     where: MarketingTrackerResultWhereInput! = {}
   ): Int
+  carts(
+    where: CartWhereInput! = {}
+    orderBy: [CartOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Cart!]
+  cart(where: CartWhereUniqueInput!): Cart
+  cartsCount(where: CartWhereInput! = {}): Int
+  cartItems(
+    where: CartItemWhereInput! = {}
+    orderBy: [CartItemOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [CartItem!]
+  cartItem(where: CartItemWhereUniqueInput!): CartItem
+  cartItemsCount(where: CartItemWhereInput! = {}): Int
+  orders(
+    where: OrderWhereInput! = {}
+    orderBy: [OrderOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Order!]
+  order(where: OrderWhereUniqueInput!): Order
+  ordersCount(where: OrderWhereInput! = {}): Int
+  orderItems(
+    where: OrderItemWhereInput! = {}
+    orderBy: [OrderItemOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [OrderItem!]
+  orderItem(where: OrderItemWhereUniqueInput!): OrderItem
+  orderItemsCount(where: OrderItemWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(

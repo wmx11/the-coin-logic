@@ -1,6 +1,11 @@
 import { Lists } from '.keystone/types';
 import { list } from '@keystone-6/core';
-import { calendarDay, checkbox, float, relationship, text, timestamp, select } from '@keystone-6/core/fields';
+import {
+  calendarDay,
+  checkbox,
+  float, json, relationship, select, text,
+  timestamp
+} from '@keystone-6/core/fields';
 import { nanoid } from 'nanoid';
 import generateInputData from '../utils/generateInputData';
 
@@ -11,26 +16,29 @@ const MarketingCampaign: Lists = {
       campaignId: text({
         ui: { description: 'ID of the marketing campaign' },
         hooks: {
-          resolveInput: async (data) => generateInputData('referralCode', `tcl_mc_${nanoid(10)}`)(data),
+          resolveInput: async (data) => generateInputData('campaignId', `tcl_mc_${nanoid(10)}`)(data),
         },
       }),
       users: relationship({ ref: 'User.marketingCampaigns', many: true }),
+      enabled: checkbox({ defaultValue: true }),
       status: select({
+        defaultValue: 'live',
         options: [
-          { label: 'Planning', value: 'planning' },
-          { label: 'In Progress', value: 'inProgress' },
-          { label: 'Success', value: 'success' },
-          { label: 'Failed', value: 'failed' },
+          { label: 'Live', value: 'live' },
+          { label: 'Ended', value: 'ended' },
         ],
-      }),
-      enabled: checkbox({ defaultValue: false }),
-      isPercentage: checkbox({
-        defaultValue: false,
-        ui: { description: 'Should the goals be calculated in percentages.' },
       }),
       isInternal: checkbox({
         defaultValue: false,
         ui: { description: 'Specifies if this marketing campaign is internal.' },
+      }),
+      trackMarket: checkbox({
+        defaultValue: true,
+        ui: { description: 'Should it be used to track market metrics.' },
+      }),
+      trackSocial: checkbox({
+        defaultValue: true,
+        ui: { description: 'Should it be used to track social metrics.' },
       }),
       startDate: calendarDay(),
       endDate: calendarDay(),
@@ -44,8 +52,14 @@ const MarketingCampaign: Lists = {
         ui: { description: 'Select from a list of creators on TCL' },
       }),
       project: relationship({ ref: 'Project' }),
+      marketStatSnapshot: json({
+        ui: { description: 'A market data snapshot taken when STARTING the campaign.' },
+      }),
+      finalSnapshot: json({
+        ui: { description: 'A market data snapshot taken when ENDING the campaign.' },
+      }),
       marketBudget: float({ ui: { description: 'Budget set for the market metrics (price, volume, holders etc.)' } }),
-      socialsBudget: float({ ui: { description: 'Budget set for the socials metrics (followers, clicks)' } }),
+      socialBudget: float({ ui: { description: 'Budget set for the socials metrics (followers, clicks)' } }),
       priceGoal: float(),
       marketCapGoal: float(),
       volumeGoal: float(),

@@ -1,5 +1,6 @@
-import React from 'react';
-import { Button, Center, Container, Text, Title } from '@mantine/core';
+import { Center, Container, Text } from '@mantine/core';
+import GradientButton from 'components/Buttons/GradientButton';
+import GradientTitle from 'components/Text/GradientTitle';
 
 function JoinOurCommunity() {
   return (
@@ -7,24 +8,17 @@ function JoinOurCommunity() {
       <Container>
         <Center>
           <div className="text-center">
-            <Title order={2} className="mb-4">
+            <GradientTitle order={2} className="mb-4">
               Grow together with a global community!
-            </Title>
+            </GradientTitle>
             <Text className="mb-4">
               Our community is made up of people all over the world who are excited to monitor the health of their
               favorite projects. Learn from new and veteran cryptocurrency users, provide suggestions, and find how you
               could improve your projects or obtain more knowledge!
             </Text>
-            <Button
-              color="violet"
-              size="lg"
-              variant="light"
-              component="a"
-              href="https://discord.gg/vwtY8XwpvZ"
-              target="_blank"
-            >
+            <GradientButton size="lg" component="a" href="https://discord.gg/cPY7vGGKTW" target="_blank">
               Join our community
-            </Button>
+            </GradientButton>
           </div>
         </Center>
       </Container>

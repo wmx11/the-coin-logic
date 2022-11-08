@@ -1,18 +1,19 @@
 import { Button, PasswordInput, Stack, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
+import GradientButton from 'components/Buttons/GradientButton';
 import ErrorMessage from 'components/ErrorMessage';
 import ResetPasswordButton from 'components/ResetPasswordButton';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 import { UserLogin, userLoginSchema } from '../../../schemas/user';
-import { toast } from 'react-toastify';
 
 const ERROR_MESSAGE = 'Your email address or password is invalid. Please try again.';
 
 const SignInContent = () => {
   const [errorMessage, setErrorMessage] = useState('');
-  const { setRegister, resetAll } = useLoginFlowStore((state) => state);
+  const { setRegister, resetAll, setLoginSuccess } = useLoginFlowStore((state) => state);
 
   const form = useForm({
     validate: zodResolver(userLoginSchema),
@@ -33,6 +34,7 @@ const SignInContent = () => {
         toast.success('You have successfully logged in!');
         setErrorMessage('');
         resetAll();
+        setLoginSuccess(true);
       }
     } catch (error) {
       toast.error('Uh oh, looks like there was an issue logging in');
@@ -64,9 +66,9 @@ const SignInContent = () => {
 
         <ResetPasswordButton />
 
-        <Button type="submit" color="violet" size="md">
+        <GradientButton type="submit" size="md">
           Sign In
-        </Button>
+        </GradientButton>
       </Stack>
     </form>
   );

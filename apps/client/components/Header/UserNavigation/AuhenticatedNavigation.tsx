@@ -27,17 +27,16 @@ const AuhenticatedNavigation: FC<AuhenticatedNavigationProps> = ({ session, setI
     }
 
     return (
-      <Menu
-        shadow="md"
-        trigger="hover"
-        control={
+      <Menu shadow="md" trigger="hover">
+        <Menu.Target>
           <div>
             <UserAvatar name={userName as string} />
           </div>
-        }
-      >
+        </Menu.Target>
+        <Menu.Dropdown>
         <Menu.Label>{userName}</Menu.Label>
-        <UserNavigationLinks />
+          <UserNavigationLinks />
+        </Menu.Dropdown>
       </Menu>
     );
   };

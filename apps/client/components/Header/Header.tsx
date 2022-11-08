@@ -12,8 +12,8 @@ function Header() {
   const { isMobileScreen } = useMobileScreen();
 
   return (
-    <div className="bg-lightBlue sticky top-0 z-20 bg-[url('../public/images/wave.svg')] bg-no-repeat bg-cover bg-bottom w-full">
-      <Container className={`${isMobileScreen && 'flex items-center justify-end py-4 w-full'}`}>
+    <div className="z-20 w-full bg-lightBlue relative">
+      <Container className={`${isMobileScreen && 'flex items-center justify-end py-3 w-full'}`}>
         {isMobileScreen && (
           <Drawer
             opened={isOpen}
@@ -25,13 +25,14 @@ function Header() {
             position="right"
             withinPortal={false}
             className="overflow-auto"
+            styles={{ drawer: { background: '#17153A' } }}
           >
             <Navigation setIsOpen={setIsOpen} />
             <UserNavigation setIsOpen={setIsOpen} />
           </Drawer>
         )}
 
-        <div className="flex justify-between w-full md:py-4">
+        <div className="flex justify-between w-full md:py-2">
           <div className="flex items-center gap-8">
             <div className="">
               <Link href="/">

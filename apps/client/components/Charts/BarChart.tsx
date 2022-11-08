@@ -3,7 +3,15 @@ import Highcharts from 'highcharts/highcharts';
 import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsReact from 'highcharts-react-official';
 
-const BarChart = ({ data, title, subtitle, yTitle, tooltip }) => {
+type BarChartProps<T> = {
+  data: T[];
+  title: string;
+  subtitle?: string;
+  yTitle?: string;
+  tooltip?: string | Record<string, string>;
+};
+
+const BarChart = <T,>({ data, title, subtitle, yTitle, tooltip }: BarChartProps<T>) => {
   if (typeof Highcharts === 'object') {
     HighchartsExporting(Highcharts);
   }
@@ -18,6 +26,7 @@ const BarChart = ({ data, title, subtitle, yTitle, tooltip }) => {
     subtitle: {
       text: subtitle,
     },
+    colors: ['#7950f2'],
     xAxis: {
       type: 'category',
       labels: {
@@ -41,18 +50,6 @@ const BarChart = ({ data, title, subtitle, yTitle, tooltip }) => {
       pointFormat: tooltip,
     },
     series: data,
-    // dataLabels: {
-    //   enabled: true,
-    //   rotation: -90,
-    //   color: '#FFFFFF',
-    //   align: 'right',
-    //   format: '{point.y:.1f}', // one decimal
-    //   y: 10, // 10 pixels down from the top
-    //   style: {
-    //     fontSize: '13px',
-    //     fontFamily: 'Verdana, sans-serif',
-    //   },
-    // },
   };
   return (
     <div>

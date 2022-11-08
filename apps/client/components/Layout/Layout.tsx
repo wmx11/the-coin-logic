@@ -6,19 +6,19 @@ import LoginFlowModal from 'components/Modals/LoginFlowModal';
 import Head from 'next/head';
 
 type LayoutProps = {
-  children: JSX.Element;
+  children: JSX.Element[];
 };
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <div>
       <Head>
-        <title key="title">Trusted, Transparent DeFi Analytics and Services | Coin Logic</title>
+        <title key="title">Trusted and Transparent data for Cryptocurrency and DeFi Projects | Coin Logic</title>
 
         <meta
           key="og:title"
           property="og:title"
-          content="Trusted, Transparent DeFi Analytics and Services | Coin Logic"
+          content="Trusted and Transparent data for Cryptocurrency and DeFi Projects | Coin Logic"
         />
 
         <meta

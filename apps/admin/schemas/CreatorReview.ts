@@ -6,6 +6,7 @@ const CreatorReview: Lists = {
   CreatorReview: list({
     fields: {
       review: text({ ui: { displayMode: 'textarea' }, validation: { isRequired: true } }),
+      user: relationship({ ref: 'User' }),
       creator: relationship({ ref: 'Creator.reviews' }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
       updatedAt: timestamp({

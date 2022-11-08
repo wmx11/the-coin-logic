@@ -3,6 +3,7 @@ import { Column } from '@table-library/react-table-library/types/compact';
 import { TableNode } from '@table-library/react-table-library/types/table';
 import { ProjectTitle } from 'components/ProjectTitle';
 import Table from 'components/Table';
+import GradientTitle from 'components/Text/GradientTitle';
 import { Trend } from 'components/Trend';
 import { FC } from 'react';
 import { Sparklines, SparklinesCurve, SparklinesSpots } from 'react-sparklines';
@@ -19,7 +20,7 @@ const CryptocurrenciesTable: FC<CryptocurrenciesTableProps> = ({ data }) => {
   }
 
   const theme = {
-    Table: `--data-table-library_grid-template-columns: 40px 195px repeat(6, 1fr);`,
+    Table: `--data-table-library_grid-template-columns: 40px 150px repeat(6, 1fr);`,
     BaseCell: `
     &:nth-of-type(2) {
       left: 0px;
@@ -100,9 +101,9 @@ const CryptocurrenciesTable: FC<CryptocurrenciesTableProps> = ({ data }) => {
 
   return (
     <Container className="py-10">
-      <Title order={2} className="mb-6">
+      <GradientTitle order={2} className="mb-6">
         Top 25 Cryptocurrencies by Market Cap
-      </Title>
+      </GradientTitle>
       <div style={{ height: 700 }}>
         <Table data={data} columns={columns} customTheme={theme} />
       </div>

@@ -1,4 +1,5 @@
 import { Button } from '@mantine/core';
+import GradientButton from 'components/Buttons/GradientButton';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 
 const UnaunthenticatedNavigation = () => {
@@ -15,14 +16,13 @@ const UnaunthenticatedNavigation = () => {
         >
           Sign In
         </Button>
-        <Button
+        <GradientButton
           onClick={() => {
             setRegister(true);
           }}
-          color="violet"
         >
           Sign Up
-        </Button>
+        </GradientButton>
       </div>
     </>
   );
