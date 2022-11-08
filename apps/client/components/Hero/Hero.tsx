@@ -1,4 +1,5 @@
-import { Button, Container, Space, Text, Title } from '@mantine/core';
+import { Button, Container, Space, Title } from '@mantine/core';
+import GradientButton from 'components/Buttons/GradientButton';
 import Partners from 'components/Partners';
 import GradientText from 'components/Text/GradientText';
 import Link from 'next/link';
@@ -6,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 import TextTransition, { presets } from 'react-text-transition';
 
-const TEXTS = ['LOGIC', 'DATA', 'INSIGHT', 'TRACKING', 'TRANSPARENCY'];
+const TEXTS = ['LOGIC', 'DATA', 'INSIGHT', 'TRACKING', 'CLARITY'];
 
 function Hero() {
   const [index, setIndex] = useState(0);
@@ -25,7 +26,7 @@ function Hero() {
               <div className="mb-8">
                 <Title order={1} className="text-5xl md:text-7xl mb-10">
                   <span>Get More </span>
-                  <TextTransition inline springConfig={presets.gentle}>
+                  <TextTransition inline springConfig={presets.gentle} direction="up">
                     <GradientText weight={700}>{TEXTS[index % TEXTS.length]}</GradientText>
                   </TextTransition>
                   <Space h="md" />
@@ -41,22 +42,15 @@ function Hero() {
                   </Button>
                 </Link>
                 <Link href="/projects" passHref>
-                  <Button
-                    color="violet"
-                    variant="gradient"
-                    gradient={{ from: 'violet', to: 'grape' }}
-                    size="lg"
-                    component="a"
-                    className="shadow-md"
-                  >
+                  <GradientButton size="lg" component="a" className="shadow-md">
                     Explore Projects
-                  </Button>
+                  </GradientButton>
                 </Link>
               </div>
             </div>
           </div>
         </Container>
-        <div className="text-white absolute bottom-24 animate-pulse flex w-full justify-center">
+        <div className="text-white absolute bottom-0 animate-pulse flex w-full justify-center">
           <FaChevronDown />
         </div>
       </div>

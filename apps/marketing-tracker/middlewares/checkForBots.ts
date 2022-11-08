@@ -1,6 +1,7 @@
+import { NextFunction, Request, Response } from 'express';
 import isbot from 'isbot';
 
-const checkForBots = (req, res, next) => {
+const checkForBots = (req: Request, res: Response, next: NextFunction) => {
   const isBotRequest = isbot(req.get('user-agent'));
 
   if (!isBotRequest) {

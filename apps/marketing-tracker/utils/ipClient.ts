@@ -1,8 +1,14 @@
-import { IpregistryClient } from '@ipregistry/client';
+import dotenv from 'dotenv';
+import { InMemoryCache, IpregistryClient } from '@ipregistry/client';
+import { Request } from 'express';
 
-const ipClient = new IpregistryClient('z647m7389zw0sd3e');
+dotenv.config();
 
-export const ipLookup = async (req) => {
+const IP_REGISTRY_KEY = process.env.IP_REGISTRY_KEY || '';
+
+const ipClient = new IpregistryClient(IP_REGISTRY_KEY, new InMemoryCache(16384, 3600 * 6 * 1000));
+
+export const ipLookup = async (req: Request) => {
   try {
     const { data } = await ipClient.lookup(req.ip);
     const referer = req.headers.referer;

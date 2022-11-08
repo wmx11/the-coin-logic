@@ -1,8 +1,13 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import useragent from 'express-useragent';
 import tracker from './routes/tracker';
+
+dotenv.config();
+
+const port = process.env.PORT;
 
 const app = express();
 
@@ -16,6 +21,6 @@ app.use(useragent.express());
 // Routes
 app.use(tracker);
 
-app.listen(2000, () => {
-  console.log('Marketing tracker listening on port: ', 2000);
+app.listen(port, () => {
+  console.log('Marketing tracker listening on port: ', port);
 });

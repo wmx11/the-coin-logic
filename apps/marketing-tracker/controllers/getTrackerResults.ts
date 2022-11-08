@@ -1,9 +1,10 @@
+import { Request, Response } from 'express';
 import saveTrackerResults from '../models/saveTrackerResults';
 import { ipLookup } from '../utils/ipClient';
 import parseUrlForMarketingTracker from '../utils/parseUrlForMarketingTracker';
 import parseUserAgent from '../utils/parseUserAgent';
 
-const getTrackerResults = async (req, res) => {
+const getTrackerResults = async (req: Request, res: Response) => {
   try {
     const userData = await ipLookup(req);
     const userAgentData = parseUserAgent(req.get('user-agent'));
@@ -17,6 +18,11 @@ const getTrackerResults = async (req, res) => {
       },
       campaignId: marketingTrackerData.campaignId,
     });
+
+    // If the tracker fails or the campaign is deleted, redirect to TCL website
+    if (!trackerData) {
+      return res.redirect('https://thecoinlogic.com');
+    }
 
     return res.redirect(trackerData.project[marketingTrackerData.target]);
   } catch (error) {

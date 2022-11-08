@@ -599,6 +599,7 @@ model ProjectRating {
 
   @@index([userId])
   @@index([projectId])
+  @@index([dateAdded])
 }
 
 model ProjectComment {
