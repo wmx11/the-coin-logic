@@ -18,7 +18,7 @@ export type MarketStatChanges = {
 
 export type StatsData = PreviousValue & {
   title?: string;
-  value?: number | number[];
+  value?: number | number[] | string;
   isCurrency?: boolean;
   tooltip?: string;
   chartEntry?: string;
