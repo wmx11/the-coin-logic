@@ -21,6 +21,4 @@ const addMarketStats = async (): Promise<void> => {
   }
 };
 
-addMarketStats()
-
 export default addMarketStats;
