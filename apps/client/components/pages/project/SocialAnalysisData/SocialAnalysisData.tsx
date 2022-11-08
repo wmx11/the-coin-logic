@@ -1,100 +1,29 @@
-import React, { FC } from 'react';
-import { FaDiscord, FaTwitter, FaWallet } from 'react-icons/fa';
+import { FC } from 'react';
+import { IoShareSocialSharp } from 'react-icons/io5';
+import { ProjectWithMarketStatsAndChanges } from 'types/Project';
+import { formateDateWithHours } from 'utils/formatters';
 import { StatsTabGroup } from '../../../StatsTabGroup';
+import { getData } from './getData';
 
-const SocialAnalysisData: FC = () => {
-  const socialAnalysisData = [
-    {
-      subGroup: {
-        title: 'Discord',
-        Icon: FaDiscord,
-        data: [
-          {
-            value: 79888,
-            previousValue: 79888,
-            title: 'Holders',
-            isCurrency: false,
-          },
-          {
-            value: 107283,
-            previousValue: 107283,
-            title: 'Average Holdings',
-            isCurrency: false,
-          },
-          {
-            value: 278,
-            previousValue: 278,
-            title: 'Average Holdings (USD)',
-            isCurrency: true,
-          },
-          {
-            value: 50,
-            previousValue: 40,
-            title: 'New Holders Today',
-            isCurrency: false,
-          },
-          {
-            value: 5,
-            previousValue: 4,
-            title: 'Recurring Buyers',
-            isCurrency: false,
-          },
-          {
-            value: 2,
-            previousValue: 1,
-            title: 'Exiting Sellers',
-            isCurrency: false,
-          },
-        ],
-      },
-    },
-    {
-      subGroup: {
-        title: 'Twitter',
-        Icon: FaTwitter,
-        data: [
-          {
-            value: 79888,
-            previousValue: 79888,
-            title: 'Holders',
-            isCurrency: false,
-          },
-          {
-            value: 107283,
-            previousValue: 107283,
-            title: 'Average Holdings',
-            isCurrency: false,
-          },
-          {
-            value: 278,
-            previousValue: 278,
-            title: 'Average Holdings (USD)',
-            isCurrency: true,
-          },
-          {
-            value: 50,
-            previousValue: 40,
-            title: 'New Holders Today',
-            isCurrency: false,
-          },
-          {
-            value: 5,
-            previousValue: 4,
-            title: 'Recurring Buyers',
-            isCurrency: false,
-          },
-          {
-            value: 2,
-            previousValue: 1,
-            title: 'Exiting Sellers',
-            isCurrency: false,
-          },
-        ],
-      },
-    },
-  ];
+type SocialAnalysisDataProps = {
+  data: ProjectWithMarketStatsAndChanges;
+};
 
-  return <StatsTabGroup title="Social Analysis" data={socialAnalysisData} />;
+const SocialAnalysisData: FC<SocialAnalysisDataProps> = ({ data }) => {
+  const { slug, trackSocials } = data.project;
+  const socialMediaData = trackSocials ? getData(data) : [];
+
+  return (
+    <StatsTabGroup
+      Icon={IoShareSocialSharp}
+      untrackedMessage={trackSocials ? '' : 'This project has social media data tracking disabled.'}
+      section="socialMediaData"
+      title="Social Media Data"
+      data={socialMediaData}
+      subtitle={`Last Updated: ${formateDateWithHours(data?.socialsDateAdded as string) || ''}`}
+      slug={slug as string}
+    />
+  );
 };
 
 export default SocialAnalysisData;

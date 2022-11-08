@@ -1,25 +1,26 @@
-import { Project, Network } from 'types';
 import { Anchor, Badge, Paper, Space, Spoiler, Text, Tooltip } from '@mantine/core';
-import React, { FC } from 'react';
-import { FaDiscord, FaGithub, FaReddit, FaTelegram, FaTwitter } from 'react-icons/fa';
-import { FiLink, FiExternalLink } from 'react-icons/fi';
-import { IoDocumentText } from 'react-icons/io5';
+import { FC } from 'react';
 import { BiUserCheck } from 'react-icons/bi';
+import { FaDiscord, FaGithub, FaReddit, FaTelegram, FaTwitter } from 'react-icons/fa';
+import { Network, Project } from 'types';
 
+import { ProjectRatings } from 'pages/api/project/get-rates';
+import toLocaleString from 'utils/toLocaleString';
 import { formatDate } from '../../../../utils/formatters';
 import { ClipboardButton } from '../../../ClipboardButton';
 import { NetworkBadge } from '../../../NetworkBadge';
-import toLocaleString from 'utils/toLocaleString';
+import CommunityVotes from '../CommunityVotes';
 
 type AboutProjectProps = {
   data: Project;
+  isRatedToday: boolean;
+  ratings: ProjectRatings;
 };
 
-const AboutProject: FC<AboutProjectProps> = ({ data }) => {
+const AboutProject: FC<AboutProjectProps> = ({ data, isRatedToday, ratings }) => {
   const {
-    website,
     name,
-    whitepaper,
+
     pairAddress,
     contractAddress,
     network,
@@ -32,7 +33,6 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
     github,
     sellTax,
     buyTax,
-    rebasePeriod,
     apy,
   } = data;
 
@@ -46,43 +46,9 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
 
   return (
     <>
-      <Paper p="md" shadow="sm" withBorder>
+      <Paper p="md" shadow="sm" withBorder className="mb-4">
         <div className="mb-4 flex flex-col md:flex-row md:gap-8">
           <div>
-            {website && whitepaper && (
-              <div className="flex gap-2 flex-wrap mb-4">
-                {website && (
-                  <Badge
-                    className="cursor-pointer"
-                    variant="outline"
-                    color="violet"
-                    component="a"
-                    href={website as string}
-                    target="_blank"
-                    leftSection={<FiLink />}
-                    rightSection={<FiExternalLink />}
-                  >
-                    Website
-                  </Badge>
-                )}
-
-                {whitepaper && (
-                  <Badge
-                    className="cursor-pointer"
-                    variant="outline"
-                    color="violet"
-                    component="a"
-                    href={whitepaper as string}
-                    target="_blank"
-                    leftSection={<IoDocumentText />}
-                    rightSection={<FiExternalLink />}
-                  >
-                    Whitepaper
-                  </Badge>
-                )}
-              </div>
-            )}
-
             <Text size="sm" className="mb-2">
               <strong>Contract Address:</strong>
               <Space />
@@ -98,7 +64,7 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
               <strong>Pair Address:</strong>
               <Space />
               <div className="flex items-center gap-1 break-all">
-                <Tooltip label={pairAddress} withArrow wrapLines styles={{ body: { maxWidth: '400px' } }}>
+                <Tooltip label={pairAddress} withArrow multiline styles={{ tooltip: { maxWidth: '400px' } }}>
                   <div className="truncate max-w-[200px] md:max-w-[350px]">{pairAddress}</div>
                 </Tooltip>
                 <ClipboardButton copy={pairAddress as string} />
@@ -186,6 +152,8 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
           </Badge>
         </div>
       </Paper>
+
+      <CommunityVotes project={data} isRatedToday={isRatedToday} ratings={ratings} />
 
       <div className="mt-4">
         <Text size="xs" color="dimmed">

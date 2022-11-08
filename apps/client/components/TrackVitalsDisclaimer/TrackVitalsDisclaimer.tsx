@@ -1,4 +1,6 @@
-import { Button, Center, Container, Text, Title } from '@mantine/core';
+import { Center, Container, Text } from '@mantine/core';
+import GradientButton from 'components/Buttons/GradientButton';
+import GradientTitle from 'components/Text/GradientTitle';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 
 function TrackVitalsDisclaimer() {
@@ -9,21 +11,20 @@ function TrackVitalsDisclaimer() {
       <Container>
         <Center>
           <div className="text-center">
-            <Title order={2} className="mb-2">
+            <GradientTitle order={2} className="mb-2">
               Monitor your DeFi journey today!
-            </Title>
+            </GradientTitle>
             <Text size="sm" color="dimmed" className="mb-4">
               Sign up now and we will help you set up your analytics dashboard on The Coin Logic
             </Text>
-            <Button
+            <GradientButton
               onClick={() => {
                 setRegister(true);
               }}
-              color="violet"
               size="lg"
             >
               Sign up to get started
-            </Button>
+            </GradientButton>
           </div>
         </Center>
       </Container>

@@ -1,10 +1,10 @@
-import { Divider, Text, UnstyledButton } from '@mantine/core';
+import { Divider, Text } from '@mantine/core';
 import MenuNavLink from 'components/MenuNavLink';
 import { signOut } from 'next-auth/react';
 import { FC } from 'react';
 import { FaUserCog } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
-import { MdOutlineAddChart, MdPayments, MdTrackChanges } from 'react-icons/md';
+import { MdOutlineAddChart, MdTrackChanges } from 'react-icons/md';
 import { RiFoldersLine } from 'react-icons/ri';
 
 type UserNavigationLinksProps = {
@@ -33,13 +33,20 @@ const UserNavigationLinks: FC<UserNavigationLinksProps> = ({ isInMenuProvider, s
         My projects
       </MenuNavLink>
 
-      <MenuNavLink href="/profile/marketing-tracker" icon={<MdTrackChanges />} isInMenu={isInMenuProvider} onClick={onClick}>
+      <MenuNavLink
+        href="/profile/marketing-tracker"
+        icon={<MdTrackChanges />}
+        isInMenu={isInMenuProvider}
+        onClick={onClick}
+      >
         Marketing Tracker
       </MenuNavLink>
 
+      {/* @TODO - Return this with proper invoices generated from Orders */}
+      {/* 
       <MenuNavLink href="/profile/payments" icon={<MdPayments />} isInMenu={isInMenuProvider} onClick={onClick}>
         Invoices
-      </MenuNavLink>
+      </MenuNavLink> */}
 
       <Divider className="my-2" />
 

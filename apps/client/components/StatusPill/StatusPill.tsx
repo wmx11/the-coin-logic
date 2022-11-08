@@ -27,7 +27,9 @@ const StatusPill: FC<StatusPillProps> = ({ status }) => {
       case 'active':
         return { color: 'green', label: 'Active', icon: <BsCheck /> };
       case 'completed':
-        return { color: 'blue', label: 'Done', icon: <MdDoneAll /> };
+        return { color: 'blue', label: 'Completed', icon: <MdDoneAll /> };
+      case 'ended':
+        return { color: 'orange', label: 'Ended', icon: <MdDoneAll /> };
       default:
         return { color: 'gray', label: 'n/a', icon: '' };
     }

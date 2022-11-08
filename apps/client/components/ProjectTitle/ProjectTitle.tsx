@@ -1,8 +1,9 @@
-import { Avatar, Indicator, Title, TitleOrder } from '@mantine/core';
-import React, { FC, HTMLAttributeAnchorTarget } from 'react';
-import Link from 'next/link';
-import { Notification } from 'types';
+import { Indicator, TitleOrder } from '@mantine/core';
+import GradientTitle from 'components/Text/GradientTitle';
 import Image from 'next/image';
+import Link from 'next/link';
+import { FC, HTMLAttributeAnchorTarget, useState } from 'react';
+import { Notification } from 'types';
 
 type ProjectTitleProps = {
   size: string;
@@ -10,19 +11,13 @@ type ProjectTitleProps = {
   title: string;
   component?: string;
   href?: string;
+  target?: string;
   notifications?: Notification[];
 };
 
-const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, href, notifications }) => {
+const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, href, notifications, target }) => {
+  const [src, setSrc] = useState<string | undefined>(avatar);
   const TitleComponent = () => {
-    if (component === 'a') {
-      return (
-        <Link href={href as HTMLAttributeAnchorTarget}>
-          <a className="hover:text-violet transition-colors font-semibold">{title}</a>
-        </Link>
-      );
-    }
-
     const sizes = {
       xs: 8,
       sm: 6,
@@ -30,14 +25,37 @@ const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, h
       lg: 1,
     };
 
-    return <Title order={sizes[size as keyof typeof sizes] as TitleOrder}>{title}</Title>;
+    if (component === 'a') {
+      return (
+        <Link href={href as HTMLAttributeAnchorTarget}>
+          <a className="hover:underline underline-offset-1 text-violet" target={target}>
+            <GradientTitle order={sizes[size as keyof typeof sizes] as TitleOrder}>{title}</GradientTitle>
+          </a>
+        </Link>
+      );
+    }
+
+    return <GradientTitle order={sizes[size as keyof typeof sizes] as TitleOrder}>{title}</GradientTitle>;
   };
 
   const TitleWithLogoComponent = () => {
     if (size === 'md') {
       return (
         <div className="flex gap-4 items-center mb-2">
-          <Image src={avatar} alt="project logo" height={38} width={38} style={{ verticalAlign: 'middle' }} />
+          {src ? (
+            <Image
+              src={src}
+              alt="project logo"
+              height={38}
+              width={38}
+              style={{ verticalAlign: 'middle' }}
+              onError={() => {
+                setSrc(undefined);
+              }}
+            />
+          ) : (
+            <div className="h-[38px] w-[38px] bg-slate-200"></div>
+          )}
           <TitleComponent />
         </div>
       );
@@ -54,7 +72,20 @@ const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, h
             size={15}
             className="items-center flex"
           >
-            <Image src={avatar} alt="project logo" height={26} width={26} style={{ verticalAlign: 'middle' }} />
+            {src ? (
+              <Image
+                src={src}
+                alt="project logo"
+                height={26}
+                width={26}
+                style={{ verticalAlign: 'middle' }}
+                onError={() => {
+                  setSrc(undefined);
+                }}
+              />
+            ) : (
+              <div className="h-[26px] w-[26px] bg-slate-200"></div>
+            )}
           </Indicator>
           <TitleComponent />
         </div>

@@ -1,5 +1,6 @@
-import { Divider, Text, Title } from '@mantine/core';
-import React, { FC } from 'react';
+import { Text } from '@mantine/core';
+import GradientTitle from 'components/Text/GradientTitle';
+import { FC } from 'react';
 import { IconType } from 'react-icons';
 
 type TitleWithIconProps = {
@@ -13,8 +14,8 @@ const TitleWithIcon: FC<TitleWithIconProps> = ({ title, subtitle, Icon }) => {
     <>
       {title && (
         <div className={`flex gap-2 items-center ${!subtitle && 'mb-4'}`}>
-          {Icon && <Icon className="text-md" />}
-          <Title order={2}>{title}</Title>
+          {Icon && <Icon className="text-md text-violet" />}
+          <GradientTitle order={2}>{title}</GradientTitle>
         </div>
       )}
 
@@ -24,7 +25,7 @@ const TitleWithIcon: FC<TitleWithIconProps> = ({ title, subtitle, Icon }) => {
         </Text>
       )}
 
-      <Divider my="sm" />
+      <div className="mb-6"></div>
     </>
   );
 };

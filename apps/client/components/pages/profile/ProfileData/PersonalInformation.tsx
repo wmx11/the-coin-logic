@@ -1,5 +1,6 @@
-import { Checkbox, Divider, Text, Title } from '@mantine/core';
-import React, { FC } from 'react';
+import { Divider, Text } from '@mantine/core';
+import GradientTitle from 'components/Text/GradientTitle';
+import { FC } from 'react';
 import { FaUserAlt } from 'react-icons/fa';
 import { User } from 'types';
 
@@ -8,13 +9,16 @@ type PersonalInformationProps = {
 };
 
 const PersonalInformation: FC<PersonalInformationProps> = ({ user }) => {
-  const { firstName, lastName, email, projectsCount, isSubscribedToEmail, isVerified, walletAddress } = user;
+  const { firstName, lastName, email, projectsCount, walletAddress } = user;
   return (
-    <div className="mb-14">
-      <Title order={3} className="flex gap-2 items-center mb-2 text-violet">
-        <FaUserAlt size={15} />
+    <div className="mb-10">
+      <GradientTitle order={3} className="flex gap-2 items-center mb-2">
+        <FaUserAlt size={15} className="text-violet" />
         Personal Information
-      </Title>
+      </GradientTitle>
+
+      <Divider size={1} className="my-2" />
+
       <Text className="mb-2">
         <strong>First Name:</strong> {firstName || '...'}
       </Text>
@@ -28,17 +32,8 @@ const PersonalInformation: FC<PersonalInformationProps> = ({ user }) => {
         <strong>Wallet Address:</strong> {walletAddress || '...'}
       </Text>
       <Text className="mb-2">
-        <strong>Projects:</strong> {projectsCount}
+        <strong>Listed Projects:</strong> {projectsCount}
       </Text>
-      <Checkbox
-        checked={isSubscribedToEmail as boolean}
-        disabled
-        label="Subscribed to email notifications and newsletters"
-        color="violet"
-        className="mb-2"
-      />
-      <Checkbox checked={isVerified as boolean} disabled label="Account is active" color="violet" className="mb-2" />
-      <Divider size={1} />
     </div>
   );
 };

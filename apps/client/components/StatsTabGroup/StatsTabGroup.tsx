@@ -1,6 +1,7 @@
-import { Center, Divider, Text, Title } from '@mantine/core';
+import { Text } from '@mantine/core';
+import GrayBox from 'components/GrayBox';
 import TitleWithIcon from 'components/TitleWithIcon';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { StatsData } from 'types/MarketData';
 import StatTab from '../StatTab';
 import { StatsTabGroupProps, SubGroup } from './types';
@@ -9,7 +10,7 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
   const StatTabsComponent = () => {
     if (!data || !data.length) {
       return (
-        <Center className="my-16 flex-col">
+        <GrayBox className="my-4 flex-col">
           <Text weight={700} className="text-3xl text-slate-500">
             {untrackedMessage}
           </Text>
@@ -17,7 +18,7 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
             We currently have no data available for the following stats. If you think this is a mistake, please contact
             us.
           </Text>
-        </Center>
+        </GrayBox>
       );
     }
 
@@ -29,7 +30,7 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
               data.map(({ value, title, previousValue, isCurrency, tooltip, chartEntry, id }, index: number) => {
                 return (
                   <StatTab
-                    key={`${title}_${index}`}
+                    key={`${title}_${index}_${subtitle}`}
                     title={title}
                     value={value}
                     previousValue={previousValue}

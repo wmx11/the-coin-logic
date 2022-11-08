@@ -1,6 +1,7 @@
-import { Divider, Text, Title } from '@mantine/core';
+import { Divider, Text } from '@mantine/core';
 import { ClipboardButton } from 'components/ClipboardButton';
-import React, { FC } from 'react';
+import GradientTitle from 'components/Text/GradientTitle';
+import { FC } from 'react';
 import { FaShareSquare } from 'react-icons/fa';
 
 type ReferralsProps = {
@@ -13,14 +14,17 @@ type ReferralsProps = {
 
 const Referrals: FC<ReferralsProps> = ({ referrals }) => {
   const { referralLink, referredUsers, onboardedProjects } = referrals;
-  
+
   return (
-    <div className="mb-14">
-      <Title order={3} className="flex gap-2 items-center mb-2 text-violet">
-        <FaShareSquare size={15} />
+    <div className="mb-10">
+      <GradientTitle order={3} className="flex gap-2 items-center mb-2">
+        <FaShareSquare size={15} className="text-violet" />
         Referrals
-      </Title>
-      <Text>
+      </GradientTitle>
+
+      <Divider size={1} className="my-2" />
+
+      <Text className="flex gap-2 items-center">
         <strong>Your referral link: </strong>
         {referralLink} <ClipboardButton copy={referralLink} />
       </Text>
@@ -34,7 +38,6 @@ const Referrals: FC<ReferralsProps> = ({ referrals }) => {
       <Text className="mb-2">
         <strong>Successfully oboarded projects:</strong> {onboardedProjects || 0}
       </Text>
-      <Divider size={1} />
     </div>
   );
 };
