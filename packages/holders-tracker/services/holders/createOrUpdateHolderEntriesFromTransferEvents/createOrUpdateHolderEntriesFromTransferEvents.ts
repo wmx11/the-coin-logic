@@ -4,20 +4,24 @@ import getPaginationFor from '../../../../utils/getPaginationFor';
 import iterateWithContext from '../../../../utils/iterateWithContext';
 import config from '../../../config';
 import { getDecimals } from '../../base';
-import { setProjectInitialized } from '../../projects';
+import { canProjectBeInitialized, setProjectInitialized } from '../../projects';
 import createOrUpdateHolderEntriesCallback from './createOrUpdateHolderEntriesCallback';
 import getTransferEventsCount from './getTransferEventsCount';
 
 type createOrUpdateHolderEntriesFromTransferEvents = {
   project: Project;
   hasHolders: boolean;
+  initial: boolean;
   contract: Contract;
+  latestBlock: number;
 };
 
 const createOrUpdateHolderEntriesFromTransferEvents = async ({
   project,
   hasHolders,
   contract,
+  latestBlock,
+  initial,
 }: createOrUpdateHolderEntriesFromTransferEvents) => {
   const projectId = project.id;
 
@@ -46,9 +50,17 @@ const createOrUpdateHolderEntriesFromTransferEvents = async ({
 
   await iterateWithContext(context, createOrUpdateHolderEntriesCallback);
 
-  if (!project.initialized || !hasHolders) {
-    await setProjectInitialized(projectId, true);
+  if (!initial) {
+    return null;
   }
+
+  const canBeInitialized = await canProjectBeInitialized(projectId, latestBlock);
+
+  if (!canBeInitialized) {
+    return null;
+  }
+
+  await setProjectInitialized(projectId, true);
 };
 
 export default createOrUpdateHolderEntriesFromTransferEvents;

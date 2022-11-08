@@ -3,6 +3,7 @@ import {
   getEnabledProjectsForHoldersTracking,
 } from '../../../graphql/queries';
 import { prismaClient } from '../../../prismaClient';
+import config from 'tcl-packages/web3/config';
 
 export const getProjects = (initial: boolean) => {
   if (initial) {
@@ -90,5 +91,22 @@ export const getProjectStatus = async (projectId: string) => {
   } catch (error) {
     console.log(error);
     return null;
+  }
+};
+
+export const canProjectBeInitialized = async (projectId: string, lastBlock: number) => {
+  const INITIALIZATION_ITERATIONS_THRESHOLD = 10;
+
+  try {
+    const project = await prismaClient.block.findFirst({
+      where: {
+        projectId,
+      },
+    });
+
+    return (project.lastBlock - lastBlock) / config.initialChunks <= INITIALIZATION_ITERATIONS_THRESHOLD;
+  } catch (error) {
+    console.error(error);
+    return false;
   }
 };
