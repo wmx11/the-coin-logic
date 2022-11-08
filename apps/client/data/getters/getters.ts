@@ -5,11 +5,10 @@ type GetDataTypes<T> = {
   query: string;
   variables?: T;
   fetchPolicy?: FetchPolicy;
-  client?: typeof apolloClient;
 };
 
-export const getData = async <T>({ query, variables, fetchPolicy, client = apolloClient }: GetDataTypes<T>) => {
-  const { data } = await client.query({
+export const getData = async <T>({ query, variables, fetchPolicy }: GetDataTypes<T>) => {
+  const { data } = await apolloClient.query({
     query: gql(query) as DocumentNode,
     variables,
     fetchPolicy: fetchPolicy || 'cache-first',

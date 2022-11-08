@@ -1,12 +1,17 @@
 export const GET_CAMPAIGN_BY_CAMPAIGN_ID = `
-query($campaignId: String) {
-  marketingCampaigns(where: { campaignId: { equals: $campaignId } }) {
+query($campaignId: String, $userId: ID) {
+  marketingCampaigns(where: {
+    campaignId: { equals: $campaignId }
+    users: { some: { id: { equals: $userId } } }
+  }) {
     id
     name
     campaignId
-    status
     enabled
+    status
     isInternal
+    trackMarket
+    trackSocial
     startDate
     endDate
     budget
@@ -19,6 +24,7 @@ query($campaignId: String) {
       enabled
     }
     project {
+      id
       name
       slug
       logo {
@@ -39,6 +45,10 @@ query($campaignId: String) {
       youtube
       medium
     }
+    marketStatSnapshot
+    finalSnapshot
+    marketBudget
+    socialBudget
     priceGoal
     marketCapGoal
     volumeGoal
