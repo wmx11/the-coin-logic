@@ -1,27 +1,17 @@
-import { Button, Checkbox, Container, Select, Stack, TextInput, Title } from '@mantine/core';
-import { useForm, zodResolver } from '@mantine/form';
-import { DatePicker } from '@mantine/dates';
+import { Container } from '@mantine/core';
 import GoBack from 'components/GoBack';
-import React from 'react';
+import GradientTitle from 'components/Text/GradientTitle';
 import CampaignForm from './CampaignForm';
 
 const CreateCampaign = () => {
-  const form = useForm({
-    // validate: zodResolver(userProfileSchema),
-    initialValues: {
-      campaignName: '',
-    },
-  });
-
   return (
     <Container className="py-10">
       <div className="mb-8">
         <GoBack />
-        <Title order={1}>Create new campaign</Title>
+        <GradientTitle order={2}>Create new campaign</GradientTitle>
       </div>
-
       <div>
-        <CampaignForm />
+        <CampaignForm type="create" />
       </div>
     </Container>
   );

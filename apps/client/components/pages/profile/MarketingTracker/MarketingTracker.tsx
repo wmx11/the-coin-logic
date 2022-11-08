@@ -1,10 +1,15 @@
-import { Button, Container, Text, Title } from '@mantine/core';
+import { Button, Text } from '@mantine/core';
+import GradientButton from 'components/Buttons/GradientButton';
 import GoBack from 'components/GoBack';
+import GrayBox from 'components/GrayBox';
+import GradientTitle from 'components/Text/GradientTitle';
+import useUser from 'hooks/useUser';
 import Link from 'next/link';
 import { FC } from 'react';
-import { FaPlus } from 'react-icons/fa';
 import routes from 'routes';
 import { MarketingCampaign } from 'types';
+import { Icons } from 'utils/icons';
+import { hasMarketingTrackerSubscription } from 'utils/utils';
 import MarketingCampaignsTable from './MarketingCampaignsTable';
 
 type MarketingTrackerProps = {
@@ -12,10 +17,25 @@ type MarketingTrackerProps = {
 };
 
 const MarketingTracker: FC<MarketingTrackerProps> = ({ marketingCampaigns }) => {
+  const { user, subscription } = useUser();
+  const hasProjects = (user?.projects?.length || 0) > 0;
+
+  const hasSubscription = (() => {
+    if (user?.isNotChargeable) {
+      return true;
+    }
+
+    if (!subscription) {
+      return false;
+    }
+
+    return hasMarketingTrackerSubscription(subscription);
+  })();
+
   const CreateNewCampaignButton = () => {
     return (
       <Link href={`${routes.marketingTracker}/create`} passHref>
-        <Button component="a" color="violet" variant="outline" leftIcon={<FaPlus />}>
+        <Button component="a" color="violet" variant="outline" leftIcon={<Icons.Add />}>
           Create new campaign
         </Button>
       </Link>
@@ -23,30 +43,51 @@ const MarketingTracker: FC<MarketingTrackerProps> = ({ marketingCampaigns }) => 
   };
 
   return (
-    <>
-      <Container className="py-10">
-        <div className="mb-8">
-          <GoBack />
-          <Title order={1}>Marketing Tracker Dashboard</Title>
+    <div className="w-full">
+      <GoBack />
+      <div>
+        <div className="flex justify-between items-center flex-wrap my-8">
+          {hasProjects && hasSubscription && <GradientTitle order={3}>My Campaigns</GradientTitle>}
+          {hasProjects && hasSubscription && <CreateNewCampaignButton />}
         </div>
 
-        <div className="flex justify-between items-center flex-wrap mb-8">
-          <Title order={2}>My Campaigns</Title>
-          <div>
-            <CreateNewCampaignButton />
-          </div>
-        </div>
+        {!hasSubscription ? (
+          <GrayBox>
+            <Text>Looks like you don't have a subscription to use this Marketing Campaign Tracking tool.</Text>
+            <Link href={routes.pricing} passHref>
+              <GradientButton component="a" color="violet">
+                Explore Product Pricing
+              </GradientButton>
+            </Link>
+          </GrayBox>
+        ) : null}
 
-        {marketingCampaigns.length === 0 && (
-          <div className="bg-zinc-100 p-10 flex flex-col items-center justify-center gap-4 rounded-md mb-8">
-            <Text>You currently have no active campaigns.</Text>
-            <CreateNewCampaignButton />
-          </div>
+        {!hasProjects && hasSubscription && (
+          <GrayBox>
+            <Text>
+              You currently have no projects assigned to your account. Please register a project on TCL in order to use
+              the marketing tracker tool.
+            </Text>
+            <Link href={routes.addProject} passHref>
+              <GradientButton component="a" color="violet" leftIcon={<Icons.Add />}>
+                Add a project
+              </GradientButton>
+            </Link>
+          </GrayBox>
         )}
 
-        {marketingCampaigns.length > 0 && <MarketingCampaignsTable marketingCampaigns={marketingCampaigns} />}
-      </Container>
-    </>
+        {marketingCampaigns.length === 0 && hasProjects && hasSubscription && (
+          <GrayBox>
+            <Text>You currently have no active campaigns.</Text>
+            <CreateNewCampaignButton />
+          </GrayBox>
+        )}
+
+        {marketingCampaigns.length > 0 && hasSubscription && (
+          <MarketingCampaignsTable marketingCampaigns={marketingCampaigns} />
+        )}
+      </div>
+    </div>
   );
 };
 

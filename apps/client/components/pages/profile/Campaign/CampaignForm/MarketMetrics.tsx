@@ -1,83 +1,91 @@
-import { Text, TextInput, Title } from '@mantine/core';
-import React from 'react';
+import { NumberInput, Text, Title } from '@mantine/core';
+import { UseFormReturnType } from '@mantine/form';
+import { AverageMarketChangeForPeriodOfTime } from 'data/getters';
+import { FC } from 'react';
+import { Campaign } from 'schemas/campaign';
 import toCurrency from 'utils/toCurrency';
 import toLocaleString from 'utils/toLocaleString';
-import { resolveStringInputToResult } from 'utils/utils';
+import { resolvePercentage } from 'utils/utils';
 
-const MarketMetrics = ({ form, projectData }) => {
+type MarketMetricsProps = {
+  form: UseFormReturnType<Campaign>;
+  projectData: AverageMarketChangeForPeriodOfTime | undefined;
+};
+
+const MarketMetrics: FC<MarketMetricsProps> = ({ form, projectData }) => {
   return (
     <div>
-      <Title className="mb-4" order={2}>
+      <Title className="mb-4" order={4}>
         Market Metrics
       </Title>
       <div className="flex justify-between gap-2 gap-y-8 flex-wrap">
         <div className="md:max-w-[49%] w-full">
-          <TextInput
+          <NumberInput
             {...form.getInputProps('priceGoal')}
-            placeholder="Price Goal"
+            placeholder="Price Goal %"
             label="Price Goal"
-            description="Expected Price increase during the marketing campaign. You can use whole numbers (100, 200, 300) or percentages (4%, 5%)"
+            description="Expected Price increase during the marketing campaign. The number represents a percentage change."
             size="md"
           />
           <Text color="violet" size="sm">
-            Current Price: {toCurrency(projectData.price)}
+            Current Price: {toCurrency(projectData?.price || 0)}
           </Text>
           <Text color="violet" size="sm">
             Expected Price After Campaign:{' '}
-            {toCurrency(resolveStringInputToResult(form.getInputProps('priceGoal').value, projectData.price)) || 0}
+            {toCurrency(resolvePercentage(form.getInputProps('priceGoal').value, projectData?.price || 0)) || '-'}
           </Text>
         </div>
         <div className="md:max-w-[49%] w-full">
-          <TextInput
+          <NumberInput
             {...form.getInputProps('marketCapGoal')}
-            placeholder="Market Cap Goal"
+            placeholder="Market Cap Goal %"
             label="Market Cap Goal"
-            description="Expected Market Cap increase during the marketing campaign. You can use whole numbers (100, 200, 300) or percentages (4%, 5%)"
+            description="Expected Market Cap increase during the marketing campaign. The number represents a percentage change."
             size="md"
           />
           <Text color="violet" size="sm">
-            Current Market Cap: {toCurrency(projectData.marketCap)}
+            Current Market Cap: {toCurrency(projectData?.marketCap || 0)}
           </Text>
           <Text color="violet" size="sm">
             Expected Market Cap After Campaign:{' '}
-            {toCurrency(resolveStringInputToResult(form.getInputProps('marketCapGoal').value, projectData.marketCap)) ||
-              0}
+            {toCurrency(resolvePercentage(form.getInputProps('marketCapGoal').value, projectData?.marketCap || 0)) ||
+              '-'}
           </Text>
         </div>
 
         <div className="md:max-w-[49%] w-full">
-          <TextInput
+          <NumberInput
             {...form.getInputProps('volumeGoal')}
-            placeholder="Volume Goal"
+            placeholder="Volume Goal %"
             label="Volume Goal"
-            description="Expected Daily Volume increase during the marketing campaign. You can use whole numbers (100, 200, 300) or percentages (4%, 5%)"
+            description="Expected Daily Volume increase during the marketing campaign. The number represents a percentage change."
             size="md"
           />
           <Text color="violet" size="sm">
-            Current Daily Volume: {toCurrency(projectData.volume.h24)}
+            Current Daily Volume: {toCurrency(projectData?.volume)}
           </Text>
           <Text color="violet" size="sm">
             Expected Daily Volume After Campaign:{' '}
-            {toCurrency(resolveStringInputToResult(form.getInputProps('volumeGoal').value, projectData.volume.h24)) ||
-              0}
+            {toCurrency(resolvePercentage(form.getInputProps('volumeGoal').value, projectData?.volume as number)) ||
+              '-'}
           </Text>
         </div>
 
         <div className="md:max-w-[49%] w-full">
-          <TextInput
+          <NumberInput
             {...form.getInputProps('holdersGoal')}
-            placeholder="Holders Goal"
+            placeholder="Holders Goal %"
             label="Holders Goal"
-            description="Expected Holders increase during the marketing campaign. You can use whole numbers (100, 200, 300) or percentages (4%, 5%)"
+            description="Expected Holders increase during the marketing campaign. The number represents a percentage change."
             size="md"
           />
           <Text color="violet" size="sm">
-            Current Holders: {toLocaleString(projectData.holders)}
+            Current Holders: {toLocaleString(projectData?.holders || 0)}
           </Text>
           <Text color="violet" size="sm">
-            Expected Daily Volume After Campaign:{' '}
-            {toLocaleString(resolveStringInputToResult(form.getInputProps('holdersGoal').value, projectData.holders)) ||
-              0}
+            Expected Holders Number After Campaign:{' '}
+            {toLocaleString(resolvePercentage(form.getInputProps('holdersGoal').value, projectData?.holders || 0)) ||
+              '-'}
           </Text>
         </div>
       </div>

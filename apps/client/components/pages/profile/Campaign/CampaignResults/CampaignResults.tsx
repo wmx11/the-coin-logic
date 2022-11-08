@@ -13,7 +13,12 @@ const CampaignResults: FC<CampaignResultsProps> = ({ campaignResults, campaign }
   const resultsData = getData({ campaignResults, campaign });
   return (
     <div className="mb-8">
-      <StatsTabGroup title="Campaign Clicks Results" Icon={BiStats} data={resultsData} />
+      <StatsTabGroup
+        title="Campaign Clicks Results"
+        untrackedMessage="You don't have enough clicks data collected."
+        Icon={BiStats}
+        data={resultsData}
+      />
     </div>
   );
 };

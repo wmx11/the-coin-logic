@@ -1,6 +1,7 @@
 import { Container, Paper, Text } from '@mantine/core';
-import WorldMapBubbleChart from 'components/Charts/WorldMapBubbleChart';
 import GoBack from 'components/GoBack';
+import GradientText from 'components/Text/GradientText';
+import { AverageMarketChangeForPeriodOfTime } from 'data/getters';
 import { FC } from 'react';
 import { MarketingCampaign, MarketingTrackerResult } from 'types';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
@@ -14,37 +15,49 @@ type CampaignProps = {
   campaign: MarketingCampaign;
   projectData: ProjectWithMarketStatsAndChanges;
   campaignResults: MarketingTrackerResult;
+  projectAverages: AverageMarketChangeForPeriodOfTime;
 };
 
-const Campaign: FC<CampaignProps> = ({ campaign, projectData, campaignResults }) => {
-  const { name, campaignId, dateAdded, updatedAt, startDate, endDate, description, project, budget } = campaign;
+const Campaign: FC<CampaignProps> = ({ campaign, projectData, campaignResults, projectAverages }) => {
+  const { description, notes } = campaign;
 
   return (
-    <Container className="py-10">
-      <GoBack />
+    <>
+      <div className="bg-zinc-50">
+        <Container className="py-10">
+          <GoBack />
+          {!campaign && (
+            <div className="bg-zinc-100 p-10 flex flex-col items-center justify-center gap-4 rounded-md mt-8">
+              <Text>We couldn't find the campaign you are looking for.</Text>
+            </div>
+          )}
 
-      {!campaign && (
-        <div className="bg-zinc-100 p-10 flex flex-col items-center justify-center gap-4 rounded-md mt-8">
-          <Text>We couldn't find the campaign you are looking for.</Text>
-        </div>
-      )}
+          <CampaignHeader campaign={campaign} projectAverages={projectAverages} campaignResults={campaignResults} />
 
-      <div>
-        <CampaignHeader campaign={campaign} />
+          <div className="flex justify-between items-stretch gap-4 flex-wrap mb-4 flex-col md:flex-row">
+            <Paper p="md" shadow="sm" withBorder className="flex-1">
+              <GradientText size="lg" weight={600}>
+                Description
+              </GradientText>
+              <Text size="sm">{description ? description : 'No description.'}</Text>
+            </Paper>
+            <Paper p="md" shadow="sm" withBorder className="flex-1">
+              <GradientText size="lg" weight={600}>
+                Notes
+              </GradientText>
+              <Text size="sm">{notes ? notes : 'No notes.'}</Text>
+            </Paper>
+          </div>
+          <CampaignUniqueLinks campaign={campaign} />
+        </Container>
+      </div>
 
-        <Paper p="md" shadow="sm" withBorder className="mb-4">
-          <Text size="lg" weight={600}>
-            Campaign description
-          </Text>
-          <Text size="sm">{description}</Text>
-        </Paper>
-
-        <CampaignUniqueLinks campaign={campaign} />
-        <CampaignGoals campaign={campaign} projectData={projectData} />
+      <Container className="py-10">
+        <CampaignGoals campaign={campaign} projectData={projectData} projectAverages={projectAverages} />
         <CampaignResults campaignResults={campaignResults} campaign={campaign} />
         <CampaignTraffic campaignResults={campaignResults} />
-      </div>
-    </Container>
+      </Container>
+    </>
   );
 };
 

@@ -29,7 +29,7 @@ const EditProfileData = () => {
 
   const handleSubmit = async ({ username, firstName, lastName, subscribeToEmail, walletAddress }: UserProfile) => {
     try {
-      const isValid = await validate();
+      const { isValid } = await validate();
 
       if (!isValid) {
         return null;
