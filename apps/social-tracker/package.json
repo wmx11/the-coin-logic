@@ -1,0 +1,12 @@
+{
+  "name": "social-tracker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "node-html-parser": "^6.1.1",
+    "tcl-packages": "*",
+    "undici": "^5.11.0"
+  }
+}
