@@ -76,8 +76,10 @@ export const getProjectsForTable = async () => {
   
   const projects = marketStats.reduce((arr, curr) => {
     const previousDay = marketStatsPreviousDay.find((item) => item.project?.slug === curr.project?.slug);
+    const hasPreviousDayDuplicate = arr.filter((item) => item.project?.slug === previousDay?.project?.slug).length > 0;
+    const hasDuplicate = arr.filter((item) => item.project?.slug === curr?.project?.slug).length > 0;
     
-    if (arr.filter((item) => item.project?.slug === previousDay?.project?.slug).length > 0) {
+    if (hasPreviousDayDuplicate || hasDuplicate) {
       return arr;
     }
 
