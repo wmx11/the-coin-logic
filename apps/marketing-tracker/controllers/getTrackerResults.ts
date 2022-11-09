@@ -10,9 +10,6 @@ const getTrackerResults = async (req: Request, res: Response) => {
     const userAgentData = parseUserAgent(req.get('user-agent'));
     const marketingTrackerData = parseUrlForMarketingTracker(req);
 
-    console.log(marketingTrackerData);
-    
-
     const trackerData = await saveTrackerResults({
       data: {
         ...userData.data,
@@ -21,6 +18,8 @@ const getTrackerResults = async (req: Request, res: Response) => {
       },
       campaignId: marketingTrackerData.campaignId,
     });
+
+    console.log(marketingTrackerData, trackerData);
 
     // If the tracker fails or the campaign is deleted, redirect to TCL website
     if (!trackerData) {
