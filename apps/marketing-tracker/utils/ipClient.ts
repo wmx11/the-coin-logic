@@ -1,8 +1,10 @@
 import dotenv from 'dotenv';
 import { InMemoryCache, IpregistryClient } from '@ipregistry/client';
 import { Request } from 'express';
+import { getIpAddress } from 'tcl-packages/utils/getIpAddress';
+import path from 'path';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 const IP_REGISTRY_KEY = process.env.IP_REGISTRY_KEY || '';
 
@@ -10,7 +12,8 @@ const ipClient = new IpregistryClient(IP_REGISTRY_KEY, new InMemoryCache(16384, 
 
 export const ipLookup = async (req: Request) => {
   try {
-    const { data } = await ipClient.lookup(req.ip);
+    const ipAddress = getIpAddress(req) || req.ip;
+    const { data } = await ipClient.lookup(ipAddress);
     const referer = req.headers.referer;
 
     if (!data) {

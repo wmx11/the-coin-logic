@@ -10,15 +10,15 @@ router.get(isDev ? '/:campaignId/:target' : '/:campaignId', checkForBots, async 
   try {
     return getTrackerResults(req, res);
   } catch (error) {
-    return res.sendFile(path.resolve(process.cwd(), 'index.html'));
+    return res.sendFile(path.resolve(process.cwd(), 'apps', 'marketing-tracker', 'index.html'));
   }
 });
 
 router.get('/', checkForBots, async (req, res) => {
   try {
-    return res.sendFile(path.resolve(process.cwd(), 'index.html'));
+    return res.sendFile(path.resolve(process.cwd(), 'apps', 'marketing-tracker', 'index.html'));
   } catch (error) {
-    return res.sendFile(path.resolve(process.cwd(), 'index.html'));
+    return res.sendFile(path.resolve(process.cwd(), 'apps', 'marketing-tracker', 'index.html'));
   }
 });
 
