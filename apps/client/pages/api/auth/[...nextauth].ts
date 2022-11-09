@@ -25,10 +25,10 @@ export const authOptions: NextAuthOptions = {
             },
           });
 
-          const { item: user } = authenticateUserWithPassword;
+          const { item: user, sessionToken } = authenticateUserWithPassword;
 
           if (user) {
-            return user.isVerified ? user : false;
+            return user.isVerified ? { ...user, sessionToken } : false;
           }
         } catch (e) {
           return null;
@@ -40,6 +40,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, account, user }) {
       if (user) {
         token.id = user.id;
+        token.sessionToken = user.sessionToken;
       }
 
       return token;
@@ -47,6 +48,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, user, token }) {
       if (token) {
         session.id = token.id;
+        session.token = token.sessionToken;
       }
 
       return session;
@@ -56,8 +58,8 @@ export const authOptions: NextAuthOptions = {
     maxAge: 30 * 60,
   },
   pages: {
-    signIn: '/?signIn=true'
-  }
+    signIn: '/?signIn=true',
+  },
 };
 
 export default NextAuth(authOptions);

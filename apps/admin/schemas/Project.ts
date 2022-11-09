@@ -2,7 +2,7 @@ import { Lists } from '.keystone/types';
 import { list } from '@keystone-6/core';
 import { checkbox, float, image, integer, json, relationship, select, text, timestamp } from '@keystone-6/core/fields';
 import { CacheScope } from 'apollo-cache-control';
-import { isAdmin } from '../utils/rbac';
+import { isAdmin, isUser } from '../utils/rbac';
 import slugify from '../utils/slugify';
 
 const Project: Lists = {
@@ -128,7 +128,7 @@ const Project: Lists = {
     },
     access: {
       operation: {
-        create: (data) => isAdmin(data),
+        create: (data) => isUser(data),
         delete: (data) => isAdmin(data),
         update: (data) => isAdmin(data),
       },

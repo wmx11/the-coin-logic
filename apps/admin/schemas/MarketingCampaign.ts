@@ -1,13 +1,9 @@
 import { Lists } from '.keystone/types';
 import { list } from '@keystone-6/core';
-import {
-  calendarDay,
-  checkbox,
-  float, json, relationship, select, text,
-  timestamp
-} from '@keystone-6/core/fields';
+import { calendarDay, checkbox, float, json, relationship, select, text, timestamp } from '@keystone-6/core/fields';
 import { nanoid } from 'nanoid';
 import generateInputData from '../utils/generateInputData';
+import { isUser } from '../utils/rbac';
 
 const MarketingCampaign: Lists = {
   MarketingCampaign: list({
@@ -73,6 +69,13 @@ const MarketingCampaign: Lists = {
           updatedAt: true,
         },
       }),
+    },
+    access: {
+      operation: {
+        create: (data) => isUser(data),
+        delete: (data) => isUser(data),
+        update: (data) => isUser(data),
+      },
     },
   }),
 };

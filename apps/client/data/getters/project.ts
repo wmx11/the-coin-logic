@@ -12,7 +12,7 @@ import {
   GET_PROJECTS_COUNT,
   GET_PROJECT_AND_MARKET_STATS_BY_SLUG,
   GET_PROJECT_AVERAGE_MARKET_CHANGE_FOR_PERIOD_OF_TIME,
-  MARKET_STAT_CHANGES
+  MARKET_STAT_CHANGES,
 } from './constatnts/project';
 import { getData } from './getters';
 
@@ -77,15 +77,11 @@ export const getProjectsForTable = async () => {
   const projects = marketStats.reduce((arr, curr) => {
     const previousDay = marketStatsPreviousDay.find((item) => item.project?.slug === curr.project?.slug);
 
-    if (!previousDay) {
+    if (arr.filter((item) => item.project?.slug === previousDay?.project?.slug).length) {
       return arr;
     }
 
-    if (arr.filter((item) => item.project?.slug === previousDay.project?.slug).length) {
-      return arr;
-    }
-
-    const getChanges = getChangesPartial(curr, previousDay);
+    const getChanges = getChangesPartial(curr, previousDay || curr);
 
     const marketStatsWithChanges = { ...curr };
 
