@@ -39,7 +39,7 @@ server {
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
+    proxy_set_header Host website.tclmt.io;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
@@ -68,7 +68,7 @@ server {
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
+    proxy_set_header Host whitepaper.tclmt.io;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
@@ -97,7 +97,7 @@ server {
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
+    proxy_set_header Host twitter.tclmt.io;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
@@ -126,7 +126,7 @@ server {
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
+    proxy_set_header Host telegram.tclmt.io;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
@@ -155,7 +155,7 @@ server {
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
+    proxy_set_header Host discord.tclmt.io;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
@@ -184,7 +184,7 @@ server {
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
+    proxy_set_header Host reddit.tclmt.io;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
@@ -213,7 +213,7 @@ server {
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
+    proxy_set_header Host youtube.tclmt.io;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
@@ -242,7 +242,7 @@ server {
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
+    proxy_set_header Host medium.tclmt.io;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
@@ -271,7 +271,7 @@ server {
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
+    proxy_set_header Host exchange.tclmt.io;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
