@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
-import { getIpAddress } from 'utils/utils';
+import { getIpAddress, sanitizeIp } from 'utils/utils';
 
 const RECAPTHA_SCORE = 0.5;
 
@@ -17,11 +17,12 @@ export default async function handler(
 ) {
   const { token } = req.body;
   const ip = getIpAddress(req);
+  const sanitizedIp = sanitizeIp(ip as string);
 
   const recaptchaResponse = await verifyRecaptcha(token);
-  
+
   if (recaptchaResponse.data.success && recaptchaResponse.data.score >= RECAPTHA_SCORE) {
-    return res.status(200).json({ success: true, ip, message: '' });
+    return res.status(200).json({ success: true, ip: sanitizedIp, message: '' });
   }
 
   return res.status(400).json({ success: false, ip: undefined, message: '' });

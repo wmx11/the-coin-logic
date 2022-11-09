@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { isToday } from 'date-fns';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getIpAddress } from 'utils/utils';
+import { getIpAddress, sanitizeIp } from 'utils/utils';
 import prisma from '../../../data/prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -9,6 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { project, user } = body;
 
   const ip = getIpAddress(req);
+  const sanitizedIp = sanitizeIp(ip as string);
 
   if (method === 'POST') {
     if (!project) {
@@ -21,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           dateAdded: 'desc',
         },
         where: {
-          ip,
+          ip: sanitizedIp,
           projectId: project?.id,
           userId: user?.id || undefined,
         },

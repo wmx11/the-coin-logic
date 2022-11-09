@@ -58,7 +58,6 @@ export const getAveragesAndMedians = <T extends Record<string, number>>(
   selectors: Record<string, boolean>,
   initialObj: Record<string, number>,
 ) => {
-
   const failSafeDataset = dataset.length ? dataset : Object.keys(selectors).map((key) => ({ [key]: 0 }));
 
   return failSafeDataset.reduce((obj, item, index) => {
@@ -85,6 +84,8 @@ export const getIpAddress = (req: IncomingMessage) => {
   const ip = typeof forwarded === 'string' ? forwarded.split(/, /)[0] : req.socket.remoteAddress;
   return ip;
 };
+
+export const sanitizeIp = (ip: string) => ip?.trim().replace(/(::ffff:)/g, '');
 
 export const calculateItemTotal = (item: CartItem, duration: string | number) => {
   const discount = item.product?.discount ? item.product?.discount : item.discount;
