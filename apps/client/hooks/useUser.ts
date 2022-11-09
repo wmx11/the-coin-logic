@@ -1,15 +1,12 @@
-import { SESSION_TOKEN } from 'constants/general';
 import { getUserById, getUserProjects, getUserReferrals } from 'data/getters/user';
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo, useState } from 'react';
 import { User } from 'types';
 import { products } from 'types/Products';
-import useLocalStorage from './useLocalStorage';
 
 const useUser = () => {
   const { data: session, status } = useSession();
   const [user, setUser] = useState<(User & { ordersCount: number }) | null>(null);
-  const [storedValue, setValue] = useLocalStorage(SESSION_TOKEN, session?.token);
   const userId = session?.id;
 
   const getUser = useMemo(async () => {
@@ -35,9 +32,6 @@ const useUser = () => {
 
   useEffect(() => {
     getUser.then((data) => setUser(data));
-    if (session) {
-      setValue(session?.token);
-    }
   }, [session]);
 
   return { user, session, status, subscription: getSubscription() };

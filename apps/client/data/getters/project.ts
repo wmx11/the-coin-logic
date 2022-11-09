@@ -43,7 +43,7 @@ export const getProjectPreviousDayMarketStatsBySlugAndDate = async (slug: string
     return null;
   }
 
-  const lastDay = formatISO(endOfYesterday());
+  const lastDay = formatISO(new Date(date));
 
   const { marketStats, socialStats } = await getData({
     query: GET_PREVIOUS_DAY_MARKET_STATS,
@@ -73,11 +73,11 @@ export const getProjectsForTable = async () => {
       date: endOfYesterday(),
     },
   });
-
+  
   const projects = marketStats.reduce((arr, curr) => {
     const previousDay = marketStatsPreviousDay.find((item) => item.project?.slug === curr.project?.slug);
-
-    if (arr.filter((item) => item.project?.slug === previousDay?.project?.slug).length) {
+    
+    if (arr.filter((item) => item.project?.slug === previousDay?.project?.slug).length > 0) {
       return arr;
     }
 
