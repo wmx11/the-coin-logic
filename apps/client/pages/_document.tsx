@@ -44,15 +44,32 @@ export default class _Document extends Document {
         {isProduction && (
           <>
             <script
-              id="Cookiebot"
-              src="https://consent.cookiebot.com/uc.js"
-              data-cbid="1efc4670-8d03-4868-985d-04754e7255be"
-              data-blockingmode="auto"
               type="text/javascript"
+              src="//www.freeprivacypolicy.com/public/cookie-consent/4.0.0/cookie-consent.js"
+              charSet="UTF-8"
             ></script>
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`} />
+            <script
+              type="text/javascript"
+              charSet="UTF-8"
+              dangerouslySetInnerHTML={{
+                __html: `
+              document.addEventListener('DOMContentLoaded', function () {
+              cookieconsent.run({"notice_banner_type":"simple","consent_type":"express","palette":"dark","language":"en","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"page_refresh_confirmation_buttons":false,"website_name":"The Coin Logic","website_privacy_policy_url":"https://thecoinlogic.com/privacy-policy"});
+              });`,
+              }}
+            ></script>
 
             <script
+              type="text/plain"
+              cookie-consent="tracking"
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+            />
+
+            <script
+              type="text/plain"
+              cookie-consent="tracking"
+              async
               // eslint-disable-next-line react/no-danger
               dangerouslySetInnerHTML={{
                 __html: `
@@ -72,14 +89,6 @@ export default class _Document extends Document {
         <body>
           <Main />
           <NextScript />
-          {isProduction && (
-            <script
-              id="CookieDeclaration"
-              src="https://consent.cookiebot.com/1efc4670-8d03-4868-985d-04754e7255be/cd.js"
-              type="text/javascript"
-              async
-            ></script>
-          )}
         </body>
       </Html>
     );

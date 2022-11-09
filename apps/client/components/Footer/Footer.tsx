@@ -62,6 +62,9 @@ function Footer() {
             <Link href={routes.cookiePolicy}>
               <a className="link link-hover">Cookie policy</a>
             </Link>
+            <a className="link link-hover" href="#" id="open_preferences_center">
+              Update cookies preferences
+            </a>
             <Link href={routes.disclaimer}>
               <a className="link link-hover">Disclaimer</a>
             </Link>
