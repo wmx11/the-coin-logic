@@ -172,7 +172,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
     };
   }
 
-  const { data } = await axios.post(routes.api.project.rateCheck, {
+  const { data: isRatedToday } = await axios.post(routes.api.project.rateCheck, {
     project: projectData.project,
     user: session,
   });
@@ -184,7 +184,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
   return {
     props: {
       projectData,
-      isRatedToday: data.isRatedToday,
+      isRatedToday: isRatedToday.isRatedToday,
       ratings: rates.ratings,
     },
   };
