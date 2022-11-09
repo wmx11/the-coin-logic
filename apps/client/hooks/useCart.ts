@@ -70,6 +70,7 @@ const useCart = () => {
   };
 
   useEffect(() => {
+    createCart();
     updateCart();
   }, [user, isCartUpdated, isCartCleared, isItemAdded]);
 
