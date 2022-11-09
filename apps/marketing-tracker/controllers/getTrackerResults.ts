@@ -10,6 +10,9 @@ const getTrackerResults = async (req: Request, res: Response) => {
     const userAgentData = parseUserAgent(req.get('user-agent'));
     const marketingTrackerData = parseUrlForMarketingTracker(req);
 
+    console.log(marketingTrackerData);
+    
+
     const trackerData = await saveTrackerResults({
       data: {
         ...userData.data,

@@ -51,10 +51,12 @@ const saveTrackerResults = async ({ data, campaignId }) => {
       });
     }
 
-    // Add exchange key to the campaign
-    Object.assign(campaign.project, {
-      exchange: campaign.project.liquidityPair.map((item) => `${item.exchange.tradeUrl}${item.tokenAddress}`)[0],
-    });
+    if (campaign.project) {
+      // Add exchange key to the campaign
+      Object.assign(campaign?.project, {
+        exchange: campaign?.project?.liquidityPair.map((item) => `${item?.exchange?.tradeUrl}${item?.tokenAddress}`)[0],
+      });
+    }
 
     return campaign;
   } catch (error) {
