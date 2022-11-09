@@ -1,5 +1,3 @@
-  GNU nano 6.2                                                                            /etc/nginx/sites-available/tclmt.io *                                                                                    
-
 proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=STATIC:10m inactive=7d use_temp_path=off;
 
 ## *** THE COIN LOGIC MARKETING TRACKER SECTION ***
