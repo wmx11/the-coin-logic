@@ -1273,24 +1273,10 @@ export type Holder = {
   id: Scalars['ID'];
   isContract?: Maybe<Scalars['Boolean']>;
   note?: Maybe<Scalars['String']>;
-  projects?: Maybe<Array<Project>>;
-  projectsCount?: Maybe<Scalars['Int']>;
+  projects?: Maybe<Project>;
   transfers?: Maybe<Array<Transfer>>;
   transfersCount?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-
-export type HolderProjectsArgs = {
-  orderBy?: Array<ProjectOrderByInput>;
-  skip?: Scalars['Int'];
-  take?: InputMaybe<Scalars['Int']>;
-  where?: ProjectWhereInput;
-};
-
-
-export type HolderProjectsCountArgs = {
-  where?: ProjectWhereInput;
 };
 
 
@@ -1312,7 +1298,7 @@ export type HolderCreateInput = {
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   isContract?: InputMaybe<Scalars['Boolean']>;
   note?: InputMaybe<Scalars['String']>;
-  projects?: InputMaybe<ProjectRelateToManyForCreateInput>;
+  projects?: InputMaybe<ProjectRelateToOneForCreateInput>;
   transfers?: InputMaybe<TransferRelateToManyForCreateInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -1338,7 +1324,7 @@ export type HolderUpdateInput = {
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   isContract?: InputMaybe<Scalars['Boolean']>;
   note?: InputMaybe<Scalars['String']>;
-  projects?: InputMaybe<ProjectRelateToManyForUpdateInput>;
+  projects?: InputMaybe<ProjectRelateToOneForUpdateInput>;
   transfers?: InputMaybe<TransferRelateToManyForUpdateInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -1353,7 +1339,7 @@ export type HolderWhereInput = {
   id?: InputMaybe<IdFilter>;
   isContract?: InputMaybe<BooleanFilter>;
   note?: InputMaybe<StringFilter>;
-  projects?: InputMaybe<ProjectManyRelationFilter>;
+  projects?: InputMaybe<ProjectWhereInput>;
   transfers?: InputMaybe<TransferManyRelationFilter>;
   updatedAt?: InputMaybe<DateTimeNullableFilter>;
 };

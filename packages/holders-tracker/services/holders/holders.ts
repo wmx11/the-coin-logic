@@ -6,9 +6,7 @@ export const getHoldersCountByProjectIdFrom = (projectId: string, from: number) 
   try {
     return prismaClient.holder.count({
       where: {
-        projects: {
-          every: { id: projectId },
-        },
+        projectsId: projectId,
         balance: {
           gte: from,
         },
@@ -27,9 +25,7 @@ export const getAverageHoldingsByProjectId = async (projectId: string) => {
         balance: true,
       },
       where: {
-        projects: {
-          every: { id: projectId },
-        },
+        projectsId: projectId,
       },
     });
     return _avg.balance;
@@ -44,16 +40,14 @@ export const getHolder = (address: string) => {
 };
 
 export const getHolderByProjectIdAndAddress = (projectId: string, address: string) => {
-  return prismaClient.holder.findFirst({ where: { address, projects: { some: { id: projectId } } } });
+  return prismaClient.holder.findFirst({ where: { address, projectsId: projectId, } });
 };
 
 export const getHoldersByProjectId = (projectId: string, pagination?: Pagination) => {
   return prismaClient.holder.findMany({
     ...pagination,
     where: {
-      projects: {
-        every: { id: projectId },
-      },
+      projectsId: projectId,
     },
   });
 };
@@ -69,9 +63,7 @@ export const getHolderByAddress = (address: string) => {
 export const getHoldersCountByProjectId = (projectId: string) => {
   return prismaClient.holder.count({
     where: {
-      projects: {
-        every: { id: projectId },
-      },
+      projectsId: projectId,
     },
   });
 };
@@ -119,16 +111,14 @@ export const getHoldersByProjectIdFromDateLowerThan = (projectId: string, date: 
   try {
     return prismaClient.holder.findMany({
       where: {
-        projects: {
-          every: { id: projectId },
-        },
+        projectsId: projectId,
         updatedAt: {
           lt: date,
         },
       },
       orderBy: {
-        updatedAt: 'asc'
-      }
+        updatedAt: 'asc',
+      },
     });
   } catch (error) {
     console.log(error);
@@ -140,9 +130,7 @@ export const getNewHoldersCountByProjectId = async (projectId: string, tokenAmou
   try {
     return prismaClient.holder.count({
       where: {
-        projects: {
-          every: { id: projectId },
-        },
+        projectsId: projectId,
         balance: {
           gte: tokenAmount,
         },
@@ -161,9 +149,7 @@ export const getLeavingHoldersCountByProjectId = async (projectId: string, token
   try {
     return prismaClient.holder.count({
       where: {
-        projects: {
-          every: { id: projectId },
-        },
+        projectsId: projectId,
         balance: {
           lte: tokenAmount,
         },
@@ -193,9 +179,7 @@ export const getRecurringHoldersCountByProjectId = async (projectId: string, tok
   try {
     return prismaClient.holder.count({
       where: {
-        projects: {
-          every: { id: projectId },
-        },
+        projectsId: projectId,
         balance: {
           gte: tokenAmount,
         },
