@@ -22,7 +22,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           dateAdded: 'desc',
         },
         where: {
-          ip: sanitizedIp,
+          ip: {
+            equals: sanitizedIp,
+          },
           projectId: project?.id,
           userId: user?.id || undefined,
         },
