@@ -7,28 +7,33 @@ import path from 'path';
 const router = Router();
 
 const trackerPath = isDev ? '/:campaignId/:target' : '/:campaignId';
+const index = path.resolve(process.cwd(), 'apps', 'marketing-tracker', 'index.html');
+const css = path.resolve(process.cwd(), 'apps', 'marketing-tracker', 'output.css');
 
 router.get(trackerPath, checkForBots, async (req, res) => {
   try {
-    return getTrackerResults(req, res);
+    if (req.subdomains.length > 0) {
+      return getTrackerResults(req, res);
+    }
+    return res.sendFile(index);
   } catch (error) {
-    return res.sendFile(path.resolve(process.cwd(), 'apps', 'marketing-tracker', 'index.html'));
+    return res.sendFile(index);
   }
 });
 
 router.get('/', checkForBots, async (req, res) => {
   try {
-    return res.sendFile(path.resolve(process.cwd(), 'apps', 'marketing-tracker', 'index.html'));
+    return res.sendFile(index);
   } catch (error) {
-    return res.sendFile(path.resolve(process.cwd(), 'apps', 'marketing-tracker', 'index.html'));
+    return res.sendFile(index);
   }
 });
 
 router.get('/output.css', checkForBots, async (req, res) => {
   try {
-    return res.sendFile(path.resolve(process.cwd(), 'apps', 'marketing-tracker', 'output.css'));
+    return res.sendFile(css);
   } catch (error) {
-    return res.sendFile(path.resolve(process.cwd(), 'apps', 'marketing-tracker', 'output.css'));
+    return res.sendFile(css);
   }
 });
 

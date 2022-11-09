@@ -40,7 +40,7 @@ const saveTrackerResults = async ({ data, campaignId }) => {
     });
 
     // If  it's not ended and it's started, save the data
-    if (isBefore(currentDate, new Date(campaign.endDate)) && isAfter(currentDate, new Date(campaign.startDate))) {
+    if (isBefore(currentDate, new Date(campaign?.endDate)) && isAfter(currentDate, new Date(campaign?.startDate))) {
       await prismaClient.marketingTrackerResult.create({
         data: {
           ...data,
