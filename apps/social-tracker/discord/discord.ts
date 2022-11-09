@@ -49,7 +49,7 @@ client.once(Events.ClientReady, async (): Promise<void> => {
     console.log(error);
   }
 
-  app.listen(port, () => console.log('Discord bot API is listening.'));
+  app.listen(port, () => console.log('Discord bot API is listening on port', port));
 });
 
 try {
