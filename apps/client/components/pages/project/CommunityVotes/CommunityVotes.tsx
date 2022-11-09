@@ -2,7 +2,7 @@ import { Button, Paper, Progress, Text } from '@mantine/core';
 import axios from 'axios';
 import useUser from 'hooks/useUser';
 import { ProjectRatings } from 'pages/api/project/get-rates';
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import routes from 'routes';
 import { Project } from 'types';
 import { Icons } from 'utils/icons';
@@ -18,11 +18,35 @@ const CommunityVotes: FC<CommunityVotesProps> = ({ project, isRatedToday, rating
     return null;
   }
 
+  const [isRatingChecked, setIsRatingChecked] = useState(false);
   const [isRated, setIsRated] = useState(isRatedToday);
   const [rates, setRates] = useState(ratings);
 
-  const { user } = useUser();
+  const { user, session, status } = useUser();
   const { name } = project;
+
+  const checkIfUserHasRatedToday = async () => {
+    if (status === 'loading' || isRatingChecked) {
+      return;
+    }
+
+    const { data: isRatedToday } = await axios.post(routes.api.project.rateCheck, {
+      project,
+      user,
+    });
+
+    setIsRatingChecked(true);
+
+    if (!isRatedToday) {
+      return setIsRated(false);
+    }
+
+    setIsRated(isRatedToday.isRatedToday);
+  };
+
+  useEffect(() => {
+    checkIfUserHasRatedToday();
+  }, [user, session, status]);
 
   const handleClick = async (rating: number) => {
     await axios.post(routes.api.project.rate, {
