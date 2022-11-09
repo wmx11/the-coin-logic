@@ -2537,13 +2537,7 @@ type Holder {
   balance: Float
   note: String
   isContract: Boolean
-  projects(
-    where: ProjectWhereInput! = {}
-    orderBy: [ProjectOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [Project!]
-  projectsCount(where: ProjectWhereInput! = {}): Int
+  projects: Project
   transfers(
     where: TransferWhereInput! = {}
     orderBy: [TransferOrderByInput!]! = []
@@ -2568,7 +2562,7 @@ input HolderWhereInput {
   balance: FloatNullableFilter
   note: StringFilter
   isContract: BooleanFilter
-  projects: ProjectManyRelationFilter
+  projects: ProjectWhereInput
   transfers: TransferManyRelationFilter
   dateAdded: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -2595,7 +2589,7 @@ input HolderUpdateInput {
   balance: Float
   note: String
   isContract: Boolean
-  projects: ProjectRelateToManyForUpdateInput
+  projects: ProjectRelateToOneForUpdateInput
   transfers: TransferRelateToManyForUpdateInput
   dateAdded: DateTime
   updatedAt: DateTime
@@ -2618,7 +2612,7 @@ input HolderCreateInput {
   balance: Float
   note: String
   isContract: Boolean
-  projects: ProjectRelateToManyForCreateInput
+  projects: ProjectRelateToOneForCreateInput
   transfers: TransferRelateToManyForCreateInput
   dateAdded: DateTime
   updatedAt: DateTime
