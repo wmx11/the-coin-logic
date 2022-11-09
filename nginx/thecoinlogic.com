@@ -75,6 +75,25 @@ server {
 ## *** THE COIN LOGIC MARKETING TRACKER SECTION ***
 
 server {
+  server_name tclmt.io www.tclmt.io;
+
+  location / {
+    proxy_pass http://localhost:3100;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+    add_header X-XSS-Protection          "1; mode=block" always;
+    add_header X-Frame-Options DENY always;
+  }
+
+    listen 80;
+}
+
+server {
   server_name website.tclmt.io www.website.tclmt.io;
 
   location / {
