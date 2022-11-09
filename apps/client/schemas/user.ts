@@ -1,11 +1,24 @@
 import { z } from 'zod';
 
+const trimString = (u: unknown) => (typeof u === 'string' ? u.trim() : u);
+
 export const commons = {
   username: z.string().min(3, { message: 'Username must be at least 3 characters long.' }).max(24),
   firstName: z.nullable(z.string().min(2, { message: 'First Name must be at least 2 characters long.' }).max(24)),
   lastName: z.nullable(z.string().min(2, { message: 'Last Name must be at least 2 characters long.' }).max(24)),
-  email: z.string().min(1, { message: 'Email is required.' }).email({ message: 'Email is invalid.' }),
-  password: z.string().min(8, { message: 'Password must be at least 8 characters long.' }),
+  email: z.preprocess(
+    trimString,
+    z
+      .string()
+      .min(1, { message: 'Email is required.' })
+      .email({ message: 'Email is invalid.' })
+      .max(64, { message: 'Email cannot be longer than 64 characters.' }),
+  ),
+
+  password: z
+    .string()
+    .min(8, { message: 'Password must be at least 8 characters long.' })
+    .max(34, { message: 'Password cannot be longer than 34 characters.' }),
   subscribeToEmail: z.boolean(),
 };
 
