@@ -13,11 +13,10 @@ import CommunityVotes from '../CommunityVotes';
 
 type AboutProjectProps = {
   data: Project;
-  isRatedToday: boolean;
   ratings: ProjectRatings;
 };
 
-const AboutProject: FC<AboutProjectProps> = ({ data, isRatedToday, ratings }) => {
+const AboutProject: FC<AboutProjectProps> = ({ data, ratings }) => {
   const {
     name,
 
@@ -153,7 +152,7 @@ const AboutProject: FC<AboutProjectProps> = ({ data, isRatedToday, ratings }) =>
         </div>
       </Paper>
 
-      <CommunityVotes project={data} isRatedToday={isRatedToday} ratings={ratings} />
+      <CommunityVotes project={data} ratings={ratings} />
 
       <div className="mt-4">
         <Text size="xs" color="dimmed">

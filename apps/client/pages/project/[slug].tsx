@@ -12,8 +12,6 @@ import SocialAnalysisData from 'components/pages/project/SocialAnalysisData';
 import TransactionVolume from 'components/pages/project/TransactionVolume';
 import withRedisCache from 'data/withRedisCache';
 import { GetServerSideProps } from 'next';
-import { unstable_getServerSession } from 'next-auth';
-import { authOptions } from 'pages/api/auth/[...nextauth]';
 import { ProjectRatings } from 'pages/api/project/get-rates';
 import { FC, useEffect } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
@@ -32,11 +30,10 @@ import { getProjectAndMarketStatsBySlug } from '../../data/getters';
 
 type ProjectProps = {
   projectData: ProjectWithMarketStatsAndChanges;
-  isRatedToday: boolean;
   ratings: ProjectRatings;
 };
 
-const project: FC<ProjectProps> = ({ projectData, isRatedToday, ratings }) => {
+const project: FC<ProjectProps> = ({ projectData, ratings }) => {
   const chartStore = useChartStore((state) => state);
   const { project } = projectData;
   const { notifications } = project;
@@ -117,7 +114,7 @@ const project: FC<ProjectProps> = ({ projectData, isRatedToday, ratings }) => {
           <div className="mb-4">
             <div className={`flex gap-4 flex-wrap md:flex-nowrap md:justify-between`}>
               <div className={`w-full md:w-[66%]`}>
-                <AboutProject data={project} isRatedToday={isRatedToday} ratings={ratings} />
+                <AboutProject data={project} ratings={ratings} />
               </div>
               <div className="w-full md:w-[34%] flex flex-col gap-4">
                 <Markets data={project} />
@@ -158,9 +155,6 @@ export default project;
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }) => {
   const slug = params?.slug;
-
-  const session = await unstable_getServerSession(req, res, authOptions);
-
   const projectData = await withRedisCache(`projectData_${slug}`, () => getProjectAndMarketStatsBySlug(slug as string));
 
   if (!projectData) {
@@ -172,11 +166,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
     };
   }
 
-  const { data: isRatedToday } = await axios.post(routes.api.project.rateCheck, {
-    project: projectData.project,
-    user: session,
-  });
-
   const { data: rates } = await axios.post(routes.api.project.getRates, {
     project: projectData.project,
   });
@@ -184,7 +173,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
   return {
     props: {
       projectData,
-      isRatedToday: isRatedToday.isRatedToday,
       ratings: rates.ratings,
     },
   };

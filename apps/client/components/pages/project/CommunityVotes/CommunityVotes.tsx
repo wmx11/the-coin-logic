@@ -9,17 +9,16 @@ import { Icons } from 'utils/icons';
 
 type CommunityVotesProps = {
   project: Project;
-  isRatedToday: boolean;
   ratings: ProjectRatings;
 };
 
-const CommunityVotes: FC<CommunityVotesProps> = ({ project, isRatedToday, ratings }) => {
+const CommunityVotes: FC<CommunityVotesProps> = ({ project, ratings }) => {
   if (!project) {
     return null;
   }
 
   const [isRatingChecked, setIsRatingChecked] = useState(false);
-  const [isRated, setIsRated] = useState(isRatedToday);
+  const [isRated, setIsRated] = useState(false);
   const [rates, setRates] = useState(ratings);
 
   const { user, session, status } = useUser();
