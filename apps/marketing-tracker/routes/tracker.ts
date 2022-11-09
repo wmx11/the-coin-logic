@@ -6,7 +6,9 @@ import path from 'path';
 
 const router = Router();
 
-router.get(isDev ? '/:campaignId/:target' : '/:campaignId', checkForBots, async (req, res) => {
+const trackerPath = isDev ? '/:campaignId/:target' : '/:campaignId';
+
+router.get(trackerPath, checkForBots, async (req, res) => {
   try {
     return getTrackerResults(req, res);
   } catch (error) {
