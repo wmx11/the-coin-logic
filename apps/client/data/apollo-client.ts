@@ -4,13 +4,14 @@ import { SESSION_TOKEN } from 'constants/general';
 
 const getToken = () => {
   if (typeof window !== 'undefined') {
-    return JSON.parse(window.localStorage.getItem(SESSION_TOKEN) as string || '');
+    return JSON.parse((window.localStorage.getItem(SESSION_TOKEN) as string) || '');
   }
   return null;
 };
 
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
+  credentials: 'include',
 });
 
 const authLink = setContext((_, { headers }) => {

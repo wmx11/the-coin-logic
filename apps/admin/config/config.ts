@@ -10,6 +10,7 @@ const config = {
       'https://cms.thecoinlogic.com',
       'https://www.cms.thecoinlogic.com',
     ],
+    credentials: true,
   },
 };
 
