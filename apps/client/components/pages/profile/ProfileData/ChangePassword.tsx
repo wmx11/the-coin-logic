@@ -1,16 +1,19 @@
-import { Button, Divider, Text, Title } from '@mantine/core';
-import React from 'react';
+import { Button, Divider, Text } from '@mantine/core';
+import GradientTitle from 'components/Text/GradientTitle';
 import { FaUserLock } from 'react-icons/fa';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 
 const ChangePassword = () => {
   const { setRequestResetPassword, setIsInitial } = useLoginFlowStore((state) => state);
   return (
-    <div className="mb-14">
-      <Title order={3} className="flex gap-2 items-center mb-2 text-violet">
-        <FaUserLock size={18} />
+    <div className="mb-10">
+      <GradientTitle order={3} className="flex gap-2 items-center mb-2">
+        <FaUserLock size={18} className="text-violet" />
         Password
-      </Title>
+      </GradientTitle>
+
+      <Divider size={1} className="my-2" />
+
       <Text size="xs" color="dimmed" className="mb-4">
         Did the old password get boring? No worries, you can change it to a new one!
       </Text>
@@ -25,7 +28,6 @@ const ChangePassword = () => {
       >
         Change Password
       </Button>
-      <Divider size={1} />
     </div>
   );
 };

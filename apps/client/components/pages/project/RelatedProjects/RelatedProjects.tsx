@@ -1,6 +1,6 @@
-import { Paper, Title } from '@mantine/core';
 import { ProjectTitle } from 'components/ProjectTitle';
-import React, { FC } from 'react';
+import GradientTitle from 'components/Text/GradientTitle';
+import { FC } from 'react';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 
 type RelatedProjectsProps = {
@@ -27,11 +27,11 @@ const RelatedProjects: FC<RelatedProjectsProps> = ({ data }) => {
   }
 
   return (
-    <Paper p="md" shadow="sm" withBorder className="mb-4">
-      <Title order={4} className="mb-4">
+    <div className="mb-4">
+      <GradientTitle order={4} className="mb-4">
         Related Projects and Tokens
-      </Title>
-      <div className="w-full flex flex-wrap gap-4 items-center">
+      </GradientTitle>
+      <div className="w-full flex flex-wrap gap-8 items-center">
         {projects.map((item) => {
           return (
             <ProjectTitle
@@ -44,7 +44,7 @@ const RelatedProjects: FC<RelatedProjectsProps> = ({ data }) => {
           );
         })}
       </div>
-    </Paper>
+    </div>
   );
 };
 

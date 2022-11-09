@@ -1,14 +1,13 @@
-import React, { FC } from 'react';
-import { DocumentRenderer, DocumentRendererProps } from '@keystone-6/document-renderer';
-import { NotFound } from 'components/NotFound';
+import { DocumentRendererProps } from '@keystone-6/document-renderer';
 import { Center, Container, Text, Title } from '@mantine/core';
+import Meta from 'components/Meta';
+import { NotFound } from 'components/NotFound';
+import TextContent from 'components/TextContent';
 import { getBlogContentBySlug } from 'data/getters';
 import Image from 'next/image';
+import { FC } from 'react';
 import { Content } from 'types';
 import { formatDate } from 'utils/formatters';
-import TextContent from 'components/TextContent';
-import Head from 'next/head';
-import Meta from 'components/Meta';
 
 type ContentTypes = {
   content: Content & {

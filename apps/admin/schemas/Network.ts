@@ -11,6 +11,7 @@ const Network: Lists = {
       url: text({ validation: { isRequired: true } }),
       scanner: text(),
       tokenScanner: text(),
+      txScanner: text(),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
     },
   }),

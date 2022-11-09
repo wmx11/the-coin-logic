@@ -7,12 +7,24 @@ query($id: ID) {
     email
     isVerified
     isSubscribedToEmail
+    isNotChargeable
     walletAddress
     projectsCount
-    subscribedTill
+    ip
+    subscriptionStatus(userId: $id) {
+      isValid
+      products
+      dateFrom
+      dateTo
+    }
     referralCode
     dateCreated
   }
+  ordersCount(
+    where: {
+      user: { id: { equals: $id } }
+    }
+  )
 }`;
 
 export const GET_USER_REFERALS = `
@@ -23,23 +35,54 @@ query($referralCode: String) {
   )
 }`;
 
-export const GET_USER_PAYMENTS = `
+export const GET_USER_MARKETING_CAMPAIGNS = `
 query($email: String) {
   user(where: { email: $email }) {
-    payments(orderBy: { dateIssued: desc }) {
+    marketingCampaigns {
+      id
       name
-      description
-      quantity
-      price
-      discount
-      tax
-      amount
-      paymentMethod
-      paymentAddress
+      campaignId
+      enabled
       status
-      invoiceUrl
-      dateIssued
-      datePaid
+      isInternal
+      startDate
+      endDate
+      budget
+      description
+      agency
+      agencyUrl
+      creator {
+        name
+        slug
+        enabled
+      }
+      project {
+        name
+        slug
+        logo {
+          url
+        }
+      }
+      priceGoal
+      marketCapGoal
+      volumeGoal
+      holdersGoal
+      twitterGoal
+      discordGoal
+      telegramGoal
+      dateAdded
+      updatedAt
+    }
+  }
+}`;
+
+export const GET_USER_PROJECTS = `
+query($email: String!) {
+  user(where: { email: $email }) {
+    projects {
+      id
+      name
+      slug
     }
   }
 }`;

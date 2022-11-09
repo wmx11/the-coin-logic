@@ -3,6 +3,7 @@ import baseAbi from 'tcl-packages/web3/baseAbi';
 import createOrUpdateHolderEntriesFromTransferEvents from 'tcl-packages/holders-tracker/services/holders/createOrUpdateHolderEntriesFromTransferEvents';
 import { getHoldersCountByProjectId } from 'tcl-packages/holders-tracker/services/holders';
 import { getProjects, setProjectStatus } from 'tcl-packages/holders-tracker/services/projects';
+import { getLatestBlock } from 'tcl-packages/holders-tracker/services/base';
 
 let isRunning = false;
 
@@ -30,6 +31,7 @@ const trackHoldings = async (initial = false, reset = false) => {
 
       const web3 = new Web3(project.network?.url as string);
       const contract = new web3.eth.Contract(baseAbi, project.contractAddress as string);
+      const latestBlock = await getLatestBlock(web3);
 
       await setProjectStatus(project.id, 'tracking_holdings');
 
@@ -37,6 +39,8 @@ const trackHoldings = async (initial = false, reset = false) => {
         project,
         hasHolders: reset ? false : hasHolders,
         contract,
+        latestBlock,
+        initial
       });
 
       await setProjectStatus(project.id, 'idle');

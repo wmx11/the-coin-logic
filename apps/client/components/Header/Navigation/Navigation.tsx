@@ -1,4 +1,3 @@
-import { Divider } from '@mantine/core';
 import useMobileScreen from 'hooks/useMobileScreen';
 import Link from 'next/link';
 import { FC } from 'react';
@@ -21,8 +20,8 @@ const Navigation: FC<NavigationProps> = ({ setIsOpen }) => {
       <div className="w-full md:w-auto" onClick={isMobileScreen && setIsOpen ? () => setIsOpen(false) : undefined}>
         <Link href={href}>
           <a
-            className={`font-bold hover:text-purple-300 transition-colors md:text-sm lg:text-base ${
-              isMobileScreen && 'w-full p-3 mb-2 block bg-violet/10 text-violet rounded-md'
+            className={`font-semibold hover:text-purple-300 transition-colors md:text-sm lg:text-base ${
+              isMobileScreen && 'w-full p-3 mb-2 block bg-violet/10 text-white rounded-md'
             }`}
           >
             {label}
@@ -34,13 +33,11 @@ const Navigation: FC<NavigationProps> = ({ setIsOpen }) => {
 
   return (
     <div className={`flex justify-between text-white py-4 ${isMobileScreen && 'flex-col items-center'}`}>
-      <div className={`flex gap-x-6 items-center ${isMobileScreen && 'flex-col mb-8 text-center w-full'} `}>
+      <div className={`flex gap-x-8 items-center ${isMobileScreen && 'flex-col mb-8 text-center w-full'} `}>
         <NavLink href={routes.projects} label="Projects" />
         <NavLink href={routes.services} label="Services" />
-        <NavLink href={routes.resources} label="Resources" />
-        <NavLink href={routes.aboutUs} label="About Us" />
-        <NavLink href={routes.roadmap} label="Roadmap" />
-        <NavLink href={routes.pricing} label="Pricing" />
+        <NavLink href={routes.articles} label="Articles" />
+        <NavLink href={routes.pricing} label="Products" />
       </div>
     </div>
   );

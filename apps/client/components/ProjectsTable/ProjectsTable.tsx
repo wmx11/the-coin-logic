@@ -1,33 +1,61 @@
-import { Button, Container, Paper, Text, Title } from '@mantine/core';
+import { Container, Text } from '@mantine/core';
+import { useSort } from '@table-library/react-table-library/sort';
 import { Column } from '@table-library/react-table-library/types/compact';
-import { TableNode } from '@table-library/react-table-library/types/table';
+import { Data, TableNode } from '@table-library/react-table-library/types/table';
 import { Badges } from 'components/Badges';
+import GradientButton from 'components/Buttons/GradientButton';
 import { NetworkBadge } from 'components/NetworkBadge';
 import { ProjectTitle } from 'components/ProjectTitle';
 import Table from 'components/Table';
+import GradientText from 'components/Text/GradientText';
+import GradientTitle from 'components/Text/GradientTitle';
 import { Trend } from 'components/Trend';
 import Link from 'next/link';
 import { FC } from 'react';
 import { AiOutlineEllipsis } from 'react-icons/ai';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { Network, Tag } from 'types';
 import { PreviousValueTypes } from 'types/MarketData';
 import toCurrency from 'utils/toCurrency';
 import toLocaleString from 'utils/toLocaleString';
 
 type ProjectsTableProps = {
-  data: TableNode[];
+  data: TableNode[] | Data;
   projectsCount: number;
 };
 
 const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
   const theme = {
-    Table: `--data-table-library_grid-template-columns: 40px 180px repeat(7, 1fr);`,
+    Table: `--data-table-library_grid-template-columns: 40px 160px repeat(7, 1fr);`,
     BaseCell: `
+    > div {
+      white-space: normal;
+    }
     &:nth-of-type(2) {
       left: 0px;
       box-shadow: 2px 0px 2px rgba(0,0,0,0.1);
     }`,
   };
+
+  const sorter = useSort(
+    data as Data,
+    {
+      onChange: () => {},
+    },
+    {
+      sortIcon: {
+        iconDefault: null,
+        iconUp: <FaChevronUp />,
+        iconDown: <FaChevronDown />,
+      },
+      sortFns: {
+        PRICE: (array) => array.sort((a, b) => a.price - b.price),
+        MARKET_CAP: (array) => array.sort((a, b) => a.marketCap - b.marketCap),
+        HOLDERS: (array) => array.sort((a, b) => a.holders - b.holders),
+        AVG_HOLDINGS: (array) => array.sort((a, b) => a.avgHoldings - b.avgHoldings),
+      },
+    },
+  );
 
   const columns: Column[] = [
     {
@@ -45,7 +73,7 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
         <>
           <ProjectTitle
             component="a"
-            href={`/project/${project.slug}`}
+            href={`/project/${project?.slug || ''}`}
             title={project.name as string}
             size="sm"
             avatar={project.logo ? project.logo.url : ''}
@@ -62,6 +90,9 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
           {<Trend previousValue={priceChange as PreviousValueTypes} inline={true} />}
         </>
       ),
+      sort: {
+        sortKey: 'PRICE',
+      },
     },
     {
       label: 'Market Cap',
@@ -71,6 +102,9 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
           {<Trend previousValue={marketCapChange as PreviousValueTypes} inline={true} />}
         </>
       ),
+      sort: {
+        sortKey: 'MARKET_CAP',
+      },
     },
     {
       label: 'Holders',
@@ -80,6 +114,9 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
           {<Trend previousValue={holdersChange as PreviousValueTypes} inline={true} />}
         </>
       ),
+      sort: {
+        sortKey: 'HOLDERS',
+      },
     },
     {
       label: 'Avg. Holdings',
@@ -89,6 +126,9 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
           {<Trend previousValue={avgHoldingsChange as PreviousValueTypes} inline={true} />}
         </>
       ),
+      sort: {
+        sortKey: 'AVG_HOLDINGS',
+      },
     },
     {
       label: 'Avg. Holdings (USD)',
@@ -103,12 +143,16 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
   return (
     <div className="my-10">
       <Container>
-        <Title order={2} className="mb-6">
-          Projects by Market Cap
-        </Title>
-        <Paper p="md" shadow="sm">
+        <div className="mb-6">
+          <GradientTitle order={2}>Projects by Market Cap</GradientTitle>
+          <Text size="xs" color="dimmed">
+            Displaying projects listed on The Coin Logic. Please make sure you do your own research before investing in
+            any of the projects.
+          </Text>
+        </div>
+        <div>
           <div>
-            <Table data={data} columns={columns} customTheme={theme} />
+            <Table data={data as TableNode[]} columns={columns} sort={sorter} customTheme={theme} />
           </div>
 
           {projectsCount > 0 && (
@@ -120,16 +164,14 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
           )}
 
           <div className="my-8 text-center">
-            <Text weight={700} className="mb-4">
+            <GradientText weight={700} className="mb-4">
               Can't find your favorite project?
-            </Text>
+            </GradientText>
             <Link href="/referrals" passHref>
-              <Button color="violet" component="a">
-                Refer a project and earn rewards!
-              </Button>
+              <GradientButton component="a">Refer a project and earn rewards!</GradientButton>
             </Link>
           </div>
-        </Paper>
+        </div>
       </Container>
     </div>
   );

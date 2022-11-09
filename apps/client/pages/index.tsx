@@ -4,7 +4,6 @@ import withRedisCache from 'data/withRedisCache';
 import useResetToken from 'hooks/useResetToken';
 import type { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-
 import { useCallback, useEffect, useState } from 'react';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 import { Content } from 'types';
@@ -50,16 +49,14 @@ const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts, topCoin
   }, [projects]);
 
   return (
-    <div>
-      <div>
-        <Hero />
-        <ProjectsTable data={projectData.projects} projectsCount={projectData.projectsCount} />
-        <CryptocurrenciesTable data={topCoins} />
-        <JoinOurCommunity />
-        <BlogPosts data={blogPosts} />
-        <TrackVitalsDisclaimer />
-      </div>
-    </div>
+    <>
+      <Hero />
+      <ProjectsTable data={projectData.projects} projectsCount={projectData.projectsCount} />
+      <CryptocurrenciesTable data={topCoins} />
+      <JoinOurCommunity />
+      <BlogPosts data={blogPosts} />
+      <TrackVitalsDisclaimer />
+    </>
   );
 };
 
@@ -69,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, query }) => 
   const projects = await withRedisCache('projects', getProjectsForTable);
   const topCoins = await withRedisCache('topCoins', getTopCoins, 10 * 60);
   const projectsCount = await withRedisCache('projectsCount', getProjectsCount);
-  const blogPosts = await withRedisCache('blogPosts', () => getBlogPosts(8));
+  const blogPosts = await withRedisCache('blogPosts_homepage', () => getBlogPosts(8));
   setRefCookie({ res, query });
 
   return {

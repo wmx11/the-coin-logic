@@ -1,18 +1,16 @@
-import { Button, Container, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { Container, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import axios from 'axios';
+import GradientButton from 'components/Buttons/GradientButton';
 import ErrorMessage from 'components/ErrorMessage';
 import { Discord, Twitter } from 'components/Socials/Socials';
-import TextContent from 'components/TextContent';
-import { getContentBySlug } from 'data/getters';
 import useRecaptcha from 'hooks/useRecaptcha';
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { commons } from 'schemas/user';
-import { ContentProps } from 'types/TextContent';
 import { z } from 'zod';
 
-const index: FC<ContentProps> = ({ content }) => {
+const index = () => {
   const { validate, errorMessage } = useRecaptcha();
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -38,7 +36,7 @@ const index: FC<ContentProps> = ({ content }) => {
 
   const handleSubmit = async ({ email, message, name }: ContactUs) => {
     try {
-      const isValid = await validate();
+      const { isValid } = await validate();
 
       if (!isValid) {
         return null;
@@ -61,7 +59,7 @@ const index: FC<ContentProps> = ({ content }) => {
 
   return (
     <Container className="py-10">
-      <div className="bg-[url('../public/images/small_hero_wave.svg')] bg-no-repeat bg-cover bg-center p-5 md:p-16 rounded-md flex flex-wrap justify-between gap-8 w-full mb-8">
+      <div className="bg-gradient-to-r from-violet to-grape md:p-16 rounded-md flex flex-wrap justify-between gap-8 w-full mb-8">
         <div className="text-white flex-1">
           <Title order={1}>Contact us</Title>
           <Text size="md">Leave your email and we will get back to you within 24 hours</Text>
@@ -88,30 +86,20 @@ const index: FC<ContentProps> = ({ content }) => {
                 description="2,000 characters long"
                 label="Your message"
                 required
+                minRows={6}
                 {...form.getInputProps('message')}
               />
               <div className="flex w-full justify-end">
-                <Button type="submit" color="violet" disabled={isDisabled}>
+                <GradientButton type="submit" disabled={isDisabled}>
                   Send a message
-                </Button>
+                </GradientButton>
               </div>
             </Stack>
           </form>
         </div>
       </div>
-      <TextContent content={content} className="m-auto max-w-none" />
     </Container>
   );
 };
 
 export default index;
-
-export const getServerSideProps = async () => {
-  const content = await getContentBySlug('contact-us');
-
-  return {
-    props: {
-      content,
-    },
-  };
-};

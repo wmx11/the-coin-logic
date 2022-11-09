@@ -11,6 +11,7 @@ import ErrorMessage from 'components/ErrorMessage';
 import ResetPasswordButton from 'components/ResetPasswordButton';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 import useUserStore from 'store/useUserStore';
+import GradientButton from 'components/Buttons/GradientButton';
 
 type Email = { email: z.infer<typeof commons.email> };
 
@@ -65,9 +66,9 @@ const RequestPasswordResetForm = () => {
           readOnly={isInitial}
         />
 
-        <Button type="submit" color="violet" size="md" loading={loading} disabled={!!data}>
+        <GradientButton type="submit" size="md" loading={loading} disabled={!!data}>
           Send instructions
-        </Button>
+        </GradientButton>
       </Stack>
     </form>
   );

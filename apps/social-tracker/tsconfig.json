@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+      "composite": true,
+      "declaration": true,
+      "declarationMap": true,
+      "incremental": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "allowSyntheticDefaultImports": true,
+      "outDir": "./dist",
+      "rootDir": ".",
+
+      "paths": { 
+        "tcl-packages/*": ["../../packages/*"],
+        "tcl-packages": ["../../packages"]
+      }
+  },
+  "references": [
+      {
+          "path": "../../packages",
+      },
+  ]
+}

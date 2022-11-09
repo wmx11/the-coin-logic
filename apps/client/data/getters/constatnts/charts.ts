@@ -11,6 +11,13 @@ const withBase = (selector: string) => `query($slug: String) {
   }
 }`;
 
+const withSocialsBase = (selector: string) => `query($slug: String) {
+  socialStats(where: { project: { slug: { equals: $slug } } }, orderBy: { dateAdded: asc }) {
+    value: ${selector}
+    date: dateAdded
+  }
+}`;
+
 export const GET_PRICE = withBase('price');
 export const GET_MARKET_CAP = withBase('marketCap');
 export const GET_TOTAL_SUPPLY = withBase('totalSupply');
@@ -25,3 +32,7 @@ export const GET_AVERAGE_HOLDINGS = withBase('avgHoldings');
 export const GET_NEW_HOLDERS = withBase('newHolders');
 export const GET_LEAVING_HOLDERS = withBase('leavingHolders');
 export const GET_RECURRING_HOLDERS = withBase('recurringHolders');
+
+export const GET_DISCORD_MEMBERS = withSocialsBase('discord');
+export const GET_TELEGRAM_MEMBERS = withSocialsBase('telegram');
+export const GET_TWITTER_FOLLOWERS = withSocialsBase('twitter');

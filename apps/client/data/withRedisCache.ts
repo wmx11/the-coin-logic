@@ -1,10 +1,21 @@
 import Redis from 'ioredis';
 
-const connectionString = process.env.REDIS_USERNAME
+const connectionStringProd = process.env.REDIS_USERNAME
   ? `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}/0`
   : {};
 
-const redis = new Redis(connectionString);
+const conenctionString =
+  process.env.NODE_ENV !== 'production'
+    ? `redis://:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}/0`
+    : connectionStringProd;
+
+let redis: Redis | null = null;
+
+try {
+  redis = new Redis(conenctionString);
+} catch (error) {
+  console.log(error);
+}
 
 const withRedisCache = async (cacheKey: string, cb: () => Promise<any>, expire?: number) => {
   if (!redis) {

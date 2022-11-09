@@ -28,7 +28,9 @@ const NotificationBar: FC<NotificationBarProps> = ({ notification, size = 'md', 
     <Paper className={`${notificationType.color} flex items-center flex-wrap gap-2 mb-${mb}`} p={size} shadow="md">
       <div>{notificationType.icon}</div>
       <div>
-        <Text size={size}>{notification.content}</Text>
+        <Text size={size}>
+          <div dangerouslySetInnerHTML={{ __html: notification.content as string }}></div>
+        </Text>
       </div>
     </Paper>
   );

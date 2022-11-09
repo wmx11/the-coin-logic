@@ -1,13 +1,20 @@
-import { createGetInitialProps } from '@mantine/next';
-import Document, { Head, Html, Main, NextScript } from 'next/document';
+import { ServerStyles, createStylesServer } from '@mantine/next';
+import Document, { Head, Html, Main, NextScript, DocumentContext } from 'next/document';
+import { mantineCache } from 'mantine-cache';
 import { GA_TRACKING_ID } from '../utils/googleTags';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-const getInitialProps = createGetInitialProps();
-
+const stylesServer = createStylesServer(mantineCache);
 export default class _Document extends Document {
-  static getInitialProps = getInitialProps;
+  static async getInitialProps(ctx: DocumentContext) {
+    const initialProps = await Document.getInitialProps(ctx);
+
+    return {
+      ...initialProps,
+      styles: [initialProps.styles, <ServerStyles html={initialProps.html} server={stylesServer} key="styles" />],
+    };
+  }
 
   render() {
     return (
@@ -36,6 +43,13 @@ export default class _Document extends Document {
 
         {isProduction && (
           <>
+            <script
+              id="Cookiebot"
+              src="https://consent.cookiebot.com/uc.js"
+              data-cbid="1efc4670-8d03-4868-985d-04754e7255be"
+              data-blockingmode="auto"
+              type="text/javascript"
+            ></script>
             <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`} />
 
             <script
@@ -58,6 +72,14 @@ export default class _Document extends Document {
         <body>
           <Main />
           <NextScript />
+          {isProduction && (
+            <script
+              id="CookieDeclaration"
+              src="https://consent.cookiebot.com/1efc4670-8d03-4868-985d-04754e7255be/cd.js"
+              type="text/javascript"
+              async
+            ></script>
+          )}
         </body>
       </Html>
     );

@@ -45,6 +45,29 @@ mutation createMarketStats(
   }
 }`;
 
+export const CREATE_SOCIAL_STATS = `
+mutation createSocialStats(
+  $twitter: Float
+  $telegram: Float
+  $discord: Float
+  $id: ID
+) {
+  createSocialStat(
+    data: {
+      twitter: $twitter 
+      telegram: $telegram 
+      discord: $discord 
+      project: { connect: { id: $id } }
+    }
+  ) {
+    id
+    project {
+      name
+      slug
+    }
+  }
+}`;
+
 export const UPDATE_PROJECT_INITIALIZED_STATUS = `
 mutation($id: ID, $initialized: Boolean) {
   updateProject(

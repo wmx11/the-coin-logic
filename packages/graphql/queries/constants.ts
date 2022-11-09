@@ -2,11 +2,16 @@ export const GET_ENABLED_PROJECTS = `
 {
   projects(where: { enabled: { equals: true }, trackData: { equals: true } }) {
     id
+    name
     contractAddress
     pairAddress
     burnAddress
     trackHoldersFromTokenAmount
     useDexScreener
+    twitter
+    telegram
+    discord
+    discordServerId
     liquidityPair {
       address
       useDexScreener

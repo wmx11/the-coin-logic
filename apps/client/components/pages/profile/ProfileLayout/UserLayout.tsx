@@ -6,7 +6,11 @@ import useUserStore from 'store/useUserStore';
 import { User } from 'types';
 import UserNavigation from '../ProfileNavigation';
 
-const ProfileLayout = (props: PropsWithChildren) => {
+type ProfileLayoutProps = {
+  withNoMenu?: boolean;
+} & PropsWithChildren;
+
+const ProfileLayout = (props: ProfileLayoutProps) => {
   const { user, status } = useUser();
   const setUser = useUserStore((state) => state.setUser);
   const { isMobileScreen } = useMobileScreen();
@@ -25,9 +29,9 @@ const ProfileLayout = (props: PropsWithChildren) => {
 
   return (
     <Container className="py-10 min-h-screen">
-      <div className="flex">
-        {!isMobileScreen && (
-          <div className="w-full md:max-w-[200px] pr-5 mr-5 border-r h-screen">
+      <div className="flex gap-x-8">
+        {(!isMobileScreen || props.withNoMenu) && (
+          <div className="w-full md:min-w-[150px] md:max-w-[200px] ">
             <UserNavigation />
           </div>
         )}

@@ -1,4 +1,3 @@
-import { Accordion, AccordionItem } from '@mantine/core';
 import React, { FC, ReactNode } from 'react';
 
 type ResponsiveTableProps = {
@@ -12,10 +11,6 @@ type ResponsiveTableProps = {
         value?: string | number | ReactNode;
         truncate?: boolean;
       }[];
-      additionalData?: {
-        label: string | number;
-        data: string | number | ReactNode;
-      };
     }[];
   };
 };
@@ -48,7 +43,7 @@ const ResponsiveTable: FC<ResponsiveTableProps> = ({ data }) => {
 
     return (
       <>
-        {rows.map(({ row, additionalData }, rowsIndex) => {
+        {rows.map(({ row }, rowsIndex) => {
           return (
             <div>
               <div
@@ -68,13 +63,6 @@ const ResponsiveTable: FC<ResponsiveTableProps> = ({ data }) => {
                   );
                 })}
               </div>
-              {additionalData && (
-                <div>
-                  <Accordion>
-                    <AccordionItem label={additionalData.label}>{additionalData.data}</AccordionItem>
-                  </Accordion>
-                </div>
-              )}
             </div>
           );
         })}

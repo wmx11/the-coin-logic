@@ -1,17 +1,23 @@
 import { Container } from '@mantine/core';
+import { Discord, Twitter } from 'components/Socials/Socials';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
-import routes from 'routes';
 import tclLogo from 'public/images/tcl_logo.png';
-import { FaDiscord, FaTwitter } from 'react-icons/fa';
-import { Discord, Twitter } from 'components/Socials/Socials';
+import routes from 'routes';
 
 function Footer() {
   return (
-    <div className="bg-[url('../public/images/wave.svg')] bg-no-repeat bg-cover bg-bottom w-full">
+    <div className="bg-gradient-to-br from-violet to-grape bg-no-repeat bg-cover bg-bottom w-full overflow-hidden">
+      <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="70" className="rotate-180">
+        <path
+          stroke="null"
+          id="svg_1"
+          d="m0,2l106.72223,9.31875c106.72223,9.49375 320.16669,27.86875 533.61115,30.3625c213.44446,2.31875 426.88892,-11.68125 640.33338,-11.68125c213.44446,0 426.88892,14 533.61115,21l106.72223,7l0,14l-106.72223,0c-106.72223,0 -320.16669,0 -533.61115,0c-213.44446,0 -426.88892,0 -640.33338,0c-213.44446,0 -426.88892,0 -533.61115,0l-106.72223,0l0,-70z"
+          fill="#fff"
+        />
+      </svg>
       <Container>
-        <footer className="footer p-10 text-white">
+        <footer className="footer py-20 text-white">
           <div>
             <span className="footer-title">Services</span>
             <Link href={routes.services}>
@@ -61,10 +67,10 @@ function Footer() {
             </Link>
           </div>
         </footer>
-        <footer className="footer px-10 py-10 border-t text-white border-base-300">
+        <footer className="footer py-10 border-t text-white border-base-300">
           <div className="items-center grid-flow-col">
             <Image src={tclLogo} alt="TCL Logo" width={30} height={35} />
-            <p>
+            <p className="mr-2">
               The Coin Logic <br />
               Owned and Created by MB Modiggo
             </p>

@@ -6,7 +6,7 @@ export type PreviousValueTypes = {
 };
 
 export type PreviousValue = {
-  previousValue: PreviousValueTypes;
+  previousValue?: PreviousValueTypes;
 };
 
 export type ChangeName<T extends string> = `${T}Change`;
@@ -18,7 +18,7 @@ export type MarketStatChanges = {
 
 export type StatsData = PreviousValue & {
   title?: string;
-  value?: number;
+  value?: number | number[] | string;
   isCurrency?: boolean;
   tooltip?: string;
   chartEntry?: string;

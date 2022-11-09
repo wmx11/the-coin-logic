@@ -4,6 +4,8 @@ const trimString = (u: unknown) => (typeof u === 'string' ? u.trim() : u);
 
 export const commons = {
   username: z.string().min(3, { message: 'Username must be at least 3 characters long.' }).max(24),
+  firstName: z.nullable(z.string().min(2, { message: 'First Name must be at least 2 characters long.' }).max(24)),
+  lastName: z.nullable(z.string().min(2, { message: 'Last Name must be at least 2 characters long.' }).max(24)),
   email: z.preprocess(
     trimString,
     z
@@ -38,8 +40,8 @@ export const userLoginSchema = z.object({
 
 export const userProfileSchema = z.object({
   username: commons.username,
-  firstName: z.nullable(z.string().min(2, { message: 'First Name must be at least 2 characters long.' }).max(24)),
-  lastName: z.nullable(z.string().min(2, { message: 'Last Name must be at least 2 characters long.' }).max(24)),
+  firstName: commons.firstName,
+  lastName: commons.lastName,
   subscribeToEmail: commons.subscribeToEmail,
   walletAddress: z.nullable(
     z
@@ -49,6 +51,17 @@ export const userProfileSchema = z.object({
   ),
 });
 
+export const userOrderSchema = z.object({
+  firstName: commons.firstName,
+  lastName: commons.lastName,
+  paymentNetwork: z.number(),
+  paymentCurrency: z.string(),
+  paymentContractAddress: z.string(),
+  paymentDecimals: z.number(),
+  duration: z.string(),
+});
+
 export type User = z.infer<typeof userSchema>;
 export type UserLogin = z.infer<typeof userLoginSchema>;
 export type UserProfile = z.infer<typeof userProfileSchema>;
+export type UserOrder = z.infer<typeof userOrderSchema>;

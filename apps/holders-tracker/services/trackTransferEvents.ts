@@ -24,8 +24,11 @@ const trackTransferEvents = async (initial = false) => {
       }
 
       await setProjectStatus(project.id, 'syncing');
+
       await trackTransferEventsByProject(project);
+
       await setProjectStatus(project.id, 'idle');
+
       await sleep(500);
     } catch (error) {
       await setProjectStatus(project.id, 'failed');

@@ -6,6 +6,7 @@ module.exports = {
         lightBlue: '#201D47',
         darkBlue: '#17153A',
         violet: '#7950f2',
+        grape: '#be4bdb',
       },
     },
   },

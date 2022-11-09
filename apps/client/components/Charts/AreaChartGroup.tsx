@@ -1,4 +1,4 @@
-import { Button, Divider, LoadingOverlay, Paper, Text, Tooltip } from '@mantine/core';
+import { Button, Divider, LoadingOverlay, Paper, Tooltip } from '@mantine/core';
 import { useState } from 'react';
 import { AiOutlineClear } from 'react-icons/ai';
 import { IoClose } from 'react-icons/io5';
@@ -32,10 +32,10 @@ const AreaChartGroup = () => {
   const CloseChart = ({ onClick }: { onClick: () => void }) => {
     return (
       <div className="flex flex-1 gap-4 justify-end cursor-pointer text-violet items-center">
-        <Tooltip label="Close this chart" withArrow transition="pop" color="violet" wrapLines={true}>
+        <Tooltip label="Close this chart" withArrow transition="pop" color="violet" multiline={true}>
           <IoClose size={25} onClick={onClick} />
         </Tooltip>
-        <Tooltip label="Close all charts" withArrow transition="pop" color="violet" wrapLines={true}>
+        <Tooltip label="Close all charts" withArrow transition="pop" color="violet" multiline={true}>
           <AiOutlineClear size={20} onClick={clearAll} />
         </Tooltip>
       </div>
@@ -49,12 +49,12 @@ const AreaChartGroup = () => {
 
     return (
       <div className="flex gap-4 flex-wrap">
-        <Tooltip label="View TCL price chart" withArrow transition="pop" color="violet" wrapLines={true}>
+        <Tooltip label="View TCL price chart" withArrow transition="pop" color="violet" multiline={true}>
           <Button variant="outline" color="violet" size="xs" onClick={() => setShowDexscreener(false)}>
             Show {chartTitle}
           </Button>
         </Tooltip>
-        <Tooltip label="View Dex Screener live price chart" withArrow transition="pop" color="violet" wrapLines={true}>
+        <Tooltip label="View Dex Screener live price chart" withArrow transition="pop" color="violet" multiline={true}>
           <Button variant="outline" color="violet" size="xs" onClick={() => setShowDexscreener(true)}>
             Show Dex Screener
           </Button>
@@ -64,7 +64,7 @@ const AreaChartGroup = () => {
   };
 
   const MainChart = () => {
-    if (chartData.length === 0) {
+    if (chartData?.length === 0) {
       return null;
     }
 
@@ -87,7 +87,7 @@ const AreaChartGroup = () => {
   };
 
   const ComparisonChart = () => {
-    if (compareChartData.length === 0) {
+    if (compareChartData?.length === 0) {
       return null;
     }
 

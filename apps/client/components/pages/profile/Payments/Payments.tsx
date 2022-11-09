@@ -1,7 +1,7 @@
 import { Space, Text } from '@mantine/core';
 import { Column } from '@table-library/react-table-library/types/compact';
 import GoBack from 'components/GoBack';
-import PaymentStatus from 'components/PaymentStatus';
+import PaymentStatus from 'components/StatusPill';
 import Table from 'components/Table';
 import { responsiveStylesForLayoutWithSideMenu } from 'components/Table/mainTheme';
 import { Payment } from 'types';

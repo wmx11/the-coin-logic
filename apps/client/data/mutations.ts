@@ -7,6 +7,7 @@ export const CREATE_USER = gql`
     $password: String
     $referrer: String
     $isSubscribedToEmail: Boolean
+    $ip: String
   ) {
     createUser(
       data: {
@@ -15,6 +16,7 @@ export const CREATE_USER = gql`
         password: $password
         referrer: $referrer
         isSubscribedToEmail: $isSubscribedToEmail
+        ip: $ip
       }
     ) {
       name

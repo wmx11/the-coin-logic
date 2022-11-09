@@ -1,15 +1,17 @@
-import { Button, Checkbox, PasswordInput, Space, Stack, Text, TextInput } from '@mantine/core';
-import { CREATE_USER } from '../../../data/mutations';
 import { DocumentNode, useMutation } from '@apollo/client';
-import { getCookie } from 'cookies-next';
-import { toast } from 'react-toastify';
+import { Button, Checkbox, PasswordInput, Stack, Text, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { useMemo } from 'react';
-import { User, userSchema } from '../../../schemas/user';
+import GradientButton from 'components/Buttons/GradientButton';
 import ErrorMessage from 'components/ErrorMessage';
+import { REF_COOKIE_NAME } from 'constants/general';
+import { getCookie } from 'cookies-next';
+import useRecaptcha from 'hooks/useRecaptcha';
+import { useMemo } from 'react';
+import { toast } from 'react-toastify';
 import routes from 'routes';
 import useLoginFlowStore from 'store/useLoginFlowStore';
-import useRecaptcha from 'hooks/useRecaptcha';
+import { CREATE_USER } from '../../../data/mutations';
+import { User, userSchema } from '../../../schemas/user';
 
 const SignUpModalForm = () => {
   const { validate, errorMessage } = useRecaptcha();
@@ -17,7 +19,7 @@ const SignUpModalForm = () => {
   const { setSuccess, setLogin } = useLoginFlowStore((state) => state);
 
   const refCookie = useMemo(() => {
-    return getCookie('tcl_ref');
+    return getCookie(REF_COOKIE_NAME);
   }, []);
 
   const form = useForm({
@@ -33,20 +35,14 @@ const SignUpModalForm = () => {
 
   const handleSubmit = async ({ username, email, password, referrer, subscribeToEmail }: User) => {
     try {
-      const isValid = await validate();
+      const { isValid, ip } = await validate();
 
       if (!isValid) {
         return null;
       }
 
       await registeruser({
-        variables: {
-          name: username.trim(),
-          email: email.trim().toLowerCase(),
-          password,
-          referrer,
-          isSubscribedToEmail: subscribeToEmail,
-        },
+        variables: { name: username, email, password, referrer, isSubscribedToEmail: subscribeToEmail, ip },
       });
 
       setSuccess(true);
@@ -100,9 +96,9 @@ const SignUpModalForm = () => {
           size="md"
         />
 
-        <Button type="submit" color="violet" loading={loading} size="md">
+        <GradientButton type="submit" loading={loading} size="md">
           Create an account
-        </Button>
+        </GradientButton>
 
         <Text size="sm" align="center">
           By proceeding, you agree to The Coin Logic's{' '}

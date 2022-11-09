@@ -1,26 +1,43 @@
 import { Lists } from '.keystone/types';
 import { list } from '@keystone-6/core';
 import { checkbox, float, image, integer, json, relationship, select, text, timestamp } from '@keystone-6/core/fields';
-import slugify from '../utils/slugify';
+import { CacheScope } from 'apollo-cache-control';
 import { isAdmin } from '../utils/rbac';
+import slugify from '../utils/slugify';
 
 const Project: Lists = {
   Project: list({
+    graphql: {
+      cacheHint: {
+        maxAge: 5 * 60,
+        scope: CacheScope.Public,
+      },
+    },
     fields: {
       name: text({ validation: { isRequired: true } }),
       slug: text({
-        ui: { description: 'Project slug. Automatically filled in upon creating/saving.' },
+        ui: { description: 'Automatically filled in upon creating/saving.' },
         hooks: {
           resolveInput: async (data) => slugify('slug', 'name')(data),
         },
+        isIndexed: true,
       }),
       logo: image({ storage: 'localLogos' }),
       enabled: checkbox({
         defaultValue: false,
         ui: { description: 'Is the project enabled and ready for data tracking.' },
       }),
+      isPending: checkbox({
+        defaultValue: false,
+        ui: { description: 'Is the project being reviewed.' },
+      }),
+      isAwaitingPayment: checkbox({
+        defaultValue: false,
+        ui: { description: 'Is the project approved for listing. This means the project is awaiting payment.' },
+      }),
       isListed: checkbox({ defaultValue: false, ui: { description: 'Is the project listed on the leaderboard.' } }),
       trackData: checkbox({ defaultValue: false, ui: { description: 'Is the project tracking market data.' } }),
+      trackSocials: checkbox({ defaultValue: false, ui: { description: 'Is the project tracking socials data.' } }),
       trackHolders: checkbox({ defaultValue: false, ui: { description: 'Is the project tracking holders data.' } }),
       periodicWalletUpdates: checkbox({
         defaultValue: false,
@@ -88,11 +105,18 @@ const Project: Lists = {
       twitter: text(),
       telegram: text(),
       discord: text(),
+      discordServerId: text(),
       reddit: text(),
       youtube: text(),
       github: text(),
       medium: text(),
+      kycLink: text(),
+      auditLink: text(),
+      auditBy: relationship({ ref: 'Audit.project', many: true }),
+      kycBy: relationship({ ref: 'Kyc.project', many: true }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
+      ratings: relationship({ ref: 'ProjectRating.project', many: true, ui: { displayMode: 'count' } }),
+      reviews: relationship({ ref: 'ProjectComment.project', many: true, ui: { displayMode: 'count' } }),
       parentProject: relationship({
         ref: 'Project',
         many: true,

@@ -1,9 +1,11 @@
-import { list } from '@keystone-6/core';
 import { Lists } from '.keystone/types';
-import { checkbox, password, relationship, text, timestamp } from '@keystone-6/core/fields';
-import { isAdmin, isAdminOrPerson, isPerson } from '../utils/rbac';
+import { graphql, list } from '@keystone-6/core';
+import { checkbox, password, relationship, text, timestamp, virtual } from '@keystone-6/core/fields';
+import { isBefore } from 'date-fns';
 import { nanoid } from 'nanoid';
+import { Product } from '../types';
 import generateInputData from '../utils/generateInputData';
+import { isAdmin, isAdminOrPerson, isPerson } from '../utils/rbac';
 
 const User: Lists = {
   User: list({
@@ -16,6 +18,7 @@ const User: Lists = {
         isIndexed: 'unique',
         isFilterable: true,
       }),
+      ip: text(),
       roles: relationship({
         ref: 'Role.users',
         many: true,
@@ -50,7 +53,7 @@ const User: Lists = {
         defaultValue: true,
         ui: { description: "Is user's email verified" },
       }),
-      subscribedTill: timestamp({ ui: { description: 'Shows the subscription date of the services' } }),
+      subscription: relationship({ ref: 'Subscription.user' }),
       referrer: text({ ui: { description: 'Refferring person' } }),
       referralCode: text({
         ui: { description: 'Personal referral code' },
@@ -60,8 +63,65 @@ const User: Lists = {
       }),
       walletAddress: text({ ui: { description: 'Wallet address of the user. Used for referral rewards.' } }),
       projects: relationship({ ref: 'Project.user', many: true }),
-      payments: relationship({ ref: 'Payment.billedTo', many: true }),
+      marketingCampaigns: relationship({ ref: 'MarketingCampaign.users', many: true }),
       dateCreated: timestamp({ defaultValue: { kind: 'now' } }),
+      subscriptionStatus: virtual({
+        field: graphql.field({
+          type: graphql.object<{
+            isValid: boolean;
+            products: Product[];
+            dateFrom: Date;
+            dateTo: Date;
+          }>()({
+            name: 'subscriptionStatus',
+            fields: {
+              isValid: graphql.field({ type: graphql.Boolean }),
+              products: graphql.field({ type: graphql.JSON }),
+              dateFrom: graphql.field({ type: graphql.DateTime }),
+              dateTo: graphql.field({ type: graphql.DateTime }),
+            },
+          }),
+          args: {
+            userId: graphql.arg({
+              type: graphql.ID,
+            }),
+          },
+          async resolve(item, { userId }, context) {
+            const { subscription } = await context.prisma.User.findFirst({
+              where: {
+                id: {
+                  equals: userId,
+                },
+              },
+              select: {
+                subscription: {
+                  select: {
+                    dateFrom: true,
+                    dateTo: true,
+                    product: {
+                      select: {
+                        slug: true,
+                        name: true,
+                        sku: true,
+                      },
+                    },
+                  },
+                },
+              },
+            });
+
+            if (!subscription) {
+              return null;
+            }
+
+            const { product, dateFrom, dateTo } = subscription;
+            const isValid = isBefore(new Date(), new Date(dateTo));
+
+            return { isValid, products: product, dateFrom, dateTo };
+          },
+        }),
+        ui: { query: '{ dateFrom dateTo }' },
+      }),
     },
   }),
 };
