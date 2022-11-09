@@ -5,6 +5,7 @@
       "declarationMap": true,
       "incremental": true,
       "esModuleInterop": true,
+      "skipLibCheck": true,
       "allowSyntheticDefaultImports": true,
       "outDir": "./dist",
       "rootDir": ".",
