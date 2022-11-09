@@ -4,10 +4,11 @@ import cors from 'cors';
 import helmet from 'helmet';
 import useragent from 'express-useragent';
 import tracker from './routes/tracker';
+import path from 'path';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
-const port = process.env.PORT;
+const port = process.env.MARKETING_TRACKER_PORT || 2500;
 
 const app = express();
 

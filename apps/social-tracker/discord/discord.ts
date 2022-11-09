@@ -1,14 +1,15 @@
+import cors from 'cors';
+import { ActivityType, Client, Events, GatewayIntentBits } from 'discord.js';
 import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
-import cors from 'cors';
 import helmet from 'helmet';
-import { Client, Events, GatewayIntentBits, ActivityType } from 'discord.js';
+import path from 'path';
 import { getDiscordMembersCount } from './getDiscordMembersCount';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 const token = process.env.NODE_ENV === 'production' ? process.env.DISCORD_TOKEN : process.env.DISCORD_TOKEN_TEST;
-const port = process.env.NODE_ENV === 'production' ? process.env.API_PORT : 2500;
+const port = process.env.NODE_ENV === 'production' ? process.env.DISCORD_API_PORT : 2600;
 
 const app = express();
 
