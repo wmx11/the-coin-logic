@@ -4,6 +4,9 @@ module.exports = {
     {
       name: 'market-tracker',
       script: './apps/market-tracker/dist/jobs/addMarketStats.js',
+      env: {
+        NODE_ENV: 'production',
+      },
     },
   ],
 };

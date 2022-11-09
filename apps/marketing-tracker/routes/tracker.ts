@@ -24,4 +24,12 @@ router.get('/', checkForBots, async (req, res) => {
   }
 });
 
+router.get('/output.css', checkForBots, async (req, res) => {
+  try {
+    return res.sendFile(path.resolve(process.cwd(), 'apps', 'marketing-tracker', 'output.css'));
+  } catch (error) {
+    return res.sendFile(path.resolve(process.cwd(), 'apps', 'marketing-tracker', 'output.css'));
+  }
+});
+
 export default router;

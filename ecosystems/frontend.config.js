@@ -7,6 +7,9 @@ module.exports = {
       automation: false,
       interpreter: 'none',
       args: 'run admin:start',
+      env: {
+        NODE_ENV: 'production',
+      },
     },
     {
       name: 'client',
@@ -14,6 +17,9 @@ module.exports = {
       automation: false,
       interpreter: 'none',
       args: 'run client:start',
+      env: {
+        NODE_ENV: 'production',
+      },
     },
   ],
 };
