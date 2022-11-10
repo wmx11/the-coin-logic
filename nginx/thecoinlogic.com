@@ -27,7 +27,7 @@ server {
   }
 
   location /discord {
-    proxy_pass http://localhost:2422
+    proxy_pass http://localhost:2422;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
