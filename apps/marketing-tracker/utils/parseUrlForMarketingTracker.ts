@@ -6,15 +6,11 @@ const parseUrlForMarketingTracker = (req: Request) => {
     return null;
   }
 
-  console.log(req.baseUrl);
-  console.log(req.headers['subdomain']);
-  console.log(req.url);
-
   const params = req.params;
-  const subdomains = req.subdomains;
+  const subdomains = req.subdomains[0] as string || req.headers['subdomain'] as string;
 
   const campaignId = params.campaignId;
-  const target = isDev ? params.target : subdomains[0];
+  const target = isDev ? params.target : subdomains;
 
   return {
     target,

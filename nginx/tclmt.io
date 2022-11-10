@@ -39,7 +39,7 @@ server {
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host website.tclmt.io;
+    proxy_set_header Host $host;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
@@ -65,16 +65,17 @@ server {
   server_name whitepaper.tclmt.io www.whitepaper.tclmt.io;
 
   location / {
-    proxy_pass http://localhost:3100;
+    proxy_pass http://localhost:3100/track/;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host whitepaper.tclmt.io;
+    proxy_set_header Host $host;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
     proxy_set_header  X-Forwarded-For $remote_addr;
     proxy_set_header  X-Forwarded-Host $remote_addr;    
+    proxy_set_header  Subdomain whitepaper;
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
     add_header X-XSS-Protection          "1; mode=block" always;
@@ -94,16 +95,17 @@ server {
   server_name twitter.tclmt.io www.twitter.tclmt.io;
 
   location / {
-    proxy_pass http://localhost:3100;
+    proxy_pass http://localhost:3100/track/;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host twitter.tclmt.io;
+    proxy_set_header Host $host;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
     proxy_set_header  X-Forwarded-For $remote_addr;
     proxy_set_header  X-Forwarded-Host $remote_addr;    
+    proxy_set_header  Subdomain twitter;
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
     add_header X-XSS-Protection          "1; mode=block" always;
@@ -123,16 +125,17 @@ server {
   server_name telegram.tclmt.io www.telegram.tclmt.io;
 
   location / {
-    proxy_pass http://localhost:3100;
+    proxy_pass http://localhost:3100/track/;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host telegram.tclmt.io;
+    proxy_set_header Host $host;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
     proxy_set_header  X-Forwarded-For $remote_addr;
     proxy_set_header  X-Forwarded-Host $remote_addr;    
+    proxy_set_header  Subdomain telegram;
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
     add_header X-XSS-Protection          "1; mode=block" always;
@@ -152,16 +155,17 @@ server {
   server_name discord.tclmt.io www.discord.tclmt.io;
 
   location / {
-    proxy_pass http://localhost:3100;
+    proxy_pass http://localhost:3100/track/;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host discord.tclmt.io;
+    proxy_set_header Host $host;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
     proxy_set_header  X-Forwarded-For $remote_addr;
     proxy_set_header  X-Forwarded-Host $remote_addr;    
+    proxy_set_header  Subdomain discord;
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
     add_header X-XSS-Protection          "1; mode=block" always;
@@ -181,16 +185,17 @@ server {
   server_name reddit.tclmt.io www.reddit.tclmt.io;
 
   location / {
-    proxy_pass http://localhost:3100;
+    proxy_pass http://localhost:3100/track/;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host reddit.tclmt.io;
+    proxy_set_header Host $host;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
     proxy_set_header  X-Forwarded-For $remote_addr;
     proxy_set_header  X-Forwarded-Host $remote_addr;    
+    proxy_set_header  Subdomain reddit;
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
     add_header X-XSS-Protection          "1; mode=block" always;
@@ -210,16 +215,17 @@ server {
   server_name youtube.tclmt.io www.youtube.tclmt.io;
 
   location / {
-    proxy_pass http://localhost:3100;
+    proxy_pass http://localhost:3100/track/;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host youtube.tclmt.io;
+    proxy_set_header Host $host;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
     proxy_set_header  X-Forwarded-For $remote_addr;
     proxy_set_header  X-Forwarded-Host $remote_addr;    
+    proxy_set_header  Subdomain youtube;
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
     add_header X-XSS-Protection          "1; mode=block" always;
@@ -239,16 +245,17 @@ server {
   server_name medium.tclmt.io www.medium.tclmt.io;
 
   location / {
-    proxy_pass http://localhost:3100;
+    proxy_pass http://localhost:3100/track/;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host medium.tclmt.io;
+    proxy_set_header Host $host;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
     proxy_set_header  X-Forwarded-For $remote_addr;
     proxy_set_header  X-Forwarded-Host $remote_addr;    
+    proxy_set_header  Subdomain medium;
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
     add_header X-XSS-Protection          "1; mode=block" always;
@@ -268,16 +275,17 @@ server {
   server_name exchange.tclmt.io www.exchange.tclmt.io;
 
   location / {
-    proxy_pass http://localhost:3100;
+    proxy_pass http://localhost:3100/track/;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
-    proxy_set_header Host exchange.tclmt.io;
+    proxy_set_header Host $host;
     proxy_cache_bypass $http_upgrade;
     proxy_set_header  X-Real-IP $remote_addr;
     proxy_set_header  X-Forwarded-Proto https;
     proxy_set_header  X-Forwarded-For $remote_addr;
-    proxy_set_header  X-Forwarded-Host $remote_addr;    
+    proxy_set_header  X-Forwarded-Host $remote_addr;   
+    proxy_set_header  Subdomain exchange;
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
     add_header X-XSS-Protection          "1; mode=block" always;

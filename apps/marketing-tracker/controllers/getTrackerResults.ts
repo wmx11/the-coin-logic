@@ -6,6 +6,10 @@ import parseUserAgent from '../utils/parseUserAgent';
 
 const getTrackerResults = async (req: Request, res: Response) => {
   try {
+    if (!req.params.campaignId) {
+      return res.redirect('https://tclmt.io');
+    }
+
     const userData = await ipLookup(req);
     const userAgentData = parseUserAgent(req.get('user-agent'));
     const marketingTrackerData = parseUrlForMarketingTracker(req);
