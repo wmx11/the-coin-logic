@@ -45,6 +45,7 @@ server {
     proxy_set_header  X-Forwarded-Proto https;
     proxy_set_header  X-Forwarded-For $remote_addr;
     proxy_set_header  X-Forwarded-Host $remote_addr;
+    proxy_set_header  Subdomain website;
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
     add_header X-XSS-Protection          "1; mode=block" always;

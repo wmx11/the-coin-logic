@@ -52,9 +52,6 @@ const saveTrackerResults = async ({ data, campaignId }) => {
       await prismaClient.marketingTrackerResult.create({
         data: {
           ...data,
-          marketingCampaign: {
-            campaignId: campaign.id,
-          },
         },
       });
     }
