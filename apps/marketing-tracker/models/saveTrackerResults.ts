@@ -4,6 +4,10 @@ import { isAfter, isBefore } from 'date-fns';
 const saveTrackerResults = async ({ data, campaignId }) => {
   const currentDate = new Date();
 
+  if (!campaignId || !data) {
+    return null;
+  }
+
   try {
     const campaign = await prismaClient.marketingCampaign.findFirst({
       where: {

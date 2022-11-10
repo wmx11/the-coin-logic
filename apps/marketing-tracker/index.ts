@@ -13,6 +13,9 @@ const port = process.env.MARKETING_TRACKER_PORT || 2500;
 
 const app = express();
 
+app.set('strict routing', true);
+app.set('subdomain offset', 2);
+
 // For getting the IP address
 app.set('trust proxy', true);
 
