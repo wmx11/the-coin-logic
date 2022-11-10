@@ -20,7 +20,7 @@ const getTrackerResults = async (req: Request, res: Response) => {
     });
 
     // If the tracker fails or the campaign is deleted, redirect to TCL website
-    if (!trackerData) {
+    if (trackerData === null || trackerData === undefined || !trackerData.project) {
       return res.redirect('https://thecoinlogic.com');
     }
 

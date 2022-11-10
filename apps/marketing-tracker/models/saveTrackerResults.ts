@@ -4,7 +4,9 @@ import { isAfter, isBefore } from 'date-fns';
 const saveTrackerResults = async ({ data, campaignId }) => {
   const currentDate = new Date();
 
-  if (!campaignId || !data) {
+  console.log(data, campaignId);
+
+  if (!campaignId) {
     return null;
   }
 
@@ -49,7 +51,7 @@ const saveTrackerResults = async ({ data, campaignId }) => {
         data: {
           ...data,
           marketingCampaign: {
-            connect: { id: campaign.id },
+            campaignId: campaign.id,
           },
         },
       });
