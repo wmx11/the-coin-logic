@@ -4,8 +4,6 @@ import { isAfter, isBefore } from 'date-fns';
 const saveTrackerResults = async ({ data, campaignId }) => {
   const currentDate = new Date();
 
-  console.log(data, campaignId);
-
   if (!campaignId) {
     return null;
   }
