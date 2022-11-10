@@ -26,6 +26,19 @@ server {
     add_header X-Frame-Options DENY always;
   }
 
+  location /discord {
+    proxy_pass http://localhost:2422
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+    add_header X-XSS-Protection          "1; mode=block" always;
+    add_header X-Frame-Options DENY always;
+  }
+
     listen 443 ssl http2; # managed by Certbot
     ssl_certificate /etc/letsencrypt/live/thecoinlogic.com/fullchain.pem; # managed by Certbot
     ssl_certificate_key /etc/letsencrypt/live/thecoinlogic.com/privkey.pem; # managed by Certbot
