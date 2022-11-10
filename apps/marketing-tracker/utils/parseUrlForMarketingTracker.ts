@@ -6,6 +6,9 @@ const parseUrlForMarketingTracker = (req: Request) => {
     return null;
   }
 
+  console.log(req.hostname);
+  console.log(req.url);
+
   const params = req.params;
   const subdomains = req.subdomains;
 

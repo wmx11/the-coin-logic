@@ -13,7 +13,9 @@ const saveTrackerResults = async ({ data, campaignId }) => {
   try {
     const campaign = await prismaClient.marketingCampaign.findFirst({
       where: {
-        campaignId,
+        campaignId: {
+          equals: campaignId,
+        },
         enabled: true,
       },
       select: {
