@@ -34,7 +34,7 @@ client.once(Events.ClientReady, async (): Promise<void> => {
   });
 
   try {
-    app.get('/get-members-count/:guildId', async (req: Request, res: Response) => {
+    app.get('/tcl-api/discord/get-members-count/:guildId', async (req: Request, res: Response) => {
       const { guildId } = req.params;
 
       if (!guildId) {
