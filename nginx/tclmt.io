@@ -35,7 +35,7 @@ server {
   server_name website.tclmt.io www.website.tclmt.io;
 
   location / {
-    proxy_pass http://localhost:3100/track;
+    proxy_pass http://localhost:3100/track/;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
