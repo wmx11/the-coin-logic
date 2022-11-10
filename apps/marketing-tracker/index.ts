@@ -4,6 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import useragent from 'express-useragent';
 import tracker from './routes/tracker';
+import index from './routes/index';
 import path from 'path';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
@@ -20,6 +21,7 @@ app.use(cors({ origin: '*' }));
 app.use(useragent.express());
 
 // Routes
+app.use(index);
 app.use(tracker);
 
 app.listen(port, () => {

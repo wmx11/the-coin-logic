@@ -19,8 +19,6 @@ const getTrackerResults = async (req: Request, res: Response) => {
       campaignId: marketingTrackerData.campaignId,
     });
 
-    console.log(marketingTrackerData, trackerData);
-
     // If the tracker fails or the campaign is deleted, redirect to TCL website
     if (!trackerData) {
       return res.redirect('https://thecoinlogic.com');

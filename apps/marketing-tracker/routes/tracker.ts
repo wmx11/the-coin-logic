@@ -5,7 +5,7 @@ import { isDev } from '../utils/utils';
 
 const router = Router();
 
-const trackerPath = isDev ? '/:campaignId/:target' : '/:campaignId';
+const trackerPath = isDev ? '/track/:campaignId/:target' : '/track/:campaignId';
 
 router.get(trackerPath, checkForBots, async (req, res) => {
   try {
