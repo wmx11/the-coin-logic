@@ -43,7 +43,7 @@ client.once(Events.ClientReady, async (): Promise<void> => {
 
       const membersCount = await getDiscordMembersCount(client, guildId as string);
 
-      res.status(200).json({ approximate_member_count: membersCount });
+      res.status(200).json({ membersCount });
     });
   } catch (error) {
     console.log(error);

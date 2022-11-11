@@ -27,13 +27,13 @@ const request = async (serverId: string) => {
       return null;
     }
 
-    const { approximate_member_count } = data;
+    const { membersCount } = data;
 
     setCache(serverId, {
-      members: approximate_member_count,
+      members: membersCount,
     });
 
-    return approximate_member_count;
+    return membersCount;
   } catch (error) {
     console.log(error);
     return null;

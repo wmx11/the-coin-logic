@@ -14,7 +14,7 @@ export const getDiscordMembersCount = async (client: Client, guildId: string) =>
       return null;
     }
 
-    const membersCount = guild.approximateMemberCount;
+    const membersCount = guild.memberCount;
 
     return membersCount;
   } catch (error) {
