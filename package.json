@@ -40,6 +40,7 @@
     "@graphql-codegen/typescript": "^2.7.3",
     "@ipregistry/client": "^4.5.0",
     "@types/express-useragent": "^1.0.2",
+    "@types/gtag.js": "^0.0.12",
     "@types/node-cron": "^3.0.2",
     "@types/slug": "^5.0.3",
     "@types/ua-parser-js": "^0.7.36",
