@@ -1,4 +1,5 @@
 import { Button, ButtonVariant, List, Text, Title } from '@mantine/core';
+import Paper from 'components/Paper';
 import Image from 'next/image';
 import { FC } from 'react';
 import { FaCheck } from 'react-icons/fa';
@@ -37,7 +38,7 @@ const PricingCard: FC<PricingCardProps> = ({
   image,
 }) => {
   return (
-    <div className={`p-5 rounded-md border shadow-md flex flex-col justify-between ${styles?.cardBody}`}>
+    <Paper className={`p-5 flex flex-col justify-between ${styles?.cardBody}`}>
       <div className="mb-8 flex gap-4">
         <div className="mb-6 max-w-[50%]">
           <Title order={1} className={`${styles?.label || 'text-violet'} text-5xl mb-4`}>
@@ -83,7 +84,7 @@ const PricingCard: FC<PricingCardProps> = ({
           {cta}
         </Button>
       </div>
-    </div>
+    </Paper>
   );
 };
 

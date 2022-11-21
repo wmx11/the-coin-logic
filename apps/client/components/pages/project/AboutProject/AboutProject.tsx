@@ -1,4 +1,4 @@
-import { Anchor, Badge, Paper, Space, Spoiler, Text, Tooltip } from '@mantine/core';
+import { Anchor, Badge, Space, Spoiler, Text, Tooltip } from '@mantine/core';
 import { FC } from 'react';
 import { BiUserCheck } from 'react-icons/bi';
 import { FaDiscord, FaGithub, FaReddit, FaTelegram, FaTwitter } from 'react-icons/fa';
@@ -10,6 +10,8 @@ import { formatDate } from '../../../../utils/formatters';
 import { ClipboardButton } from '../../../ClipboardButton';
 import { NetworkBadge } from '../../../NetworkBadge';
 import CommunityVotes from '../CommunityVotes';
+import Paper from 'components/Paper';
+import CommunityComments from '../CommunityComments';
 
 type AboutProjectProps = {
   data: Project;
@@ -45,7 +47,7 @@ const AboutProject: FC<AboutProjectProps> = ({ data, ratings }) => {
 
   return (
     <>
-      <Paper p="md" shadow="sm" withBorder className="mb-4">
+      <Paper className="mb-4">
         <div className="mb-4 flex flex-col md:flex-row md:gap-8">
           <div>
             <Text size="sm" className="mb-2">
@@ -152,7 +154,13 @@ const AboutProject: FC<AboutProjectProps> = ({ data, ratings }) => {
         </div>
       </Paper>
 
-      <CommunityVotes project={data} ratings={ratings} />
+      <div className="mb-4">
+        <CommunityVotes project={data} ratings={ratings} />
+      </div>
+
+      {/* <div className="mb-4">
+        <CommunityComments project={data} />
+      </div> */}
 
       <div className="mt-4">
         <Text size="xs" color="dimmed">

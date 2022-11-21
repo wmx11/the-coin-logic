@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import routes from 'routes';
 import { ProjectSchema, projectSchema } from 'schemas/project';
 import { Network } from 'types';
+import axios from 'axios';
 
 type AddProjectProps = {
   networks: Network[];
@@ -67,6 +68,15 @@ const AddProject: FC<AddProjectProps> = ({ networks }) => {
       }
 
       toast.success('Your project has been submitted for a review.');
+
+      axios.post('/api/email/sendRequestProjectListingEmail', {
+        name: user?.name,
+        email: user?.email,
+        message: `
+        <p>Hi! I want to list a project <strong>${values.name}</strong></p>
+        <p><strong>Project Description:</strong> ${values.description}</p>
+        `,
+      });
     } catch (error) {
       toast.error('There has been an issue adding your project.');
       console.log(error);

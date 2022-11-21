@@ -12,12 +12,12 @@ type AuditsAndKycProps = {
 };
 
 const AuditsAndKyc: FC<AuditsAndKycProps> = ({ project }) => {
-  const { auditBy, kycBy } = project;
+  const { auditBy, kycBy, customVetting } = project;
 
   return (
-    <div className="">
+    <div>
       <GradientTitle order={2} className="flex items-center gap-2 mb-4">
-        {auditBy?.length && kycBy?.length ? (
+        {(auditBy?.length && kycBy?.length) || customVetting ? (
           <>
             Project is Vetted <MdVerified className="text-violet" />
           </>
@@ -27,6 +27,14 @@ const AuditsAndKyc: FC<AuditsAndKycProps> = ({ project }) => {
           </>
         )}
       </GradientTitle>
+
+      {customVetting ? (
+        <div className="mb-4 break-words">
+          <Text size="xs" color="dimmed">
+            {customVetting}
+          </Text>
+        </div>
+      ) : null}
 
       <div className="mb-4">
         <GradientText weight={600} className="mb-2">
@@ -56,7 +64,7 @@ const AuditsAndKyc: FC<AuditsAndKycProps> = ({ project }) => {
         </div>
       </div>
 
-      <div>
+      <div className="mb-4">
         <GradientText weight={600} className="mb-2">
           KYC By
         </GradientText>
@@ -82,6 +90,12 @@ const AuditsAndKyc: FC<AuditsAndKycProps> = ({ project }) => {
             </Text>
           )}
         </div>
+      </div>
+
+      <div>
+        <Text size="xs" color="dimmed" italic>
+          Do conduct your own due diligence and consult your financial advisor before making any investment decisions.
+        </Text>
       </div>
     </div>
   );

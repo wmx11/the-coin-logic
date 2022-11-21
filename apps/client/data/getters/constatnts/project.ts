@@ -179,6 +179,7 @@ query($slug: String) {
           }
         }
       }
+      customVetting
       notifications(where: { enabled: { equals: true } }) {
         title
         content

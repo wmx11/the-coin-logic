@@ -723,6 +723,7 @@ type Project {
     skip: Int! = 0
   ): [Kyc!]
   kycByCount(where: KycWhereInput! = {}): Int
+  customVetting: String
   dateAdded: DateTime
   ratings(
     where: ProjectRatingWhereInput! = {}
@@ -828,6 +829,7 @@ input ProjectWhereInput {
   auditLink: StringFilter
   auditBy: AuditManyRelationFilter
   kycBy: KycManyRelationFilter
+  customVetting: StringFilter
   dateAdded: DateTimeNullableFilter
   ratings: ProjectRatingManyRelationFilter
   reviews: ProjectCommentManyRelationFilter
@@ -966,6 +968,7 @@ input ProjectOrderByInput {
   medium: OrderDirection
   kycLink: OrderDirection
   auditLink: OrderDirection
+  customVetting: OrderDirection
   dateAdded: OrderDirection
 }
 
@@ -1021,6 +1024,7 @@ input ProjectUpdateInput {
   auditLink: String
   auditBy: AuditRelateToManyForUpdateInput
   kycBy: KycRelateToManyForUpdateInput
+  customVetting: String
   dateAdded: DateTime
   ratings: ProjectRatingRelateToManyForUpdateInput
   reviews: ProjectCommentRelateToManyForUpdateInput
@@ -1156,6 +1160,7 @@ input ProjectCreateInput {
   auditLink: String
   auditBy: AuditRelateToManyForCreateInput
   kycBy: KycRelateToManyForCreateInput
+  customVetting: String
   dateAdded: DateTime
   ratings: ProjectRatingRelateToManyForCreateInput
   reviews: ProjectCommentRelateToManyForCreateInput

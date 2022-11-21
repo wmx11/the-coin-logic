@@ -1,4 +1,6 @@
-import { Avatar, Button, Divider, Paper, Text, Title } from '@mantine/core';
+import { Avatar, Button, Divider, Text, Title } from '@mantine/core';
+import Paper from 'components/Paper';
+import GradientTitle from 'components/Text/GradientTitle';
 import React, { FC } from 'react';
 import { Project } from 'types';
 
@@ -19,9 +21,9 @@ const Markets: FC<MarketsProps> = ({ data }) => {
     return (
       <div className="mb-4" key={`market_${index}`}>
         <div className="flex justify-between items-center">
-          <Title order={6} className="mb-2">
+          <GradientTitle order={6} className="mb-2">
             {name}
-          </Title>
+          </GradientTitle>
         </div>
         {exchange ? (
           <Button
@@ -47,7 +49,7 @@ const Markets: FC<MarketsProps> = ({ data }) => {
   });
 
   return (
-    <Paper p="md" shadow="sm" withBorder>
+    <Paper>
       <Title order={4}>Markets</Title>
 
       <Divider size={1} my={8} />

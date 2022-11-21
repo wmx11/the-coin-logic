@@ -1,5 +1,7 @@
-import { Button, Paper, Progress, Text } from '@mantine/core';
+import { Button, Progress, Text } from '@mantine/core';
 import axios from 'axios';
+import Paper from 'components/Paper';
+import GradientText from 'components/Text/GradientText';
 import useUser from 'hooks/useUser';
 import { ProjectRatings } from 'pages/api/project/get-rates';
 import { FC, useState, useEffect } from 'react';
@@ -64,22 +66,22 @@ const CommunityVotes: FC<CommunityVotesProps> = ({ project, ratings }) => {
   };
 
   return (
-    <Paper p="md" shadow="sm" withBorder className="flex justify-between items-center flex-col md:flex-row">
+    <Paper className="flex justify-between items-center flex-col md:flex-row">
       <div className="flex-1 md:max-w-[50%] w-full">
         {isRated ? (
           <>
-            <Text size="md" weight={700}>
+            <GradientText size="md" weight={700}>
               Thank you for voting for {name}!
-            </Text>
+            </GradientText>
             <Text size="xs" color="dimmed">
               You can vote again in 24 hours
             </Text>
           </>
         ) : (
           <>
-            <Text size="md" weight={700}>
-              How will you rate {name} today?
-            </Text>
+            <GradientText size="md" weight={700}>
+              How do you feel about {name} today?
+            </GradientText>
             <Text size="xs" color="dimmed">
               Vote to see community sentiment
             </Text>
@@ -100,11 +102,21 @@ const CommunityVotes: FC<CommunityVotesProps> = ({ project, ratings }) => {
                   size="md"
                 />
                 <div className="flex w-full justify-between items-center mt-2">
-                  <Text size="xs" color="dimmed" className="flex gap-2 items-center">
-                    {rates.positivePercentage}% Good <Icons.ThumbsUp />
+                  <Text size="xs" color="dimmed">
+                    <div className="flex gap-2 items-center">
+                      {rates.positivePercentage}% Good <Icons.ThumbsUp />
+                    </div>
+                    <div>
+                      {rates?.positive} / {rates?.total}
+                    </div>
                   </Text>
-                  <Text size="xs" color="dimmed" className="flex gap-2 items-center">
-                    {rates.negativePercentage}% Bad <Icons.ThumbsDown />
+                  <Text size="xs" color="dimmed">
+                    <div className="flex gap-2 items-center">
+                      {rates.negativePercentage}% Bad <Icons.ThumbsDown />
+                    </div>
+                    <div>
+                      {rates?.negative} / {rates?.total}
+                    </div>
                   </Text>
                 </div>
               </div>
