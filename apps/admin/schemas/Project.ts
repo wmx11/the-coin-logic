@@ -114,6 +114,12 @@ const Project: Lists = {
       auditLink: text(),
       auditBy: relationship({ ref: 'Audit.project', many: true }),
       kycBy: relationship({ ref: 'Kyc.project', many: true }),
+      customVetting: text({
+        ui: {
+          displayMode: 'textarea',
+          description: 'Reason for why the project is listed and has provided a custom approval.',
+        },
+      }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
       ratings: relationship({ ref: 'ProjectRating.project', many: true, ui: { displayMode: 'count' } }),
       reviews: relationship({ ref: 'ProjectComment.project', many: true, ui: { displayMode: 'count' } }),

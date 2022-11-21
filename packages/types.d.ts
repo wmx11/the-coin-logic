@@ -4339,6 +4339,7 @@ export type Project = {
   contractAddress?: Maybe<Scalars['String']>;
   customTrackers?: Maybe<Array<CustomTracker>>;
   customTrackersCount?: Maybe<Scalars['Int']>;
+  customVetting?: Maybe<Scalars['String']>;
   dailyApy?: Maybe<Scalars['Float']>;
   dateAdded?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
@@ -4623,6 +4624,7 @@ export type ProjectCreateInput = {
   calendar?: InputMaybe<Scalars['String']>;
   contractAddress?: InputMaybe<Scalars['String']>;
   customTrackers?: InputMaybe<CustomTrackerRelateToManyForCreateInput>;
+  customVetting?: InputMaybe<Scalars['String']>;
   dailyApy?: InputMaybe<Scalars['Float']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
@@ -4685,6 +4687,7 @@ export type ProjectOrderByInput = {
   buyTax?: InputMaybe<OrderDirection>;
   calendar?: InputMaybe<OrderDirection>;
   contractAddress?: InputMaybe<OrderDirection>;
+  customVetting?: InputMaybe<OrderDirection>;
   dailyApy?: InputMaybe<OrderDirection>;
   dateAdded?: InputMaybe<OrderDirection>;
   description?: InputMaybe<OrderDirection>;
@@ -4839,6 +4842,7 @@ export type ProjectUpdateInput = {
   calendar?: InputMaybe<Scalars['String']>;
   contractAddress?: InputMaybe<Scalars['String']>;
   customTrackers?: InputMaybe<CustomTrackerRelateToManyForUpdateInput>;
+  customVetting?: InputMaybe<Scalars['String']>;
   dailyApy?: InputMaybe<Scalars['Float']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
@@ -4900,6 +4904,7 @@ export type ProjectWhereInput = {
   calendar?: InputMaybe<StringFilter>;
   contractAddress?: InputMaybe<StringFilter>;
   customTrackers?: InputMaybe<CustomTrackerManyRelationFilter>;
+  customVetting?: InputMaybe<StringFilter>;
   dailyApy?: InputMaybe<FloatNullableFilter>;
   dateAdded?: InputMaybe<DateTimeNullableFilter>;
   description?: InputMaybe<StringFilter>;

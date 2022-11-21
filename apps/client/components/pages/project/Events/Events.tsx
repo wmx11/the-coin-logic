@@ -1,4 +1,5 @@
-import { Divider, Paper, Text, Title } from '@mantine/core';
+import { Divider, Text, Title } from '@mantine/core';
+import Paper from 'components/Paper';
 import React, { FC } from 'react';
 import { Project } from 'types';
 
@@ -13,7 +14,7 @@ const Events: FC<EventsProps> = ({ data }) => {
 
   return (
     <div>
-      <Paper p="md" shadow="sm" withBorder>
+      <Paper>
         <Title order={4}>Events</Title>
 
         <Divider size={1} my={8} />

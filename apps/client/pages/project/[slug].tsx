@@ -68,8 +68,8 @@ const project: FC<ProjectProps> = ({ projectData, ratings }) => {
             </div>
           )}
 
-          <div className="w-full flex flex-wrap gap-4 mb-4 items-start justify-between">
-            <div>
+          <div className="w-full flex flex-col md:flex-row gap-4 mb-4 items-start justify-between">
+            <div className="flex-1">
               <div className="w-full mb-4">
                 <ProjectTitle title={project.name as string} size="md" avatar={project.logo ? project.logo.url : ''} />
                 <div>
@@ -106,7 +106,7 @@ const project: FC<ProjectProps> = ({ projectData, ratings }) => {
               ) : null}
             </div>
 
-            <div className="">
+            <div className="md:max-w-[370px]">
               <AuditsAndKyc project={project} />
             </div>
           </div>
@@ -155,7 +155,8 @@ export default project;
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }) => {
   const slug = params?.slug;
-  const projectData = await withRedisCache(`projectData_${slug}`, () => getProjectAndMarketStatsBySlug(slug as string));
+  // const projectData = await withRedisCache(`projectData_${slug}`, () => getProjectAndMarketStatsBySlug(slug as string));
+  const projectData = await getProjectAndMarketStatsBySlug(slug as string);
 
   if (!projectData) {
     return {

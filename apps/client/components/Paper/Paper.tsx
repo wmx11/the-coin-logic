@@ -7,7 +7,7 @@ type PaperProps = {
 
 const Paper: FC<PaperProps> = ({ children, className }) => {
   return (
-    <PaperComponent p="md" shadow="sm" withBorder className={`hover:shadow-lg transition-shadow ${className}`}>
+    <PaperComponent p="md" shadow="sm" className={`hover:shadow-lg transition-shadow ${className}`}>
       {children}
     </PaperComponent>
   );

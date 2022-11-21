@@ -1,6 +1,7 @@
-import { Loader, Paper, Popover, Text, Tooltip } from '@mantine/core';
+import { Loader, Popover, Text, Tooltip } from '@mantine/core';
+import Paper from 'components/Paper';
 import { WithGetDataReturn } from 'data/getters';
-import { FC, useState } from 'react';
+import { FC, forwardRef, useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { HiChartSquareBar } from 'react-icons/hi';
 import { MdCompare } from 'react-icons/md';
@@ -80,13 +81,16 @@ const StatTab: FC<StatTabProps> = ({
     return isCurrency ? toCurrency(value) : toLocaleString(value);
   };
 
+  const TooltipIcon = forwardRef<HTMLDivElement>((props, ref) => {
+    return (
+      <div {...props} ref={ref}>
+        <FaInfoCircle onClick={() => setOpened((o) => !o)} className="text-violet" />
+      </div>
+    );
+  });
+
   return (
-    <Paper
-      p="md"
-      shadow="sm"
-      withBorder
-      className="w-full min-h-[120px] md:w-[265px] text-center relative hover:shadow-lg transition-shadow"
-    >
+    <Paper className="w-full min-h-[120px] md:w-[265px] text-center relative">
       <Text className="text-slate-500 font-semibold text-sm">{title}</Text>
       <Text weight={700} className="text-2xl mb-1">
         {getTabValue()}
@@ -104,7 +108,7 @@ const StatTab: FC<StatTabProps> = ({
               shadow="md"
             >
               <Popover.Target>
-                <FaInfoCircle onClick={() => setOpened((o) => !o)} className="text-violet" />
+                <TooltipIcon />
               </Popover.Target>
               <Popover.Dropdown>
                 <Text size="sm" pt="xs">

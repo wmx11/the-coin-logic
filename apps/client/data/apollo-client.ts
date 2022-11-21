@@ -4,7 +4,11 @@ import { SESSION_TOKEN } from 'constants/general';
 
 const getToken = () => {
   if (typeof window !== 'undefined') {
-    return JSON.parse((window.localStorage.getItem(SESSION_TOKEN) as string) || '');
+    try {
+      return JSON.parse((window.localStorage.getItem(SESSION_TOKEN) as string) || '');
+    } catch (error) {
+      return null;
+    }
   }
   return null;
 };

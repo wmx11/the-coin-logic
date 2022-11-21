@@ -1,4 +1,4 @@
-import { endOfYesterday, formatISO } from 'date-fns';
+import { endOfYesterday, formatISO, sub } from 'date-fns';
 import { MarketStat, Project } from 'types';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import getChangesPartial from 'utils/getChangesPartial';
@@ -43,7 +43,7 @@ export const getProjectPreviousDayMarketStatsBySlugAndDate = async (slug: string
     return null;
   }
 
-  const lastDay = formatISO(new Date(date));
+  const lastDay = formatISO(sub(new Date(date), { days: 1 }));
 
   const { marketStats, socialStats } = await getData({
     query: GET_PREVIOUS_DAY_MARKET_STATS,
@@ -73,12 +73,12 @@ export const getProjectsForTable = async () => {
       date: endOfYesterday(),
     },
   });
-  
+
   const projects = marketStats.reduce((arr, curr) => {
     const previousDay = marketStatsPreviousDay.find((item) => item.project?.slug === curr.project?.slug);
     const hasPreviousDayDuplicate = arr.filter((item) => item.project?.slug === previousDay?.project?.slug).length > 0;
     const hasDuplicate = arr.filter((item) => item.project?.slug === curr?.project?.slug).length > 0;
-    
+
     if (hasPreviousDayDuplicate || hasDuplicate) {
       return arr;
     }
