@@ -11,6 +11,7 @@ export type StatsTabGroupProps = Stats & {
   subtitle?: string;
   untrackedMessage?: string;
   section?: '' | 'marketData' | 'holdersData' | 'socialMediaData';
+  projectId?: string;
 };
 
 export type SubGroup = Stats & {};

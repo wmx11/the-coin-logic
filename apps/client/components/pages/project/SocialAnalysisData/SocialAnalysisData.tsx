@@ -10,7 +10,7 @@ type SocialAnalysisDataProps = {
 };
 
 const SocialAnalysisData: FC<SocialAnalysisDataProps> = ({ data }) => {
-  const { slug, trackSocials } = data.project;
+  const { slug, trackSocials, id } = data.project;
   const socialMediaData = trackSocials ? getData(data) : [];
 
   return (
@@ -22,6 +22,7 @@ const SocialAnalysisData: FC<SocialAnalysisDataProps> = ({ data }) => {
       data={socialMediaData}
       subtitle={`Last Updated: ${formateDateWithHours(data?.socialsDateAdded as string) || ''}`}
       slug={slug as string}
+      projectId={id}
     />
   );
 };

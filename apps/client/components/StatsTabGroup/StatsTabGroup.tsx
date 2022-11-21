@@ -6,7 +6,16 @@ import { StatsData } from 'types/MarketData';
 import StatTab from '../StatTab';
 import { StatsTabGroupProps, SubGroup } from './types';
 
-const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untrackedMessage, data, slug, section }) => {
+const StatsTabGroup: FC<StatsTabGroupProps> = ({
+  Icon,
+  title,
+  subtitle,
+  untrackedMessage,
+  data,
+  slug,
+  section,
+  projectId,
+}) => {
   const StatTabsComponent = () => {
     if (!data || !data.length) {
       return (
@@ -40,6 +49,7 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({ Icon, title, subtitle, untracke
                     slug={slug}
                     section={section}
                     id={id}
+                    projectId={projectId}
                   />
                 );
               })}

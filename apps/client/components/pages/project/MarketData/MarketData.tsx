@@ -9,7 +9,7 @@ type MarketDataTypes = { data: ProjectWithMarketStatsAndChanges };
 
 const MarketData: FC<MarketDataTypes> = ({ data }) => {
   const { dateAdded } = data;
-  const { slug } = data.project;
+  const { slug, id } = data.project;
 
   const marketData = getData(data);
 
@@ -23,6 +23,7 @@ const MarketData: FC<MarketDataTypes> = ({ data }) => {
         subtitle={`Last updated ${formateDateWithHours(dateAdded as string)}`}
         data={marketData}
         slug={slug as string}
+        projectId={id}
       />
     </>
   );

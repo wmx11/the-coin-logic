@@ -1,9 +1,9 @@
-const withBase = (selector: string) => `query($slug: String) {
-  marketStats(where: { project: { slug: { equals: $slug } } }, orderBy: { dateAdded: asc }) {
+const withBase = (selector: string) => `query($projectId: ID) {
+  marketStats(where: { project: { id: { equals: $projectId } } }, orderBy: { dateAdded: asc }) {
     value: ${selector}
     date: dateAdded
   }
-  projects(where: { slug: { equals: $slug } }) {
+  projects(where: { id: { equals: $projectId } }) {
     network {
       slug
     }
@@ -11,8 +11,8 @@ const withBase = (selector: string) => `query($slug: String) {
   }
 }`;
 
-const withSocialsBase = (selector: string) => `query($slug: String) {
-  socialStats(where: { project: { slug: { equals: $slug } } }, orderBy: { dateAdded: asc }) {
+const withSocialsBase = (selector: string) => `query($projectId: ID) {
+  socialStats(where: { project: { id: { equals: $projectId } } }, orderBy: { dateAdded: asc }) {
     value: ${selector}
     date: dateAdded
   }

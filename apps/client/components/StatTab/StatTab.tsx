@@ -20,6 +20,7 @@ type StatTabProps = {
   slug?: string;
   section?: '' | 'marketData' | 'holdersData' | 'socialMediaData';
   id?: string;
+  projectId?: string;
   previousValue?: PreviousValueTypes;
 };
 
@@ -33,13 +34,14 @@ const StatTab: FC<StatTabProps> = ({
   slug,
   section,
   id,
+  projectId,
 }) => {
   const [opened, setOpened] = useState(false);
   const chartStore = useChartStore((state) => state);
 
   const getChartEntryData = async (entry: string) => {
     const methods = await import('data/getters/charts');
-    const data = await methods[entry as keyof typeof methods](slug as string, id || (title as string));
+    const data = await methods[entry as keyof typeof methods](projectId as string, id || (title as string));
     return data as WithGetDataReturn;
   };
 

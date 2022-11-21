@@ -32,25 +32,25 @@ export type WithGetDataReturn = {
   socialStats: ChartData[];
 };
 
-const withGetData = async (query: string, slug: string): Promise<WithGetDataReturn> => {
+const withGetData = async (query: string, projectId: string): Promise<WithGetDataReturn> => {
   const { marketStats, projects, socialStats } = await getData({
     query,
-    variables: { slug },
+    variables: { projectId },
     fetchPolicy: 'cache-first',
   });
   return { marketStats, project: projects && projects[0], socialStats } || [];
 };
 
-export const getPrice = async (slug: string) => withGetData(GET_PRICE, slug);
-export const getMarketCap = async (slug: string) => withGetData(GET_MARKET_CAP, slug);
-export const getTotalSupply = async (slug: string) => withGetData(GET_TOTAL_SUPPLY, slug);
-export const getLiquidity = async (slug: string) => withGetData(GET_LIQUIDITY, slug);
-export const getPairPrice = async (slug: string) => withGetData(GET_PAIR_PRICE, slug);
-export const getBurnedTokens = async (slug: string) => withGetData(GET_BURNED_TOKENS, slug);
-export const getFdv = async (slug: string) => withGetData(GET_FDV, slug);
+export const getPrice = async (projectId: string) => withGetData(GET_PRICE, projectId);
+export const getMarketCap = async (projectId: string) => withGetData(GET_MARKET_CAP, projectId);
+export const getTotalSupply = async (projectId: string) => withGetData(GET_TOTAL_SUPPLY, projectId);
+export const getLiquidity = async (projectId: string) => withGetData(GET_LIQUIDITY, projectId);
+export const getPairPrice = async (projectId: string) => withGetData(GET_PAIR_PRICE, projectId);
+export const getBurnedTokens = async (projectId: string) => withGetData(GET_BURNED_TOKENS, projectId);
+export const getFdv = async (projectId: string) => withGetData(GET_FDV, projectId);
 
-export const getCustomTrackers = async (slug: string, selector: string) => {
-  const data = await withGetData(GET_CUSTOM_TRACKERS, slug);
+export const getCustomTrackers = async (projectId: string, selector: string) => {
+  const data = await withGetData(GET_CUSTOM_TRACKERS, projectId);
 
   const resolvedData = {
     marketStats:
@@ -69,12 +69,12 @@ export const getCustomTrackers = async (slug: string, selector: string) => {
   return { ...resolvedData, project: data.project };
 };
 
-export const getHolders = async (slug: string) => withGetData(GET_HOLDERS, slug);
-export const getAvgHoldings = async (slug: string) => withGetData(GET_AVERAGE_HOLDINGS, slug);
-export const getNewHolders = async (slug: string) => withGetData(GET_NEW_HOLDERS, slug);
-export const getLeavingHolders = async (slug: string) => withGetData(GET_LEAVING_HOLDERS, slug);
-export const getRecurringHolders = async (slug: string) => withGetData(GET_RECURRING_HOLDERS, slug);
+export const getHolders = async (projectId: string) => withGetData(GET_HOLDERS, projectId);
+export const getAvgHoldings = async (projectId: string) => withGetData(GET_AVERAGE_HOLDINGS, projectId);
+export const getNewHolders = async (projectId: string) => withGetData(GET_NEW_HOLDERS, projectId);
+export const getLeavingHolders = async (projectId: string) => withGetData(GET_LEAVING_HOLDERS, projectId);
+export const getRecurringHolders = async (projectId: string) => withGetData(GET_RECURRING_HOLDERS, projectId);
 
-export const getDiscordMembers = async (slug: string) => withGetData(GET_DISCORD_MEMBERS, slug);
-export const getTelegramMembers = async (slug: string) => withGetData(GET_TELEGRAM_MEMBERS, slug);
-export const getTwitterFollowers = async (slug: string) => withGetData(GET_TWITTER_FOLLOWERS, slug);
+export const getDiscordMembers = async (projectId: string) => withGetData(GET_DISCORD_MEMBERS, projectId);
+export const getTelegramMembers = async (projectId: string) => withGetData(GET_TELEGRAM_MEMBERS, projectId);
+export const getTwitterFollowers = async (projectId: string) => withGetData(GET_TWITTER_FOLLOWERS, projectId);
