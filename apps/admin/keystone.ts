@@ -15,6 +15,7 @@ import { lists } from './schema';
 import { withAuth, session } from './auth';
 import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache';
 import { default as devConfig } from './config/config';
+import rateLimit from 'express-rate-limit';
 
 export default withAuth(
   // Using the config function helps typescript guide you to the available options.
@@ -62,6 +63,18 @@ export default withAuth(
     server: {
       port: 3500,
       cors: devConfig.cors,
+      extendExpressApp(app, createContext) {
+        app.set('trust proxy', 1);
+        app.use(
+          rateLimit({
+            windowMs: 60 * 1000,
+            max: 300,
+            standardHeaders: true,
+            message: JSON.stringify({ message: 'Too many requests' }),
+          }),
+        );
+        app.get('/ip-check', (req, res) => res.send(req.ip));
+      },
     },
     graphql: {
       debug: process.env.NODE_ENV !== 'production',
