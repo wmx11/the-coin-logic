@@ -1,59 +1,88 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../data/prisma';
-import { add, isAfter } from 'date-fns';
+import { SUBSCRIPTION_CONFIRMATION_ID } from 'constants/email';
 import { FREE_SUBSCRIPTION_DAYS, SUBSCRIPTION_DAYS } from 'constants/subscription';
-import { Order } from 'tcl-packages/prismaClient';
+import request, { Auth } from 'data/api/request';
+import { response } from 'data/api/response';
+import { add, isAfter } from 'date-fns';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import routes from 'routes';
+import config from 'tcl-packages/email/config';
+import { Order, Product } from 'types';
+import { products } from 'types/Products';
+import { formateDateWithHours } from 'utils/formatters';
+import { signedRequest } from 'utils/signedRequest';
+import prisma from '../../../data/prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { method, body } = req;
-  const { order }: { order: Order } = body;
+  const requestHandler = request(req, res);
+  const responseHandler = response(res);
 
-  if (!order) {
-    return res.status(403).json({ message: 'Order not found' });
-  }
+  const initSubscription = async (auth: Auth) => {
+    const { order, duration }: { order: Order; duration: number } = req.body;
 
-  if (method === 'POST') {
-    const user = order.userId;
+    if (!auth.id) {
+      return responseHandler.unauthorized();
+    }
 
-    const orderItem = await prisma.orderItem.findFirst({
+    const user = await prisma.user.findUnique({
       where: {
-        orderId: order.id,
+        id: auth.id,
       },
       select: {
-        product: {
-          select: {
-            id: true,
-            isOneTime: true,
-            isMonthly: true,
-            price: true,
-          },
-        },
+        email: true,
       },
     });
 
-    const product = orderItem?.product;
+    if (!order || !user) {
+      return responseHandler.badRequest('Order or user not found');
+    }
 
-    if (!user) {
-      return res.status(403).json({ message: 'User not found' });
+    const orderItem = await prisma.orderItem.findUnique({
+      where: {
+        id: order?.orderItem?.id || undefined,
+      },
+      include: {
+        product: true,
+      },
+    });
+
+    if (!orderItem) {
+      return responseHandler.badRequest('Order item not found');
+    }
+
+    let product: Product | null = null;
+
+    if (duration) {
+      const data = await prisma.product.findFirst({
+        where: {
+          sku: products.sku.marketingCampaignTrackerListed,
+        },
+      });
+      product = data;
+    } else {
+      product = orderItem.product;
     }
 
     if (!product) {
-      return res.status(403).json({ message: 'Product not found' });
+      return responseHandler.badRequest('Product not found');
     }
 
-    if (product.isOneTime) {
-      return res.status(200).json({ message: 'Product does not require a subscription' });
+    if (product.isOneTime || !duration) {
+      return responseHandler.badRequest('Subscription is not required');
     }
 
     // Current date
     const dateFrom = new Date();
 
     const getDateTo = () => {
-      if (product.price === 0 && product.isMonthly) {
+      if (duration) {
+        return add(new Date(), { days: SUBSCRIPTION_DAYS * duration });
+      }
+
+      if (product?.price === 0 && product.isMonthly) {
         return add(new Date(), { days: FREE_SUBSCRIPTION_DAYS });
       }
 
-      if (order.durationInMonths && product.isMonthly) {
+      if (order.durationInMonths && product?.isMonthly) {
         const durationInMonthsToDays = order.durationInMonths * SUBSCRIPTION_DAYS;
         return add(new Date(), { days: durationInMonthsToDays });
       }
@@ -85,8 +114,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await prisma.subscription.create({
       data: {
-        userId: user,
-        orderId: order.id,
+        user: {
+          connect: {
+            id: order?.user?.id || undefined,
+          },
+        },
+        order: {
+          connect: {
+            id: order.id || undefined,
+          },
+        },
         isActive: true,
         product: {
           connect: {
@@ -98,8 +135,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    return res.status(200).json({ message: 'Subscription successfully granted' });
-  }
+    await signedRequest(
+      {
+        type: 'post',
+        url: routes.api.email.submit,
+        data: {
+          subject: 'Thank you for subscribing to TCL tools!',
+          to: user.email,
+          cc: config.tclEmail,
+          templateId: SUBSCRIPTION_CONFIRMATION_ID,
+          dynamicTemplateData: {
+            product_name: orderItem?.product?.name as string,
+            date_from: formateDateWithHours(new Date().toString()),
+            date_to: formateDateWithHours(getDateTo().toString()),
+            marketing_tracker_link: `${routes.base}${routes.marketingTracker}`,
+          },
+        },
+      },
+      auth.id,
+      {
+        trusted: true,
+        signature: 'email_submit',
+      },
+    );
 
-  return res.status(403).json({ message: 'Not allowed' });
+    return responseHandler.ok({}, 'Subscribed succesfully');
+  };
+
+  return requestHandler.signedPost(initSubscription);
 }

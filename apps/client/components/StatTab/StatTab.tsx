@@ -1,7 +1,7 @@
 import { Loader, Popover, Text, Tooltip } from '@mantine/core';
 import Paper from 'components/Paper';
 import { WithGetDataReturn } from 'data/getters';
-import { FC, forwardRef, useState } from 'react';
+import { FC, forwardRef, useEffect, useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { HiChartSquareBar } from 'react-icons/hi';
 import { MdCompare } from 'react-icons/md';
@@ -17,6 +17,7 @@ type StatTabProps = {
   isCurrency?: boolean;
   tooltip?: string;
   chartEntry?: string;
+  isChartDefaultOpen?: boolean;
   slug?: string;
   section?: '' | 'marketData' | 'holdersData' | 'socialMediaData';
   id?: string;
@@ -31,7 +32,7 @@ const StatTab: FC<StatTabProps> = ({
   isCurrency,
   tooltip,
   chartEntry,
-  slug,
+  isChartDefaultOpen,
   section,
   id,
   projectId,
@@ -67,6 +68,12 @@ const StatTab: FC<StatTabProps> = ({
       section === 'socialMediaData' ? (data.socialStats as ChartData[]) : (data.marketStats as ChartData[]),
     );
   };
+
+  useEffect(() => {
+    if (isChartDefaultOpen && !chartStore.loading && chartStore.chartData.length < 1) {
+      handleChartEntry(chartEntry as string);
+    }
+  }, []);
 
   const getTabValue = () => {
     if (Array.isArray(value)) {

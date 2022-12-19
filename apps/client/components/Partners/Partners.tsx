@@ -1,5 +1,6 @@
 import CardinalHouse from 'public/images/cardinal_house.png';
-import KCConsulting from 'public/images/kc_consulting.jpg';
+import KCConsulting from 'public/images/kc_consulting.png';
+import AssureDefi from 'public/images/assure_defi.png';
 import TMG from 'public/images/tmg_logo.png';
 import FluxLabs from 'public/images/flux-labs.png';
 import Gauss from 'public/images/gauss.png';
@@ -16,6 +17,13 @@ const Partners = () => {
           Trusted By Our Partners
         </Text>
         <div className="flex gap-8 justify-between items-center flex-wrap">
+          <div className="max-w-[180px] w-full">
+            <Link href="https://assuredefi.com/">
+              <a target="_blank">
+                <Image src={AssureDefi} />
+              </a>
+            </Link>
+          </div>
           <div className="max-w-[60px] w-full">
             <Link href="https://www.cardinalhouse.finance/">
               <a target="_blank">
@@ -23,7 +31,7 @@ const Partners = () => {
               </a>
             </Link>
           </div>
-          <div className="max-w-[150px] w-full">
+          <div className="max-w-[100px] w-full">
             <Link href="https://kcconsulting.agency/">
               <a target="_blank">
                 <Image src={KCConsulting} />

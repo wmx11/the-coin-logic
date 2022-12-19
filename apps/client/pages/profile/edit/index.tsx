@@ -1,5 +1,5 @@
-import EditProfileData from 'components/pages/profile/EditProfileData';
-import UserLayout from 'components/pages/profile/ProfileLayout';
+import EditProfileData from 'views/profile/EditProfileData';
+import UserLayout from 'views/profile/ProfileLayout';
 
 import { ReactElement } from 'react';
 

@@ -1,5 +1,5 @@
-import MyProjects from 'components/pages/profile/MyProjects';
-import UserLayout from 'components/pages/profile/ProfileLayout';
+import MyProjects from 'views/profile/MyProjects';
+import UserLayout from 'views/profile/ProfileLayout';
 import { getProjectsByUserEmail } from 'data/getters';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';

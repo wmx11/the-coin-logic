@@ -1,5 +1,5 @@
-import ProfileData from 'components/pages/profile/ProfileData';
-import UserLayout from 'components/pages/profile/ProfileLayout';
+import ProfileData from 'views/profile/ProfileData';
+import UserLayout from 'views/profile/ProfileLayout';
 import { ReactElement } from 'react';
 
 function ProfilePage<NextPageWithLayout>() {

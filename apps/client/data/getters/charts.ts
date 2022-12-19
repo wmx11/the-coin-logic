@@ -17,7 +17,7 @@ import {
   GET_RECURRING_HOLDERS,
   GET_TELEGRAM_MEMBERS,
   GET_TOTAL_SUPPLY,
-  GET_TWITTER_FOLLOWERS
+  GET_TWITTER_FOLLOWERS,
 } from './constatnts/charts';
 import { getData } from './getters';
 
@@ -36,7 +36,7 @@ const withGetData = async (query: string, projectId: string): Promise<WithGetDat
   const { marketStats, projects, socialStats } = await getData({
     query,
     variables: { projectId },
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'network-only',
   });
   return { marketStats, project: projects && projects[0], socialStats } || [];
 };

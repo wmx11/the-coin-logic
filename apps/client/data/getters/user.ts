@@ -26,5 +26,5 @@ export const getUserMarketingCampaigns = async (email: string) => {
 
 export const getUserProjects = async (email: string) => {
   const { user } = await getData({ query: GET_USER_PROJECTS, variables: { email }, fetchPolicy: 'network-only' });
-  return user?.projects || null;
+  return { projects: user?.projects, managedProjects: user?.managedProjects } || null;
 };

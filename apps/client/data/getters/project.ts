@@ -1,18 +1,21 @@
 import { endOfYesterday, formatISO, sub } from 'date-fns';
+import { prismaClient } from 'tcl-packages/prismaClient';
 import { MarketStat, Project } from 'types';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import getChangesPartial from 'utils/getChangesPartial';
 import { prepareCustomTrackers } from 'utils/prepareCustomTrackers';
-import { getAveragesAndMedians } from 'utils/utils';
+import { getAveragesAndMedians, getLogoLink } from 'utils/utils';
 import {
   GET_ENABLED_AND_LISTED_PROJECTS,
-  GET_MARKETSTATS_AND_PROJECTS,
+  GET_ENABLED_PROJECTS_FOR_FILTERING,
+  GET_MARKETSTATS_BY_PROJECT_ID_FOR_TABLE,
   GET_PREVIOUS_DAY_MARKET_STATS,
   GET_PROJECTS_BY_USER_EMAIL,
   GET_PROJECTS_COUNT,
-  GET_PROJECT_AND_MARKET_STATS_BY_SLUG,
+  GET_PROJECT_AND_MARKET_STATS_BY_ID,
   GET_PROJECT_AVERAGE_MARKET_CHANGE_FOR_PERIOD_OF_TIME,
-  MARKET_STAT_CHANGES,
+  GET_PROJECT_ID_BY_SLUG,
+  MARKET_STAT_CHANGES
 } from './constatnts/project';
 import { getData } from './getters';
 
@@ -33,13 +36,33 @@ export const getEnabledAndListedProjects = async () => {
   return projects;
 };
 
+export const getEnabledAndListedProjectsForFiltering = async () => {
+  const { projects } = await getData({
+    query: GET_ENABLED_PROJECTS_FOR_FILTERING,
+    fetchPolicy: 'network-only',
+  });
+  return projects;
+};
+
 export const getProjectsCount = async () => {
   const { projectsCount } = await getData({ query: GET_PROJECTS_COUNT, fetchPolicy: 'network-only' });
   return projectsCount;
 };
 
-export const getProjectPreviousDayMarketStatsBySlugAndDate = async (slug: string, date: string) => {
-  if (!slug || !date) {
+export const getProjectIdBySlug = async (slug: string) => {
+  const { projects } = await getData({
+    query: GET_PROJECT_ID_BY_SLUG,
+    fetchPolicy: 'network-only',
+    variables: {
+      slug,
+    },
+  });
+
+  return projects[0].id || null;
+};
+
+export const getProjectPreviousDayMarketStatsByProjectIdAndDate = async (projectId: string, date: string) => {
+  if (!projectId || !date) {
     return null;
   }
 
@@ -47,74 +70,68 @@ export const getProjectPreviousDayMarketStatsBySlugAndDate = async (slug: string
 
   const { marketStats, socialStats } = await getData({
     query: GET_PREVIOUS_DAY_MARKET_STATS,
-    variables: { slug, lastDay },
+    variables: { projectId, lastDay },
     fetchPolicy: 'network-only',
   });
   return { marketStats: marketStats[0], socialStats: socialStats[0] };
 };
 
 export const getProjectsForTable = async () => {
-  const count = await getProjectsCount();
   const enabledAndListedProjects: Project[] = await getEnabledAndListedProjects();
+  const projects: MarketStat[] = [];
 
-  const { marketStats }: { marketStats: MarketStat[] } = await getData({
-    query: GET_MARKETSTATS_AND_PROJECTS,
-    fetchPolicy: 'network-only',
-    variables: {
-      take: count,
-    },
-  });
+  for (const project of enabledAndListedProjects) {
+    const { marketStats: todayArr }: { marketStats: MarketStat[] } = await getData({
+      query: GET_MARKETSTATS_BY_PROJECT_ID_FOR_TABLE,
+      fetchPolicy: 'network-only',
+      variables: {
+        projectId: project.id,
+      },
+    });
 
-  const { marketStats: marketStatsPreviousDay }: { marketStats: MarketStat[] } = await getData({
-    query: GET_MARKETSTATS_AND_PROJECTS,
-    fetchPolicy: 'network-only',
-    variables: {
-      take: count,
-      date: endOfYesterday(),
-    },
-  });
+    const { marketStats: yesterdayArr }: { marketStats: MarketStat[] } = await getData({
+      query: GET_MARKETSTATS_BY_PROJECT_ID_FOR_TABLE,
+      fetchPolicy: 'network-only',
+      variables: {
+        projectId: project.id,
+        date: endOfYesterday(),
+      },
+    });
 
-  const projects = marketStats.reduce((arr, curr) => {
-    const previousDay = marketStatsPreviousDay.find((item) => item.project?.slug === curr.project?.slug);
-    const hasPreviousDayDuplicate = arr.filter((item) => item.project?.slug === previousDay?.project?.slug).length > 0;
-    const hasDuplicate = arr.filter((item) => item.project?.slug === curr?.project?.slug).length > 0;
+    const today = todayArr[0] || undefined;
+    const yesterday = yesterdayArr[0] || undefined;
 
-    if (hasPreviousDayDuplicate || hasDuplicate) {
-      return arr;
+    if (today && yesterday) {
+      const getChanges = getChangesPartial(today, yesterday || today);
+      const marketStatsWithChanges = { ...today, project };
+      MARKET_STAT_CHANGES.forEach((value) => Object.assign(marketStatsWithChanges, getChanges(value)));
+      projects.push(marketStatsWithChanges);
     }
 
-    const getChanges = getChangesPartial(curr, previousDay || curr);
+    if (!today && !yesterday) {
+      const getChanges = getChangesPartial({}, {});
+      const marketStatsWithChanges = { project } as MarketStat;
+      MARKET_STAT_CHANGES.forEach((value) =>
+        Object.assign(marketStatsWithChanges, { ...getChanges(value), [value]: 0 }),
+      );
+      projects.push(marketStatsWithChanges);
+    }
+  }
 
-    const marketStatsWithChanges = { ...curr };
+  projects.sort((a, b) => (b?.marketCap as number) - (a?.marketCap as number));
+  projects.forEach((item, index) => Object.assign(item, { order: index + 1 }));
 
-    MARKET_STAT_CHANGES.forEach((value) => Object.assign(marketStatsWithChanges, getChanges(value)));
-
-    arr.push(marketStatsWithChanges);
-
-    return arr;
-  }, [] as MarketStat[]);
-
-  const enabledAndListedProjectsWithNoData = enabledAndListedProjects.reduce((arr, curr) => {
-    const getChanges = getChangesPartial(curr, curr);
-    const marketStatsWithChanges = { project: { ...curr } } as MarketStat;
-    MARKET_STAT_CHANGES.forEach((value) => Object.assign(marketStatsWithChanges, { ...getChanges(value), [value]: 0 }));
-    arr.push(marketStatsWithChanges);
-    return arr;
-  }, [] as MarketStat[]);
-
-  const allProjects = projects.concat(enabledAndListedProjectsWithNoData);
-  allProjects.sort((a, b) => (b?.marketCap as number) - (a?.marketCap as number));
-  allProjects.forEach((item, index) => Object.assign(item, { order: index + 1 }));
-
-  return allProjects;
+  return projects;
 };
 
 export const getProjectAndMarketStatsBySlug = async (
   slug: string,
 ): Promise<ProjectWithMarketStatsAndChanges | null> => {
+  const date = formatISO(new Date());
+  const projectId = await getProjectIdBySlug(slug);
   const marketStatsArray = await getData({
-    query: GET_PROJECT_AND_MARKET_STATS_BY_SLUG,
-    variables: { slug },
+    query: GET_PROJECT_AND_MARKET_STATS_BY_ID,
+    variables: { projectId, date },
     fetchPolicy: 'network-only',
   });
 
@@ -124,7 +141,10 @@ export const getProjectAndMarketStatsBySlug = async (
     return null;
   }
 
-  const marketStatsLastDayData = await getProjectPreviousDayMarketStatsBySlugAndDate(slug, marketStats.dateAdded);
+  const marketStatsLastDayData = await getProjectPreviousDayMarketStatsByProjectIdAndDate(
+    projectId,
+    marketStats.dateAdded,
+  );
 
   const marketStatsLastDay = marketStatsLastDayData?.marketStats;
   const socialStatsLastDay = marketStatsLastDayData?.socialStats;
@@ -148,13 +168,88 @@ export const getProjectAndMarketStatsBySlug = async (
 
   const newMarketStats = {
     ...marketStats,
-    relatedProjects: marketStatsArray.relatedProjects,
     ...marketStatsArray.socialStats[0],
+    relatedProjects: marketStatsArray?.relatedProjects,
+    paymentPlans: marketStatsArray?.paymentPlans,
+    quizzes: marketStatsArray?.quizzes,
   };
 
   MARKET_STAT_CHANGES.forEach((value) => Object.assign(newMarketStats, getChanges(value)));
 
   return newMarketStats;
+};
+
+export const getTrendingProjects = async (limit = 3) => {
+  const count = await getProjectsCount();
+
+  const marketStatsToday = prismaClient?.marketStat.findMany({
+    select: {
+      price: true,
+      project: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          logo_id: true,
+          logo_extension: true,
+        },
+      },
+    },
+    orderBy: {
+      dateAdded: 'desc',
+    },
+    take: count,
+  });
+
+  const marketStatsYesterday = prismaClient?.marketStat.findMany({
+    select: {
+      price: true,
+      project: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          logo_id: true,
+          logo_extension: true,
+        },
+      },
+    },
+    where: {
+      dateAdded: {
+        lt: sub(new Date(), { days: 1 }),
+      },
+    },
+    orderBy: {
+      dateAdded: 'desc',
+    },
+    take: count,
+  });
+
+  const [today, yesterday] = await Promise.all([marketStatsToday, marketStatsYesterday]);
+
+  type Results = { name: string; slug: string; logo: string; change: number }[];
+
+  const results = today
+    ?.reduce((arr, curr) => {
+      const yesterdayData = yesterday?.find((item) => item?.project?.id === curr?.project?.id);
+      const getChanges = getChangesPartial(curr, yesterdayData);
+
+      const change = getChanges('price').priceChange.percentage;
+
+      if (change > 0 && change !== Infinity) {
+        arr.push({
+          name: curr?.project?.name as string,
+          slug: curr?.project?.slug as string,
+          logo: getLogoLink(curr?.project?.logo_id as string, curr.project?.logo_extension as string),
+          change,
+        });
+      }
+      return arr;
+    }, [] as Results)
+    .sort((a, b) => b.change - a.change)
+    .slice(0, limit);
+
+  return results;
 };
 
 export type AverageMarketChangeForPeriodOfTime = {

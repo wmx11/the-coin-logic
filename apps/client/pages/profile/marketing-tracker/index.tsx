@@ -1,5 +1,5 @@
-import MarketingTracker from 'components/pages/profile/MarketingTracker';
-import UserLayout from 'components/pages/profile/ProfileLayout';
+import MarketingTracker from 'views/profile/MarketingTracker';
+import UserLayout from 'views/profile/ProfileLayout';
 import { getUserMarketingCampaigns } from 'data/getters/user';
 import useUser from 'hooks/useUser';
 import { ReactElement, useCallback, useEffect, useState } from 'react';

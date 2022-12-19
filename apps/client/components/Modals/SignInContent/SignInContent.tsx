@@ -5,8 +5,8 @@ import ErrorMessage from 'components/ErrorMessage';
 import ResetPasswordButton from 'components/ResetPasswordButton';
 import { SESSION_TOKEN } from 'constants/general';
 import useLocalStorage from 'hooks/useLocalStorage';
-import { signIn, useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { getSession, signIn, useSession } from 'next-auth/react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 import { UserLogin, userLoginSchema } from '../../../schemas/user';
@@ -16,7 +16,7 @@ const ERROR_MESSAGE = 'Your email address or password is invalid. Please try aga
 const SignInContent = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const { setRegister, resetAll, setLoginSuccess } = useLoginFlowStore((state) => state);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [storedValue, setValue] = useLocalStorage(SESSION_TOKEN, session?.token);
 
   const form = useForm({
@@ -27,21 +27,20 @@ const SignInContent = () => {
     },
   });
 
-  useEffect(() => {
-    setValue(session?.token || '');
-  }, [session]);
-
   const handleSubmit = async ({ email, password }: UserLogin) => {
     try {
       const data = await signIn('credentials', { redirect: false, email: email.trim().toLowerCase(), password });
+
       if (data?.status === 401) {
         setErrorMessage(ERROR_MESSAGE);
       }
 
       if (data?.status === 200) {
+        const session = await getSession();
+        setValue(session?.token || '');
         toast.success('You have successfully logged in!');
-        setErrorMessage('');
         resetAll();
+        setErrorMessage('');
         setLoginSuccess(true);
       }
     } catch (error) {

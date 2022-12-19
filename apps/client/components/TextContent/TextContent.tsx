@@ -8,21 +8,30 @@ export type TextContentProps = {
     content?: DocumentRendererProps;
   };
   className?: string;
+  richContent?: string;
 };
 
-const TextContent: FC<TextContentProps> = ({ content, className }) => {
-  if (!content) {
-    return null;
-  }
+const TextContent: FC<TextContentProps> = ({ content, richContent, className }) => {
+  const parsedRichContent = () => {
+    try {
+      return JSON.parse(richContent as string);
+    } catch (error) {
+      return '';
+    }
+  };
 
   return (
     <section className={`prose prose-md ${className}`}>
       <article className="m-auto">
-        <DocumentRenderer
-          document={content?.content?.document}
-          renderers={renderers}
-          componentBlocks={componentBlockRenderers}
-        />
+        {richContent ? (
+          <div dangerouslySetInnerHTML={{ __html: parsedRichContent() }}></div>
+        ) : (
+          <DocumentRenderer
+            document={content?.content?.document}
+            renderers={renderers}
+            componentBlocks={componentBlockRenderers}
+          />
+        )}
       </article>
     </section>
   );

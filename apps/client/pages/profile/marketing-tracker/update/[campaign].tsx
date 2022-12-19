@@ -1,5 +1,5 @@
 import HasSubscriptionProvider from 'components/HasSubscriptionProvider';
-import UpdateCampaign from 'components/pages/profile/Campaign/UpdateCampaign';
+import UpdateCampaign from 'views/profile/Campaign/UpdateCampaign';
 import { getCampaignByCampaignId } from 'data/getters/campaigns';
 import { GetServerSideProps } from 'next';
 import { unstable_getServerSession } from 'next-auth';

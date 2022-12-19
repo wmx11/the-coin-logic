@@ -1,5 +1,5 @@
 import HasSubscriptionProvider from 'components/HasSubscriptionProvider';
-import Campaign from 'components/pages/profile/Campaign';
+import Campaign from 'views/profile/Campaign';
 import {
   AverageMarketChangeForPeriodOfTime,
   getProjectAndMarketStatsBySlug,

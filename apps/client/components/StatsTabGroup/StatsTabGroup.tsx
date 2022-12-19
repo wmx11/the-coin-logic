@@ -36,23 +36,29 @@ const StatsTabGroup: FC<StatsTabGroupProps> = ({
         <div>
           <div className="flex items-stretch justify-center md:justify-start flex-wrap gap-4">
             {data &&
-              data.map(({ value, title, previousValue, isCurrency, tooltip, chartEntry, id }, index: number) => {
-                return (
-                  <StatTab
-                    key={`${title}_${index}_${subtitle}`}
-                    title={title}
-                    value={value}
-                    previousValue={previousValue}
-                    isCurrency={isCurrency}
-                    tooltip={tooltip}
-                    chartEntry={chartEntry}
-                    slug={slug}
-                    section={section}
-                    id={id}
-                    projectId={projectId}
-                  />
-                );
-              })}
+              data.map(
+                (
+                  { value, title, previousValue, isCurrency, tooltip, chartEntry, id, isChartDefaultOpen },
+                  index: number,
+                ) => {
+                  return (
+                    <StatTab
+                      key={`${title}_${index}_${subtitle}`}
+                      title={title}
+                      value={value}
+                      previousValue={previousValue}
+                      isCurrency={isCurrency}
+                      tooltip={tooltip}
+                      chartEntry={chartEntry}
+                      slug={slug}
+                      section={section}
+                      id={id}
+                      projectId={projectId}
+                      isChartDefaultOpen={isChartDefaultOpen}
+                    />
+                  );
+                },
+              )}
           </div>
         </div>
       );

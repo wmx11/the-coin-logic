@@ -3,11 +3,19 @@ import { FC, PropsWithChildren } from 'react';
 
 type PaperProps = {
   className?: string;
+  withBorder?: boolean;
+  onClick?: () => void;
 } & PropsWithChildren;
 
-const Paper: FC<PaperProps> = ({ children, className }) => {
+const Paper: FC<PaperProps> = ({ children, className, withBorder, onClick }) => {
   return (
-    <PaperComponent p="md" shadow="sm" className={`hover:shadow-lg transition-shadow ${className}`}>
+    <PaperComponent
+      withBorder={withBorder}
+      p="md"
+      shadow="sm"
+      className={`hover:shadow-lg transition-shadow ${className}`}
+      onClick={onClick}
+    >
       {children}
     </PaperComponent>
   );

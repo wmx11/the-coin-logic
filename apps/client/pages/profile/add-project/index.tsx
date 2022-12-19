@@ -1,5 +1,5 @@
-import AddProject from 'components/pages/profile/AddProject';
-import UserLayout from 'components/pages/profile/ProfileLayout';
+import AddProject from 'views/profile/AddProject';
+import UserLayout from 'views/profile/ProfileLayout';
 import prisma from 'data/prisma';
 import { ReactElement } from 'react';
 import { Network } from 'types';
