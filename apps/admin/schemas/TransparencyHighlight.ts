@@ -1,10 +1,10 @@
 import { Lists } from '.keystone/types';
 import { list } from '@keystone-6/core';
-import { integer, relationship, timestamp, text } from '@keystone-6/core/fields';
+import { checkbox, relationship, text, timestamp } from '@keystone-6/core/fields';
 import { CacheScope } from 'apollo-cache-control';
 
-const ProjectRating: Lists = {
-  ProjectRating: list({
+const TransparencyHighlight: Lists = {
+  TransparencyHighlight: list({
     graphql: {
       cacheHint: {
         maxAge: 3 * 60 * 60,
@@ -12,15 +12,9 @@ const ProjectRating: Lists = {
       },
     },
     fields: {
-      rating: integer({
-        defaultValue: 0,
-        validation: {
-          max: 5,
-        },
-      }),
-      ip: text(),
-      user: relationship({ ref: 'User', db: { foreignKey: true } }),
-      project: relationship({ ref: 'Project.ratings', db: { foreignKey: true } }),
+      content: text({ ui: { displayMode: 'textarea' } }),
+      isPositive: checkbox({ defaultValue: false }),
+      project: relationship({ ref: 'Project.transparencyHighlights', db: { foreignKey: true } }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' }, isIndexed: true }),
       updatedAt: timestamp({
         db: {
@@ -30,4 +24,4 @@ const ProjectRating: Lists = {
     },
   }),
 };
-export default ProjectRating;
+export default TransparencyHighlight;

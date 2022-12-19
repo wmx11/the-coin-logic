@@ -7,6 +7,7 @@ const OrderItem: Lists = {
     fields: {
       order: relationship({ ref: 'Order.orderItem', db: { foreignKey: true } }),
       product: relationship({ ref: 'Product', db: { foreignKey: true } }),
+      paymentPlan: relationship({ ref: 'PaymentPlan', db: { foreignKey: true } }),
       price: float(),
       quantity: float({ defaultValue: 1 }),
       discount: float({ defaultValue: 0 }),

@@ -27,8 +27,8 @@ const Creator: Lists = {
       priceFrom: float(),
       priceTo: float(),
       marketingCampaigns: relationship({ ref: 'MarketingCampaign.creator', many: true, ui: { displayMode: 'count' } }),
-      ratings: relationship({ ref: 'CreatorRating.creator', many: true, ui: { displayMode: 'count' } }),
-      reviews: relationship({ ref: 'CreatorReview.creator', many: true, ui: { displayMode: 'count' } }),
+      votes: relationship({ ref: 'Vote.creator', many: true, ui: { displayMode: 'count' } }),
+      comments: relationship({ ref: 'Comment.creator', many: true, ui: { displayMode: 'count' } }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
       updatedAt: timestamp({
         db: {

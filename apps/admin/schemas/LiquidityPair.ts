@@ -15,6 +15,12 @@ const LiquidityPair: Lists = {
       network: relationship({ ref: 'Network' }),
       project: relationship({ ref: 'Project.liquidityPair', many: true }),
       exchange: relationship({ ref: 'Exchange' }),
+      customExchangeAddress: text({
+        ui: {
+          description:
+            'Used when the project wants a specific address to the exchange. For example, including input and output tokens.',
+        },
+      }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
     },
   }),

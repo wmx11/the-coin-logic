@@ -2,7 +2,6 @@ import { Lists } from '.keystone/types';
 import { list } from '@keystone-6/core';
 import { checkbox, float, image, integer, json, relationship, select, text, timestamp } from '@keystone-6/core/fields';
 import { CacheScope } from 'apollo-cache-control';
-import { isAdmin, isUser } from '../utils/rbac';
 import slugify from '../utils/slugify';
 
 const Project: Lists = {
@@ -23,6 +22,7 @@ const Project: Lists = {
         isIndexed: true,
       }),
       logo: image({ storage: 'localLogos' }),
+      dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
       enabled: checkbox({
         defaultValue: false,
         ui: { description: 'Is the project enabled and ready for data tracking.' },
@@ -36,7 +36,29 @@ const Project: Lists = {
         ui: { description: 'Is the project approved for listing. This means the project is awaiting payment.' },
       }),
       isListed: checkbox({ defaultValue: false, ui: { description: 'Is the project listed on the leaderboard.' } }),
+      isNft: checkbox({
+        defaultValue: false,
+        ui: { description: 'Is the project an NFT (does not display and track some of the data)' },
+      }),
+      displayBlogPosts: checkbox({
+        defaultValue: false,
+        ui: { description: 'Should display blog posts' },
+      }),
+      displayTransparencyScore: checkbox({
+        defaultValue: false,
+        ui: { description: 'Should a transparency score be displayed.' },
+      }),
+      displayCommunityVotes: checkbox({
+        defaultValue: false,
+      }),
+      displayCommunityComments: checkbox({ defaultValue: false }),
       trackData: checkbox({ defaultValue: false, ui: { description: 'Is the project tracking market data.' } }),
+      trackPrice: checkbox({
+        defaultValue: false,
+      }),
+      trackMarketCap: checkbox({
+        defaultValue: false,
+      }),
       trackSocials: checkbox({ defaultValue: false, ui: { description: 'Is the project tracking socials data.' } }),
       trackHolders: checkbox({ defaultValue: false, ui: { description: 'Is the project tracking holders data.' } }),
       periodicWalletUpdates: checkbox({
@@ -105,6 +127,7 @@ const Project: Lists = {
       twitter: text(),
       telegram: text(),
       discord: text(),
+      // Remove this in later stages
       discordServerId: text(),
       reddit: text(),
       youtube: text(),
@@ -112,17 +135,40 @@ const Project: Lists = {
       medium: text(),
       kycLink: text(),
       auditLink: text(),
-      auditBy: relationship({ ref: 'Audit.project', many: true }),
-      kycBy: relationship({ ref: 'Kyc.project', many: true }),
       customVetting: text({
         ui: {
           displayMode: 'textarea',
           description: 'Reason for why the project is listed and has provided a custom approval.',
         },
       }),
-      dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
-      ratings: relationship({ ref: 'ProjectRating.project', many: true, ui: { displayMode: 'count' } }),
-      reviews: relationship({ ref: 'ProjectComment.project', many: true, ui: { displayMode: 'count' } }),
+      tclRating: integer({
+        validation: {
+          max: 100,
+        },
+      }),
+      transparencyScore: integer({
+        validation: {
+          max: 90,
+        },
+      }),
+      paymentPlan: relationship({ ref: 'PaymentPlan' }),
+      auditBy: relationship({ ref: 'Audit.project', many: true }),
+      kycBy: relationship({ ref: 'Kyc.project', many: true }),
+      transparencyRatings: relationship({
+        ref: 'TransparencyRating.project',
+        many: true,
+        ui: { displayMode: 'count' },
+      }),
+      transparencyHighlights: relationship({
+        ref: 'TransparencyHighlight.project',
+        many: true,
+      }),
+      content: relationship({ ref: 'Content.project', many: true }),
+      comments: relationship({ ref: 'Comment.project', many: true, ui: { displayMode: 'count' } }),
+      votes: relationship({ ref: 'Vote.project', many: true, ui: { displayMode: 'count' } }),
+      events: relationship({ ref: 'DiscordEvent.project', many: true, ui: { displayMode: 'select' } }),
+      announcements: relationship({ ref: 'DiscordAnnouncement.project', many: true, ui: { displayMode: 'select' } }),
+      discordConfig: relationship({ ref: 'DiscordConfig.project' }),
       parentProject: relationship({
         ref: 'Project',
         many: true,
@@ -132,13 +178,13 @@ const Project: Lists = {
         many: true,
       }),
     },
-    access: {
-      operation: {
-        create: (data) => isUser(data),
-        delete: (data) => isAdmin(data),
-        update: (data) => isAdmin(data),
-      },
-    },
+    // access: {
+    //   operation: {
+    //     create: (data) => isUser(data),
+    //     delete: (data) => isAdmin(data),
+    //     update: (data) => isAdmin(data),
+    //   },
+    // },
   }),
 };
 

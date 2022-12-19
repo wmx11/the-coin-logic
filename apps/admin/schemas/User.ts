@@ -5,20 +5,37 @@ import { isBefore } from 'date-fns';
 import { nanoid } from 'nanoid';
 import { Product } from '../types';
 import generateInputData from '../utils/generateInputData';
-import { isAdmin, isAdminOrPerson, isPerson } from '../utils/rbac';
+import { isAdmin, isAdminOrPerson } from '../utils/rbac';
 
 const User: Lists = {
   User: list({
     fields: {
       name: text(),
-      firstName: text(),
-      lastName: text(),
+      firstName: text({
+        access: {
+          read: isAdminOrPerson,
+          update: isAdminOrPerson,
+        },
+      }),
+      lastName: text({
+        access: {
+          read: isAdminOrPerson,
+          update: isAdminOrPerson,
+        },
+      }),
       email: text({
         validation: { isRequired: true },
         isIndexed: 'unique',
         isFilterable: true,
+        access: {
+          update: isAdmin,
+        },
       }),
-      ip: text(),
+      ip: text({
+        access: {
+          read: isAdminOrPerson,
+        },
+      }),
       roles: relationship({
         ref: 'Role.users',
         many: true,
@@ -30,24 +47,30 @@ const User: Lists = {
       password: password({
         validation: { isRequired: true },
         access: {
-          read: isAdminOrPerson,
-          update: isPerson,
+          update: isAdminOrPerson,
         },
       }),
       isAdmin: checkbox({
         defaultValue: false,
         access: {
-          read: isAdmin,
           update: isAdmin,
         },
       }),
       isSubscribedToEmail: checkbox({
         defaultValue: false,
         ui: { description: 'Is the user subscribed to the email notifications' },
+        access: {
+          read: isAdminOrPerson,
+          update: isAdminOrPerson,
+        },
       }),
       isNotChargeable: checkbox({
         defaultValue: false,
         ui: { description: 'Allows to use the services without paying' },
+        access: {
+          read: isAdminOrPerson,
+          update: isAdminOrPerson,
+        },
       }),
       isVerified: checkbox({
         defaultValue: true,
@@ -62,7 +85,9 @@ const User: Lists = {
         },
       }),
       walletAddress: text({ ui: { description: 'Wallet address of the user. Used for referral rewards.' } }),
+      content: relationship({ ref: 'Content.user', many: true }),
       projects: relationship({ ref: 'Project.user', many: true }),
+      managedProjects: relationship({ ref: 'Project', many: true }),
       marketingCampaigns: relationship({ ref: 'MarketingCampaign.users', many: true }),
       dateCreated: timestamp({ defaultValue: { kind: 'now' } }),
       subscriptionStatus: virtual({
