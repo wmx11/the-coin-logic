@@ -10,7 +10,6 @@ const getSocialStats = async (project: Project) => {
   const discord = await getDiscordMembersCount(project);
   await sleep(500);
   const telegram = await getTelegramMembersCount(project);
-  console.log(project.name);
 
   return { id: project.id, twitter, discord, telegram };
 };

@@ -1,4 +1,30 @@
-import { FaFileExport, FaPlus, FaRegEdit, FaStop, FaThumbsDown, FaThumbsUp, FaTrash } from 'react-icons/fa';
+import { BsThreeDots } from 'react-icons/bs';
+import {
+  FaCalendarDay,
+  FaCheck,
+  FaChevronDown,
+  FaChevronRight,
+  FaCrown,
+  FaFileExport,
+  FaFireAlt,
+  FaGamepad,
+  FaHeart,
+  FaPlus,
+  FaRegEdit,
+  FaRegEye,
+  FaRegEyeSlash,
+  FaStar,
+  FaStop,
+  FaThumbsDown,
+  FaThumbsUp,
+  FaTimes,
+  FaTrash,
+  FaTrophy,
+} from 'react-icons/fa';
+import { GoTriangleDown, GoTriangleUp } from 'react-icons/go';
+import { IoTicketOutline } from 'react-icons/io5';
+import { MdAnnouncement, MdOutlineArticle, MdOutlineEmojiEmotions, MdOutlineQuiz } from 'react-icons/md';
+import { GrMoney } from 'react-icons/gr';
 
 export const Icons = {
   Edit: FaRegEdit,
@@ -8,4 +34,26 @@ export const Icons = {
   ThumbsUp: FaThumbsUp,
   ThumbsDown: FaThumbsDown,
   ExportFile: FaFileExport,
+  Event: FaCalendarDay,
+  Announcement: MdAnnouncement,
+  ChevronRight: FaChevronRight,
+  ChevronDown: FaChevronDown,
+  Fire: FaFireAlt,
+  Emoji: MdOutlineEmojiEmotions,
+  TrendUp: GoTriangleUp,
+  TrendDown: GoTriangleDown,
+  Heart: FaHeart,
+  Dots: BsThreeDots,
+  Eye: FaRegEye,
+  EyeSlashed: FaRegEyeSlash,
+  Game: FaGamepad,
+  Ticket: IoTicketOutline,
+  Star: FaStar,
+  Article: MdOutlineArticle,
+  Trophy: FaTrophy,
+  Coins: GrMoney,
+  Cross: FaTimes,
+  Check: FaCheck,
+  Quiz: MdOutlineQuiz,
+  Crown: FaCrown,
 };

@@ -1,5 +1,6 @@
 import { isAfter, isToday } from 'date-fns';
 import { IncomingMessage } from 'http';
+import path from 'path';
 import { CartItem } from 'types';
 import { products as productsSku } from 'types/Products';
 import { formatDate } from './formatters';
@@ -79,13 +80,13 @@ export const getAveragesAndMedians = <T extends Record<string, number>>(
   }, initialObj);
 };
 
+export const sanitizeIp = (ip: string) => ip?.trim().replace(/(::ffff:)/g, '');
+
 export const getIpAddress = (req: IncomingMessage) => {
   const forwarded = req.headers['x-forwarded-for'];
   const ip = typeof forwarded === 'string' ? forwarded.split(/, /)[0] : req.socket.remoteAddress;
-  return ip;
+  return sanitizeIp(ip as string);
 };
-
-export const sanitizeIp = (ip: string) => ip?.trim().replace(/(::ffff:)/g, '');
 
 export const calculateItemTotal = (item: CartItem, duration: string | number) => {
   const discount = item.product?.discount ? item.product?.discount : item.discount;
@@ -110,3 +111,22 @@ export const hasMarketingTrackerSubscription = (subscription: { sku: string }) =
     productsSku.sku.marketingCampaignTrackerListed,
     productsSku.sku.marketingCampaignTrackerUnlisted,
   ].includes(subscription?.sku);
+
+export const LINKS_REGEX = /(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/g;
+
+export const addLinksToText = (string: string) =>
+  string.replace(
+    LINKS_REGEX,
+    (link: string) => `<a href="${link}" target="__blank" class="text-violet underline">${link}</a>`,
+  );
+
+export const getLogoLink = (imageId: string, extension: string) =>
+  `${process.env.NEXT_PUBLIC_LOGOS_URL}/${imageId}.${extension}`;
+
+export const resolveImagePaths = () => {
+  const getPath = (pathName: string) => path.resolve(process.cwd(), '../', 'admin', 'public', pathName);
+  return {
+    logos: getPath('logos'),
+    images: getPath('images'),
+  };
+};

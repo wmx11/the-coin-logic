@@ -20,6 +20,8 @@ const addSocialStats = async (): Promise<void> => {
       console.log(error);
     }
   }
+
+  return undefined;
 };
 
 export default addSocialStats;

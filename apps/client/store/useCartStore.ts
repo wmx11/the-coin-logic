@@ -1,14 +1,16 @@
-import { Cart } from 'types';
+import { Cart, User } from 'types';
 import create from 'zustand';
 
 type CartState = {
-  cartStore: Cart | null;
-  setCartStore: (cartStore: Cart) => void;
+  cart: Cart | null;
+  setCart: (cart: Cart) => void;
+  removeCart: () => void;
 };
 
-const useCartState = create<CartState>((set) => ({
-  cartStore: null,
-  setCartStore: (cartStore) => set(() => ({ cartStore })),
+const useCartStore = create<CartState>((set) => ({
+  cart: null,
+  setCart: (cart) => set(() => ({ cart })),
+  removeCart: () => set(() => ({ cart: null })),
 }));
 
-export default useCartState;
+export default useCartStore;

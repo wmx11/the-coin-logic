@@ -21,8 +21,23 @@ const generateMarketStatsDexScreener = async (
   const pair = data[0];
 
   const totalSupply = await defaultMarketStatsGenerator.supply.getTotalSupply();
-  const burnedTokens = await defaultMarketStatsGenerator.supply.getBurnedTokens();
   const marketCap = parseFloat(pair.priceUsd) * totalSupply;
+
+  if (project.trackPrice && project.trackMarketCap && !project.trackData && !project.isNft) {
+    return {
+      price: parseFloat(pair.priceUsd),
+      marketCap,
+      txns: null,
+      volume: null,
+      fdv: null,
+      liquidity: null,
+      pairPrice: null,
+      totalSupply: null,
+      burnedTokens: null,
+    };
+  }
+
+  const burnedTokens = await defaultMarketStatsGenerator.supply.getBurnedTokens();
 
   return {
     price: parseFloat(pair.priceUsd),
