@@ -31,7 +31,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       }
     }
 
-    const data = await prismaClient.vote.create({
+    const data = await prismaClient?.vote.create({
       data: {
         vote: parseInt(value, 10),
         type,

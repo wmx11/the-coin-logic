@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return responseHandler.badRequest();
     }
 
-    const quiz = await prismaClient.quiz.findUnique({
+    const quiz = await prismaClient?.quiz.findUnique({
       where: {
         id,
       },
@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return responseHandler.badRequest('Quiz not found.');
     }
 
-    const data = await prismaClient.quiz.update({
+    const data = await prismaClient?.quiz.update({
       where: {
         id,
       },

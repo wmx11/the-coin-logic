@@ -320,10 +320,7 @@ query($projectId: ID, $date: DateTime) {
         messageUrl
         dateAdded
       }
-      transparencyHighlights {
-        content
-        isPositive
-      }
+      transparencyHighlights
       paymentPlan {
         id
         name

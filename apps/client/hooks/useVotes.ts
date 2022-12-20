@@ -114,7 +114,15 @@ const useVotes = () => {
     }
   };
 
-  const rateProjectAsTcl = async ({ rating, id }: { rating: number; id: string }) => {
+  const rateProjectAsTcl = async ({
+    rating,
+    id,
+    transparencyHighlights,
+  }: {
+    rating: number;
+    id: string;
+    transparencyHighlights?: string;
+  }) => {
     if (requireLogin()) {
       return false;
     }
@@ -123,7 +131,11 @@ const useVotes = () => {
 
     try {
       await signedRequest(
-        { type: 'post', url: routes.api.project.transparency.rate, data: { rating, id, userId: user?.id } },
+        {
+          type: 'post',
+          url: routes.api.project.transparency.rate,
+          data: { rating, id, transparencyHighlights, userId: user?.id },
+        },
         user?.id as string,
       );
       setLoading(false);

@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return responseHandler.badRequest();
     }
 
-    const comment = await prismaClient.content.findFirst({
+    const comment = await prismaClient?.content.findFirst({
       where: {
         id,
         likes: {
@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
         };
 
-    const data = await prismaClient.content.update({
+    const data = await prismaClient?.content.update({
       where: {
         id,
       },

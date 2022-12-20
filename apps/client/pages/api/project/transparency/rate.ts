@@ -13,15 +13,16 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return responseHandler.unauthorized();
     }
 
-    const { rating, id } = req.body;
+    const { rating, id, transparencyHighlights } = req.body;
 
     if (rating === undefined) {
       return responseHandler.forbidden();
     }
 
-    const data = await prismaClient.project.update({
+    const data = await prismaClient?.project.update({
       data: {
         tclRating: parseInt(rating, 10),
+        transparencyHighlights: transparencyHighlights || undefined,
       },
       where: {
         id,

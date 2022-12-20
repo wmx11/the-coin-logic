@@ -60,7 +60,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return responseHandler.forbidden();
     }
 
-    const project = await prismaClient.project.findUnique({
+    const project = await prismaClient?.project.findUnique({
       where: {
         id: projectId,
       },
@@ -69,11 +69,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       },
     });
 
-    const quiz = await prismaClient.quiz.findUnique({
-      where: {
-        id: quizId || undefined,
-      },
-    });
+    const quiz = isUpdate
+      ? await prismaClient?.quiz.findUnique({
+          where: {
+            id: quizId || undefined,
+          },
+        })
+      : undefined;
 
     const canManageProject = await isProjectEditor({ userId: userId as string, projectId: project?.id as string });
 
@@ -122,7 +124,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     if (isUpdate) {
-      const data = await prismaClient.quiz.update({
+      const data = await prismaClient?.quiz.update({
         where: {
           id: quizId,
         },
@@ -141,7 +143,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return responseHandler.ok(data);
     }
 
-    const data = await prismaClient.quiz.create({
+    const data = await prismaClient?.quiz.create({
       data: {
         ...quizData,
       },

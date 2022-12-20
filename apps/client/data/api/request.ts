@@ -59,7 +59,7 @@ const request = (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const decoded = jwt.verify(authToken, secret) as { id: string };
 
-      const user = await prismaClient.user.findFirst({
+      const user = await prismaClient?.user.findFirst({
         where: {
           id: decoded?.id,
         },

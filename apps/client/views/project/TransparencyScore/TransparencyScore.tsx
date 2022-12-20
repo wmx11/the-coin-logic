@@ -1,4 +1,5 @@
-import { Button, NumberInput, RingProgress, Text } from '@mantine/core';
+import { ActionIcon, Button, Checkbox, NumberInput, RingProgress, Text, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import GradientButton from 'components/Buttons/GradientButton';
 import Paper from 'components/Paper';
 import SocialShare from 'components/SocialShare';
@@ -18,9 +19,22 @@ type TransparencyScoreProps = {
 };
 
 const TransparencyScore: FC<TransparencyScoreProps> = ({ data }) => {
-  const { transparencyHighlights, auditByCount, kycByCount, customVetting, id, tclRating, transparencyScore } = data;
-
+  const { auditByCount, kycByCount, customVetting, id, tclRating, transparencyScore } = data;
   const [tclScore, setTclScore] = useState<number>((tclRating as number) || 0);
+
+  const transparencyHighlights = (() => {
+    try {
+      return JSON.parse(data.transparencyHighlights);
+    } catch (error) {
+      console.log(error);
+    }
+  })();
+
+  const form = useForm({
+    initialValues: {
+      transparencyHighlights: transparencyHighlights || [{ content: '', isPositive: false }],
+    },
+  });
 
   const {
     votes,
@@ -76,19 +90,19 @@ const TransparencyScore: FC<TransparencyScoreProps> = ({ data }) => {
           <GradientText className="mb-4" weight={700}>
             Highlights and Concerns
           </GradientText>
-          {transparencyHighlights && transparencyHighlights.length ? (
+          {transparencyHighlights && transparencyHighlights.length && transparencyHighlights[0].content !== '' ? (
             <div className="flex flex-col gap-2">
-              {transparencyHighlights.map(({ content, isPositive }, index) => {
+              {transparencyHighlights.map((data: typeof form.values.transparencyHighlights, index: number) => {
                 return (
                   <Text size="xs" color="dimmed" className="flex gap-2 items-center" key={`highlight_${index}`}>
                     <div
                       className={`${
-                        isPositive ? 'bg-green-300 text-green-800' : 'bg-red-300 text-red-800'
+                        data.isPositive ? 'bg-green-300 text-green-800' : 'bg-red-300 text-red-800'
                       } rounded p-1`}
                     >
-                      {isPositive ? <Icons.ThumbsUp /> : <Icons.ThumbsDown />}
+                      {data.isPositive ? <Icons.ThumbsUp /> : <Icons.ThumbsDown />}
                     </div>
-                    <div>{content}</div>
+                    <div>{data.content}</div>
                   </Text>
                 );
               })}
@@ -159,7 +173,7 @@ const TransparencyScore: FC<TransparencyScoreProps> = ({ data }) => {
               <Text size="xs" color="red" className="my-2">
                 Admin Controls
               </Text>
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap mb-4">
                 <div className="flex items-center gap-2">
                   <NumberInput
                     size="xs"
@@ -169,7 +183,16 @@ const TransparencyScore: FC<TransparencyScoreProps> = ({ data }) => {
                     value={tclScore}
                     onChange={(val) => setTclScore(val as number)}
                   />
-                  <GradientButton size="xs" onClick={() => rateProjectAsTcl({ rating: tclScore, id })}>
+                  <GradientButton
+                    size="xs"
+                    onClick={() =>
+                      rateProjectAsTcl({
+                        rating: tclScore,
+                        id,
+                        transparencyHighlights: JSON.stringify(form.values.transparencyHighlights),
+                      })
+                    }
+                  >
                     Give TCL Rating
                   </GradientButton>
                 </div>
@@ -189,6 +212,48 @@ const TransparencyScore: FC<TransparencyScoreProps> = ({ data }) => {
                 >
                   Recalculate
                 </GradientButton>
+              </div>
+              <div>
+                {form.values.transparencyHighlights.map(
+                  (item: typeof form.values.transparencyHighlights, index: number) => {
+                    return (
+                      <div className="flex gap-2 items-end mb-2">
+                        <ActionIcon
+                          color="red"
+                          className="mb-2"
+                          onClick={() => {
+                            form.removeListItem('transparencyHighlights', index);
+                          }}
+                        >
+                          <Icons.Delete />
+                        </ActionIcon>
+                        <TextInput
+                          {...form.getInputProps(`transparencyHighlights.${index}.content`)}
+                          label={`Highlight #${index + 1}`}
+                          className="flex-1"
+                        />
+                        <Checkbox
+                          {...form.getInputProps(`transparencyHighlights.${index}.isPositive`, { type: 'checkbox' })}
+                          label="Positive"
+                        />
+                      </div>
+                    );
+                  },
+                )}
+                <Button
+                  size="xs"
+                  variant="light"
+                  color="violet"
+                  leftIcon={<Icons.Add />}
+                  onClick={() => {
+                    form.insertListItem('transparencyHighlights', {
+                      content: '',
+                      isPositive: false,
+                    });
+                  }}
+                >
+                  Add Highlight
+                </Button>
               </div>
             </div>
           ) : null}

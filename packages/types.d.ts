@@ -2899,8 +2899,6 @@ export type Mutation = {
   createTokens?: Maybe<Array<Maybe<Token>>>;
   createTransfer?: Maybe<Transfer>;
   createTransfers?: Maybe<Array<Maybe<Transfer>>>;
-  createTransparencyHighlight?: Maybe<TransparencyHighlight>;
-  createTransparencyHighlights?: Maybe<Array<Maybe<TransparencyHighlight>>>;
   createTransparencyRating?: Maybe<TransparencyRating>;
   createTransparencyRatings?: Maybe<Array<Maybe<TransparencyRating>>>;
   createUser?: Maybe<User>;
@@ -2987,8 +2985,6 @@ export type Mutation = {
   deleteTokens?: Maybe<Array<Maybe<Token>>>;
   deleteTransfer?: Maybe<Transfer>;
   deleteTransfers?: Maybe<Array<Maybe<Transfer>>>;
-  deleteTransparencyHighlight?: Maybe<TransparencyHighlight>;
-  deleteTransparencyHighlights?: Maybe<Array<Maybe<TransparencyHighlight>>>;
   deleteTransparencyRating?: Maybe<TransparencyRating>;
   deleteTransparencyRatings?: Maybe<Array<Maybe<TransparencyRating>>>;
   deleteUser?: Maybe<User>;
@@ -3078,8 +3074,6 @@ export type Mutation = {
   updateTokens?: Maybe<Array<Maybe<Token>>>;
   updateTransfer?: Maybe<Transfer>;
   updateTransfers?: Maybe<Array<Maybe<Transfer>>>;
-  updateTransparencyHighlight?: Maybe<TransparencyHighlight>;
-  updateTransparencyHighlights?: Maybe<Array<Maybe<TransparencyHighlight>>>;
   updateTransparencyRating?: Maybe<TransparencyRating>;
   updateTransparencyRatings?: Maybe<Array<Maybe<TransparencyRating>>>;
   updateUser?: Maybe<User>;
@@ -3497,16 +3491,6 @@ export type MutationCreateTransferArgs = {
 
 export type MutationCreateTransfersArgs = {
   data: Array<TransferCreateInput>;
-};
-
-
-export type MutationCreateTransparencyHighlightArgs = {
-  data: TransparencyHighlightCreateInput;
-};
-
-
-export type MutationCreateTransparencyHighlightsArgs = {
-  data: Array<TransparencyHighlightCreateInput>;
 };
 
 
@@ -3937,16 +3921,6 @@ export type MutationDeleteTransferArgs = {
 
 export type MutationDeleteTransfersArgs = {
   where: Array<TransferWhereUniqueInput>;
-};
-
-
-export type MutationDeleteTransparencyHighlightArgs = {
-  where: TransparencyHighlightWhereUniqueInput;
-};
-
-
-export type MutationDeleteTransparencyHighlightsArgs = {
-  where: Array<TransparencyHighlightWhereUniqueInput>;
 };
 
 
@@ -4429,17 +4403,6 @@ export type MutationUpdateTransferArgs = {
 
 export type MutationUpdateTransfersArgs = {
   data: Array<TransferUpdateArgs>;
-};
-
-
-export type MutationUpdateTransparencyHighlightArgs = {
-  data: TransparencyHighlightUpdateInput;
-  where: TransparencyHighlightWhereUniqueInput;
-};
-
-
-export type MutationUpdateTransparencyHighlightsArgs = {
-  data: Array<TransparencyHighlightUpdateArgs>;
 };
 
 
@@ -5236,8 +5199,7 @@ export type Project = {
   trackMarketCap?: Maybe<Scalars['Boolean']>;
   trackPrice?: Maybe<Scalars['Boolean']>;
   trackSocials?: Maybe<Scalars['Boolean']>;
-  transparencyHighlights?: Maybe<Array<TransparencyHighlight>>;
-  transparencyHighlightsCount?: Maybe<Scalars['Int']>;
+  transparencyHighlights?: Maybe<Scalars['JSON']>;
   transparencyRatings?: Maybe<Array<TransparencyRating>>;
   transparencyRatingsCount?: Maybe<Scalars['Int']>;
   transparencyScore?: Maybe<Scalars['Int']>;
@@ -5409,19 +5371,6 @@ export type ProjectTagsCountArgs = {
 };
 
 
-export type ProjectTransparencyHighlightsArgs = {
-  orderBy?: Array<TransparencyHighlightOrderByInput>;
-  skip?: Scalars['Int'];
-  take?: InputMaybe<Scalars['Int']>;
-  where?: TransparencyHighlightWhereInput;
-};
-
-
-export type ProjectTransparencyHighlightsCountArgs = {
-  where?: TransparencyHighlightWhereInput;
-};
-
-
 export type ProjectTransparencyRatingsArgs = {
   orderBy?: Array<TransparencyRatingOrderByInput>;
   skip?: Scalars['Int'];
@@ -5524,7 +5473,7 @@ export type ProjectCreateInput = {
   trackMarketCap?: InputMaybe<Scalars['Boolean']>;
   trackPrice?: InputMaybe<Scalars['Boolean']>;
   trackSocials?: InputMaybe<Scalars['Boolean']>;
-  transparencyHighlights?: InputMaybe<TransparencyHighlightRelateToManyForCreateInput>;
+  transparencyHighlights?: InputMaybe<Scalars['JSON']>;
   transparencyRatings?: InputMaybe<TransparencyRatingRelateToManyForCreateInput>;
   transparencyScore?: InputMaybe<Scalars['Int']>;
   twitter?: InputMaybe<Scalars['String']>;
@@ -5690,7 +5639,7 @@ export type ProjectUpdateInput = {
   trackMarketCap?: InputMaybe<Scalars['Boolean']>;
   trackPrice?: InputMaybe<Scalars['Boolean']>;
   trackSocials?: InputMaybe<Scalars['Boolean']>;
-  transparencyHighlights?: InputMaybe<TransparencyHighlightRelateToManyForUpdateInput>;
+  transparencyHighlights?: InputMaybe<Scalars['JSON']>;
   transparencyRatings?: InputMaybe<TransparencyRatingRelateToManyForUpdateInput>;
   transparencyScore?: InputMaybe<Scalars['Int']>;
   twitter?: InputMaybe<Scalars['String']>;
@@ -5768,7 +5717,6 @@ export type ProjectWhereInput = {
   trackMarketCap?: InputMaybe<BooleanFilter>;
   trackPrice?: InputMaybe<BooleanFilter>;
   trackSocials?: InputMaybe<BooleanFilter>;
-  transparencyHighlights?: InputMaybe<TransparencyHighlightManyRelationFilter>;
   transparencyRatings?: InputMaybe<TransparencyRatingManyRelationFilter>;
   transparencyScore?: InputMaybe<IntNullableFilter>;
   twitter?: InputMaybe<StringFilter>;
@@ -5908,9 +5856,6 @@ export type Query = {
   transfer?: Maybe<Transfer>;
   transfers?: Maybe<Array<Transfer>>;
   transfersCount?: Maybe<Scalars['Int']>;
-  transparencyHighlight?: Maybe<TransparencyHighlight>;
-  transparencyHighlights?: Maybe<Array<TransparencyHighlight>>;
-  transparencyHighlightsCount?: Maybe<Scalars['Int']>;
   transparencyRating?: Maybe<TransparencyRating>;
   transparencyRatings?: Maybe<Array<TransparencyRating>>;
   transparencyRatingsCount?: Maybe<Scalars['Int']>;
@@ -6641,24 +6586,6 @@ export type QueryTransfersArgs = {
 
 export type QueryTransfersCountArgs = {
   where?: TransferWhereInput;
-};
-
-
-export type QueryTransparencyHighlightArgs = {
-  where: TransparencyHighlightWhereUniqueInput;
-};
-
-
-export type QueryTransparencyHighlightsArgs = {
-  orderBy?: Array<TransparencyHighlightOrderByInput>;
-  skip?: Scalars['Int'];
-  take?: InputMaybe<Scalars['Int']>;
-  where?: TransparencyHighlightWhereInput;
-};
-
-
-export type QueryTransparencyHighlightsCountArgs = {
-  where?: TransparencyHighlightWhereInput;
 };
 
 
@@ -7486,79 +7413,6 @@ export type TransferWhereInput = {
 };
 
 export type TransferWhereUniqueInput = {
-  id?: InputMaybe<Scalars['ID']>;
-};
-
-export type TransparencyHighlight = {
-  __typename?: 'TransparencyHighlight';
-  content?: Maybe<Scalars['String']>;
-  dateAdded?: Maybe<Scalars['DateTime']>;
-  id: Scalars['ID'];
-  isPositive?: Maybe<Scalars['Boolean']>;
-  project?: Maybe<Project>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type TransparencyHighlightCreateInput = {
-  content?: InputMaybe<Scalars['String']>;
-  dateAdded?: InputMaybe<Scalars['DateTime']>;
-  isPositive?: InputMaybe<Scalars['Boolean']>;
-  project?: InputMaybe<ProjectRelateToOneForCreateInput>;
-  updatedAt?: InputMaybe<Scalars['DateTime']>;
-};
-
-export type TransparencyHighlightManyRelationFilter = {
-  every?: InputMaybe<TransparencyHighlightWhereInput>;
-  none?: InputMaybe<TransparencyHighlightWhereInput>;
-  some?: InputMaybe<TransparencyHighlightWhereInput>;
-};
-
-export type TransparencyHighlightOrderByInput = {
-  content?: InputMaybe<OrderDirection>;
-  dateAdded?: InputMaybe<OrderDirection>;
-  id?: InputMaybe<OrderDirection>;
-  isPositive?: InputMaybe<OrderDirection>;
-  updatedAt?: InputMaybe<OrderDirection>;
-};
-
-export type TransparencyHighlightRelateToManyForCreateInput = {
-  connect?: InputMaybe<Array<TransparencyHighlightWhereUniqueInput>>;
-  create?: InputMaybe<Array<TransparencyHighlightCreateInput>>;
-};
-
-export type TransparencyHighlightRelateToManyForUpdateInput = {
-  connect?: InputMaybe<Array<TransparencyHighlightWhereUniqueInput>>;
-  create?: InputMaybe<Array<TransparencyHighlightCreateInput>>;
-  disconnect?: InputMaybe<Array<TransparencyHighlightWhereUniqueInput>>;
-  set?: InputMaybe<Array<TransparencyHighlightWhereUniqueInput>>;
-};
-
-export type TransparencyHighlightUpdateArgs = {
-  data: TransparencyHighlightUpdateInput;
-  where: TransparencyHighlightWhereUniqueInput;
-};
-
-export type TransparencyHighlightUpdateInput = {
-  content?: InputMaybe<Scalars['String']>;
-  dateAdded?: InputMaybe<Scalars['DateTime']>;
-  isPositive?: InputMaybe<Scalars['Boolean']>;
-  project?: InputMaybe<ProjectRelateToOneForUpdateInput>;
-  updatedAt?: InputMaybe<Scalars['DateTime']>;
-};
-
-export type TransparencyHighlightWhereInput = {
-  AND?: InputMaybe<Array<TransparencyHighlightWhereInput>>;
-  NOT?: InputMaybe<Array<TransparencyHighlightWhereInput>>;
-  OR?: InputMaybe<Array<TransparencyHighlightWhereInput>>;
-  content?: InputMaybe<StringFilter>;
-  dateAdded?: InputMaybe<DateTimeNullableFilter>;
-  id?: InputMaybe<IdFilter>;
-  isPositive?: InputMaybe<BooleanFilter>;
-  project?: InputMaybe<ProjectWhereInput>;
-  updatedAt?: InputMaybe<DateTimeNullableFilter>;
-};
-
-export type TransparencyHighlightWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']>;
 };
 

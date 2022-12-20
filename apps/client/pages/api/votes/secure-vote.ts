@@ -23,7 +23,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if (type === 'vote' || type === 'transparency') {
       const { data } = await axios.post(routes.api.votes.voteCheck, {
         ...req.body,
-        ip
+        ip,
       });
 
       if (data?.data?.canVote === false) {
@@ -31,7 +31,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       }
     }
 
-    const data = await prismaClient.vote.create({
+    const data = await prismaClient?.vote.create({
       data: {
         vote: parseInt(value, 10),
         type,

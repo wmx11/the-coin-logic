@@ -15,7 +15,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return responseHandler.badRequest();
     }
 
-    const data = await prismaClient.comment.create({
+    const data = await prismaClient?.comment.create({
       data: {
         content,
         sentiment: parseInt(sentiment, 10),
@@ -27,9 +27,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         user: {
           select: {
             name: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
     return responseHandler.ok(data);

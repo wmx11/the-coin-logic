@@ -26,7 +26,6 @@ export { default as KycGroup } from './KycGroup';
 export { default as Audit } from './Audit';
 export { default as Kyc } from './Kyc';
 export { default as Product } from './Product';
-export { default as TransparencyHighlight } from './TransparencyHighlight';
 export { default as TransparencyRating } from './TransparencyRating';
 export { default as Subscription } from './Subscription';
 export { default as Cart } from './Cart';
@@ -40,4 +39,3 @@ export { default as Vote } from './Vote';
 export { default as PaymentPlan } from './PaymentPlan';
 export { default as Coupon } from './Coupon';
 export { default as Quiz } from './Quiz';
-

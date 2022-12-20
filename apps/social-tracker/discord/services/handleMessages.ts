@@ -5,7 +5,7 @@ import routes from '../api/routes/routes';
 import { createAnnouncement, deleteAnnouncement, updateAnnouncement } from '../modules/messages';
 
 const getDiscordConfig = async () => {
-  const config = await prismaClient.discordConfig.findMany({
+  const config = await prismaClient?.discordConfig.findMany({
     select: {
       announcementsChannelId: true,
       project: {

@@ -14,7 +14,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const selectStartOfDay = isStartOfDay ? { dateAdded: { gte: startOfDay(new Date()) } } : {};
 
-    const votes = await prismaClient.vote.groupBy({
+    const votes = await prismaClient?.vote.groupBy({
       by: ['vote'],
       _count: {
         vote: true,

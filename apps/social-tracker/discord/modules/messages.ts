@@ -12,7 +12,7 @@ const findAnnouncementChannel = (channelId: string, announcementChannels: Config
   announcementChannels.find(({ announcementsChannelId }) => announcementsChannelId.toString() === channelId.toString());
 
 const getExistingMessage = async (messageId: string) => {
-  const existingMessage = await prismaClient.discordAnnouncement.findFirst({
+  const existingMessage = await prismaClient?.discordAnnouncement.findFirst({
     where: {
       messageId,
     },
@@ -41,7 +41,7 @@ export const createAnnouncement = async (message: Message, config: Config) => {
 
     const extractedTitle = content.substring(0, 35).concat('', '...');
 
-    await prismaClient.discordAnnouncement.create({
+    await prismaClient?.discordAnnouncement.create({
       data: {
         channelId,
         content,
@@ -73,7 +73,7 @@ export const updateAnnouncement = async (message: Message | PartialMessage, conf
       return null;
     }
 
-    await prismaClient.discordAnnouncement.update({
+    await prismaClient?.discordAnnouncement.update({
       where: {
         id: existingMessage.id,
       },
@@ -102,7 +102,7 @@ export const deleteAnnouncement = async (message: Message | PartialMessage, conf
   try {
     const existingMessage = await getExistingMessage(message.id);
 
-    await prismaClient.discordAnnouncement.delete({
+    await prismaClient?.discordAnnouncement.delete({
       where: {
         id: existingMessage.id,
       },

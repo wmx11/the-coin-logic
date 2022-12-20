@@ -20,7 +20,7 @@ export const getHoldersCountByProjectIdFrom = (projectId: string, from: number) 
 
 export const getAverageHoldingsByProjectId = async (projectId: string) => {
   try {
-    const { _avg } = await prismaClient.holder.aggregate({
+    const { _avg } = await prismaClient?.holder.aggregate({
       _avg: {
         balance: true,
       },
@@ -40,7 +40,7 @@ export const getHolder = (address: string) => {
 };
 
 export const getHolderByProjectIdAndAddress = (projectId: string, address: string) => {
-  return prismaClient.holder.findFirst({ where: { address, projectsId: projectId, } });
+  return prismaClient.holder.findFirst({ where: { address, projectsId: projectId } });
 };
 
 export const getHoldersByProjectId = (projectId: string, pagination?: Pagination) => {

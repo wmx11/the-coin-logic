@@ -19,7 +19,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return responseHandler.forbidden();
     }
 
-    const data = await prismaClient.comment.delete({
+    const data = await prismaClient?.comment.delete({
       where: {
         id,
       },

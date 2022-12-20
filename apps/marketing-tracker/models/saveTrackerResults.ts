@@ -9,15 +9,15 @@ const saveTrackerResults = async ({ data, campaignId }) => {
   }
 
   try {
-    const campaign = await prismaClient.marketingCampaign.findFirst({
+    const campaign = await prismaClient?.marketingCampaign.findFirst({
       where: {
         campaignId: {
           equals: campaignId,
         },
         enabled: true,
         status: {
-          equals: 'live'
-        }
+          equals: 'live',
+        },
       },
       select: {
         id: true,
@@ -49,8 +49,12 @@ const saveTrackerResults = async ({ data, campaignId }) => {
     });
 
     // If  it's not ended and it's started, save the data
-    if (campaign && isBefore(currentDate, new Date(campaign?.endDate)) && isAfter(currentDate, new Date(campaign?.startDate))) {
-      await prismaClient.marketingTrackerResult.create({
+    if (
+      campaign &&
+      isBefore(currentDate, new Date(campaign?.endDate)) &&
+      isAfter(currentDate, new Date(campaign?.startDate))
+    ) {
+      await prismaClient?.marketingTrackerResult.create({
         data: {
           ...data,
           marketingCampaignId: campaign.id,

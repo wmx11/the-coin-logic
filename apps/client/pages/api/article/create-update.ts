@@ -41,7 +41,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return responseHandler.forbidden();
     }
 
-    const project = await prismaClient.project.findFirst({
+    const project = await prismaClient?.project.findFirst({
       where: {
         slug: {
           equals: projectSlug,
@@ -52,13 +52,15 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       },
     });
 
-    const article = await prismaClient.content.findUnique({
-      where: {
-        id: articleId || undefined,
-      },
-    });
+    const article = isUpdate
+      ? await prismaClient?.content.findUnique({
+          where: {
+            id: articleId || undefined,
+          },
+        })
+      : undefined;
 
-    const canManageProject = await prismaClient.user.findFirst({
+    const canManageProject = await prismaClient?.user.findFirst({
       where: {
         id: userId,
       },
@@ -82,7 +84,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return responseHandler.forbidden();
     }
 
-    const blogBlock = await prismaClient.contentBlock.findFirst({
+    const blogBlock = await prismaClient?.contentBlock.findFirst({
       where: {
         blockName: {
           equals: 'blog',
@@ -124,7 +126,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     if (isUpdate) {
-      const data = await prismaClient.content.update({
+      const data = await prismaClient?.content.update({
         where: {
           id: articleId,
         },
@@ -143,7 +145,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return responseHandler.ok(data);
     }
 
-    const data = await prismaClient.content.create({
+    const data = await prismaClient?.content.create({
       data: {
         ...articleData,
       },

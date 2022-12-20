@@ -15,7 +15,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return responseHandler.badRequest();
     }
 
-    const data = await prismaClient.comment.update({
+    const data = await prismaClient?.comment.update({
       where: {
         id,
       },

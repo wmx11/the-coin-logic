@@ -236,7 +236,7 @@ export const getTrendingProjects = async (limit = 3) => {
 
       const change = getChanges('price').priceChange.percentage;
 
-      if (change > 0 && change !== Infinity) {
+      if (change && change !== Infinity) {
         arr.push({
           name: curr?.project?.name as string,
           slug: curr?.project?.slug as string,

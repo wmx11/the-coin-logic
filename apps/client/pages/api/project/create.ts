@@ -37,7 +37,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const metaData = await logo.metadata();
       const logoName = uuidv4();
 
-      const project = await prismaClient.project.create({
+      const project = await prismaClient?.project.create({
         data: {
           user: {
             connect: {
@@ -57,7 +57,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       await logo.toFile(`${resolveImagePaths().logos}/${logoName}.png`);
 
-      const user = await prismaClient.user.findUnique({
+      const user = await prismaClient?.user.findUnique({
         where: {
           id: auth.id,
         },

@@ -780,13 +780,7 @@ type Project {
     skip: Int! = 0
   ): [TransparencyRating!]
   transparencyRatingsCount(where: TransparencyRatingWhereInput! = {}): Int
-  transparencyHighlights(
-    where: TransparencyHighlightWhereInput! = {}
-    orderBy: [TransparencyHighlightOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [TransparencyHighlight!]
-  transparencyHighlightsCount(where: TransparencyHighlightWhereInput! = {}): Int
+  transparencyHighlights: JSON
   content(
     where: ContentWhereInput! = {}
     orderBy: [ContentOrderByInput!]! = []
@@ -926,7 +920,6 @@ input ProjectWhereInput {
   auditBy: AuditManyRelationFilter
   kycBy: KycManyRelationFilter
   transparencyRatings: TransparencyRatingManyRelationFilter
-  transparencyHighlights: TransparencyHighlightManyRelationFilter
   content: ContentManyRelationFilter
   comments: CommentManyRelationFilter
   votes: VoteManyRelationFilter
@@ -1017,12 +1010,6 @@ input TransparencyRatingManyRelationFilter {
   every: TransparencyRatingWhereInput
   some: TransparencyRatingWhereInput
   none: TransparencyRatingWhereInput
-}
-
-input TransparencyHighlightManyRelationFilter {
-  every: TransparencyHighlightWhereInput
-  some: TransparencyHighlightWhereInput
-  none: TransparencyHighlightWhereInput
 }
 
 input CommentManyRelationFilter {
@@ -1170,7 +1157,7 @@ input ProjectUpdateInput {
   auditBy: AuditRelateToManyForUpdateInput
   kycBy: KycRelateToManyForUpdateInput
   transparencyRatings: TransparencyRatingRelateToManyForUpdateInput
-  transparencyHighlights: TransparencyHighlightRelateToManyForUpdateInput
+  transparencyHighlights: JSON
   content: ContentRelateToManyForUpdateInput
   comments: CommentRelateToManyForUpdateInput
   votes: VoteRelateToManyForUpdateInput
@@ -1249,13 +1236,6 @@ input TransparencyRatingRelateToManyForUpdateInput {
   set: [TransparencyRatingWhereUniqueInput!]
   create: [TransparencyRatingCreateInput!]
   connect: [TransparencyRatingWhereUniqueInput!]
-}
-
-input TransparencyHighlightRelateToManyForUpdateInput {
-  disconnect: [TransparencyHighlightWhereUniqueInput!]
-  set: [TransparencyHighlightWhereUniqueInput!]
-  create: [TransparencyHighlightCreateInput!]
-  connect: [TransparencyHighlightWhereUniqueInput!]
 }
 
 input CommentRelateToManyForUpdateInput {
@@ -1362,7 +1342,7 @@ input ProjectCreateInput {
   auditBy: AuditRelateToManyForCreateInput
   kycBy: KycRelateToManyForCreateInput
   transparencyRatings: TransparencyRatingRelateToManyForCreateInput
-  transparencyHighlights: TransparencyHighlightRelateToManyForCreateInput
+  transparencyHighlights: JSON
   content: ContentRelateToManyForCreateInput
   comments: CommentRelateToManyForCreateInput
   votes: VoteRelateToManyForCreateInput
@@ -1416,11 +1396,6 @@ input KycRelateToManyForCreateInput {
 input TransparencyRatingRelateToManyForCreateInput {
   create: [TransparencyRatingCreateInput!]
   connect: [TransparencyRatingWhereUniqueInput!]
-}
-
-input TransparencyHighlightRelateToManyForCreateInput {
-  create: [TransparencyHighlightCreateInput!]
-  connect: [TransparencyHighlightWhereUniqueInput!]
 }
 
 input CommentRelateToManyForCreateInput {
@@ -3846,60 +3821,6 @@ input KycGroupCreateInput {
   updatedAt: DateTime
 }
 
-type TransparencyHighlight {
-  id: ID!
-  content: String
-  isPositive: Boolean
-  project: Project
-  dateAdded: DateTime
-  updatedAt: DateTime
-}
-
-input TransparencyHighlightWhereUniqueInput {
-  id: ID
-}
-
-input TransparencyHighlightWhereInput {
-  AND: [TransparencyHighlightWhereInput!]
-  OR: [TransparencyHighlightWhereInput!]
-  NOT: [TransparencyHighlightWhereInput!]
-  id: IDFilter
-  content: StringFilter
-  isPositive: BooleanFilter
-  project: ProjectWhereInput
-  dateAdded: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
-}
-
-input TransparencyHighlightOrderByInput {
-  id: OrderDirection
-  content: OrderDirection
-  isPositive: OrderDirection
-  dateAdded: OrderDirection
-  updatedAt: OrderDirection
-}
-
-input TransparencyHighlightUpdateInput {
-  content: String
-  isPositive: Boolean
-  project: ProjectRelateToOneForUpdateInput
-  dateAdded: DateTime
-  updatedAt: DateTime
-}
-
-input TransparencyHighlightUpdateArgs {
-  where: TransparencyHighlightWhereUniqueInput!
-  data: TransparencyHighlightUpdateInput!
-}
-
-input TransparencyHighlightCreateInput {
-  content: String
-  isPositive: Boolean
-  project: ProjectRelateToOneForCreateInput
-  dateAdded: DateTime
-  updatedAt: DateTime
-}
-
 type TransparencyRating {
   id: ID!
   rating: Int
@@ -5155,25 +5076,6 @@ type Mutation {
   updateKycGroups(data: [KycGroupUpdateArgs!]!): [KycGroup]
   deleteKycGroup(where: KycGroupWhereUniqueInput!): KycGroup
   deleteKycGroups(where: [KycGroupWhereUniqueInput!]!): [KycGroup]
-  createTransparencyHighlight(
-    data: TransparencyHighlightCreateInput!
-  ): TransparencyHighlight
-  createTransparencyHighlights(
-    data: [TransparencyHighlightCreateInput!]!
-  ): [TransparencyHighlight]
-  updateTransparencyHighlight(
-    where: TransparencyHighlightWhereUniqueInput!
-    data: TransparencyHighlightUpdateInput!
-  ): TransparencyHighlight
-  updateTransparencyHighlights(
-    data: [TransparencyHighlightUpdateArgs!]!
-  ): [TransparencyHighlight]
-  deleteTransparencyHighlight(
-    where: TransparencyHighlightWhereUniqueInput!
-  ): TransparencyHighlight
-  deleteTransparencyHighlights(
-    where: [TransparencyHighlightWhereUniqueInput!]!
-  ): [TransparencyHighlight]
   createTransparencyRating(
     data: TransparencyRatingCreateInput!
   ): TransparencyRating
@@ -5596,16 +5498,6 @@ type Query {
   ): [KycGroup!]
   kycGroup(where: KycGroupWhereUniqueInput!): KycGroup
   kycGroupsCount(where: KycGroupWhereInput! = {}): Int
-  transparencyHighlights(
-    where: TransparencyHighlightWhereInput! = {}
-    orderBy: [TransparencyHighlightOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [TransparencyHighlight!]
-  transparencyHighlight(
-    where: TransparencyHighlightWhereUniqueInput!
-  ): TransparencyHighlight
-  transparencyHighlightsCount(where: TransparencyHighlightWhereInput! = {}): Int
   transparencyRatings(
     where: TransparencyRatingWhereInput! = {}
     orderBy: [TransparencyRatingOrderByInput!]! = []

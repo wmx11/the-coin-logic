@@ -4,7 +4,7 @@ import { DiscordEventUpdateInput } from 'tcl-packages/types';
 
 export const createScheduledEvent = async (event: PrismaSchema.DiscordEventUncheckedCreateInput) => {
   try {
-    const existingEvent = await prismaClient.discordEvent.count({
+    const existingEvent = await prismaClient?.discordEvent.count({
       where: {
         eventId: event.eventId,
       },
@@ -14,7 +14,7 @@ export const createScheduledEvent = async (event: PrismaSchema.DiscordEventUnche
       return null;
     }
 
-    const project = await prismaClient.project.findFirst({
+    const project = await prismaClient?.project.findFirst({
       where: {
         discordServerId: event.guildId,
       },
@@ -28,7 +28,7 @@ export const createScheduledEvent = async (event: PrismaSchema.DiscordEventUnche
       return null;
     }
 
-    await prismaClient.discordEvent.create({
+    await prismaClient?.discordEvent.create({
       data: {
         ...(event as PrismaSchema.DiscordEventUncheckedCreateInput),
         inviteUrl: event?.inviteUrl || project?.discord || undefined,
@@ -42,7 +42,7 @@ export const createScheduledEvent = async (event: PrismaSchema.DiscordEventUnche
 
 export const updateScheduledEvent = async (event: DiscordEventUpdateInput) => {
   try {
-    const eventToUpdate = await prismaClient.discordEvent.findFirst({
+    const eventToUpdate = await prismaClient?.discordEvent.findFirst({
       where: {
         eventId: event.eventId,
       },
@@ -55,7 +55,7 @@ export const updateScheduledEvent = async (event: DiscordEventUpdateInput) => {
       return null;
     }
 
-    const project = await prismaClient.project.findFirst({
+    const project = await prismaClient?.project.findFirst({
       where: {
         discordServerId: event.guildId,
       },
@@ -64,7 +64,7 @@ export const updateScheduledEvent = async (event: DiscordEventUpdateInput) => {
       },
     });
 
-    await prismaClient.discordEvent.update({
+    await prismaClient?.discordEvent.update({
       data: {
         ...(event as PrismaSchema.DiscordEventUpdateInput),
         inviteUrl: event?.inviteUrl || project?.discord || undefined,
@@ -80,7 +80,7 @@ export const updateScheduledEvent = async (event: DiscordEventUpdateInput) => {
 
 export const deleteScheduledEvent = async (event: GuildScheduledEvent) => {
   try {
-    const eventToDelete = await prismaClient.discordEvent.findFirst({
+    const eventToDelete = await prismaClient?.discordEvent.findFirst({
       where: {
         eventId: event?.id,
       },
@@ -93,7 +93,7 @@ export const deleteScheduledEvent = async (event: GuildScheduledEvent) => {
       return null;
     }
 
-    await prismaClient.discordEvent.delete({
+    await prismaClient?.discordEvent.delete({
       where: {
         id: eventToDelete?.id,
       },

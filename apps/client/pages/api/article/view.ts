@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return responseHandler.badRequest();
     }
 
-    const article = await prismaClient.content.findUnique({
+    const article = await prismaClient?.content.findUnique({
       where: {
         id,
       },
@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return responseHandler.badRequest('Article not found.');
     }
 
-    const data = await prismaClient.content.update({
+    const data = await prismaClient?.content.update({
       where: {
         id,
       },

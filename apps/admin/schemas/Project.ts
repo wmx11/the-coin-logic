@@ -3,6 +3,7 @@ import { list } from '@keystone-6/core';
 import { checkbox, float, image, integer, json, relationship, select, text, timestamp } from '@keystone-6/core/fields';
 import { CacheScope } from 'apollo-cache-control';
 import slugify from '../utils/slugify';
+import { isAdmin, isUser } from '../utils/rbac';
 
 const Project: Lists = {
   Project: list({
@@ -159,10 +160,7 @@ const Project: Lists = {
         many: true,
         ui: { displayMode: 'count' },
       }),
-      transparencyHighlights: relationship({
-        ref: 'TransparencyHighlight.project',
-        many: true,
-      }),
+      transparencyHighlights: json({ defaultValue: [{ isPositive: false, content: '' }] }),
       content: relationship({ ref: 'Content.project', many: true }),
       comments: relationship({ ref: 'Comment.project', many: true, ui: { displayMode: 'count' } }),
       votes: relationship({ ref: 'Vote.project', many: true, ui: { displayMode: 'count' } }),
@@ -178,13 +176,13 @@ const Project: Lists = {
         many: true,
       }),
     },
-    // access: {
-    //   operation: {
-    //     create: (data) => isUser(data),
-    //     delete: (data) => isAdmin(data),
-    //     update: (data) => isAdmin(data),
-    //   },
-    // },
+    access: {
+      operation: {
+        create: (data) => isUser(data),
+        delete: (data) => isAdmin(data),
+        update: (data) => isAdmin(data),
+      },
+    },
   }),
 };
 

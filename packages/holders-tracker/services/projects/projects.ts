@@ -98,7 +98,7 @@ export const canProjectBeInitialized = async (projectId: string, lastBlock: numb
   const INITIALIZATION_ITERATIONS_THRESHOLD = 10;
 
   try {
-    const project = await prismaClient.block.findFirst({
+    const project = await prismaClient?.block.findFirst({
       where: {
         projectId,
       },
