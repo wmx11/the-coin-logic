@@ -33,8 +33,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return responseHandler.ok(votes);
     }
 
-    const positive = votes.find((item) => item.vote === 1)?._count.vote || 0;
-    const negative = votes.find((item) => item.vote === 0)?._count.vote || 0;
+    const positive = votes?.find((item) => item.vote === 1)?._count.vote || 0;
+    const negative = votes?.find((item) => item.vote === 0)?._count.vote || 0;
     const total = positive + negative;
     const positivePercentage = Math.floor((positive / total) * 100);
     const negativePercentage = Math.floor((negative / total) * 100);
