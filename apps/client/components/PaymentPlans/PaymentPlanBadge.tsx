@@ -18,12 +18,7 @@ const PaymentPlanBadge: FC<PaymentPlanBadgeProps> = ({ paymentPlan, badgeProps }
 
   return (
     <Tooltip label={paymentPlan?.tooltip}>
-      <Badge
-        {...badgeProps}
-        variant="filled"
-        styles={{ root: { backgroundColor: planConfig?.color, color: '#000' } }}
-        leftSection={<Icons.Star style={{ color: '#7950f2' }} />}
-      >
+      <Badge {...badgeProps} variant="filled" styles={{ root: { backgroundColor: planConfig?.color, color: '#000' } }}>
         {paymentPlan?.name}
       </Badge>
     </Tooltip>

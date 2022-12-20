@@ -137,7 +137,7 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
     },
     { label: 'Tags', renderCell: ({ project }) => <Badges badges={project.tags as Tag[]} /> },
     {
-      label: 'Plan',
+      label: 'TCL Plan',
       renderCell: ({ project }) => <PaymentPlanBadge paymentPlan={project?.paymentPlan} badgeProps={{ size: 'xs' }} />,
     },
     {
