@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return responseHandler.badRequest('Coupon code must be provided.');
     }
 
-    const coupon = await prisma.coupon.findFirst({
+    const coupon = await prisma?.coupon.findFirst({
       where: {
         code: {
           equals: couponCode,
@@ -74,7 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (!revoke && projectId && (acceptFromNetworks.length > 0 || acceptFromReferrers.length > 0)) {
-      const project = await prisma.project.findUnique({
+      const project = await prisma?.project.findUnique({
         where: {
           id: projectId,
         },
@@ -115,7 +115,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     }
 
-    await prisma.cart.update({
+    await prisma?.cart.update({
       where: {
         id: cart.id,
       },
@@ -124,7 +124,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    await prisma.cartItem.update({
+    await prisma?.cartItem.update({
       where: {
         id: cart.cartItem?.id,
       },
@@ -133,7 +133,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    const updatedCart = await prisma.cart.findFirst({
+    const updatedCart = await prisma?.cart.findFirst({
       where: {
         id: cart.id,
       },
@@ -168,7 +168,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     }
 
-    await prisma.coupon.update({
+    await prisma?.coupon.update({
       where: {
         id,
       },

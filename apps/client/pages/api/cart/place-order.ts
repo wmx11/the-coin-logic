@@ -38,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const item = cart.cartItem as CartItem;
 
-    const user = await prisma.user.findUnique({
+    const user = await prisma?.user.findUnique({
       where: {
         id: cart?.user?.id as string,
       },
@@ -55,7 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (!user.firstName || !user.lastName) {
-      await prisma.user.update({
+      await prisma?.user.update({
         where: {
           id: user?.id as string,
         },
@@ -74,7 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const currencyPriceEur = data ? data[orderInfo.apiId]?.eur : 1;
 
-    const paymentNetwork = await prisma.network.findFirst({
+    const paymentNetwork = await prisma?.network.findFirst({
       where: {
         slug: orderInfo.paymentNetwork,
       },
@@ -84,7 +84,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    const order = await prisma.order.create({
+    const order = await prisma?.order.create({
       data: {
         userId: user?.id || undefined,
         projectId: orderInfo.project || undefined,
@@ -103,9 +103,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    await prisma.orderItem.create({
+    await prisma?.orderItem.create({
       data: {
-        orderId: order.id,
+        orderId: order?.id || undefined,
         productId: item?.product?.id || undefined,
         discount: item.discount,
         price: item.price,
@@ -118,7 +118,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const paymentPlanKey = item?.paymentPlan?.slug as string;
     const paymentPlanConfig = paymentPlans[paymentPlanKey as keyof typeof paymentPlans]?.config;
 
-    const project = await prisma.project.findUnique({
+    const project = await prisma?.project.findUnique({
       where: {
         id: orderInfo.project,
       },
@@ -130,7 +130,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (project && item.paymentPlan) {
       const { marketingTrackerDuration, ...rest } = paymentPlanConfig;
-      await prisma.project.update({
+      await prisma?.project.update({
         data: {
           isPending: false,
           isAwaitingPayment: false,
@@ -143,7 +143,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
 
-    await prisma.cart.update({
+    await prisma?.cart.update({
       where: {
         id: cart.id,
       },
@@ -168,7 +168,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             product_name: `${item?.product?.name} ${
               item.paymentPlan ? `(Payment plan: ${item.paymentPlan.name})` : null
             }`,
-            order_number: `#${order.orderNumber}`,
+            order_number: `#${order?.orderNumber}`,
             price: toCurrency(total) || '$0',
             transaction_hash: orderInfo.transactionHash,
             proof_of_payment: `${paymentNetwork?.txScanner}/${orderInfo.transactionHash}`,
@@ -184,9 +184,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     );
 
-    const newOrder = await prisma.order.findUnique({
+    const newOrder = await prisma?.order.findUnique({
       where: {
-        id: order.id,
+        id: order?.id || undefined,
       },
       include: {
         orderItem: true,

@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const responseHandler = response(res);
 
   const createCart = async (auth: Auth) => {
-    const existingCart = await prisma.cart.findFirst({
+    const existingCart = await prisma?.cart.findFirst({
       where: {
         userId: auth.id,
       },
@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return responseHandler.ok({ cart: existingCart });
     }
 
-    const cart = await prisma.cart.create({
+    const cart = await prisma?.cart.create({
       data: {
         userId: auth.id,
       },

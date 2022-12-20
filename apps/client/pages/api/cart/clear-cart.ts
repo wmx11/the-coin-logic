@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return responseHandler.badRequest('Cart not found.');
     }
 
-    await prisma.cartItem.deleteMany({
+    await prisma?.cartItem.deleteMany({
       where: {
         cartId: cart.id,
       },

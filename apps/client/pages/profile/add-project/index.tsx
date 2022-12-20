@@ -15,7 +15,7 @@ const AddProjectPage = ({ networks }: AddProjectPageProps) => {
 export default AddProjectPage;
 
 export const getServerSideProps = async () => {
-  const networks = await prisma.network.findMany({
+  const networks = await prisma?.network.findMany({
     select: {
       id: true,
       name: true,

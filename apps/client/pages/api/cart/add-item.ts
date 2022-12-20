@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return responseHandler.badRequest('Cart or SKU is required.');
     }
 
-    const product = await prisma.product.findFirst({
+    const product = await prisma?.product.findFirst({
       where: {
         sku,
       },
@@ -32,13 +32,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Delete all items before adding the new one
-    await prisma.cartItem.deleteMany({
+    await prisma?.cartItem.deleteMany({
       where: {
         cartId: cart.id,
       },
     });
 
-    const project = await prisma.project.findFirst({
+    const project = await prisma?.project.findFirst({
       where: {
         id: projectId,
       },
@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    const paymentPlan = await prisma.paymentPlan.findFirst({
+    const paymentPlan = await prisma?.paymentPlan.findFirst({
       where: {
         id: paymentPlanId,
       },
@@ -55,7 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const getPrice = () => {
       if (paymentPlanId && paymentPlan) {
-        return paymentPlan?.price as number - (project?.paymentPlan?.price || 0);
+        return (paymentPlan?.price as number) - (project?.paymentPlan?.price || 0);
       }
 
       if (projectId && project) {
@@ -77,7 +77,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return project?.paymentPlan?.discount || 0;
     };
 
-    const cartItem = await prisma.cartItem.create({
+    const cartItem = await prisma?.cartItem.create({
       data: {
         cartId: cart.id,
         productId: product.id,

@@ -105,7 +105,7 @@ export default Success;
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params, query }) => {
   const { orderId } = query;
 
-  const order = await prisma.order.findFirst({
+  const order = await prisma?.order.findFirst({
     where: {
       id: (orderId as string) || undefined,
     },

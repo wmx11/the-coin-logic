@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return responseHandler.unauthorized();
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await prisma?.user.findUnique({
       where: {
         id: auth.id,
       },
@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return responseHandler.badRequest('Order or user not found');
     }
 
-    const orderItem = await prisma.orderItem.findUnique({
+    const orderItem = await prisma?.orderItem.findUnique({
       where: {
         id: order?.orderItem?.id || undefined,
       },
@@ -52,12 +52,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let product: Product | null = null;
 
     if (duration) {
-      const data = await prisma.product.findFirst({
+      const data = await prisma?.product.findFirst({
         where: {
           sku: products.sku.marketingCampaignTrackerListed,
         },
       });
-      product = data;
+      product = data ? data : null;
     } else {
       product = orderItem.product;
     }
@@ -90,7 +90,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return add(new Date(), { days: SUBSCRIPTION_DAYS });
     };
 
-    const existingSubscription = await prisma.subscription.findFirst({
+    const existingSubscription = await prisma?.subscription.findFirst({
       where: {
         orderId: order.id,
       },
@@ -102,7 +102,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       existingSubscription.isActive &&
       isAfter(new Date(), existingSubscription.dateTo as Date)
     ) {
-      await prisma.subscription.update({
+      await prisma?.subscription.update({
         where: {
           id: existingSubscription.id,
         },
@@ -112,7 +112,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
 
-    await prisma.subscription.create({
+    await prisma?.subscription.create({
       data: {
         user: {
           connect: {

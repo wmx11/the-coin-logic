@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const responseHandler = response(res);
 
   const updateCart = async (auth: Auth) => {
-    const cart = await prisma.cart.findFirst({
+    const cart = await prisma?.cart.findFirst({
       where: {
         userId: auth.id,
       },
