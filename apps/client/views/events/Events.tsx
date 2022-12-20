@@ -54,11 +54,7 @@ const Events: FC<EventsProps> = ({ events, count }) => {
           </div>
         ) : (
           <div className="py-10">
-            <GrayBox>
-              {eventsData
-                ? 'The following project has no events or the events are not tracked.'
-                : 'Looks like there are no events here 😮'}
-            </GrayBox>
+            <GrayBox>Looks like there are no events here 😮</GrayBox>
           </div>
         )}
         <div className="flex items-end justify-between gap-2">

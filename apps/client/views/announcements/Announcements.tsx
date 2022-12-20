@@ -63,9 +63,7 @@ const Announcements: FC<AnnouncementsProps> = ({ announcements, count }) => {
           </>
         ) : (
           <div className="py-10">
-            <GrayBox>
-              {announcementsData && announcementsData.length ? '' : 'Looks like there are no announcements here 😮'}
-            </GrayBox>
+            <GrayBox>Looks like there are no announcements here 😮</GrayBox>
           </div>
         )}
         <div className="flex items-end justify-between gap-2">

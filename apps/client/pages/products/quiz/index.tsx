@@ -47,7 +47,7 @@ const QuizzesPage: FC<QuizzesProps> = ({ quizzes, quizzesCount }) => {
           <Quizzes data={data || quizzes} />
         ) : (
           <div className="py-10">
-            <GrayBox>No quizzes here 😮</GrayBox>
+            <GrayBox>Looks like there are no quizzes here 😮</GrayBox>
           </div>
         )}
 
