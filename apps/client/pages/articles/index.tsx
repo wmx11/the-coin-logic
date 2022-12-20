@@ -1,8 +1,8 @@
 import { Container, Text } from '@mantine/core';
 import { BlogPosts } from 'components/BlogPosts';
-import PaginationFilter from 'components/Filters/PaginationFilter';
-import PerPageFilter from 'components/Filters/PerPageFilter';
-import ProjectsFilter from 'components/Filters/ProjectsFilter';
+// import PaginationFilter from 'components/Filters/PaginationFilter';
+// import PerPageFilter from 'components/Filters/PerPageFilter';
+// import ProjectsFilter from 'components/Filters/ProjectsFilter';
 import GrayBox from 'components/GrayBox';
 import Meta from 'components/Meta';
 import GradientTitle from 'components/Text/GradientTitle';
