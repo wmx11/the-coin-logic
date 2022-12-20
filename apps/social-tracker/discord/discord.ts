@@ -1,10 +1,10 @@
 import cors from 'cors';
 import { ActivityType, Client, Events, GatewayIntentBits } from 'discord.js';
 import dotenv from 'dotenv';
-import express, { Request, Response } from 'express';
+import express from 'express';
 import helmet from 'helmet';
 import path from 'path';
-import { getDiscordMembersCount } from './getDiscordMembersCount';
+import initDiscordApi from './api/initDiscordApi';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
@@ -22,7 +22,12 @@ app.use(
 app.use(helmet());
 
 const client: Client = new Client({
-  intents: [GatewayIntentBits.Guilds],
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildScheduledEvents,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+  ],
 });
 
 client.once(Events.ClientReady, async (): Promise<void> => {
@@ -33,21 +38,7 @@ client.once(Events.ClientReady, async (): Promise<void> => {
     status: 'online',
   });
 
-  try {
-    app.get('/tcl-api/discord/get-members-count/:guildId', async (req: Request, res: Response) => {
-      const { guildId } = req.params;
-
-      if (!guildId) {
-        res.status(404).json({ message: 'Guild ID not found' });
-      }
-
-      const membersCount = await getDiscordMembersCount(client, guildId as string);
-
-      res.status(200).json({ membersCount });
-    });
-  } catch (error) {
-    console.log(error);
-  }
+  initDiscordApi(app, client);
 
   app.listen(port, () => console.log('Discord bot API is listening on port', port));
 });

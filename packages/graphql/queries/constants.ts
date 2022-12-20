@@ -1,6 +1,14 @@
 export const GET_ENABLED_PROJECTS = `
 {
-  projects(where: { enabled: { equals: true }, trackData: { equals: true } }) {
+  projects(
+    where: {
+      enabled: { equals: true }
+      OR: [
+        { trackData: { equals: true } }
+        { trackPrice: { equals: true }, trackMarketCap: { equals: true } }
+      ]
+    }
+  ) {
     id
     name
     contractAddress
@@ -12,6 +20,10 @@ export const GET_ENABLED_PROJECTS = `
     telegram
     discord
     discordServerId
+    trackData
+    trackPrice
+    trackMarketCap
+    isNft
     liquidityPair {
       address
       useDexScreener

@@ -1,63 +1,60 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import axios from 'axios';
+import { PURCHASE_CONFIRMATION_ID } from 'constants/email';
+import request, { Auth } from 'data/api/request';
+import { response } from 'data/api/response';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import routes from 'routes';
-import { Cart } from 'tcl-packages/prismaClient';
-
+import { Cart, CartItem } from 'types';
+import { signedRequest } from 'utils/signedRequest';
+import toCurrency from 'utils/toCurrency';
 import { calculateItemTotal } from 'utils/utils';
 import prisma from '../../../data/prisma';
+import { paymentPlans } from '../../../utils/paymentPlans/config';
+import config from 'tcl-packages/email/config';
+
+type OrderInfo = {
+  firstName: string;
+  lastName: string;
+  transactionHash: string;
+  duration: string;
+  currency: string;
+  apiId: string;
+  walletAddress: string;
+  paymentNetwork: string;
+  project?: string; // ID of the project
+};
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { method, body } = req;
+  const requestHandler = request(req, res);
+  const responseHandler = response(res);
 
-  const {
-    cart,
-    orderInfo,
-  }: {
-    cart: Cart;
-    orderInfo: {
-      firstName: string;
-      lastName: string;
-      transactionHash: string;
-      duration: string;
-      currency: string;
-      apiId: string;
-      walletAddress: string;
-      paymentNetwork: string;
-      project?: string; // ID of the project
-    };
-  } = body;
+  const placeOrder = async (auth: Auth) => {
+    const { cart, orderInfo }: { cart: Cart; orderInfo: OrderInfo } = req.body;
 
-  if (!cart && !orderInfo) {
-    return res.status(403).json({ message: 'Missing Cart and OrderInfo' });
-  }
+    if (!cart || !orderInfo) {
+      return responseHandler.badRequest('Cart and order information is required');
+    }
 
-  if (method === 'POST') {
-    const user = await prisma.user.findFirst({
+    const item = cart.cartItem as CartItem;
+
+    const user = await prisma.user.findUnique({
       where: {
-        id: cart.userId as string,
+        id: cart?.user?.id as string,
       },
       select: {
         id: true,
+        email: true,
         firstName: true,
         lastName: true,
       },
     });
 
-    const item = await prisma.cartItem.findFirst({
-      where: {
-        cartId: cart.id,
-      },
-      include: {
-        product: true,
-      },
-    });
-
-    if (!item) {
-      return res.status(404).json({ message: 'No products found.' });
+    if (!user) {
+      return responseHandler.forbidden('Invalid user');
     }
 
-    if (!user?.firstName && !user?.lastName) {
+    if (!user.firstName || !user.lastName) {
       await prisma.user.update({
         where: {
           id: user?.id as string,
@@ -81,60 +78,142 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       where: {
         slug: orderInfo.paymentNetwork,
       },
+      select: {
+        id: true,
+        txScanner: true,
+      },
     });
 
     const order = await prisma.order.create({
       data: {
-        userId: user?.id,
+        userId: user?.id || undefined,
         projectId: orderInfo.project || undefined,
-        paymentNetworkId: paymentNetwork?.id,
+        paymentNetworkId: paymentNetwork?.id || undefined,
         walletAddress: orderInfo.walletAddress,
         transactionHash: orderInfo.transactionHash,
         currency: orderInfo.currency,
         currencyPriceEur,
-        durationInMonths: parseInt(orderInfo.duration, 10),
+        durationInMonths: parseInt(orderInfo.duration, 10) || 0,
         discount: item.discount,
         tax: item.tax,
         grandTotal: total,
         total: total,
         subTotal: total,
+        couponCodeId: cart?.couponCode?.id || undefined,
       },
     });
 
     await prisma.orderItem.create({
       data: {
         orderId: order.id,
-        productId: item?.productId,
+        productId: item?.product?.id || undefined,
         discount: item.discount,
         price: item.price,
         quantity: item.quantity,
         tax: item.tax,
+        paymentPlanId: item.paymentPlan?.id || undefined,
       },
     });
 
-    if (item?.product?.isMonthly) {
-      await axios.post(routes.api.user.initSubscription, {
-        order,
-      });
-    }
+    const paymentPlanKey = item?.paymentPlan?.slug as string;
+    const paymentPlanConfig = paymentPlans[paymentPlanKey as keyof typeof paymentPlans]?.config;
 
-    if (orderInfo.project) {
+    const project = await prisma.project.findUnique({
+      where: {
+        id: orderInfo.project,
+      },
+      select: {
+        id: true,
+        slug: true,
+      },
+    });
+
+    if (project && item.paymentPlan) {
+      const { marketingTrackerDuration, ...rest } = paymentPlanConfig;
       await prisma.project.update({
         data: {
           isPending: false,
           isAwaitingPayment: false,
-          enabled: true,
-          trackData: true,
-          isListed: true,
+          paymentPlanId: item.paymentPlan?.id || undefined,
+          ...rest,
         },
         where: {
-          id: orderInfo.project || undefined,
+          id: project.id || undefined,
         },
       });
     }
 
-    return res.status(200).json({ order });
-  }
+    await prisma.cart.update({
+      where: {
+        id: cart.id,
+      },
+      data: {
+        couponCode: {
+          disconnect: true,
+        },
+        couponCodeId: undefined,
+      },
+    });
 
-  return res.status(403).json({ message: 'You do not have permission' });
+    await signedRequest(
+      {
+        type: 'post',
+        url: routes.api.email.submit,
+        data: {
+          subject: 'Your TCL Invoice',
+          to: user.email,
+          cc: config.tclEmail,
+          templateId: PURCHASE_CONFIRMATION_ID,
+          dynamicTemplateData: {
+            product_name: `${item?.product?.name} ${
+              item.paymentPlan ? `(Payment plan: ${item.paymentPlan.name})` : null
+            }`,
+            order_number: `#${order.orderNumber}`,
+            price: toCurrency(total) || '$0',
+            transaction_hash: orderInfo.transactionHash,
+            proof_of_payment: `${paymentNetwork?.txScanner}/${orderInfo.transactionHash}`,
+            project_listing_text: project ? 'You can find your project listing on ' : null,
+            project_url: project ? `${routes.base}${routes.project}/${project.slug}` : null,
+          },
+        },
+      },
+      user.id,
+      {
+        trusted: true,
+        signature: 'email_submit',
+      },
+    );
+
+    const newOrder = await prisma.order.findUnique({
+      where: {
+        id: order.id,
+      },
+      include: {
+        orderItem: true,
+        user: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (item?.product?.isMonthly || paymentPlanConfig.marketingTrackerDuration) {
+      await signedRequest(
+        {
+          type: 'post',
+          url: routes.api.user.initSubscription,
+          data: {
+            order: newOrder,
+            duration: paymentPlanConfig?.marketingTrackerDuration || undefined,
+          },
+        },
+        user.id,
+      );
+    }
+
+    return responseHandler.ok(newOrder, 'Order has been placed successfully');
+  };
+
+  return requestHandler.signedPost(placeOrder);
 }

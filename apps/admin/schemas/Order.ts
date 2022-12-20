@@ -7,7 +7,7 @@ const Order: Lists = {
     fields: {
       orderNumber: integer({ defaultValue: { kind: 'autoincrement' }, db: { isNullable: false } }),
       user: relationship({ ref: 'User', db: { foreignKey: true } }),
-      orderItem: relationship({ ref: 'OrderItem.order', many: true }),
+      orderItem: relationship({ ref: 'OrderItem.order' }),
       project: relationship({ ref: 'Project', db: { foreignKey: true } }),
       walletAddress: text(),
       transactionHash: text(),
@@ -20,6 +20,7 @@ const Order: Lists = {
       total: float(),
       subTotal: float(),
       grandTotal: float(),
+      couponCode: relationship({ ref: 'Coupon.order' }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
       updatedAt: timestamp({
         db: {

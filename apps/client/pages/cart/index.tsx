@@ -5,19 +5,15 @@ import GradientTitle from 'components/Text/GradientTitle';
 import useCart from 'hooks/useCart';
 import Image from 'next/image';
 import CryptoBuy from 'public/images/crypto_buy.svg';
-import { useEffect } from 'react';
 import { CartItem } from 'types';
 
 const index = () => {
-  const { cart, clearItems, updateCart, isCartUpdated, isCartCleared, isItemAdded, user } = useCart();
+  const { cart, clearItems } = useCart();
 
-  useEffect(() => {
-    updateCart();
-  }, [isCartUpdated, isCartCleared, isItemAdded, user]);
+  const item = cart?.cartItem;
+  const paymentPlan = item?.paymentPlan;
 
-  const item = cart?.cartItem && cart.cartItem[0];
-
-  if (!cart || (cart?.cartItem && cart?.cartItem.length < 1)) {
+  if (!cart || !item) {
     return (
       <Container className="py-10 min-h-screen flex flex-col justify-center">
         <GrayBox>Your cart is empty</GrayBox>
@@ -35,6 +31,15 @@ const index = () => {
                 {item?.product?.name}
               </GradientTitle>
               <Text color="dimmed">{item?.product?.description}</Text>
+              {paymentPlan ? (
+                <div className="mt-4">
+                  <GradientTitle weight={700} order={3} className="mb-4">
+                    Payment Plan: {paymentPlan.name}
+                  </GradientTitle>
+                  <Text color="dimmed" className="mb-2">{paymentPlan.tooltip}</Text>
+                  <Text color="dimmed">{paymentPlan.description}</Text>
+                </div>
+              ) : null}
             </div>
             <div>
               <Image src={CryptoBuy} width={400} height={400} />

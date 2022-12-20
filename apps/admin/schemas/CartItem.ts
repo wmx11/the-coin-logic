@@ -6,6 +6,7 @@ const CartItem: Lists = {
   CartItem: list({
     fields: {
       product: relationship({ ref: 'Product', db: { foreignKey: true } }),
+      paymentPlan: relationship({ ref: 'PaymentPlan', db: { foreignKey: true } }),
       cart: relationship({ ref: 'Cart.cartItem', db: { foreignKey: true } }),
       price: float(),
       tax: float({ defaultValue: 0 }),

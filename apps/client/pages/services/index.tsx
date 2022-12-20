@@ -5,7 +5,6 @@ import Paper from 'components/Paper';
 import GradientTitle from 'components/Text/GradientTitle';
 import Image from 'next/image';
 import AMAs from 'public/images/amas.svg';
-import ComingSoon from 'public/images/coming_soon.svg';
 import CommunityEvents from 'public/images/community_events.svg';
 import ContractAudits from 'public/images/contract_audits.svg';
 import KYC from 'public/images/kyc.svg';
@@ -45,8 +44,8 @@ const index = () => {
       <Meta title="Listing, tracking, audits, KYC, and other services | Coin Logic" />
       <Container className="py-10">
         <div className="mb-16">
-          <GradientTitle align="center">Our Features and Services</GradientTitle>
-          <Text size="sm" color="dimmed" align="center">
+          <GradientTitle>Our Features and Services</GradientTitle>
+          <Text size="xs" color="dimmed">
             Taking care and helping new, and already established projects
           </Text>
         </div>
@@ -63,7 +62,7 @@ const index = () => {
           />
           <ServiceCard
             title="K.Y.C"
-            description="K.Y.C is one way to make you and your project transparent. Having you and your team complete a full K.Y.C will bring trust to the community and will set a certain mindframe for future actions and management of the project. Our partners at K.C Consulting provide the best legal K.Y.C services!"
+            description="K.Y.C is one way to make you and your project transparent. Having you and your team complete a full K.Y.C will bring trust to the community and will set a certain mindframe for future actions and management of the project. Our partners at Assure DeFi provide the best legal K.Y.C services!"
             image={KYC}
           />
           <ServiceCard
@@ -80,11 +79,6 @@ const index = () => {
             title="AMAs"
             description="AMAs are a great way to reach new potential investors and get fresh eyes on your project. They serve as a very useful tool in sharing what your project is about and who the team is around the project. Contact Cardinal House to schedule an AMA!"
             image={AMAs}
-          />
-          <ServiceCard
-            title="Ivy Nest (Coming Soon!)"
-            description="You wont want to be late to this once its out!"
-            image={ComingSoon}
           />
         </div>
       </Container>

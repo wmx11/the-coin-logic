@@ -13,34 +13,41 @@ generator client {
 }
 
 model User {
-  id                       String              @id @default(cuid())
-  name                     String              @default("")
-  firstName                String              @default("")
-  lastName                 String              @default("")
-  email                    String              @unique @default("")
-  ip                       String              @default("")
-  roles                    Role[]              @relation("Role_users")
-  password                 String
-  isAdmin                  Boolean             @default(false)
-  isSubscribedToEmail      Boolean             @default(false)
-  isNotChargeable          Boolean             @default(false)
-  isVerified               Boolean             @default(true)
-  subscription             Subscription?       @relation("Subscription_user")
-  referrer                 String              @default("")
-  referralCode             String              @default("")
-  walletAddress            String              @default("")
-  projects                 Project[]           @relation("Project_user")
-  marketingCampaigns       MarketingCampaign[] @relation("MarketingCampaign_users")
-  dateCreated              DateTime?           @default(now())
-  passwordResetToken       String?
-  passwordResetIssuedAt    DateTime?
-  passwordResetRedeemedAt  DateTime?
-  from_CreatorRating_user  CreatorRating[]     @relation("CreatorRating_user")
-  from_CreatorReview_user  CreatorReview[]     @relation("CreatorReview_user")
-  from_ProjectRating_user  ProjectRating[]     @relation("ProjectRating_user")
-  from_ProjectComment_user ProjectComment[]    @relation("ProjectComment_user")
-  from_Cart_user           Cart[]              @relation("Cart_user")
-  from_Order_user          Order[]             @relation("Order_user")
+  id                              String               @id @default(cuid())
+  name                            String               @default("")
+  firstName                       String               @default("")
+  lastName                        String               @default("")
+  email                           String               @unique @default("")
+  ip                              String               @default("")
+  roles                           Role[]               @relation("Role_users")
+  password                        String
+  isAdmin                         Boolean              @default(false)
+  isSubscribedToEmail             Boolean              @default(false)
+  isNotChargeable                 Boolean              @default(false)
+  isVerified                      Boolean              @default(true)
+  subscription                    Subscription?        @relation("Subscription_user")
+  referrer                        String               @default("")
+  referralCode                    String               @default("")
+  walletAddress                   String               @default("")
+  content                         Content[]            @relation("Content_user")
+  projects                        Project[]            @relation("Project_user")
+  managedProjects                 Project[]            @relation("User_managedProjects")
+  marketingCampaigns              MarketingCampaign[]  @relation("MarketingCampaign_users")
+  dateCreated                     DateTime?            @default(now())
+  passwordResetToken              String?
+  passwordResetIssuedAt           DateTime?
+  passwordResetRedeemedAt         DateTime?
+  from_Coupon_acceptFromReferrers Coupon[]             @relation("Coupon_acceptFromReferrers")
+  from_Content_likes              Content[]            @relation("Content_likes")
+  from_Comment_likes              Comment[]            @relation("Comment_likes")
+  from_Comment_reports            Comment[]            @relation("Comment_reports")
+  from_Comment_user               Comment[]            @relation("Comment_user")
+  from_TransparencyRating_user    TransparencyRating[] @relation("TransparencyRating_user")
+  from_Cart_user                  Cart[]               @relation("Cart_user")
+  from_Order_user                 Order[]              @relation("Order_user")
+  from_Vote_user                  Vote[]               @relation("Vote_user")
+  from_Quiz_user                  Quiz[]               @relation("Quiz_user")
+  from_Quiz_likes                 Quiz[]               @relation("Quiz_likes")
 }
 
 model Subscription {
@@ -96,82 +103,136 @@ model Role {
 }
 
 model Project {
-  id                             String              @id @default(cuid())
-  name                           String              @default("")
-  slug                           String              @default("")
+  id                             String                  @id @default(cuid())
+  name                           String                  @default("")
+  slug                           String                  @default("")
   logo_filesize                  Int?
   logo_extension                 String?
   logo_width                     Int?
   logo_height                    Int?
   logo_id                        String?
-  enabled                        Boolean             @default(false)
-  isPending                      Boolean             @default(false)
-  isAwaitingPayment              Boolean             @default(false)
-  isListed                       Boolean             @default(false)
-  trackData                      Boolean             @default(false)
-  trackSocials                   Boolean             @default(false)
-  trackHolders                   Boolean             @default(false)
-  periodicWalletUpdates          Boolean             @default(false)
-  initialized                    Boolean             @default(false)
-  markForDeletion                Boolean             @default(false)
-  useDexScreener                 Boolean             @default(false)
+  dateAdded                      DateTime?               @default(now())
+  enabled                        Boolean                 @default(false)
+  isPending                      Boolean                 @default(false)
+  isAwaitingPayment              Boolean                 @default(false)
+  isListed                       Boolean                 @default(false)
+  isNft                          Boolean                 @default(false)
+  displayBlogPosts               Boolean                 @default(false)
+  displayTransparencyScore       Boolean                 @default(false)
+  displayCommunityVotes          Boolean                 @default(false)
+  displayCommunityComments       Boolean                 @default(false)
+  trackData                      Boolean                 @default(false)
+  trackPrice                     Boolean                 @default(false)
+  trackMarketCap                 Boolean                 @default(false)
+  trackSocials                   Boolean                 @default(false)
+  trackHolders                   Boolean                 @default(false)
+  periodicWalletUpdates          Boolean                 @default(false)
+  initialized                    Boolean                 @default(false)
+  markForDeletion                Boolean                 @default(false)
+  useDexScreener                 Boolean                 @default(false)
   status                         String?
-  tags                           Tag[]               @relation("Project_tags")
-  contractAddress                String              @default("")
-  pairAddress                    String              @default("")
-  exhangeAddress                 String              @default("")
-  burnAddress                    String              @default("0x000000000000000000000000000000000000dead")
-  liquidityPair                  LiquidityPair[]     @relation("LiquidityPair_project")
-  network                        Network?            @relation("Project_network", fields: [networkId], references: [id])
-  networkId                      String?             @map("network")
-  trackHoldersFromTokenAmount    Float?              @default(0)
-  trackHoldersFromDollarAmount   Float?              @default(0)
-  description                    String              @default("")
+  tags                           Tag[]                   @relation("Project_tags")
+  contractAddress                String                  @default("")
+  pairAddress                    String                  @default("")
+  exhangeAddress                 String                  @default("")
+  burnAddress                    String                  @default("0x000000000000000000000000000000000000dead")
+  liquidityPair                  LiquidityPair[]         @relation("LiquidityPair_project")
+  network                        Network?                @relation("Project_network", fields: [networkId], references: [id])
+  networkId                      String?                 @map("network")
+  trackHoldersFromTokenAmount    Float?                  @default(0)
+  trackHoldersFromDollarAmount   Float?                  @default(0)
+  description                    String                  @default("")
   launchDate                     DateTime?
   launchBlock                    Int?
-  user                           User[]              @relation("Project_user")
-  notifications                  Notification[]      @relation("Notification_project")
+  user                           User[]                  @relation("Project_user")
+  notifications                  Notification[]          @relation("Notification_project")
   ABI                            Json?
-  customTrackers                 CustomTracker[]     @relation("CustomTracker_project")
+  customTrackers                 CustomTracker[]         @relation("CustomTracker_project")
   sellTax                        Float?
   buyTax                         Float?
-  rebasePeriod                   String              @default("")
+  rebasePeriod                   String                  @default("")
   apy                            Float?
   dailyApy                       Float?
-  calendar                       String              @default("")
-  website                        String              @default("")
-  whitepaper                     String              @default("")
-  twitter                        String              @default("")
-  telegram                       String              @default("")
-  discord                        String              @default("")
-  discordServerId                String              @default("")
-  reddit                         String              @default("")
-  youtube                        String              @default("")
-  github                         String              @default("")
-  medium                         String              @default("")
-  kycLink                        String              @default("")
-  auditLink                      String              @default("")
-  auditBy                        Audit[]             @relation("Audit_project")
-  kycBy                          Kyc[]               @relation("Kyc_project")
-  customVetting                  String              @default("")
-  dateAdded                      DateTime?           @default(now())
-  ratings                        ProjectRating[]     @relation("ProjectRating_project")
-  reviews                        ProjectComment[]    @relation("ProjectComment_project")
-  parentProject                  Project[]           @relation("Project_parentProject")
-  relatedProjects                Project[]           @relation("Project_relatedProjects")
-  from_Project_parentProject     Project[]           @relation("Project_parentProject")
-  from_Project_relatedProjects   Project[]           @relation("Project_relatedProjects")
-  from_MarketStat_project        MarketStat[]        @relation("MarketStat_project")
-  from_SocialStat_project        SocialStat[]        @relation("SocialStat_project")
-  from_DiscordBot_project        DiscordBot[]        @relation("DiscordBot_project")
-  from_Block_project             Block[]             @relation("Block_project")
-  from_Transfer_project          Transfer[]          @relation("Transfer_project")
-  from_Holder_projects           Holder[]            @relation("Holder_projects")
-  from_MarketingCampaign_project MarketingCampaign[] @relation("MarketingCampaign_project")
-  from_Order_project             Order[]             @relation("Order_project")
+  calendar                       String                  @default("")
+  website                        String                  @default("")
+  whitepaper                     String                  @default("")
+  twitter                        String                  @default("")
+  telegram                       String                  @default("")
+  discord                        String                  @default("")
+  discordServerId                String                  @default("")
+  reddit                         String                  @default("")
+  youtube                        String                  @default("")
+  github                         String                  @default("")
+  medium                         String                  @default("")
+  kycLink                        String                  @default("")
+  auditLink                      String                  @default("")
+  customVetting                  String                  @default("")
+  tclRating                      Int?
+  transparencyScore              Int?
+  paymentPlan                    PaymentPlan?            @relation("Project_paymentPlan", fields: [paymentPlanId], references: [id])
+  paymentPlanId                  String?                 @map("paymentPlan")
+  auditBy                        Audit[]                 @relation("Audit_project")
+  kycBy                          Kyc[]                   @relation("Kyc_project")
+  transparencyRatings            TransparencyRating[]    @relation("TransparencyRating_project")
+  transparencyHighlights         TransparencyHighlight[] @relation("TransparencyHighlight_project")
+  content                        Content[]               @relation("Content_project")
+  comments                       Comment[]               @relation("Comment_project")
+  votes                          Vote[]                  @relation("Vote_project")
+  events                         DiscordEvent[]          @relation("DiscordEvent_project")
+  announcements                  DiscordAnnouncement[]   @relation("DiscordAnnouncement_project")
+  discordConfig                  DiscordConfig?          @relation("DiscordConfig_project")
+  parentProject                  Project[]               @relation("Project_parentProject")
+  relatedProjects                Project[]               @relation("Project_relatedProjects")
+  from_User_managedProjects      User[]                  @relation("User_managedProjects")
+  from_Project_parentProject     Project[]               @relation("Project_parentProject")
+  from_Project_relatedProjects   Project[]               @relation("Project_relatedProjects")
+  from_MarketStat_project        MarketStat[]            @relation("MarketStat_project")
+  from_SocialStat_project        SocialStat[]            @relation("SocialStat_project")
+  from_DiscordBot_project        DiscordBot[]            @relation("DiscordBot_project")
+  from_Block_project             Block[]                 @relation("Block_project")
+  from_Transfer_project          Transfer[]              @relation("Transfer_project")
+  from_Holder_projects           Holder[]                @relation("Holder_projects")
+  from_MarketingCampaign_project MarketingCampaign[]     @relation("MarketingCampaign_project")
+  from_Order_project             Order[]                 @relation("Order_project")
+  from_Quiz_project              Quiz[]                  @relation("Quiz_project")
 
   @@index([slug])
   @@index([networkId])
+  @@index([paymentPlanId])
+}
+
+model PaymentPlan {
+  id                         String      @id @default(cuid())
+  name                       String      @default("")
+  slug                       String      @default("")
+  tooltip                    String      @default("")
+  description                String      @default("")
+  enabled                    Boolean     @default(false)
+  price                      Float?
+  discount                   Float?
+  dateAdded                  DateTime?   @default(now())
+  updatedAt                  DateTime?   @updatedAt
+  from_Project_paymentPlan   Project[]   @relation("Project_paymentPlan")
+  from_CartItem_paymentPlan  CartItem[]  @relation("CartItem_paymentPlan")
+  from_OrderItem_paymentPlan OrderItem[] @relation("OrderItem_paymentPlan")
+}
+
+model Coupon {
+  id                  String    @id @default(cuid())
+  name                String    @default("")
+  code                String    @default("")
+  enabled             Boolean   @default(false)
+  discountPercentage  Int?
+  timesPerUser        Int?
+  validFrom           DateTime?
+  validTill           DateTime?
+  usedBy              Json?     @default("[{\"user\":\"id\",\"times\":0}]")
+  acceptFromReferrers User[]    @relation("Coupon_acceptFromReferrers")
+  acceptFromNetworks  Network[] @relation("Coupon_acceptFromNetworks")
+  cart                Cart[]    @relation("Cart_couponCode")
+  order               Order[]   @relation("Order_couponCode")
+  dateAdded           DateTime? @default(now())
+  updatedAt           DateTime? @updatedAt
 }
 
 model Audit {
@@ -286,21 +347,22 @@ model CustomTracker {
 }
 
 model LiquidityPair {
-  id             String               @id @default(cuid())
-  name           String               @default("")
-  address        String               @default("")
-  tokenAddress   String               @default("")
-  order          Int?                 @default(1)
-  isPrimary      Boolean              @default(false)
-  useDexScreener Boolean              @default(false)
-  stablePair     StableLiquidityPair? @relation("LiquidityPair_stablePair", fields: [stablePairId], references: [id])
-  stablePairId   String?              @map("stablePair")
-  network        Network?             @relation("LiquidityPair_network", fields: [networkId], references: [id])
-  networkId      String?              @map("network")
-  project        Project[]            @relation("LiquidityPair_project")
-  exchange       Exchange?            @relation("LiquidityPair_exchange", fields: [exchangeId], references: [id])
-  exchangeId     String?              @map("exchange")
-  dateAdded      DateTime?            @default(now())
+  id                    String               @id @default(cuid())
+  name                  String               @default("")
+  address               String               @default("")
+  tokenAddress          String               @default("")
+  order                 Int?                 @default(1)
+  isPrimary             Boolean              @default(false)
+  useDexScreener        Boolean              @default(false)
+  stablePair            StableLiquidityPair? @relation("LiquidityPair_stablePair", fields: [stablePairId], references: [id])
+  stablePairId          String?              @map("stablePair")
+  network               Network?             @relation("LiquidityPair_network", fields: [networkId], references: [id])
+  networkId             String?              @map("network")
+  project               Project[]            @relation("LiquidityPair_project")
+  exchange              Exchange?            @relation("LiquidityPair_exchange", fields: [exchangeId], references: [id])
+  exchangeId            String?              @map("exchange")
+  customExchangeAddress String               @default("")
+  dateAdded             DateTime?            @default(now())
 
   @@index([stablePairId])
   @@index([networkId])
@@ -357,6 +419,7 @@ model Network {
   txScanner                        String                @default("")
   dateAdded                        DateTime?             @default(now())
   from_Project_network             Project[]             @relation("Project_network")
+  from_Coupon_acceptFromNetworks   Coupon[]              @relation("Coupon_acceptFromNetworks")
   from_CustomTracker_network       CustomTracker[]       @relation("CustomTracker_network")
   from_LiquidityPair_network       LiquidityPair[]       @relation("LiquidityPair_network")
   from_Token_network               Token[]               @relation("Token_network")
@@ -375,6 +438,59 @@ model StableLiquidityPair {
   from_LiquidityPair_stablePair LiquidityPair[] @relation("LiquidityPair_stablePair")
 
   @@index([networkId])
+}
+
+model DiscordConfig {
+  id                       String    @id @default(cuid())
+  guildName                String    @default("")
+  guildId                  String    @default("")
+  announcementsChannelId   String    @default("")
+  announcementsChannelName String    @default("")
+  generalChannelId         String    @default("")
+  generalChannelName       String    @default("")
+  project                  Project?  @relation("DiscordConfig_project", fields: [projectId], references: [id])
+  projectId                String?   @unique @map("project")
+  dateAdded                DateTime? @default(now())
+  updatedAt                DateTime? @updatedAt
+}
+
+model DiscordEvent {
+  id                      String    @id @default(cuid())
+  eventId                 String    @default("")
+  guildId                 String    @default("")
+  channelId               String    @default("")
+  guildName               String    @default("")
+  channelName             String    @default("")
+  name                    String    @default("")
+  description             String    @default("")
+  inviteUrl               String    @default("")
+  scheduledStartTimestamp DateTime?
+  scheduledEndTimestamp   DateTime?
+  location                String    @default("")
+  userCount               Int?
+  image                   String    @default("")
+  project                 Project?  @relation("DiscordEvent_project", fields: [projectId], references: [id])
+  projectId               String?   @map("project")
+  dateAdded               DateTime? @default(now())
+  updatedAt               DateTime? @updatedAt
+
+  @@index([projectId])
+}
+
+model DiscordAnnouncement {
+  id         String    @id @default(cuid())
+  messageId  String    @default("")
+  guildId    String    @default("")
+  channelId  String    @default("")
+  title      String    @default("")
+  content    Json?
+  messageUrl String    @default("")
+  project    Project?  @relation("DiscordAnnouncement_project", fields: [projectId], references: [id])
+  projectId  String?   @map("project")
+  dateAdded  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@index([projectId])
 }
 
 model DiscordBot {
@@ -406,13 +522,42 @@ model Content {
   contentTypeId   String?       @map("contentType")
   enabled         Boolean       @default(false)
   summary         String        @default("")
+  richContent     Json?
   content         Json          @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
   blockName       ContentBlock? @relation("Content_blockName", fields: [blockNameId], references: [id])
   blockNameId     String?       @map("blockName")
+  user            User?         @relation("Content_user", fields: [userId], references: [id])
+  userId          String?       @map("user")
+  project         Project?      @relation("Content_project", fields: [projectId], references: [id])
+  projectId       String?       @map("project")
+  views           Int?
+  likes           User[]        @relation("Content_likes")
   dateAdded       DateTime?     @default(now())
 
   @@index([contentTypeId])
   @@index([blockNameId])
+  @@index([userId])
+  @@index([projectId])
+}
+
+model Comment {
+  id        String    @id @default(cuid())
+  content   Json?
+  sentiment Int?
+  likes     User[]    @relation("Comment_likes")
+  reports   User[]    @relation("Comment_reports")
+  user      User?     @relation("Comment_user", fields: [userId], references: [id])
+  userId    String?   @map("user")
+  project   Project?  @relation("Comment_project", fields: [projectId], references: [id])
+  projectId String?   @map("project")
+  creator   Creator?  @relation("Comment_creator", fields: [creatorId], references: [id])
+  creatorId String?   @map("creator")
+  dateAdded DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([userId])
+  @@index([projectId])
+  @@index([creatorId])
 }
 
 model ContentBlock {
@@ -518,8 +663,8 @@ model Creator {
   priceFrom          Float?
   priceTo            Float?
   marketingCampaigns MarketingCampaign[] @relation("MarketingCampaign_creator")
-  ratings            CreatorRating[]     @relation("CreatorRating_creator")
-  reviews            CreatorReview[]     @relation("CreatorReview_creator")
+  votes              Vote[]              @relation("Vote_creator")
+  comments           Comment[]           @relation("Comment_creator")
   dateAdded          DateTime?           @default(now())
   updatedAt          DateTime?           @updatedAt
 }
@@ -574,41 +719,26 @@ model KycGroup {
   from_Kyc_kycGroup Kyc[]     @relation("Kyc_kycGroup")
 }
 
-model CreatorRating {
-  id        String    @id @default(cuid())
-  rating    Int?      @default(0)
-  user      User?     @relation("CreatorRating_user", fields: [userId], references: [id])
-  userId    String?   @map("user")
-  creator   Creator?  @relation("CreatorRating_creator", fields: [creatorId], references: [id])
-  creatorId String?   @map("creator")
-  dateAdded DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+model TransparencyHighlight {
+  id         String    @id @default(cuid())
+  content    String    @default("")
+  isPositive Boolean   @default(false)
+  project    Project?  @relation("TransparencyHighlight_project", fields: [projectId], references: [id])
+  projectId  String?   @map("project")
+  dateAdded  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
 
-  @@index([userId])
-  @@index([creatorId])
+  @@index([projectId])
+  @@index([dateAdded])
 }
 
-model CreatorReview {
-  id        String    @id @default(cuid())
-  review    String    @default("")
-  user      User?     @relation("CreatorReview_user", fields: [userId], references: [id])
-  userId    String?   @map("user")
-  creator   Creator?  @relation("CreatorReview_creator", fields: [creatorId], references: [id])
-  creatorId String?   @map("creator")
-  dateAdded DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-
-  @@index([userId])
-  @@index([creatorId])
-}
-
-model ProjectRating {
+model TransparencyRating {
   id        String    @id @default(cuid())
   rating    Int?      @default(0)
   ip        String    @default("")
-  user      User?     @relation("ProjectRating_user", fields: [userId], references: [id])
+  user      User?     @relation("TransparencyRating_user", fields: [userId], references: [id])
   userId    String?   @map("user")
-  project   Project?  @relation("ProjectRating_project", fields: [projectId], references: [id])
+  project   Project?  @relation("TransparencyRating_project", fields: [projectId], references: [id])
   projectId String?   @map("project")
   dateAdded DateTime? @default(now())
   updatedAt DateTime? @updatedAt
@@ -616,20 +746,6 @@ model ProjectRating {
   @@index([userId])
   @@index([projectId])
   @@index([dateAdded])
-}
-
-model ProjectComment {
-  id        String    @id @default(cuid())
-  comment   String    @default("")
-  user      User?     @relation("ProjectComment_user", fields: [userId], references: [id])
-  userId    String?   @map("user")
-  project   Project?  @relation("ProjectComment_project", fields: [projectId], references: [id])
-  projectId String?   @map("project")
-  dateAdded DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-
-  @@index([userId])
-  @@index([projectId])
 }
 
 model MarketingCampaign {
@@ -694,31 +810,36 @@ model MarketingTrackerResult {
 }
 
 model Cart {
-  id        String     @id @default(cuid())
-  user      User?      @relation("Cart_user", fields: [userId], references: [id])
-  userId    String?    @map("user")
-  cartItem  CartItem[] @relation("CartItem_cart")
-  dateAdded DateTime?  @default(now())
-  updatedAt DateTime?  @updatedAt
+  id           String    @id @default(cuid())
+  user         User?     @relation("Cart_user", fields: [userId], references: [id])
+  userId       String?   @map("user")
+  cartItem     CartItem? @relation("CartItem_cart")
+  couponCode   Coupon?   @relation("Cart_couponCode", fields: [couponCodeId], references: [id])
+  couponCodeId String?   @map("couponCode")
+  dateAdded    DateTime? @default(now())
+  updatedAt    DateTime? @updatedAt
 
   @@index([userId])
+  @@index([couponCodeId])
 }
 
 model CartItem {
-  id        String    @id @default(cuid())
-  product   Product?  @relation("CartItem_product", fields: [productId], references: [id])
-  productId String?   @map("product")
-  cart      Cart?     @relation("CartItem_cart", fields: [cartId], references: [id])
-  cartId    String?   @map("cart")
-  price     Float?
-  tax       Float?    @default(0)
-  discount  Float?    @default(0)
-  quantity  Float?    @default(1)
-  dateAdded DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  id            String       @id @default(cuid())
+  product       Product?     @relation("CartItem_product", fields: [productId], references: [id])
+  productId     String?      @map("product")
+  paymentPlan   PaymentPlan? @relation("CartItem_paymentPlan", fields: [paymentPlanId], references: [id])
+  paymentPlanId String?      @map("paymentPlan")
+  cart          Cart?        @relation("CartItem_cart", fields: [cartId], references: [id])
+  cartId        String?      @unique @map("cart")
+  price         Float?
+  tax           Float?       @default(0)
+  discount      Float?       @default(0)
+  quantity      Float?       @default(1)
+  dateAdded     DateTime?    @default(now())
+  updatedAt     DateTime?    @updatedAt
 
   @@index([productId])
-  @@index([cartId])
+  @@index([paymentPlanId])
 }
 
 model Order {
@@ -726,7 +847,7 @@ model Order {
   orderNumber             Int            @default(autoincrement())
   user                    User?          @relation("Order_user", fields: [userId], references: [id])
   userId                  String?        @map("user")
-  orderItem               OrderItem[]    @relation("OrderItem_order")
+  orderItem               OrderItem?     @relation("OrderItem_order")
   project                 Project?       @relation("Order_project", fields: [projectId], references: [id])
   projectId               String?        @map("project")
   walletAddress           String         @default("")
@@ -741,6 +862,8 @@ model Order {
   total                   Float?
   subTotal                Float?
   grandTotal              Float?
+  couponCode              Coupon?        @relation("Order_couponCode", fields: [couponCodeId], references: [id])
+  couponCodeId            String?        @map("couponCode")
   dateAdded               DateTime?      @default(now())
   updatedAt               DateTime?      @updatedAt
   from_Subscription_order Subscription[] @relation("Subscription_order")
@@ -748,21 +871,79 @@ model Order {
   @@index([userId])
   @@index([projectId])
   @@index([paymentNetworkId])
+  @@index([couponCodeId])
 }
 
 model OrderItem {
+  id            String       @id @default(cuid())
+  order         Order?       @relation("OrderItem_order", fields: [orderId], references: [id])
+  orderId       String?      @unique @map("order")
+  product       Product?     @relation("OrderItem_product", fields: [productId], references: [id])
+  productId     String?      @map("product")
+  paymentPlan   PaymentPlan? @relation("OrderItem_paymentPlan", fields: [paymentPlanId], references: [id])
+  paymentPlanId String?      @map("paymentPlan")
+  price         Float?
+  quantity      Float?       @default(1)
+  discount      Float?       @default(0)
+  tax           Float?       @default(0)
+  dateAdded     DateTime?    @default(now())
+  updatedAt     DateTime?    @updatedAt
+
+  @@index([productId])
+  @@index([paymentPlanId])
+}
+
+model Vote {
   id        String    @id @default(cuid())
-  order     Order?    @relation("OrderItem_order", fields: [orderId], references: [id])
-  orderId   String?   @map("order")
-  product   Product?  @relation("OrderItem_product", fields: [productId], references: [id])
-  productId String?   @map("product")
-  price     Float?
-  quantity  Float?    @default(1)
-  discount  Float?    @default(0)
-  tax       Float?    @default(0)
+  vote      Int?      @default(0)
+  ip        String    @default("")
+  type      String?
+  user      User?     @relation("Vote_user", fields: [userId], references: [id])
+  userId    String?   @map("user")
+  project   Project?  @relation("Vote_project", fields: [projectId], references: [id])
+  projectId String?   @map("project")
+  creator   Creator?  @relation("Vote_creator", fields: [creatorId], references: [id])
+  creatorId String?   @map("creator")
   dateAdded DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 
-  @@index([orderId])
-  @@index([productId])
+  @@index([userId])
+  @@index([projectId])
+  @@index([creatorId])
+}
+
+model Quiz {
+  id               String    @id @default(cuid())
+  title            String    @default("")
+  slug             String    @default("")
+  imageUrl         String    @default("")
+  image_filesize   Int?
+  image_extension  String?
+  image_width      Int?
+  image_height     Int?
+  image_id         String?
+  enabled          Boolean   @default(false)
+  hasRewards       Boolean   @default(false)
+  rewardsAmount    Int?
+  rewardType       String    @default("")
+  description      Json?
+  onWinDescription Json?
+  onEndDescription Json?
+  config           Json?
+  totalWinners     Int?
+  winners          Int?
+  timePerQuestion  Int?      @default(0)
+  views            Int?
+  project          Project?  @relation("Quiz_project", fields: [projectId], references: [id])
+  projectId        String?   @map("project")
+  user             User?     @relation("Quiz_user", fields: [userId], references: [id])
+  userId           String?   @map("user")
+  likes            User[]    @relation("Quiz_likes")
+  startDate        DateTime?
+  endDate          DateTime?
+  dateAdded        DateTime? @default(now())
+  updatedAt        DateTime? @updatedAt
+
+  @@index([projectId])
+  @@index([userId])
 }

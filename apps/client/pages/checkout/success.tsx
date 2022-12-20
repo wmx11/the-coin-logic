@@ -11,12 +11,14 @@ import { Order } from 'tcl-packages/types';
 import { formatDate } from 'utils/formatters';
 import toCurrency from 'utils/toCurrency';
 import prisma from '../../data/prisma';
+import GradientText from 'components/Text/GradientText';
 
 type SuccessProps = {
   order: Order;
 };
 
 const Success: FC<SuccessProps> = ({ order }) => {
+  const { project } = order;
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <Container className="py-10">
@@ -36,10 +38,22 @@ const Success: FC<SuccessProps> = ({ order }) => {
               Order Details:
             </Text>
             <Paper>
-              <GradientTitle weight={700}>{order.orderItem && order?.orderItem[0]?.product?.name}</GradientTitle>
-              <Text color="dimmed" size="xs" className="mb-4">
-                {order?.orderItem && order?.orderItem[0]?.product?.description}
-              </Text>
+              <div>
+                <GradientTitle weight={700}>{order.orderItem && order?.orderItem?.product?.name}</GradientTitle>
+                <Text color="dimmed" size="xs" className="mb-4">
+                  {order?.orderItem && order?.orderItem?.product?.description}
+                </Text>
+              </div>
+              <div>
+                {project?.paymentPlan ? (
+                  <>
+                    <GradientText weight={700}>Payment Plan: {project.paymentPlan.name}</GradientText>
+                    <Text color="dimmed" size="xs" className="mb-4">
+                      {project.paymentPlan.description}
+                    </Text>
+                  </>
+                ) : null}
+              </div>
               <div className="flex flex-col gap-2">
                 <Text>
                   <strong>Date: </strong>
@@ -114,6 +128,16 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params,
       paymentNetwork: {
         select: {
           txScanner: true,
+        },
+      },
+      project: {
+        select: {
+          paymentPlan: {
+            select: {
+              name: true,
+              description: true,
+            },
+          },
         },
       },
     },

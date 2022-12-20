@@ -1,6 +1,6 @@
 import { list } from '@keystone-6/core';
 import { Lists } from '.keystone/types';
-import { checkbox, image, relationship, text, timestamp } from '@keystone-6/core/fields';
+import { checkbox, image, integer, json, relationship, text, timestamp } from '@keystone-6/core/fields';
 import { document } from '@keystone-6/fields-document';
 import slugify from '../utils/slugify';
 import { componentBlocks } from '../component-blocks/component-blocks';
@@ -14,13 +14,14 @@ const Content: Lists = {
           resolveInput: async (data) => slugify('slug', 'title')(data),
         },
       }),
-      image: image({ storage: 'localImages', ui: { description: '800px x 450px'}}),
+      image: image({ storage: 'localImages', ui: { description: '800px x 450px' } }),
       contentType: relationship({ ref: 'ContentType' }),
       enabled: checkbox({ defaultValue: false }),
       summary: text({ ui: { displayMode: 'textarea' } }),
+      richContent: json(),
       content: document({
         ui: {
-          views: require.resolve('../component-blocks/component-blocks')
+          views: require.resolve('../component-blocks/component-blocks'),
         },
         componentBlocks,
         formatting: true,
@@ -32,11 +33,15 @@ const Content: Lists = {
         ],
       }),
       blockName: relationship({ ref: 'ContentBlock' }),
+      user: relationship({ ref: 'User.content' }),
+      project: relationship({ ref: 'Project.content' }),
+      views: integer(),
+      likes: relationship({ ref: 'User', many: true, ui: { displayMode: 'count' } }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
     },
     ui: {
-      description: 'Images are 800px x 450px'
-    }
+      description: 'Images are 800px x 450px',
+    },
   }),
 };
 export default Content;

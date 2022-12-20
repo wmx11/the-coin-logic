@@ -13,7 +13,6 @@ export type ChangeName<T extends string> = `${T}Change`;
 
 export type MarketStatChanges = {
   [key: string]: PreviousValueTypes;
-  // priceChange?: PreviousValueTypes;
 };
 
 export type StatsData = PreviousValue & {
@@ -22,6 +21,7 @@ export type StatsData = PreviousValue & {
   isCurrency?: boolean;
   tooltip?: string;
   chartEntry?: string;
+  isChartDefaultOpen?: boolean;
   subGroup?: SubGroup;
 };
 

@@ -8,6 +8,7 @@ query($id: ID) {
     isVerified
     isSubscribedToEmail
     isNotChargeable
+    isAdmin
     walletAddress
     projectsCount
     ip
@@ -80,6 +81,11 @@ export const GET_USER_PROJECTS = `
 query($email: String!) {
   user(where: { email: $email }) {
     projects {
+      id
+      name
+      slug
+    }
+    managedProjects {
       id
       name
       slug

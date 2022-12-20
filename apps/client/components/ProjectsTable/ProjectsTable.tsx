@@ -5,6 +5,7 @@ import { Data, TableNode } from '@table-library/react-table-library/types/table'
 import { Badges } from 'components/Badges';
 import GradientButton from 'components/Buttons/GradientButton';
 import { NetworkBadge } from 'components/NetworkBadge';
+import PaymentPlanBadge from 'components/PaymentPlans/PaymentPlanBadge';
 import { ProjectTitle } from 'components/ProjectTitle';
 import Table from 'components/Table';
 import GradientText from 'components/Text/GradientText';
@@ -26,7 +27,7 @@ type ProjectsTableProps = {
 
 const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
   const theme = {
-    Table: `--data-table-library_grid-template-columns: 40px 160px repeat(7, 1fr);`,
+    Table: `--data-table-library_grid-template-columns: 40px 160px repeat(8, 1fr);`,
     BaseCell: `
     > div {
       white-space: normal;
@@ -135,6 +136,10 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
       renderCell: ({ avgHoldings, price }) => <>{toCurrency(avgHoldings * price) || <AiOutlineEllipsis />}</>,
     },
     { label: 'Tags', renderCell: ({ project }) => <Badges badges={project.tags as Tag[]} /> },
+    {
+      label: 'TCL Plan',
+      renderCell: ({ project }) => <PaymentPlanBadge paymentPlan={project?.paymentPlan} badgeProps={{ size: 'xs' }} />,
+    },
     {
       label: 'Network',
       renderCell: ({ project }) => <NetworkBadge network={project.network as Network} showName={false} />,

@@ -1,8 +1,10 @@
 import { Chip, Select, Text, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
+import GradientButton from 'components/Buttons/GradientButton';
 import Paper from 'components/Paper';
 import PayWithCryptoButton from 'components/PayWithCryptoButton';
 import { PayWithCryptoButtonOnSuccess } from 'components/PayWithCryptoButton/PayWithCryptoButton';
+import { QUERY_PROJECT_ID } from 'constants/general';
 import useCart from 'hooks/useCart';
 import useUser from 'hooks/useUser';
 import Image from 'next/image';
@@ -12,6 +14,7 @@ import routes from 'routes';
 import { UserOrder, userOrderSchema } from 'schemas/user';
 import { CartItem } from 'tcl-packages/types';
 import web3Config from 'tcl-packages/web3/config';
+import { Icons } from 'utils/icons';
 import toCurrency from 'utils/toCurrency';
 import { calculateItemTotal } from 'utils/utils';
 
@@ -20,11 +23,10 @@ type PaymentFormProps = {
 };
 
 const PaymentForm: FC<PaymentFormProps> = ({ item }) => {
+  const { user } = useUser();
+  const { placeOrder, applyCoupon, couponError, isCouponApplied, couponCode, setCouponCode } = useCart();
   const [paymentNetwork, setPaymentNetwork] = useState('0');
   const [paymentCurrency, setPaymentCurrency] = useState('0');
-  const { user } = useUser();
-  const { placeOrder, clearItems } = useCart();
-  const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const router = useRouter();
 
   const form = useForm<UserOrder>({
@@ -63,12 +65,6 @@ const PaymentForm: FC<PaymentFormProps> = ({ item }) => {
   const handleSubmit = () => {};
 
   const onSuccess = async (data: PayWithCryptoButtonOnSuccess) => {
-    if (isOrderPlaced) {
-      return;
-    }
-
-    setIsOrderPlaced(true);
-
     const order = await placeOrder({
       firstName: form.values.firstName,
       lastName: form.values.lastName,
@@ -78,20 +74,25 @@ const PaymentForm: FC<PaymentFormProps> = ({ item }) => {
       walletAddress: data.walletAddress,
       paymentNetwork: getNetwork().slug,
       apiId: getCurrency().apiId,
-      project: router.query['projectId'] || undefined,
+      project: router.query[QUERY_PROJECT_ID] || undefined,
     });
-
-    await clearItems();
 
     window.location.replace(`${routes.checkout.success}?orderId=${order?.id}`);
   };
 
   return (
     <>
-      <Paper className="mb-4">
+      <Paper className="mb-4" withBorder>
         <div className="mb-4">
-          <Text weight={600}>Product</Text>
-          <Text>{item?.product?.name}</Text>
+          <div>
+            <Text weight={600}>Product</Text>
+            <Text>{item?.product?.name}</Text>
+            {item.paymentPlan ? (
+              <Text size="xs" color="violet">
+                Payment Plan: {item?.paymentPlan?.name}
+              </Text>
+            ) : null}
+          </div>
           <Text weight={600}>Price</Text>
           {item?.price === 0 && item?.product?.isMonthly ? (
             <div>7 Day Free Trial</div>
@@ -110,8 +111,18 @@ const PaymentForm: FC<PaymentFormProps> = ({ item }) => {
 
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <div className="flex flex-col gap-4">
-            <TextInput label="First Name" {...form.getInputProps('firstName')} required size="md" />
-            <TextInput label="Last Name" {...form.getInputProps('lastName')} required size="md" />
+            <TextInput
+              label="First Name"
+              description="Used for invoicing purposes. Not strictly required."
+              {...form.getInputProps('firstName')}
+              size="md"
+            />
+            <TextInput
+              label="Last Name"
+              description="Used for invoicing purposes. Not strictly required."
+              {...form.getInputProps('lastName')}
+              size="md"
+            />
 
             {item?.product?.isMonthly && (item?.price as number) > 0 ? (
               <Select
@@ -179,13 +190,54 @@ const PaymentForm: FC<PaymentFormProps> = ({ item }) => {
               </>
             )}
 
+            {(item?.price as number) > 0 ? (
+              <div>
+                {isCouponApplied ? null : (
+                  <div className="flex gap-2 items-end">
+                    <TextInput
+                      label="Coupon code"
+                      description="Have a discount coupon?"
+                      className="flex-1"
+                      value={couponCode}
+                      onChange={(event) => setCouponCode(event.currentTarget.value)}
+                    />
+
+                    <GradientButton
+                      onClick={() =>
+                        applyCoupon({ couponCode, projectId: (router.query[QUERY_PROJECT_ID] as string) || undefined })
+                      }
+                    >
+                      Apply
+                    </GradientButton>
+                  </div>
+                )}
+
+                {isCouponApplied ? (
+                  <div className="flex justify-between items-end border-b pb-2 mt-4">
+                    <div className="flex gap-2 items-center">
+                      <Icons.Ticket />
+                      <Text size="sm" color="dimmed">
+                        {couponCode}
+                      </Text>
+                    </div>
+                    <GradientButton onClick={() => applyCoupon({ couponCode, revoke: true })} size="xs">
+                      Revoke
+                    </GradientButton>
+                  </div>
+                ) : null}
+                <Text size="xs" color="red">
+                  {couponError}
+                </Text>
+              </div>
+            ) : null}
+
             <div className="text-right">
               <Text weight={600}>
                 Discount: {item?.price === 0 ? '0%' : `${item?.product?.discount || item?.discount}%`}
               </Text>
               <Text weight={600}>Tax VAT: {item?.price === 0 ? '0%' : `${item?.tax}%`}</Text>
               <Text weight={600} size="xl">
-                Total Billed: {item?.price === 0 ? '$0' : toCurrency((total as number) || 0)}
+                Total Billed: {item?.price === 0 ? '$0' : toCurrency((total as number) || 0) || '$0'}
               </Text>
             </div>
 

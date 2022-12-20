@@ -38,10 +38,10 @@ const PricingCard: FC<PricingCardProps> = ({
   image,
 }) => {
   return (
-    <Paper className={`p-5 flex flex-col justify-between ${styles?.cardBody}`}>
-      <div className="mb-8 flex gap-4">
-        <div className="mb-6 max-w-[50%]">
-          <Title order={1} className={`${styles?.label || 'text-violet'} text-5xl mb-4`}>
+    <Paper className={`p-5 flex flex-col justify-between ${styles?.cardBody}`} withBorder>
+      <div className="mb-8 flex gap-4 flex-wrap">
+        <div className="mb-6 md:max-w-[50%] flex-1">
+          <Title order={1} className={`${styles?.label || 'text-violet'} text-md md:text-5xl mb-4`}>
             {label}
           </Title>
           <Title order={4} className={`mb-2 ${styles?.price} bg-white/20 rounded-md p-2`}>
@@ -52,7 +52,7 @@ const PricingCard: FC<PricingCardProps> = ({
           </Text>
         </div>
 
-        <div>
+        <div className='flex-1'>
           {offers && (
             <List spacing="xs" size="sm" center icon={<FaCheck className={`${styles?.offerIcon || 'text-violet'}`} />}>
               {offers?.split(',').map((offer, index) => {

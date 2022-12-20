@@ -1,34 +1,42 @@
+import { Container } from '@mantine/core';
 import CryptocurrenciesTable from 'components/CryptocurrenciesTable';
-import { getTopCoins } from 'data/cryptoData/getters';
+import { getTopCoins } from 'data/cryptocurrency/getters';
+import { getAnnouncementsHighlights } from 'data/getters/announcements';
+import { getEventsHighlights } from 'data/getters/events';
 import withRedisCache from 'data/withRedisCache';
 import useResetToken from 'hooks/useResetToken';
 import type { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import useLoginFlowStore from 'store/useLoginFlowStore';
-import { Content } from 'types';
+import { Content, DiscordAnnouncement, DiscordEvent } from 'types';
 import { CryptocurrencyDataResponse } from 'types/CryptocurrencyData';
 import setRefCookie from 'utils/setRefCookie';
+import Highlights from 'views/home/Highlights';
 import { BlogPosts } from '../components/BlogPosts';
 import { Hero } from '../components/Hero';
 import { JoinOurCommunity } from '../components/JoinOurCommunity';
 import { ProjectsTable } from '../components/ProjectsTable';
 import TrackVitalsDisclaimer from '../components/TrackVitalsDisclaimer';
-import { getBlogPosts, getProjectsCount, getProjectsForTable } from '../data/getters';
+import { getBlogPosts, getProjectsCount, getProjectsForTable, getTrendingProjects } from '../data/getters';
 
 type HomeProps = {
   projects: [];
   projectsCount: number;
   blogPosts: Content[];
   topCoins: CryptocurrencyDataResponse[];
+  highlights: {
+    eventsHighlights: DiscordEvent[];
+    announcementsHighlights: DiscordAnnouncement[];
+    trendingHighlights: { name: string; slug: string; logo: string; change: number }[];
+  };
 };
 
-const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts, topCoins }) => {
-  const [projectData, setProjectData] = useState({ projects: [], projectsCount: 0 });
+const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts, topCoins, highlights }) => {
+  const router = useRouter();
   const { setResetPassword, setLogin } = useLoginFlowStore((state) => state);
   const { token } = useResetToken();
 
-  const router = useRouter();
   const { query } = router;
 
   const openLogInOrPasswordResetModal = useCallback(() => {
@@ -45,16 +53,18 @@ const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts, topCoin
 
   useEffect(() => {
     openLogInOrPasswordResetModal();
-    setProjectData((state) => ({ ...state, projects, projectsCount }));
   }, [projects]);
 
   return (
     <>
       <Hero />
-      <ProjectsTable data={projectData.projects} projectsCount={projectData.projectsCount} />
+      <Highlights highlights={highlights} />
+      <ProjectsTable data={projects} projectsCount={projectsCount} />
       <CryptocurrenciesTable data={topCoins} />
       <JoinOurCommunity />
-      <BlogPosts data={blogPosts} />
+      <Container>
+        <BlogPosts data={blogPosts} />
+      </Container>
       <TrackVitalsDisclaimer />
     </>
   );
@@ -63,18 +73,32 @@ const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts, topCoin
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async ({ res, query }) => {
-  const projects = await withRedisCache('projects', getProjectsForTable);
-  const topCoins = await withRedisCache('topCoins', getTopCoins, 10 * 60);
-  const projectsCount = await withRedisCache('projectsCount', getProjectsCount);
-  const blogPosts = await withRedisCache('blogPosts_homepage', () => getBlogPosts(8));
+  const [projects, projectsCount, blogPosts, topCoins, eventsHighlights, announcementsHighlights, trendingHighlights] =
+    await Promise.all([
+      withRedisCache('projects', getProjectsForTable),
+      withRedisCache('projectsCount', getProjectsCount),
+      withRedisCache('blogPosts_homepage', () =>
+        getBlogPosts({ take: 6, skip: 0, limit: 0, count: 0, isLastPage: false, page: 0, pages: 0 }),
+      ),
+      withRedisCache('topCoins', getTopCoins, 10 * 60),
+      getEventsHighlights(),
+      getAnnouncementsHighlights(),
+      getTrendingProjects(5),
+    ]);
+
   setRefCookie({ res, query });
 
   return {
     props: {
       projects,
       projectsCount,
-      blogPosts,
+      blogPosts: blogPosts[0],
       topCoins,
+      highlights: {
+        eventsHighlights,
+        announcementsHighlights,
+        trendingHighlights,
+      },
     },
   };
 };

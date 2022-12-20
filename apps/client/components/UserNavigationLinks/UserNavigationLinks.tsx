@@ -1,11 +1,14 @@
 import { Divider, Text } from '@mantine/core';
 import MenuNavLink from 'components/MenuNavLink';
+import { SESSION_TOKEN } from 'constants/general';
+import useLocalStorage from 'hooks/useLocalStorage';
 import { signOut } from 'next-auth/react';
 import { FC } from 'react';
 import { FaUserCog } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
 import { MdOutlineAddChart, MdTrackChanges } from 'react-icons/md';
 import { RiFoldersLine } from 'react-icons/ri';
+import routes from 'routes';
 
 type UserNavigationLinksProps = {
   isInMenuProvider?: boolean;
@@ -14,27 +17,24 @@ type UserNavigationLinksProps = {
 
 const UserNavigationLinks: FC<UserNavigationLinksProps> = ({ isInMenuProvider, setIsOpen }) => {
   const onClick = setIsOpen ? () => setIsOpen(false) : () => false;
+  const [storedValue, setValue] = useLocalStorage(SESSION_TOKEN, '');
+
   return (
     <>
-      <MenuNavLink href="/profile" icon={<FaUserCog />} isInMenu={isInMenuProvider} onClick={onClick}>
+      <MenuNavLink href={routes.profile} icon={<FaUserCog />} isInMenu={isInMenuProvider} onClick={onClick}>
         Profile
       </MenuNavLink>
 
-      <MenuNavLink
-        href="/profile/add-project"
-        icon={<MdOutlineAddChart />}
-        isInMenu={isInMenuProvider}
-        onClick={onClick}
-      >
+      <MenuNavLink href={routes.addProject} icon={<MdOutlineAddChart />} isInMenu={isInMenuProvider} onClick={onClick}>
         Add project
       </MenuNavLink>
 
-      <MenuNavLink href="/profile/my-projects" icon={<RiFoldersLine />} isInMenu={isInMenuProvider} onClick={onClick}>
+      <MenuNavLink href={routes.myProjects} icon={<RiFoldersLine />} isInMenu={isInMenuProvider} onClick={onClick}>
         My projects
       </MenuNavLink>
 
       <MenuNavLink
-        href="/profile/marketing-tracker"
+        href={routes.marketingTracker}
         icon={<MdTrackChanges />}
         isInMenu={isInMenuProvider}
         onClick={onClick}
@@ -53,7 +53,10 @@ const UserNavigationLinks: FC<UserNavigationLinksProps> = ({ isInMenuProvider, s
       <MenuNavLink
         icon={<FiLogOut />}
         isInMenu={isInMenuProvider}
-        onClick={() => signOut({ redirect: true, callbackUrl: '/' })}
+        onClick={() => {
+          setValue('');
+          signOut({ redirect: true, callbackUrl: '/' });
+        }}
       >
         <Text size="xs">Log Out</Text>
       </MenuNavLink>

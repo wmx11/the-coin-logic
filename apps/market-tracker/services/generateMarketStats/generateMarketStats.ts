@@ -36,6 +36,24 @@ const generateMarketStats = async (project: Project): Promise<MarketStats> => {
     return marketStats;
   }
 
+  // If the project has the lowest payment plan available and is not NFT
+  if (project.trackPrice && project.trackMarketCap && !project.trackData && !project.isNft) {
+    const price = await defaultMarketStatsGenerator.prices.getTokenPrice();
+    const marketCap = await defaultMarketStatsGenerator.supply.getMarketCap();
+
+    return {
+      price,
+      marketCap,
+      pairPrice: null,
+      liquidity: null,
+      totalSupply: null,
+      burnedTokens: null,
+      txns: null,
+      volume: null,
+      fdv: null,
+    };
+  }
+
   const price = await defaultMarketStatsGenerator.prices.getTokenPrice();
   const pairPrice = await defaultMarketStatsGenerator.prices.getPairPrice();
   const liquidity = await defaultMarketStatsGenerator.supply.getLiquidity();

@@ -90,6 +90,7 @@ export const AUTHENTICATE_USER = gql`
           email
           isVerified
           isSubscribedToEmail
+          isAdmin
         }
       }
       ... on UserAuthenticationWithPasswordFailure {

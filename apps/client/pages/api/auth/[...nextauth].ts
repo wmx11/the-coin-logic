@@ -41,6 +41,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.sessionToken = user.sessionToken;
+        token.isAdmin = user.isAdmin;
       }
 
       return token;
@@ -49,6 +50,7 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.id = token.id;
         session.token = token.sessionToken;
+        session.isAdmin = token.isAdmin;
       }
 
       return session;

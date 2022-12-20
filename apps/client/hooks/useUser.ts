@@ -1,23 +1,33 @@
 import { getUserById, getUserProjects, getUserReferrals } from 'data/getters/user';
 import { useSession } from 'next-auth/react';
-import { useEffect, useMemo, useState } from 'react';
-import { User } from 'types';
+import { useCallback, useEffect } from 'react';
+import useUserStore from 'store/useUserStore';
 import { products } from 'types/Products';
 
 const useUser = () => {
   const { data: session, status } = useSession();
-  const [user, setUser] = useState<(User & { ordersCount: number }) | null>(null);
+  const { user, setUser, removeUser } = useUserStore();
   const userId = session?.id;
 
-  const getUser = useMemo(async () => {
+  const getUser = useCallback(async () => {
+    if (!session && user) {
+      removeUser();
+    }
+
     if (!userId) {
       return null;
     }
 
-    const user = await getUserById(session.id as string);
-    const userReferrals = await getUserReferrals(user.referralCode);
-    const projects = await getUserProjects(user.email);
-    return { id: userId, ...user, ...userReferrals, projects };
+    const userData = await getUserById(session.id as string);
+
+    const [userReferrals, projects] = await Promise.all([
+      getUserReferrals(userData.referralCode),
+      getUserProjects(userData.email),
+    ]);
+
+    const data = { id: userId, ...userData, ...userReferrals, ...projects };
+
+    setUser(data);
   }, [session]);
 
   const getSubscription = (): { sku: string; slug: string; name: string } | null => {
@@ -31,7 +41,7 @@ const useUser = () => {
   };
 
   useEffect(() => {
-    getUser.then((data) => setUser(data));
+    getUser();
   }, [session]);
 
   return { user, session, status, subscription: getSubscription() };

@@ -1,16 +1,17 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import request, { Auth } from 'data/api/request';
+import { response } from 'data/api/response';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../data/prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { method, body } = req;
+  const requestHandler = request(req, res);
+  const responseHandler = response(res);
 
-  const { userId } = body;
-
-  if (method === 'POST') {
+  const createCart = async (auth: Auth) => {
     const existingCart = await prisma.cart.findFirst({
       where: {
-        userId,
+        userId: auth.id,
       },
       include: {
         cartItem: {
@@ -23,33 +24,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             id: true,
           },
         },
+        couponCode: true,
       },
     });
 
-    if (!existingCart) {
-      const newCart = await prisma.cart.create({
-        data: {
-          userId,
-        },
-        include: {
-          cartItem: {
-            include: {
-              product: true,
-            },
-          },
-          user: {
-            select: {
-              id: true,
-            },
-          },
-        },
-      });
-
-      return res.status(200).json({ cart: newCart });
+    if (existingCart) {
+      return responseHandler.ok({ cart: existingCart });
     }
 
-    return res.status(200).json({ cart: existingCart });
-  }
+    const cart = await prisma.cart.create({
+      data: {
+        userId: auth.id,
+      },
+      include: {
+        cartItem: {
+          include: {
+            product: true,
+          },
+        },
+        user: {
+          select: {
+            id: true,
+          },
+        },
+        couponCode: true,
+      },
+    });
 
-  return res.status(403).json({ message: 'You do not have permission' });
+    return responseHandler.ok({ cart });
+  };
+
+  return requestHandler.signedPost(createCart);
 }

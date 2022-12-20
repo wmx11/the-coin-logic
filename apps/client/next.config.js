@@ -14,6 +14,7 @@ const nextConfig = {
       'https://assets.coingecko.com',
       'assets.coingecko.com',
       'cryptologos.cc',
+      'cdn.discordapp.com',
     ],
     minimumCacheTTL: 3600,
   },

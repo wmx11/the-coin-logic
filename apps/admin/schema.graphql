@@ -24,6 +24,13 @@ type User {
   referrer: String
   referralCode: String
   walletAddress: String
+  content(
+    where: ContentWhereInput! = {}
+    orderBy: [ContentOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Content!]
+  contentCount(where: ContentWhereInput! = {}): Int
   projects(
     where: ProjectWhereInput! = {}
     orderBy: [ProjectOrderByInput!]! = []
@@ -31,6 +38,13 @@ type User {
     skip: Int! = 0
   ): [Project!]
   projectsCount(where: ProjectWhereInput! = {}): Int
+  managedProjects(
+    where: ProjectWhereInput! = {}
+    orderBy: [ProjectOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Project!]
+  managedProjectsCount(where: ProjectWhereInput! = {}): Int
   marketingCampaigns(
     where: MarketingCampaignWhereInput! = {}
     orderBy: [MarketingCampaignOrderByInput!]! = []
@@ -83,7 +97,9 @@ input UserWhereInput {
   referrer: StringFilter
   referralCode: StringFilter
   walletAddress: StringFilter
+  content: ContentManyRelationFilter
   projects: ProjectManyRelationFilter
+  managedProjects: ProjectManyRelationFilter
   marketingCampaigns: MarketingCampaignManyRelationFilter
   dateCreated: DateTimeNullableFilter
   passwordResetToken: PasswordFilter
@@ -145,6 +161,12 @@ input RoleManyRelationFilter {
 input BooleanFilter {
   equals: Boolean
   not: BooleanFilter
+}
+
+input ContentManyRelationFilter {
+  every: ContentWhereInput
+  some: ContentWhereInput
+  none: ContentWhereInput
 }
 
 input ProjectManyRelationFilter {
@@ -214,7 +236,9 @@ input UserUpdateInput {
   referrer: String
   referralCode: String
   walletAddress: String
+  content: ContentRelateToManyForUpdateInput
   projects: ProjectRelateToManyForUpdateInput
+  managedProjects: ProjectRelateToManyForUpdateInput
   marketingCampaigns: MarketingCampaignRelateToManyForUpdateInput
   dateCreated: DateTime
   passwordResetToken: String
@@ -233,6 +257,13 @@ input SubscriptionRelateToOneForUpdateInput {
   create: SubscriptionCreateInput
   connect: SubscriptionWhereUniqueInput
   disconnect: Boolean
+}
+
+input ContentRelateToManyForUpdateInput {
+  disconnect: [ContentWhereUniqueInput!]
+  set: [ContentWhereUniqueInput!]
+  create: [ContentCreateInput!]
+  connect: [ContentWhereUniqueInput!]
 }
 
 input ProjectRelateToManyForUpdateInput {
@@ -270,7 +301,9 @@ input UserCreateInput {
   referrer: String
   referralCode: String
   walletAddress: String
+  content: ContentRelateToManyForCreateInput
   projects: ProjectRelateToManyForCreateInput
+  managedProjects: ProjectRelateToManyForCreateInput
   marketingCampaigns: MarketingCampaignRelateToManyForCreateInput
   dateCreated: DateTime
   passwordResetToken: String
@@ -286,6 +319,11 @@ input RoleRelateToManyForCreateInput {
 input SubscriptionRelateToOneForCreateInput {
   create: SubscriptionCreateInput
   connect: SubscriptionWhereUniqueInput
+}
+
+input ContentRelateToManyForCreateInput {
+  create: [ContentCreateInput!]
+  connect: [ContentWhereUniqueInput!]
 }
 
 input ProjectRelateToManyForCreateInput {
@@ -633,11 +671,19 @@ type Project {
   name: String
   slug: String
   logo: ImageFieldOutput
+  dateAdded: DateTime
   enabled: Boolean
   isPending: Boolean
   isAwaitingPayment: Boolean
   isListed: Boolean
+  isNft: Boolean
+  displayBlogPosts: Boolean
+  displayTransparencyScore: Boolean
+  displayCommunityVotes: Boolean
+  displayCommunityComments: Boolean
   trackData: Boolean
+  trackPrice: Boolean
+  trackMarketCap: Boolean
   trackSocials: Boolean
   trackHolders: Boolean
   periodicWalletUpdates: Boolean
@@ -709,6 +755,10 @@ type Project {
   medium: String
   kycLink: String
   auditLink: String
+  customVetting: String
+  tclRating: Int
+  transparencyScore: Int
+  paymentPlan: PaymentPlan
   auditBy(
     where: AuditWhereInput! = {}
     orderBy: [AuditOrderByInput!]! = []
@@ -723,22 +773,56 @@ type Project {
     skip: Int! = 0
   ): [Kyc!]
   kycByCount(where: KycWhereInput! = {}): Int
-  customVetting: String
-  dateAdded: DateTime
-  ratings(
-    where: ProjectRatingWhereInput! = {}
-    orderBy: [ProjectRatingOrderByInput!]! = []
+  transparencyRatings(
+    where: TransparencyRatingWhereInput! = {}
+    orderBy: [TransparencyRatingOrderByInput!]! = []
     take: Int
     skip: Int! = 0
-  ): [ProjectRating!]
-  ratingsCount(where: ProjectRatingWhereInput! = {}): Int
-  reviews(
-    where: ProjectCommentWhereInput! = {}
-    orderBy: [ProjectCommentOrderByInput!]! = []
+  ): [TransparencyRating!]
+  transparencyRatingsCount(where: TransparencyRatingWhereInput! = {}): Int
+  transparencyHighlights(
+    where: TransparencyHighlightWhereInput! = {}
+    orderBy: [TransparencyHighlightOrderByInput!]! = []
     take: Int
     skip: Int! = 0
-  ): [ProjectComment!]
-  reviewsCount(where: ProjectCommentWhereInput! = {}): Int
+  ): [TransparencyHighlight!]
+  transparencyHighlightsCount(where: TransparencyHighlightWhereInput! = {}): Int
+  content(
+    where: ContentWhereInput! = {}
+    orderBy: [ContentOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Content!]
+  contentCount(where: ContentWhereInput! = {}): Int
+  comments(
+    where: CommentWhereInput! = {}
+    orderBy: [CommentOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Comment!]
+  commentsCount(where: CommentWhereInput! = {}): Int
+  votes(
+    where: VoteWhereInput! = {}
+    orderBy: [VoteOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Vote!]
+  votesCount(where: VoteWhereInput! = {}): Int
+  events(
+    where: DiscordEventWhereInput! = {}
+    orderBy: [DiscordEventOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [DiscordEvent!]
+  eventsCount(where: DiscordEventWhereInput! = {}): Int
+  announcements(
+    where: DiscordAnnouncementWhereInput! = {}
+    orderBy: [DiscordAnnouncementOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [DiscordAnnouncement!]
+  announcementsCount(where: DiscordAnnouncementWhereInput! = {}): Int
+  discordConfig: DiscordConfig
   parentProject(
     where: ProjectWhereInput! = {}
     orderBy: [ProjectOrderByInput!]! = []
@@ -782,11 +866,19 @@ input ProjectWhereInput {
   id: IDFilter
   name: StringFilter
   slug: StringFilter
+  dateAdded: DateTimeNullableFilter
   enabled: BooleanFilter
   isPending: BooleanFilter
   isAwaitingPayment: BooleanFilter
   isListed: BooleanFilter
+  isNft: BooleanFilter
+  displayBlogPosts: BooleanFilter
+  displayTransparencyScore: BooleanFilter
+  displayCommunityVotes: BooleanFilter
+  displayCommunityComments: BooleanFilter
   trackData: BooleanFilter
+  trackPrice: BooleanFilter
+  trackMarketCap: BooleanFilter
   trackSocials: BooleanFilter
   trackHolders: BooleanFilter
   periodicWalletUpdates: BooleanFilter
@@ -827,12 +919,20 @@ input ProjectWhereInput {
   medium: StringFilter
   kycLink: StringFilter
   auditLink: StringFilter
+  customVetting: StringFilter
+  tclRating: IntNullableFilter
+  transparencyScore: IntNullableFilter
+  paymentPlan: PaymentPlanWhereInput
   auditBy: AuditManyRelationFilter
   kycBy: KycManyRelationFilter
-  customVetting: StringFilter
-  dateAdded: DateTimeNullableFilter
-  ratings: ProjectRatingManyRelationFilter
-  reviews: ProjectCommentManyRelationFilter
+  transparencyRatings: TransparencyRatingManyRelationFilter
+  transparencyHighlights: TransparencyHighlightManyRelationFilter
+  content: ContentManyRelationFilter
+  comments: CommentManyRelationFilter
+  votes: VoteManyRelationFilter
+  events: DiscordEventManyRelationFilter
+  announcements: DiscordAnnouncementManyRelationFilter
+  discordConfig: DiscordConfigWhereInput
   parentProject: ProjectManyRelationFilter
   relatedProjects: ProjectManyRelationFilter
 }
@@ -913,27 +1013,59 @@ input KycManyRelationFilter {
   none: KycWhereInput
 }
 
-input ProjectRatingManyRelationFilter {
-  every: ProjectRatingWhereInput
-  some: ProjectRatingWhereInput
-  none: ProjectRatingWhereInput
+input TransparencyRatingManyRelationFilter {
+  every: TransparencyRatingWhereInput
+  some: TransparencyRatingWhereInput
+  none: TransparencyRatingWhereInput
 }
 
-input ProjectCommentManyRelationFilter {
-  every: ProjectCommentWhereInput
-  some: ProjectCommentWhereInput
-  none: ProjectCommentWhereInput
+input TransparencyHighlightManyRelationFilter {
+  every: TransparencyHighlightWhereInput
+  some: TransparencyHighlightWhereInput
+  none: TransparencyHighlightWhereInput
+}
+
+input CommentManyRelationFilter {
+  every: CommentWhereInput
+  some: CommentWhereInput
+  none: CommentWhereInput
+}
+
+input VoteManyRelationFilter {
+  every: VoteWhereInput
+  some: VoteWhereInput
+  none: VoteWhereInput
+}
+
+input DiscordEventManyRelationFilter {
+  every: DiscordEventWhereInput
+  some: DiscordEventWhereInput
+  none: DiscordEventWhereInput
+}
+
+input DiscordAnnouncementManyRelationFilter {
+  every: DiscordAnnouncementWhereInput
+  some: DiscordAnnouncementWhereInput
+  none: DiscordAnnouncementWhereInput
 }
 
 input ProjectOrderByInput {
   id: OrderDirection
   name: OrderDirection
   slug: OrderDirection
+  dateAdded: OrderDirection
   enabled: OrderDirection
   isPending: OrderDirection
   isAwaitingPayment: OrderDirection
   isListed: OrderDirection
+  isNft: OrderDirection
+  displayBlogPosts: OrderDirection
+  displayTransparencyScore: OrderDirection
+  displayCommunityVotes: OrderDirection
+  displayCommunityComments: OrderDirection
   trackData: OrderDirection
+  trackPrice: OrderDirection
+  trackMarketCap: OrderDirection
   trackSocials: OrderDirection
   trackHolders: OrderDirection
   periodicWalletUpdates: OrderDirection
@@ -969,18 +1101,27 @@ input ProjectOrderByInput {
   kycLink: OrderDirection
   auditLink: OrderDirection
   customVetting: OrderDirection
-  dateAdded: OrderDirection
+  tclRating: OrderDirection
+  transparencyScore: OrderDirection
 }
 
 input ProjectUpdateInput {
   name: String
   slug: String
   logo: ImageFieldInput
+  dateAdded: DateTime
   enabled: Boolean
   isPending: Boolean
   isAwaitingPayment: Boolean
   isListed: Boolean
+  isNft: Boolean
+  displayBlogPosts: Boolean
+  displayTransparencyScore: Boolean
+  displayCommunityVotes: Boolean
+  displayCommunityComments: Boolean
   trackData: Boolean
+  trackPrice: Boolean
+  trackMarketCap: Boolean
   trackSocials: Boolean
   trackHolders: Boolean
   periodicWalletUpdates: Boolean
@@ -1022,12 +1163,20 @@ input ProjectUpdateInput {
   medium: String
   kycLink: String
   auditLink: String
+  customVetting: String
+  tclRating: Int
+  transparencyScore: Int
+  paymentPlan: PaymentPlanRelateToOneForUpdateInput
   auditBy: AuditRelateToManyForUpdateInput
   kycBy: KycRelateToManyForUpdateInput
-  customVetting: String
-  dateAdded: DateTime
-  ratings: ProjectRatingRelateToManyForUpdateInput
-  reviews: ProjectCommentRelateToManyForUpdateInput
+  transparencyRatings: TransparencyRatingRelateToManyForUpdateInput
+  transparencyHighlights: TransparencyHighlightRelateToManyForUpdateInput
+  content: ContentRelateToManyForUpdateInput
+  comments: CommentRelateToManyForUpdateInput
+  votes: VoteRelateToManyForUpdateInput
+  events: DiscordEventRelateToManyForUpdateInput
+  announcements: DiscordAnnouncementRelateToManyForUpdateInput
+  discordConfig: DiscordConfigRelateToOneForUpdateInput
   parentProject: ProjectRelateToManyForUpdateInput
   relatedProjects: ProjectRelateToManyForUpdateInput
 }
@@ -1075,6 +1224,12 @@ input CustomTrackerRelateToManyForUpdateInput {
   connect: [CustomTrackerWhereUniqueInput!]
 }
 
+input PaymentPlanRelateToOneForUpdateInput {
+  create: PaymentPlanCreateInput
+  connect: PaymentPlanWhereUniqueInput
+  disconnect: Boolean
+}
+
 input AuditRelateToManyForUpdateInput {
   disconnect: [AuditWhereUniqueInput!]
   set: [AuditWhereUniqueInput!]
@@ -1089,18 +1244,52 @@ input KycRelateToManyForUpdateInput {
   connect: [KycWhereUniqueInput!]
 }
 
-input ProjectRatingRelateToManyForUpdateInput {
-  disconnect: [ProjectRatingWhereUniqueInput!]
-  set: [ProjectRatingWhereUniqueInput!]
-  create: [ProjectRatingCreateInput!]
-  connect: [ProjectRatingWhereUniqueInput!]
+input TransparencyRatingRelateToManyForUpdateInput {
+  disconnect: [TransparencyRatingWhereUniqueInput!]
+  set: [TransparencyRatingWhereUniqueInput!]
+  create: [TransparencyRatingCreateInput!]
+  connect: [TransparencyRatingWhereUniqueInput!]
 }
 
-input ProjectCommentRelateToManyForUpdateInput {
-  disconnect: [ProjectCommentWhereUniqueInput!]
-  set: [ProjectCommentWhereUniqueInput!]
-  create: [ProjectCommentCreateInput!]
-  connect: [ProjectCommentWhereUniqueInput!]
+input TransparencyHighlightRelateToManyForUpdateInput {
+  disconnect: [TransparencyHighlightWhereUniqueInput!]
+  set: [TransparencyHighlightWhereUniqueInput!]
+  create: [TransparencyHighlightCreateInput!]
+  connect: [TransparencyHighlightWhereUniqueInput!]
+}
+
+input CommentRelateToManyForUpdateInput {
+  disconnect: [CommentWhereUniqueInput!]
+  set: [CommentWhereUniqueInput!]
+  create: [CommentCreateInput!]
+  connect: [CommentWhereUniqueInput!]
+}
+
+input VoteRelateToManyForUpdateInput {
+  disconnect: [VoteWhereUniqueInput!]
+  set: [VoteWhereUniqueInput!]
+  create: [VoteCreateInput!]
+  connect: [VoteWhereUniqueInput!]
+}
+
+input DiscordEventRelateToManyForUpdateInput {
+  disconnect: [DiscordEventWhereUniqueInput!]
+  set: [DiscordEventWhereUniqueInput!]
+  create: [DiscordEventCreateInput!]
+  connect: [DiscordEventWhereUniqueInput!]
+}
+
+input DiscordAnnouncementRelateToManyForUpdateInput {
+  disconnect: [DiscordAnnouncementWhereUniqueInput!]
+  set: [DiscordAnnouncementWhereUniqueInput!]
+  create: [DiscordAnnouncementCreateInput!]
+  connect: [DiscordAnnouncementWhereUniqueInput!]
+}
+
+input DiscordConfigRelateToOneForUpdateInput {
+  create: DiscordConfigCreateInput
+  connect: DiscordConfigWhereUniqueInput
+  disconnect: Boolean
 }
 
 input ProjectUpdateArgs {
@@ -1112,11 +1301,19 @@ input ProjectCreateInput {
   name: String
   slug: String
   logo: ImageFieldInput
+  dateAdded: DateTime
   enabled: Boolean
   isPending: Boolean
   isAwaitingPayment: Boolean
   isListed: Boolean
+  isNft: Boolean
+  displayBlogPosts: Boolean
+  displayTransparencyScore: Boolean
+  displayCommunityVotes: Boolean
+  displayCommunityComments: Boolean
   trackData: Boolean
+  trackPrice: Boolean
+  trackMarketCap: Boolean
   trackSocials: Boolean
   trackHolders: Boolean
   periodicWalletUpdates: Boolean
@@ -1158,12 +1355,20 @@ input ProjectCreateInput {
   medium: String
   kycLink: String
   auditLink: String
+  customVetting: String
+  tclRating: Int
+  transparencyScore: Int
+  paymentPlan: PaymentPlanRelateToOneForCreateInput
   auditBy: AuditRelateToManyForCreateInput
   kycBy: KycRelateToManyForCreateInput
-  customVetting: String
-  dateAdded: DateTime
-  ratings: ProjectRatingRelateToManyForCreateInput
-  reviews: ProjectCommentRelateToManyForCreateInput
+  transparencyRatings: TransparencyRatingRelateToManyForCreateInput
+  transparencyHighlights: TransparencyHighlightRelateToManyForCreateInput
+  content: ContentRelateToManyForCreateInput
+  comments: CommentRelateToManyForCreateInput
+  votes: VoteRelateToManyForCreateInput
+  events: DiscordEventRelateToManyForCreateInput
+  announcements: DiscordAnnouncementRelateToManyForCreateInput
+  discordConfig: DiscordConfigRelateToOneForCreateInput
   parentProject: ProjectRelateToManyForCreateInput
   relatedProjects: ProjectRelateToManyForCreateInput
 }
@@ -1193,6 +1398,11 @@ input CustomTrackerRelateToManyForCreateInput {
   connect: [CustomTrackerWhereUniqueInput!]
 }
 
+input PaymentPlanRelateToOneForCreateInput {
+  create: PaymentPlanCreateInput
+  connect: PaymentPlanWhereUniqueInput
+}
+
 input AuditRelateToManyForCreateInput {
   create: [AuditCreateInput!]
   connect: [AuditWhereUniqueInput!]
@@ -1203,14 +1413,286 @@ input KycRelateToManyForCreateInput {
   connect: [KycWhereUniqueInput!]
 }
 
-input ProjectRatingRelateToManyForCreateInput {
-  create: [ProjectRatingCreateInput!]
-  connect: [ProjectRatingWhereUniqueInput!]
+input TransparencyRatingRelateToManyForCreateInput {
+  create: [TransparencyRatingCreateInput!]
+  connect: [TransparencyRatingWhereUniqueInput!]
 }
 
-input ProjectCommentRelateToManyForCreateInput {
-  create: [ProjectCommentCreateInput!]
-  connect: [ProjectCommentWhereUniqueInput!]
+input TransparencyHighlightRelateToManyForCreateInput {
+  create: [TransparencyHighlightCreateInput!]
+  connect: [TransparencyHighlightWhereUniqueInput!]
+}
+
+input CommentRelateToManyForCreateInput {
+  create: [CommentCreateInput!]
+  connect: [CommentWhereUniqueInput!]
+}
+
+input VoteRelateToManyForCreateInput {
+  create: [VoteCreateInput!]
+  connect: [VoteWhereUniqueInput!]
+}
+
+input DiscordEventRelateToManyForCreateInput {
+  create: [DiscordEventCreateInput!]
+  connect: [DiscordEventWhereUniqueInput!]
+}
+
+input DiscordAnnouncementRelateToManyForCreateInput {
+  create: [DiscordAnnouncementCreateInput!]
+  connect: [DiscordAnnouncementWhereUniqueInput!]
+}
+
+input DiscordConfigRelateToOneForCreateInput {
+  create: DiscordConfigCreateInput
+  connect: DiscordConfigWhereUniqueInput
+}
+
+type PaymentPlan {
+  id: ID!
+  name: String
+  slug: String
+  tooltip: String
+  description: String
+  enabled: Boolean
+  price: Float
+  discount: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input PaymentPlanWhereUniqueInput {
+  id: ID
+}
+
+input PaymentPlanWhereInput {
+  AND: [PaymentPlanWhereInput!]
+  OR: [PaymentPlanWhereInput!]
+  NOT: [PaymentPlanWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  slug: StringFilter
+  tooltip: StringFilter
+  description: StringFilter
+  enabled: BooleanFilter
+  price: FloatNullableFilter
+  discount: FloatNullableFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input PaymentPlanOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  slug: OrderDirection
+  tooltip: OrderDirection
+  description: OrderDirection
+  enabled: OrderDirection
+  price: OrderDirection
+  discount: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PaymentPlanUpdateInput {
+  name: String
+  slug: String
+  tooltip: String
+  description: String
+  enabled: Boolean
+  price: Float
+  discount: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input PaymentPlanUpdateArgs {
+  where: PaymentPlanWhereUniqueInput!
+  data: PaymentPlanUpdateInput!
+}
+
+input PaymentPlanCreateInput {
+  name: String
+  slug: String
+  tooltip: String
+  description: String
+  enabled: Boolean
+  price: Float
+  discount: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+type Coupon {
+  id: ID!
+  name: String
+  code: String
+  enabled: Boolean
+  discountPercentage: Int
+  timesPerUser: Int
+  validFrom: DateTime
+  validTill: DateTime
+  usedBy: JSON
+  acceptFromReferrers(
+    where: UserWhereInput! = {}
+    orderBy: [UserOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [User!]
+  acceptFromReferrersCount(where: UserWhereInput! = {}): Int
+  acceptFromNetworks(
+    where: NetworkWhereInput! = {}
+    orderBy: [NetworkOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Network!]
+  acceptFromNetworksCount(where: NetworkWhereInput! = {}): Int
+  cart(
+    where: CartWhereInput! = {}
+    orderBy: [CartOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Cart!]
+  cartCount(where: CartWhereInput! = {}): Int
+  order(
+    where: OrderWhereInput! = {}
+    orderBy: [OrderOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Order!]
+  orderCount(where: OrderWhereInput! = {}): Int
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CouponWhereUniqueInput {
+  id: ID
+}
+
+input CouponWhereInput {
+  AND: [CouponWhereInput!]
+  OR: [CouponWhereInput!]
+  NOT: [CouponWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  code: StringFilter
+  enabled: BooleanFilter
+  discountPercentage: IntNullableFilter
+  timesPerUser: IntNullableFilter
+  validFrom: DateTimeNullableFilter
+  validTill: DateTimeNullableFilter
+  acceptFromReferrers: UserManyRelationFilter
+  acceptFromNetworks: NetworkManyRelationFilter
+  cart: CartManyRelationFilter
+  order: OrderManyRelationFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input NetworkManyRelationFilter {
+  every: NetworkWhereInput
+  some: NetworkWhereInput
+  none: NetworkWhereInput
+}
+
+input CartManyRelationFilter {
+  every: CartWhereInput
+  some: CartWhereInput
+  none: CartWhereInput
+}
+
+input OrderManyRelationFilter {
+  every: OrderWhereInput
+  some: OrderWhereInput
+  none: OrderWhereInput
+}
+
+input CouponOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  code: OrderDirection
+  enabled: OrderDirection
+  discountPercentage: OrderDirection
+  timesPerUser: OrderDirection
+  validFrom: OrderDirection
+  validTill: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CouponUpdateInput {
+  name: String
+  code: String
+  enabled: Boolean
+  discountPercentage: Int
+  timesPerUser: Int
+  validFrom: DateTime
+  validTill: DateTime
+  usedBy: JSON
+  acceptFromReferrers: UserRelateToManyForUpdateInput
+  acceptFromNetworks: NetworkRelateToManyForUpdateInput
+  cart: CartRelateToManyForUpdateInput
+  order: OrderRelateToManyForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input NetworkRelateToManyForUpdateInput {
+  disconnect: [NetworkWhereUniqueInput!]
+  set: [NetworkWhereUniqueInput!]
+  create: [NetworkCreateInput!]
+  connect: [NetworkWhereUniqueInput!]
+}
+
+input CartRelateToManyForUpdateInput {
+  disconnect: [CartWhereUniqueInput!]
+  set: [CartWhereUniqueInput!]
+  create: [CartCreateInput!]
+  connect: [CartWhereUniqueInput!]
+}
+
+input OrderRelateToManyForUpdateInput {
+  disconnect: [OrderWhereUniqueInput!]
+  set: [OrderWhereUniqueInput!]
+  create: [OrderCreateInput!]
+  connect: [OrderWhereUniqueInput!]
+}
+
+input CouponUpdateArgs {
+  where: CouponWhereUniqueInput!
+  data: CouponUpdateInput!
+}
+
+input CouponCreateInput {
+  name: String
+  code: String
+  enabled: Boolean
+  discountPercentage: Int
+  timesPerUser: Int
+  validFrom: DateTime
+  validTill: DateTime
+  usedBy: JSON
+  acceptFromReferrers: UserRelateToManyForCreateInput
+  acceptFromNetworks: NetworkRelateToManyForCreateInput
+  cart: CartRelateToManyForCreateInput
+  order: OrderRelateToManyForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input NetworkRelateToManyForCreateInput {
+  create: [NetworkCreateInput!]
+  connect: [NetworkWhereUniqueInput!]
+}
+
+input CartRelateToManyForCreateInput {
+  create: [CartCreateInput!]
+  connect: [CartWhereUniqueInput!]
+}
+
+input OrderRelateToManyForCreateInput {
+  create: [OrderCreateInput!]
+  connect: [OrderWhereUniqueInput!]
 }
 
 type Audit {
@@ -1685,6 +2167,7 @@ type LiquidityPair {
   ): [Project!]
   projectCount(where: ProjectWhereInput! = {}): Int
   exchange: Exchange
+  customExchangeAddress: String
   dateAdded: DateTime
 }
 
@@ -1707,6 +2190,7 @@ input LiquidityPairWhereInput {
   network: NetworkWhereInput
   project: ProjectManyRelationFilter
   exchange: ExchangeWhereInput
+  customExchangeAddress: StringFilter
   dateAdded: DateTimeNullableFilter
 }
 
@@ -1718,6 +2202,7 @@ input LiquidityPairOrderByInput {
   order: OrderDirection
   isPrimary: OrderDirection
   useDexScreener: OrderDirection
+  customExchangeAddress: OrderDirection
   dateAdded: OrderDirection
 }
 
@@ -1732,6 +2217,7 @@ input LiquidityPairUpdateInput {
   network: NetworkRelateToOneForUpdateInput
   project: ProjectRelateToManyForUpdateInput
   exchange: ExchangeRelateToOneForUpdateInput
+  customExchangeAddress: String
   dateAdded: DateTime
 }
 
@@ -1763,6 +2249,7 @@ input LiquidityPairCreateInput {
   network: NetworkRelateToOneForCreateInput
   project: ProjectRelateToManyForCreateInput
   exchange: ExchangeRelateToOneForCreateInput
+  customExchangeAddress: String
   dateAdded: DateTime
 }
 
@@ -2081,6 +2568,261 @@ input TokenRelateToManyForCreateInput {
   connect: [TokenWhereUniqueInput!]
 }
 
+type DiscordConfig {
+  id: ID!
+  guildName: String
+  guildId: String
+  announcementsChannelId: String
+  announcementsChannelName: String
+  generalChannelId: String
+  generalChannelName: String
+  project: Project
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input DiscordConfigWhereUniqueInput {
+  id: ID
+}
+
+input DiscordConfigWhereInput {
+  AND: [DiscordConfigWhereInput!]
+  OR: [DiscordConfigWhereInput!]
+  NOT: [DiscordConfigWhereInput!]
+  id: IDFilter
+  guildName: StringFilter
+  guildId: StringFilter
+  announcementsChannelId: StringFilter
+  announcementsChannelName: StringFilter
+  generalChannelId: StringFilter
+  generalChannelName: StringFilter
+  project: ProjectWhereInput
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input DiscordConfigOrderByInput {
+  id: OrderDirection
+  guildName: OrderDirection
+  guildId: OrderDirection
+  announcementsChannelId: OrderDirection
+  announcementsChannelName: OrderDirection
+  generalChannelId: OrderDirection
+  generalChannelName: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input DiscordConfigUpdateInput {
+  guildName: String
+  guildId: String
+  announcementsChannelId: String
+  announcementsChannelName: String
+  generalChannelId: String
+  generalChannelName: String
+  project: ProjectRelateToOneForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input DiscordConfigUpdateArgs {
+  where: DiscordConfigWhereUniqueInput!
+  data: DiscordConfigUpdateInput!
+}
+
+input DiscordConfigCreateInput {
+  guildName: String
+  guildId: String
+  announcementsChannelId: String
+  announcementsChannelName: String
+  generalChannelId: String
+  generalChannelName: String
+  project: ProjectRelateToOneForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+type DiscordEvent {
+  id: ID!
+  eventId: String
+  guildId: String
+  channelId: String
+  guildName: String
+  channelName: String
+  name: String
+  description: String
+  inviteUrl: String
+  scheduledStartTimestamp: DateTime
+  scheduledEndTimestamp: DateTime
+  location: String
+  userCount: Int
+  image: String
+  project: Project
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input DiscordEventWhereUniqueInput {
+  id: ID
+}
+
+input DiscordEventWhereInput {
+  AND: [DiscordEventWhereInput!]
+  OR: [DiscordEventWhereInput!]
+  NOT: [DiscordEventWhereInput!]
+  id: IDFilter
+  eventId: StringFilter
+  guildId: StringFilter
+  channelId: StringFilter
+  guildName: StringFilter
+  channelName: StringFilter
+  name: StringFilter
+  description: StringFilter
+  inviteUrl: StringFilter
+  scheduledStartTimestamp: DateTimeNullableFilter
+  scheduledEndTimestamp: DateTimeNullableFilter
+  location: StringFilter
+  userCount: IntNullableFilter
+  image: StringFilter
+  project: ProjectWhereInput
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input DiscordEventOrderByInput {
+  id: OrderDirection
+  eventId: OrderDirection
+  guildId: OrderDirection
+  channelId: OrderDirection
+  guildName: OrderDirection
+  channelName: OrderDirection
+  name: OrderDirection
+  description: OrderDirection
+  inviteUrl: OrderDirection
+  scheduledStartTimestamp: OrderDirection
+  scheduledEndTimestamp: OrderDirection
+  location: OrderDirection
+  userCount: OrderDirection
+  image: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input DiscordEventUpdateInput {
+  eventId: String
+  guildId: String
+  channelId: String
+  guildName: String
+  channelName: String
+  name: String
+  description: String
+  inviteUrl: String
+  scheduledStartTimestamp: DateTime
+  scheduledEndTimestamp: DateTime
+  location: String
+  userCount: Int
+  image: String
+  project: ProjectRelateToOneForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input DiscordEventUpdateArgs {
+  where: DiscordEventWhereUniqueInput!
+  data: DiscordEventUpdateInput!
+}
+
+input DiscordEventCreateInput {
+  eventId: String
+  guildId: String
+  channelId: String
+  guildName: String
+  channelName: String
+  name: String
+  description: String
+  inviteUrl: String
+  scheduledStartTimestamp: DateTime
+  scheduledEndTimestamp: DateTime
+  location: String
+  userCount: Int
+  image: String
+  project: ProjectRelateToOneForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+type DiscordAnnouncement {
+  id: ID!
+  messageId: String
+  guildId: String
+  channelId: String
+  title: String
+  content: JSON
+  messageUrl: String
+  project: Project
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input DiscordAnnouncementWhereUniqueInput {
+  id: ID
+}
+
+input DiscordAnnouncementWhereInput {
+  AND: [DiscordAnnouncementWhereInput!]
+  OR: [DiscordAnnouncementWhereInput!]
+  NOT: [DiscordAnnouncementWhereInput!]
+  id: IDFilter
+  messageId: StringFilter
+  guildId: StringFilter
+  channelId: StringFilter
+  title: StringFilter
+  messageUrl: StringFilter
+  project: ProjectWhereInput
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input DiscordAnnouncementOrderByInput {
+  id: OrderDirection
+  messageId: OrderDirection
+  guildId: OrderDirection
+  channelId: OrderDirection
+  title: OrderDirection
+  messageUrl: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input DiscordAnnouncementUpdateInput {
+  messageId: String
+  guildId: String
+  channelId: String
+  title: String
+  content: JSON
+  messageUrl: String
+  project: ProjectRelateToOneForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input DiscordAnnouncementUpdateArgs {
+  where: DiscordAnnouncementWhereUniqueInput!
+  data: DiscordAnnouncementUpdateInput!
+}
+
+input DiscordAnnouncementCreateInput {
+  messageId: String
+  guildId: String
+  channelId: String
+  title: String
+  content: JSON
+  messageUrl: String
+  project: ProjectRelateToOneForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
 type DiscordBot {
   id: ID!
   name: String
@@ -2163,8 +2905,19 @@ type Content {
   contentType: ContentType
   enabled: Boolean
   summary: String
+  richContent: JSON
   content: Content_content_Document
   blockName: ContentBlock
+  user: User
+  project: Project
+  views: Int
+  likes(
+    where: UserWhereInput! = {}
+    orderBy: [UserOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [User!]
+  likesCount(where: UserWhereInput! = {}): Int
   dateAdded: DateTime
 }
 
@@ -2187,6 +2940,10 @@ input ContentWhereInput {
   enabled: BooleanFilter
   summary: StringFilter
   blockName: ContentBlockWhereInput
+  user: UserWhereInput
+  project: ProjectWhereInput
+  views: IntNullableFilter
+  likes: UserManyRelationFilter
   dateAdded: DateTimeNullableFilter
 }
 
@@ -2196,6 +2953,7 @@ input ContentOrderByInput {
   slug: OrderDirection
   enabled: OrderDirection
   summary: OrderDirection
+  views: OrderDirection
   dateAdded: OrderDirection
 }
 
@@ -2206,8 +2964,13 @@ input ContentUpdateInput {
   contentType: ContentTypeRelateToOneForUpdateInput
   enabled: Boolean
   summary: String
+  richContent: JSON
   content: JSON
   blockName: ContentBlockRelateToOneForUpdateInput
+  user: UserRelateToOneForUpdateInput
+  project: ProjectRelateToOneForUpdateInput
+  views: Int
+  likes: UserRelateToManyForUpdateInput
   dateAdded: DateTime
 }
 
@@ -2235,8 +2998,13 @@ input ContentCreateInput {
   contentType: ContentTypeRelateToOneForCreateInput
   enabled: Boolean
   summary: String
+  richContent: JSON
   content: JSON
   blockName: ContentBlockRelateToOneForCreateInput
+  user: UserRelateToOneForCreateInput
+  project: ProjectRelateToOneForCreateInput
+  views: Int
+  likes: UserRelateToManyForCreateInput
   dateAdded: DateTime
 }
 
@@ -2248,6 +3016,97 @@ input ContentTypeRelateToOneForCreateInput {
 input ContentBlockRelateToOneForCreateInput {
   create: ContentBlockCreateInput
   connect: ContentBlockWhereUniqueInput
+}
+
+type Comment {
+  id: ID!
+  content: JSON
+  sentiment: Int
+  likes(
+    where: UserWhereInput! = {}
+    orderBy: [UserOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [User!]
+  likesCount(where: UserWhereInput! = {}): Int
+  reports(
+    where: UserWhereInput! = {}
+    orderBy: [UserOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [User!]
+  reportsCount(where: UserWhereInput! = {}): Int
+  user: User
+  project: Project
+  creator: Creator
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CommentWhereUniqueInput {
+  id: ID
+}
+
+input CommentWhereInput {
+  AND: [CommentWhereInput!]
+  OR: [CommentWhereInput!]
+  NOT: [CommentWhereInput!]
+  id: IDFilter
+  sentiment: IntNullableFilter
+  likes: UserManyRelationFilter
+  reports: UserManyRelationFilter
+  user: UserWhereInput
+  project: ProjectWhereInput
+  creator: CreatorWhereInput
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CommentOrderByInput {
+  id: OrderDirection
+  sentiment: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CommentUpdateInput {
+  content: JSON
+  sentiment: Int
+  likes: UserRelateToManyForUpdateInput
+  reports: UserRelateToManyForUpdateInput
+  user: UserRelateToOneForUpdateInput
+  project: ProjectRelateToOneForUpdateInput
+  creator: CreatorRelateToOneForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CreatorRelateToOneForUpdateInput {
+  create: CreatorCreateInput
+  connect: CreatorWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CommentUpdateArgs {
+  where: CommentWhereUniqueInput!
+  data: CommentUpdateInput!
+}
+
+input CommentCreateInput {
+  content: JSON
+  sentiment: Int
+  likes: UserRelateToManyForCreateInput
+  reports: UserRelateToManyForCreateInput
+  user: UserRelateToOneForCreateInput
+  project: ProjectRelateToOneForCreateInput
+  creator: CreatorRelateToOneForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input CreatorRelateToOneForCreateInput {
+  create: CreatorCreateInput
+  connect: CreatorWhereUniqueInput
 }
 
 type ContentBlock {
@@ -2652,20 +3511,20 @@ type Creator {
     skip: Int! = 0
   ): [MarketingCampaign!]
   marketingCampaignsCount(where: MarketingCampaignWhereInput! = {}): Int
-  ratings(
-    where: CreatorRatingWhereInput! = {}
-    orderBy: [CreatorRatingOrderByInput!]! = []
+  votes(
+    where: VoteWhereInput! = {}
+    orderBy: [VoteOrderByInput!]! = []
     take: Int
     skip: Int! = 0
-  ): [CreatorRating!]
-  ratingsCount(where: CreatorRatingWhereInput! = {}): Int
-  reviews(
-    where: CreatorReviewWhereInput! = {}
-    orderBy: [CreatorReviewOrderByInput!]! = []
+  ): [Vote!]
+  votesCount(where: VoteWhereInput! = {}): Int
+  comments(
+    where: CommentWhereInput! = {}
+    orderBy: [CommentOrderByInput!]! = []
     take: Int
     skip: Int! = 0
-  ): [CreatorReview!]
-  reviewsCount(where: CreatorReviewWhereInput! = {}): Int
+  ): [Comment!]
+  commentsCount(where: CommentWhereInput! = {}): Int
   dateAdded: DateTime
   updatedAt: DateTime
 }
@@ -2694,22 +3553,10 @@ input CreatorWhereInput {
   priceFrom: FloatNullableFilter
   priceTo: FloatNullableFilter
   marketingCampaigns: MarketingCampaignManyRelationFilter
-  ratings: CreatorRatingManyRelationFilter
-  reviews: CreatorReviewManyRelationFilter
+  votes: VoteManyRelationFilter
+  comments: CommentManyRelationFilter
   dateAdded: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
-}
-
-input CreatorRatingManyRelationFilter {
-  every: CreatorRatingWhereInput
-  some: CreatorRatingWhereInput
-  none: CreatorRatingWhereInput
-}
-
-input CreatorReviewManyRelationFilter {
-  every: CreatorReviewWhereInput
-  some: CreatorReviewWhereInput
-  none: CreatorReviewWhereInput
 }
 
 input CreatorOrderByInput {
@@ -2749,24 +3596,10 @@ input CreatorUpdateInput {
   priceFrom: Float
   priceTo: Float
   marketingCampaigns: MarketingCampaignRelateToManyForUpdateInput
-  ratings: CreatorRatingRelateToManyForUpdateInput
-  reviews: CreatorReviewRelateToManyForUpdateInput
+  votes: VoteRelateToManyForUpdateInput
+  comments: CommentRelateToManyForUpdateInput
   dateAdded: DateTime
   updatedAt: DateTime
-}
-
-input CreatorRatingRelateToManyForUpdateInput {
-  disconnect: [CreatorRatingWhereUniqueInput!]
-  set: [CreatorRatingWhereUniqueInput!]
-  create: [CreatorRatingCreateInput!]
-  connect: [CreatorRatingWhereUniqueInput!]
-}
-
-input CreatorReviewRelateToManyForUpdateInput {
-  disconnect: [CreatorReviewWhereUniqueInput!]
-  set: [CreatorReviewWhereUniqueInput!]
-  create: [CreatorReviewCreateInput!]
-  connect: [CreatorReviewWhereUniqueInput!]
 }
 
 input CreatorUpdateArgs {
@@ -2791,20 +3624,10 @@ input CreatorCreateInput {
   priceFrom: Float
   priceTo: Float
   marketingCampaigns: MarketingCampaignRelateToManyForCreateInput
-  ratings: CreatorRatingRelateToManyForCreateInput
-  reviews: CreatorReviewRelateToManyForCreateInput
+  votes: VoteRelateToManyForCreateInput
+  comments: CommentRelateToManyForCreateInput
   dateAdded: DateTime
   updatedAt: DateTime
-}
-
-input CreatorRatingRelateToManyForCreateInput {
-  create: [CreatorRatingCreateInput!]
-  connect: [CreatorRatingWhereUniqueInput!]
-}
-
-input CreatorReviewRelateToManyForCreateInput {
-  create: [CreatorReviewCreateInput!]
-  connect: [CreatorReviewWhereUniqueInput!]
 }
 
 type Auditor {
@@ -3023,124 +3846,61 @@ input KycGroupCreateInput {
   updatedAt: DateTime
 }
 
-type CreatorRating {
+type TransparencyHighlight {
   id: ID!
-  rating: Int
-  user: User
-  creator: Creator
+  content: String
+  isPositive: Boolean
+  project: Project
   dateAdded: DateTime
   updatedAt: DateTime
 }
 
-input CreatorRatingWhereUniqueInput {
+input TransparencyHighlightWhereUniqueInput {
   id: ID
 }
 
-input CreatorRatingWhereInput {
-  AND: [CreatorRatingWhereInput!]
-  OR: [CreatorRatingWhereInput!]
-  NOT: [CreatorRatingWhereInput!]
+input TransparencyHighlightWhereInput {
+  AND: [TransparencyHighlightWhereInput!]
+  OR: [TransparencyHighlightWhereInput!]
+  NOT: [TransparencyHighlightWhereInput!]
   id: IDFilter
-  rating: IntNullableFilter
-  user: UserWhereInput
-  creator: CreatorWhereInput
+  content: StringFilter
+  isPositive: BooleanFilter
+  project: ProjectWhereInput
   dateAdded: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
 
-input CreatorRatingOrderByInput {
+input TransparencyHighlightOrderByInput {
   id: OrderDirection
-  rating: OrderDirection
+  content: OrderDirection
+  isPositive: OrderDirection
   dateAdded: OrderDirection
   updatedAt: OrderDirection
 }
 
-input CreatorRatingUpdateInput {
-  rating: Int
-  user: UserRelateToOneForUpdateInput
-  creator: CreatorRelateToOneForUpdateInput
+input TransparencyHighlightUpdateInput {
+  content: String
+  isPositive: Boolean
+  project: ProjectRelateToOneForUpdateInput
   dateAdded: DateTime
   updatedAt: DateTime
 }
 
-input CreatorRelateToOneForUpdateInput {
-  create: CreatorCreateInput
-  connect: CreatorWhereUniqueInput
-  disconnect: Boolean
+input TransparencyHighlightUpdateArgs {
+  where: TransparencyHighlightWhereUniqueInput!
+  data: TransparencyHighlightUpdateInput!
 }
 
-input CreatorRatingUpdateArgs {
-  where: CreatorRatingWhereUniqueInput!
-  data: CreatorRatingUpdateInput!
-}
-
-input CreatorRatingCreateInput {
-  rating: Int
-  user: UserRelateToOneForCreateInput
-  creator: CreatorRelateToOneForCreateInput
+input TransparencyHighlightCreateInput {
+  content: String
+  isPositive: Boolean
+  project: ProjectRelateToOneForCreateInput
   dateAdded: DateTime
   updatedAt: DateTime
 }
 
-input CreatorRelateToOneForCreateInput {
-  create: CreatorCreateInput
-  connect: CreatorWhereUniqueInput
-}
-
-type CreatorReview {
-  id: ID!
-  review: String
-  user: User
-  creator: Creator
-  dateAdded: DateTime
-  updatedAt: DateTime
-}
-
-input CreatorReviewWhereUniqueInput {
-  id: ID
-}
-
-input CreatorReviewWhereInput {
-  AND: [CreatorReviewWhereInput!]
-  OR: [CreatorReviewWhereInput!]
-  NOT: [CreatorReviewWhereInput!]
-  id: IDFilter
-  review: StringFilter
-  user: UserWhereInput
-  creator: CreatorWhereInput
-  dateAdded: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
-}
-
-input CreatorReviewOrderByInput {
-  id: OrderDirection
-  review: OrderDirection
-  dateAdded: OrderDirection
-  updatedAt: OrderDirection
-}
-
-input CreatorReviewUpdateInput {
-  review: String
-  user: UserRelateToOneForUpdateInput
-  creator: CreatorRelateToOneForUpdateInput
-  dateAdded: DateTime
-  updatedAt: DateTime
-}
-
-input CreatorReviewUpdateArgs {
-  where: CreatorReviewWhereUniqueInput!
-  data: CreatorReviewUpdateInput!
-}
-
-input CreatorReviewCreateInput {
-  review: String
-  user: UserRelateToOneForCreateInput
-  creator: CreatorRelateToOneForCreateInput
-  dateAdded: DateTime
-  updatedAt: DateTime
-}
-
-type ProjectRating {
+type TransparencyRating {
   id: ID!
   rating: Int
   ip: String
@@ -3150,14 +3910,14 @@ type ProjectRating {
   updatedAt: DateTime
 }
 
-input ProjectRatingWhereUniqueInput {
+input TransparencyRatingWhereUniqueInput {
   id: ID
 }
 
-input ProjectRatingWhereInput {
-  AND: [ProjectRatingWhereInput!]
-  OR: [ProjectRatingWhereInput!]
-  NOT: [ProjectRatingWhereInput!]
+input TransparencyRatingWhereInput {
+  AND: [TransparencyRatingWhereInput!]
+  OR: [TransparencyRatingWhereInput!]
+  NOT: [TransparencyRatingWhereInput!]
   id: IDFilter
   rating: IntNullableFilter
   ip: StringFilter
@@ -3167,7 +3927,7 @@ input ProjectRatingWhereInput {
   updatedAt: DateTimeNullableFilter
 }
 
-input ProjectRatingOrderByInput {
+input TransparencyRatingOrderByInput {
   id: OrderDirection
   rating: OrderDirection
   ip: OrderDirection
@@ -3175,7 +3935,7 @@ input ProjectRatingOrderByInput {
   updatedAt: OrderDirection
 }
 
-input ProjectRatingUpdateInput {
+input TransparencyRatingUpdateInput {
   rating: Int
   ip: String
   user: UserRelateToOneForUpdateInput
@@ -3184,67 +3944,14 @@ input ProjectRatingUpdateInput {
   updatedAt: DateTime
 }
 
-input ProjectRatingUpdateArgs {
-  where: ProjectRatingWhereUniqueInput!
-  data: ProjectRatingUpdateInput!
+input TransparencyRatingUpdateArgs {
+  where: TransparencyRatingWhereUniqueInput!
+  data: TransparencyRatingUpdateInput!
 }
 
-input ProjectRatingCreateInput {
+input TransparencyRatingCreateInput {
   rating: Int
   ip: String
-  user: UserRelateToOneForCreateInput
-  project: ProjectRelateToOneForCreateInput
-  dateAdded: DateTime
-  updatedAt: DateTime
-}
-
-type ProjectComment {
-  id: ID!
-  comment: String
-  user: User
-  project: Project
-  dateAdded: DateTime
-  updatedAt: DateTime
-}
-
-input ProjectCommentWhereUniqueInput {
-  id: ID
-}
-
-input ProjectCommentWhereInput {
-  AND: [ProjectCommentWhereInput!]
-  OR: [ProjectCommentWhereInput!]
-  NOT: [ProjectCommentWhereInput!]
-  id: IDFilter
-  comment: StringFilter
-  user: UserWhereInput
-  project: ProjectWhereInput
-  dateAdded: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
-}
-
-input ProjectCommentOrderByInput {
-  id: OrderDirection
-  comment: OrderDirection
-  dateAdded: OrderDirection
-  updatedAt: OrderDirection
-}
-
-input ProjectCommentUpdateInput {
-  comment: String
-  user: UserRelateToOneForUpdateInput
-  project: ProjectRelateToOneForUpdateInput
-  dateAdded: DateTime
-  updatedAt: DateTime
-}
-
-input ProjectCommentUpdateArgs {
-  where: ProjectCommentWhereUniqueInput!
-  data: ProjectCommentUpdateInput!
-}
-
-input ProjectCommentCreateInput {
-  comment: String
   user: UserRelateToOneForCreateInput
   project: ProjectRelateToOneForCreateInput
   dateAdded: DateTime
@@ -3558,13 +4265,8 @@ input MarketingCampaignRelateToOneForCreateInput {
 type Cart {
   id: ID!
   user: User
-  cartItem(
-    where: CartItemWhereInput! = {}
-    orderBy: [CartItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [CartItem!]
-  cartItemCount(where: CartItemWhereInput! = {}): Int
+  cartItem: CartItem
+  couponCode: Coupon
   dateAdded: DateTime
   updatedAt: DateTime
 }
@@ -3579,15 +4281,10 @@ input CartWhereInput {
   NOT: [CartWhereInput!]
   id: IDFilter
   user: UserWhereInput
-  cartItem: CartItemManyRelationFilter
+  cartItem: CartItemWhereInput
+  couponCode: CouponWhereInput
   dateAdded: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
-}
-
-input CartItemManyRelationFilter {
-  every: CartItemWhereInput
-  some: CartItemWhereInput
-  none: CartItemWhereInput
 }
 
 input CartOrderByInput {
@@ -3598,16 +4295,22 @@ input CartOrderByInput {
 
 input CartUpdateInput {
   user: UserRelateToOneForUpdateInput
-  cartItem: CartItemRelateToManyForUpdateInput
+  cartItem: CartItemRelateToOneForUpdateInput
+  couponCode: CouponRelateToOneForUpdateInput
   dateAdded: DateTime
   updatedAt: DateTime
 }
 
-input CartItemRelateToManyForUpdateInput {
-  disconnect: [CartItemWhereUniqueInput!]
-  set: [CartItemWhereUniqueInput!]
-  create: [CartItemCreateInput!]
-  connect: [CartItemWhereUniqueInput!]
+input CartItemRelateToOneForUpdateInput {
+  create: CartItemCreateInput
+  connect: CartItemWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CouponRelateToOneForUpdateInput {
+  create: CouponCreateInput
+  connect: CouponWhereUniqueInput
+  disconnect: Boolean
 }
 
 input CartUpdateArgs {
@@ -3617,19 +4320,26 @@ input CartUpdateArgs {
 
 input CartCreateInput {
   user: UserRelateToOneForCreateInput
-  cartItem: CartItemRelateToManyForCreateInput
+  cartItem: CartItemRelateToOneForCreateInput
+  couponCode: CouponRelateToOneForCreateInput
   dateAdded: DateTime
   updatedAt: DateTime
 }
 
-input CartItemRelateToManyForCreateInput {
-  create: [CartItemCreateInput!]
-  connect: [CartItemWhereUniqueInput!]
+input CartItemRelateToOneForCreateInput {
+  create: CartItemCreateInput
+  connect: CartItemWhereUniqueInput
+}
+
+input CouponRelateToOneForCreateInput {
+  create: CouponCreateInput
+  connect: CouponWhereUniqueInput
 }
 
 type CartItem {
   id: ID!
   product: Product
+  paymentPlan: PaymentPlan
   cart: Cart
   price: Float
   tax: Float
@@ -3649,6 +4359,7 @@ input CartItemWhereInput {
   NOT: [CartItemWhereInput!]
   id: IDFilter
   product: ProductWhereInput
+  paymentPlan: PaymentPlanWhereInput
   cart: CartWhereInput
   price: FloatNullableFilter
   tax: FloatNullableFilter
@@ -3670,6 +4381,7 @@ input CartItemOrderByInput {
 
 input CartItemUpdateInput {
   product: ProductRelateToOneForUpdateInput
+  paymentPlan: PaymentPlanRelateToOneForUpdateInput
   cart: CartRelateToOneForUpdateInput
   price: Float
   tax: Float
@@ -3698,6 +4410,7 @@ input CartItemUpdateArgs {
 
 input CartItemCreateInput {
   product: ProductRelateToOneForCreateInput
+  paymentPlan: PaymentPlanRelateToOneForCreateInput
   cart: CartRelateToOneForCreateInput
   price: Float
   tax: Float
@@ -3721,13 +4434,7 @@ type Order {
   id: ID!
   orderNumber: Int
   user: User
-  orderItem(
-    where: OrderItemWhereInput! = {}
-    orderBy: [OrderItemOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [OrderItem!]
-  orderItemCount(where: OrderItemWhereInput! = {}): Int
+  orderItem: OrderItem
   project: Project
   walletAddress: String
   transactionHash: String
@@ -3740,6 +4447,7 @@ type Order {
   total: Float
   subTotal: Float
   grandTotal: Float
+  couponCode: Coupon
   dateAdded: DateTime
   updatedAt: DateTime
 }
@@ -3755,7 +4463,7 @@ input OrderWhereInput {
   id: IDFilter
   orderNumber: IntFilter
   user: UserWhereInput
-  orderItem: OrderItemManyRelationFilter
+  orderItem: OrderItemWhereInput
   project: ProjectWhereInput
   walletAddress: StringFilter
   transactionHash: StringFilter
@@ -3768,6 +4476,7 @@ input OrderWhereInput {
   total: FloatNullableFilter
   subTotal: FloatNullableFilter
   grandTotal: FloatNullableFilter
+  couponCode: CouponWhereInput
   dateAdded: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -3781,12 +4490,6 @@ input IntFilter {
   gt: Int
   gte: Int
   not: IntFilter
-}
-
-input OrderItemManyRelationFilter {
-  every: OrderItemWhereInput
-  some: OrderItemWhereInput
-  none: OrderItemWhereInput
 }
 
 input OrderOrderByInput {
@@ -3809,7 +4512,7 @@ input OrderOrderByInput {
 input OrderUpdateInput {
   orderNumber: Int
   user: UserRelateToOneForUpdateInput
-  orderItem: OrderItemRelateToManyForUpdateInput
+  orderItem: OrderItemRelateToOneForUpdateInput
   project: ProjectRelateToOneForUpdateInput
   walletAddress: String
   transactionHash: String
@@ -3822,15 +4525,15 @@ input OrderUpdateInput {
   total: Float
   subTotal: Float
   grandTotal: Float
+  couponCode: CouponRelateToOneForUpdateInput
   dateAdded: DateTime
   updatedAt: DateTime
 }
 
-input OrderItemRelateToManyForUpdateInput {
-  disconnect: [OrderItemWhereUniqueInput!]
-  set: [OrderItemWhereUniqueInput!]
-  create: [OrderItemCreateInput!]
-  connect: [OrderItemWhereUniqueInput!]
+input OrderItemRelateToOneForUpdateInput {
+  create: OrderItemCreateInput
+  connect: OrderItemWhereUniqueInput
+  disconnect: Boolean
 }
 
 input OrderUpdateArgs {
@@ -3841,7 +4544,7 @@ input OrderUpdateArgs {
 input OrderCreateInput {
   orderNumber: Int
   user: UserRelateToOneForCreateInput
-  orderItem: OrderItemRelateToManyForCreateInput
+  orderItem: OrderItemRelateToOneForCreateInput
   project: ProjectRelateToOneForCreateInput
   walletAddress: String
   transactionHash: String
@@ -3854,19 +4557,21 @@ input OrderCreateInput {
   total: Float
   subTotal: Float
   grandTotal: Float
+  couponCode: CouponRelateToOneForCreateInput
   dateAdded: DateTime
   updatedAt: DateTime
 }
 
-input OrderItemRelateToManyForCreateInput {
-  create: [OrderItemCreateInput!]
-  connect: [OrderItemWhereUniqueInput!]
+input OrderItemRelateToOneForCreateInput {
+  create: OrderItemCreateInput
+  connect: OrderItemWhereUniqueInput
 }
 
 type OrderItem {
   id: ID!
   order: Order
   product: Product
+  paymentPlan: PaymentPlan
   price: Float
   quantity: Float
   discount: Float
@@ -3886,6 +4591,7 @@ input OrderItemWhereInput {
   id: IDFilter
   order: OrderWhereInput
   product: ProductWhereInput
+  paymentPlan: PaymentPlanWhereInput
   price: FloatNullableFilter
   quantity: FloatNullableFilter
   discount: FloatNullableFilter
@@ -3907,6 +4613,7 @@ input OrderItemOrderByInput {
 input OrderItemUpdateInput {
   order: OrderRelateToOneForUpdateInput
   product: ProductRelateToOneForUpdateInput
+  paymentPlan: PaymentPlanRelateToOneForUpdateInput
   price: Float
   quantity: Float
   discount: Float
@@ -3923,10 +4630,216 @@ input OrderItemUpdateArgs {
 input OrderItemCreateInput {
   order: OrderRelateToOneForCreateInput
   product: ProductRelateToOneForCreateInput
+  paymentPlan: PaymentPlanRelateToOneForCreateInput
   price: Float
   quantity: Float
   discount: Float
   tax: Float
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+type Vote {
+  id: ID!
+  vote: Int
+  ip: String
+  type: String
+  user: User
+  project: Project
+  creator: Creator
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input VoteWhereUniqueInput {
+  id: ID
+}
+
+input VoteWhereInput {
+  AND: [VoteWhereInput!]
+  OR: [VoteWhereInput!]
+  NOT: [VoteWhereInput!]
+  id: IDFilter
+  vote: IntNullableFilter
+  ip: StringFilter
+  type: StringNullableFilter
+  user: UserWhereInput
+  project: ProjectWhereInput
+  creator: CreatorWhereInput
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input VoteOrderByInput {
+  id: OrderDirection
+  vote: OrderDirection
+  ip: OrderDirection
+  type: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input VoteUpdateInput {
+  vote: Int
+  ip: String
+  type: String
+  user: UserRelateToOneForUpdateInput
+  project: ProjectRelateToOneForUpdateInput
+  creator: CreatorRelateToOneForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input VoteUpdateArgs {
+  where: VoteWhereUniqueInput!
+  data: VoteUpdateInput!
+}
+
+input VoteCreateInput {
+  vote: Int
+  ip: String
+  type: String
+  user: UserRelateToOneForCreateInput
+  project: ProjectRelateToOneForCreateInput
+  creator: CreatorRelateToOneForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+type Quiz {
+  id: ID!
+  title: String
+  slug: String
+  imageUrl: String
+  image: ImageFieldOutput
+  enabled: Boolean
+  hasRewards: Boolean
+  rewardsAmount: Int
+  rewardType: String
+  description: JSON
+  onWinDescription: JSON
+  onEndDescription: JSON
+  config: JSON
+  totalWinners: Int
+  winners: Int
+  timePerQuestion: Int
+  views: Int
+  project: Project
+  user: User
+  likes(
+    where: UserWhereInput! = {}
+    orderBy: [UserOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [User!]
+  likesCount(where: UserWhereInput! = {}): Int
+  startDate: DateTime
+  endDate: DateTime
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input QuizWhereUniqueInput {
+  id: ID
+}
+
+input QuizWhereInput {
+  AND: [QuizWhereInput!]
+  OR: [QuizWhereInput!]
+  NOT: [QuizWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  slug: StringFilter
+  imageUrl: StringFilter
+  enabled: BooleanFilter
+  hasRewards: BooleanFilter
+  rewardsAmount: IntNullableFilter
+  rewardType: StringFilter
+  totalWinners: IntNullableFilter
+  winners: IntNullableFilter
+  timePerQuestion: IntNullableFilter
+  views: IntNullableFilter
+  project: ProjectWhereInput
+  user: UserWhereInput
+  likes: UserManyRelationFilter
+  startDate: DateTimeNullableFilter
+  endDate: DateTimeNullableFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input QuizOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  slug: OrderDirection
+  imageUrl: OrderDirection
+  enabled: OrderDirection
+  hasRewards: OrderDirection
+  rewardsAmount: OrderDirection
+  rewardType: OrderDirection
+  totalWinners: OrderDirection
+  winners: OrderDirection
+  timePerQuestion: OrderDirection
+  views: OrderDirection
+  startDate: OrderDirection
+  endDate: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input QuizUpdateInput {
+  title: String
+  slug: String
+  imageUrl: String
+  image: ImageFieldInput
+  enabled: Boolean
+  hasRewards: Boolean
+  rewardsAmount: Int
+  rewardType: String
+  description: JSON
+  onWinDescription: JSON
+  onEndDescription: JSON
+  config: JSON
+  totalWinners: Int
+  winners: Int
+  timePerQuestion: Int
+  views: Int
+  project: ProjectRelateToOneForUpdateInput
+  user: UserRelateToOneForUpdateInput
+  likes: UserRelateToManyForUpdateInput
+  startDate: DateTime
+  endDate: DateTime
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input QuizUpdateArgs {
+  where: QuizWhereUniqueInput!
+  data: QuizUpdateInput!
+}
+
+input QuizCreateInput {
+  title: String
+  slug: String
+  imageUrl: String
+  image: ImageFieldInput
+  enabled: Boolean
+  hasRewards: Boolean
+  rewardsAmount: Int
+  rewardType: String
+  description: JSON
+  onWinDescription: JSON
+  onEndDescription: JSON
+  config: JSON
+  totalWinners: Int
+  winners: Int
+  timePerQuestion: Int
+  views: Int
+  project: ProjectRelateToOneForCreateInput
+  user: UserRelateToOneForCreateInput
+  likes: UserRelateToManyForCreateInput
+  startDate: DateTime
+  endDate: DateTime
   dateAdded: DateTime
   updatedAt: DateTime
 }
@@ -3979,6 +4892,21 @@ type Mutation {
   updateProjects(data: [ProjectUpdateArgs!]!): [Project]
   deleteProject(where: ProjectWhereUniqueInput!): Project
   deleteProjects(where: [ProjectWhereUniqueInput!]!): [Project]
+  createPaymentPlan(data: PaymentPlanCreateInput!): PaymentPlan
+  createPaymentPlans(data: [PaymentPlanCreateInput!]!): [PaymentPlan]
+  updatePaymentPlan(
+    where: PaymentPlanWhereUniqueInput!
+    data: PaymentPlanUpdateInput!
+  ): PaymentPlan
+  updatePaymentPlans(data: [PaymentPlanUpdateArgs!]!): [PaymentPlan]
+  deletePaymentPlan(where: PaymentPlanWhereUniqueInput!): PaymentPlan
+  deletePaymentPlans(where: [PaymentPlanWhereUniqueInput!]!): [PaymentPlan]
+  createCoupon(data: CouponCreateInput!): Coupon
+  createCoupons(data: [CouponCreateInput!]!): [Coupon]
+  updateCoupon(where: CouponWhereUniqueInput!, data: CouponUpdateInput!): Coupon
+  updateCoupons(data: [CouponUpdateArgs!]!): [Coupon]
+  deleteCoupon(where: CouponWhereUniqueInput!): Coupon
+  deleteCoupons(where: [CouponWhereUniqueInput!]!): [Coupon]
   createAudit(data: AuditCreateInput!): Audit
   createAudits(data: [AuditCreateInput!]!): [Audit]
   updateAudit(where: AuditWhereUniqueInput!, data: AuditUpdateInput!): Audit
@@ -4089,6 +5017,45 @@ type Mutation {
   deleteStableLiquidityPairs(
     where: [StableLiquidityPairWhereUniqueInput!]!
   ): [StableLiquidityPair]
+  createDiscordConfig(data: DiscordConfigCreateInput!): DiscordConfig
+  createDiscordConfigs(data: [DiscordConfigCreateInput!]!): [DiscordConfig]
+  updateDiscordConfig(
+    where: DiscordConfigWhereUniqueInput!
+    data: DiscordConfigUpdateInput!
+  ): DiscordConfig
+  updateDiscordConfigs(data: [DiscordConfigUpdateArgs!]!): [DiscordConfig]
+  deleteDiscordConfig(where: DiscordConfigWhereUniqueInput!): DiscordConfig
+  deleteDiscordConfigs(
+    where: [DiscordConfigWhereUniqueInput!]!
+  ): [DiscordConfig]
+  createDiscordEvent(data: DiscordEventCreateInput!): DiscordEvent
+  createDiscordEvents(data: [DiscordEventCreateInput!]!): [DiscordEvent]
+  updateDiscordEvent(
+    where: DiscordEventWhereUniqueInput!
+    data: DiscordEventUpdateInput!
+  ): DiscordEvent
+  updateDiscordEvents(data: [DiscordEventUpdateArgs!]!): [DiscordEvent]
+  deleteDiscordEvent(where: DiscordEventWhereUniqueInput!): DiscordEvent
+  deleteDiscordEvents(where: [DiscordEventWhereUniqueInput!]!): [DiscordEvent]
+  createDiscordAnnouncement(
+    data: DiscordAnnouncementCreateInput!
+  ): DiscordAnnouncement
+  createDiscordAnnouncements(
+    data: [DiscordAnnouncementCreateInput!]!
+  ): [DiscordAnnouncement]
+  updateDiscordAnnouncement(
+    where: DiscordAnnouncementWhereUniqueInput!
+    data: DiscordAnnouncementUpdateInput!
+  ): DiscordAnnouncement
+  updateDiscordAnnouncements(
+    data: [DiscordAnnouncementUpdateArgs!]!
+  ): [DiscordAnnouncement]
+  deleteDiscordAnnouncement(
+    where: DiscordAnnouncementWhereUniqueInput!
+  ): DiscordAnnouncement
+  deleteDiscordAnnouncements(
+    where: [DiscordAnnouncementWhereUniqueInput!]!
+  ): [DiscordAnnouncement]
   createDiscordBot(data: DiscordBotCreateInput!): DiscordBot
   createDiscordBots(data: [DiscordBotCreateInput!]!): [DiscordBot]
   updateDiscordBot(
@@ -4107,6 +5074,15 @@ type Mutation {
   updateContents(data: [ContentUpdateArgs!]!): [Content]
   deleteContent(where: ContentWhereUniqueInput!): Content
   deleteContents(where: [ContentWhereUniqueInput!]!): [Content]
+  createComment(data: CommentCreateInput!): Comment
+  createComments(data: [CommentCreateInput!]!): [Comment]
+  updateComment(
+    where: CommentWhereUniqueInput!
+    data: CommentUpdateInput!
+  ): Comment
+  updateComments(data: [CommentUpdateArgs!]!): [Comment]
+  deleteComment(where: CommentWhereUniqueInput!): Comment
+  deleteComments(where: [CommentWhereUniqueInput!]!): [Comment]
   createContentBlock(data: ContentBlockCreateInput!): ContentBlock
   createContentBlocks(data: [ContentBlockCreateInput!]!): [ContentBlock]
   updateContentBlock(
@@ -4179,50 +5155,44 @@ type Mutation {
   updateKycGroups(data: [KycGroupUpdateArgs!]!): [KycGroup]
   deleteKycGroup(where: KycGroupWhereUniqueInput!): KycGroup
   deleteKycGroups(where: [KycGroupWhereUniqueInput!]!): [KycGroup]
-  createCreatorRating(data: CreatorRatingCreateInput!): CreatorRating
-  createCreatorRatings(data: [CreatorRatingCreateInput!]!): [CreatorRating]
-  updateCreatorRating(
-    where: CreatorRatingWhereUniqueInput!
-    data: CreatorRatingUpdateInput!
-  ): CreatorRating
-  updateCreatorRatings(data: [CreatorRatingUpdateArgs!]!): [CreatorRating]
-  deleteCreatorRating(where: CreatorRatingWhereUniqueInput!): CreatorRating
-  deleteCreatorRatings(
-    where: [CreatorRatingWhereUniqueInput!]!
-  ): [CreatorRating]
-  createCreatorReview(data: CreatorReviewCreateInput!): CreatorReview
-  createCreatorReviews(data: [CreatorReviewCreateInput!]!): [CreatorReview]
-  updateCreatorReview(
-    where: CreatorReviewWhereUniqueInput!
-    data: CreatorReviewUpdateInput!
-  ): CreatorReview
-  updateCreatorReviews(data: [CreatorReviewUpdateArgs!]!): [CreatorReview]
-  deleteCreatorReview(where: CreatorReviewWhereUniqueInput!): CreatorReview
-  deleteCreatorReviews(
-    where: [CreatorReviewWhereUniqueInput!]!
-  ): [CreatorReview]
-  createProjectRating(data: ProjectRatingCreateInput!): ProjectRating
-  createProjectRatings(data: [ProjectRatingCreateInput!]!): [ProjectRating]
-  updateProjectRating(
-    where: ProjectRatingWhereUniqueInput!
-    data: ProjectRatingUpdateInput!
-  ): ProjectRating
-  updateProjectRatings(data: [ProjectRatingUpdateArgs!]!): [ProjectRating]
-  deleteProjectRating(where: ProjectRatingWhereUniqueInput!): ProjectRating
-  deleteProjectRatings(
-    where: [ProjectRatingWhereUniqueInput!]!
-  ): [ProjectRating]
-  createProjectComment(data: ProjectCommentCreateInput!): ProjectComment
-  createProjectComments(data: [ProjectCommentCreateInput!]!): [ProjectComment]
-  updateProjectComment(
-    where: ProjectCommentWhereUniqueInput!
-    data: ProjectCommentUpdateInput!
-  ): ProjectComment
-  updateProjectComments(data: [ProjectCommentUpdateArgs!]!): [ProjectComment]
-  deleteProjectComment(where: ProjectCommentWhereUniqueInput!): ProjectComment
-  deleteProjectComments(
-    where: [ProjectCommentWhereUniqueInput!]!
-  ): [ProjectComment]
+  createTransparencyHighlight(
+    data: TransparencyHighlightCreateInput!
+  ): TransparencyHighlight
+  createTransparencyHighlights(
+    data: [TransparencyHighlightCreateInput!]!
+  ): [TransparencyHighlight]
+  updateTransparencyHighlight(
+    where: TransparencyHighlightWhereUniqueInput!
+    data: TransparencyHighlightUpdateInput!
+  ): TransparencyHighlight
+  updateTransparencyHighlights(
+    data: [TransparencyHighlightUpdateArgs!]!
+  ): [TransparencyHighlight]
+  deleteTransparencyHighlight(
+    where: TransparencyHighlightWhereUniqueInput!
+  ): TransparencyHighlight
+  deleteTransparencyHighlights(
+    where: [TransparencyHighlightWhereUniqueInput!]!
+  ): [TransparencyHighlight]
+  createTransparencyRating(
+    data: TransparencyRatingCreateInput!
+  ): TransparencyRating
+  createTransparencyRatings(
+    data: [TransparencyRatingCreateInput!]!
+  ): [TransparencyRating]
+  updateTransparencyRating(
+    where: TransparencyRatingWhereUniqueInput!
+    data: TransparencyRatingUpdateInput!
+  ): TransparencyRating
+  updateTransparencyRatings(
+    data: [TransparencyRatingUpdateArgs!]!
+  ): [TransparencyRating]
+  deleteTransparencyRating(
+    where: TransparencyRatingWhereUniqueInput!
+  ): TransparencyRating
+  deleteTransparencyRatings(
+    where: [TransparencyRatingWhereUniqueInput!]!
+  ): [TransparencyRating]
   createMarketingCampaign(
     data: MarketingCampaignCreateInput!
   ): MarketingCampaign
@@ -4291,6 +5261,18 @@ type Mutation {
   updateOrderItems(data: [OrderItemUpdateArgs!]!): [OrderItem]
   deleteOrderItem(where: OrderItemWhereUniqueInput!): OrderItem
   deleteOrderItems(where: [OrderItemWhereUniqueInput!]!): [OrderItem]
+  createVote(data: VoteCreateInput!): Vote
+  createVotes(data: [VoteCreateInput!]!): [Vote]
+  updateVote(where: VoteWhereUniqueInput!, data: VoteUpdateInput!): Vote
+  updateVotes(data: [VoteUpdateArgs!]!): [Vote]
+  deleteVote(where: VoteWhereUniqueInput!): Vote
+  deleteVotes(where: [VoteWhereUniqueInput!]!): [Vote]
+  createQuiz(data: QuizCreateInput!): Quiz
+  createQuizzes(data: [QuizCreateInput!]!): [Quiz]
+  updateQuiz(where: QuizWhereUniqueInput!, data: QuizUpdateInput!): Quiz
+  updateQuizzes(data: [QuizUpdateArgs!]!): [Quiz]
+  deleteQuiz(where: QuizWhereUniqueInput!): Quiz
+  deleteQuizzes(where: [QuizWhereUniqueInput!]!): [Quiz]
   endSession: Boolean!
   authenticateUserWithPassword(
     email: String!
@@ -4378,6 +5360,22 @@ type Query {
   ): [Project!]
   project(where: ProjectWhereUniqueInput!): Project
   projectsCount(where: ProjectWhereInput! = {}): Int
+  paymentPlans(
+    where: PaymentPlanWhereInput! = {}
+    orderBy: [PaymentPlanOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [PaymentPlan!]
+  paymentPlan(where: PaymentPlanWhereUniqueInput!): PaymentPlan
+  paymentPlansCount(where: PaymentPlanWhereInput! = {}): Int
+  coupons(
+    where: CouponWhereInput! = {}
+    orderBy: [CouponOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Coupon!]
+  coupon(where: CouponWhereUniqueInput!): Coupon
+  couponsCount(where: CouponWhereInput! = {}): Int
   audits(
     where: AuditWhereInput! = {}
     orderBy: [AuditOrderByInput!]! = []
@@ -4476,6 +5474,32 @@ type Query {
     where: StableLiquidityPairWhereUniqueInput!
   ): StableLiquidityPair
   stableLiquidityPairsCount(where: StableLiquidityPairWhereInput! = {}): Int
+  discordConfigs(
+    where: DiscordConfigWhereInput! = {}
+    orderBy: [DiscordConfigOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [DiscordConfig!]
+  discordConfig(where: DiscordConfigWhereUniqueInput!): DiscordConfig
+  discordConfigsCount(where: DiscordConfigWhereInput! = {}): Int
+  discordEvents(
+    where: DiscordEventWhereInput! = {}
+    orderBy: [DiscordEventOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [DiscordEvent!]
+  discordEvent(where: DiscordEventWhereUniqueInput!): DiscordEvent
+  discordEventsCount(where: DiscordEventWhereInput! = {}): Int
+  discordAnnouncements(
+    where: DiscordAnnouncementWhereInput! = {}
+    orderBy: [DiscordAnnouncementOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [DiscordAnnouncement!]
+  discordAnnouncement(
+    where: DiscordAnnouncementWhereUniqueInput!
+  ): DiscordAnnouncement
+  discordAnnouncementsCount(where: DiscordAnnouncementWhereInput! = {}): Int
   discordBots(
     where: DiscordBotWhereInput! = {}
     orderBy: [DiscordBotOrderByInput!]! = []
@@ -4492,6 +5516,14 @@ type Query {
   ): [Content!]
   content(where: ContentWhereUniqueInput!): Content
   contentsCount(where: ContentWhereInput! = {}): Int
+  comments(
+    where: CommentWhereInput! = {}
+    orderBy: [CommentOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Comment!]
+  comment(where: CommentWhereUniqueInput!): Comment
+  commentsCount(where: CommentWhereInput! = {}): Int
   contentBlocks(
     where: ContentBlockWhereInput! = {}
     orderBy: [ContentBlockOrderByInput!]! = []
@@ -4564,38 +5596,26 @@ type Query {
   ): [KycGroup!]
   kycGroup(where: KycGroupWhereUniqueInput!): KycGroup
   kycGroupsCount(where: KycGroupWhereInput! = {}): Int
-  creatorRatings(
-    where: CreatorRatingWhereInput! = {}
-    orderBy: [CreatorRatingOrderByInput!]! = []
+  transparencyHighlights(
+    where: TransparencyHighlightWhereInput! = {}
+    orderBy: [TransparencyHighlightOrderByInput!]! = []
     take: Int
     skip: Int! = 0
-  ): [CreatorRating!]
-  creatorRating(where: CreatorRatingWhereUniqueInput!): CreatorRating
-  creatorRatingsCount(where: CreatorRatingWhereInput! = {}): Int
-  creatorReviews(
-    where: CreatorReviewWhereInput! = {}
-    orderBy: [CreatorReviewOrderByInput!]! = []
+  ): [TransparencyHighlight!]
+  transparencyHighlight(
+    where: TransparencyHighlightWhereUniqueInput!
+  ): TransparencyHighlight
+  transparencyHighlightsCount(where: TransparencyHighlightWhereInput! = {}): Int
+  transparencyRatings(
+    where: TransparencyRatingWhereInput! = {}
+    orderBy: [TransparencyRatingOrderByInput!]! = []
     take: Int
     skip: Int! = 0
-  ): [CreatorReview!]
-  creatorReview(where: CreatorReviewWhereUniqueInput!): CreatorReview
-  creatorReviewsCount(where: CreatorReviewWhereInput! = {}): Int
-  projectRatings(
-    where: ProjectRatingWhereInput! = {}
-    orderBy: [ProjectRatingOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProjectRating!]
-  projectRating(where: ProjectRatingWhereUniqueInput!): ProjectRating
-  projectRatingsCount(where: ProjectRatingWhereInput! = {}): Int
-  projectComments(
-    where: ProjectCommentWhereInput! = {}
-    orderBy: [ProjectCommentOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [ProjectComment!]
-  projectComment(where: ProjectCommentWhereUniqueInput!): ProjectComment
-  projectCommentsCount(where: ProjectCommentWhereInput! = {}): Int
+  ): [TransparencyRating!]
+  transparencyRating(
+    where: TransparencyRatingWhereUniqueInput!
+  ): TransparencyRating
+  transparencyRatingsCount(where: TransparencyRatingWhereInput! = {}): Int
   marketingCampaigns(
     where: MarketingCampaignWhereInput! = {}
     orderBy: [MarketingCampaignOrderByInput!]! = []
@@ -4650,6 +5670,22 @@ type Query {
   ): [OrderItem!]
   orderItem(where: OrderItemWhereUniqueInput!): OrderItem
   orderItemsCount(where: OrderItemWhereInput! = {}): Int
+  votes(
+    where: VoteWhereInput! = {}
+    orderBy: [VoteOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Vote!]
+  vote(where: VoteWhereUniqueInput!): Vote
+  votesCount(where: VoteWhereInput! = {}): Int
+  quizzes(
+    where: QuizWhereInput! = {}
+    orderBy: [QuizOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Quiz!]
+  quiz(where: QuizWhereUniqueInput!): Quiz
+  quizzesCount(where: QuizWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(
