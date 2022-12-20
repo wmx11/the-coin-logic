@@ -34,16 +34,8 @@ const TransparencyScore: FC<TransparencyScoreProps> = ({ data }) => {
     },
   });
 
-  const {
-    votes,
-    canVote,
-    hasVoted,
-    fetchVotes,
-    canUserVoteToday,
-    voteSecure,
-    recalculateTransparency,
-    rateProjectAsTcl,
-  } = useVotes();
+  const { votes, canVote, hasVoted, fetchVotes, canUserVoteToday, vote, recalculateTransparency, rateProjectAsTcl } =
+    useVotes();
 
   const { user } = useUser();
 
@@ -127,7 +119,7 @@ const TransparencyScore: FC<TransparencyScoreProps> = ({ data }) => {
                   size="sm"
                   leftIcon={<Icons.Eye />}
                   color="teal"
-                  onClick={() => voteSecure({ type: 'transparency', projectId: id, value: 1 })}
+                  onClick={() => vote({ type: 'transparency', projectId: id, value: 1 })}
                 >
                   Transparent
                 </Button>
@@ -135,7 +127,7 @@ const TransparencyScore: FC<TransparencyScoreProps> = ({ data }) => {
                   size="sm"
                   leftIcon={<Icons.EyeSlashed />}
                   color="dark"
-                  onClick={() => voteSecure({ type: 'transparency', projectId: id, value: 0 })}
+                  onClick={() => vote({ type: 'transparency', projectId: id, value: 0 })}
                 >
                   Obscure
                 </Button>
