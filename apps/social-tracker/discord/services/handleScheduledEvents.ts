@@ -27,6 +27,8 @@ const handleCreateOrUpdate = async (
     location: event?.entityMetadata?.location || undefined,
   };
 
+  console.log(data);
+
   handler(data);
 };
 
