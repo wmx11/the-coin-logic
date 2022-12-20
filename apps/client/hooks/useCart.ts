@@ -29,8 +29,6 @@ const useCart = () => {
 
   const router = useRouter();
 
-  console.log(cart);
-
   useEffect(() => {
     if (!cart) {
       createCart();
