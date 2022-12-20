@@ -17,6 +17,7 @@ import {
   MARKET_STAT_CHANGES,
 } from './constatnts/project';
 import { getData } from './getters';
+import prisma from '../prisma';
 
 export const getProjectsByUserEmail = async (email: string) => {
   const { user } = await getData({
