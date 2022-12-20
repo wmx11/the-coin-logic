@@ -90,7 +90,7 @@ const QuizResults: FC<QuizResultsProps> = ({ quiz, results }) => {
           points += 1;
         }
 
-        if (answer.isCorrect && answer.selected) {
+        if (answer.isCorrect && answer.selected && totalPoints < points) {
           if (answer.allCorrect) {
             return (totalPoints += answers.length);
           }
@@ -103,6 +103,10 @@ const QuizResults: FC<QuizResultsProps> = ({ quiz, results }) => {
         }
       });
     });
+
+    if (totalPoints > points) {
+      totalPoints = points;
+    }
 
     return { points, totalPoints, hasWon };
   };
