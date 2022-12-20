@@ -1,5 +1,4 @@
 import { formatISO, startOfYesterday } from 'date-fns';
-import { prismaClient } from 'tcl-packages/prismaClient';
 import { MarketStat, Project } from 'types';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import getChangesPartial from 'utils/getChangesPartial';
@@ -182,7 +181,7 @@ export const getProjectAndMarketStatsBySlug = async (
 export const getTrendingProjects = async (limit = 3) => {
   const count = await getProjectsCount();
 
-  const marketStatsToday = prismaClient?.marketStat.findMany({
+  const marketStatsToday = prisma?.marketStat.findMany({
     select: {
       price: true,
       project: {
@@ -201,7 +200,7 @@ export const getTrendingProjects = async (limit = 3) => {
     take: count,
   });
 
-  const marketStatsYesterday = prismaClient?.marketStat.findMany({
+  const marketStatsYesterday = prisma?.marketStat.findMany({
     select: {
       price: true,
       project: {
