@@ -19,8 +19,14 @@ type TransparencyScoreProps = {
 };
 
 const TransparencyScore: FC<TransparencyScoreProps> = ({ data }) => {
-  const { transparencyHighlights, auditByCount, kycByCount, customVetting, id, tclRating, transparencyScore } = data;
+  const { auditByCount, kycByCount, customVetting, id, tclRating, transparencyScore } = data;
   const [tclScore, setTclScore] = useState<number>((tclRating as number) || 0);
+
+  const transparencyHighlights = (() => {
+    try {
+      return data.transparencyHighlights ? JSON.parse(data.transparencyHighlights) : [];
+    } catch (error) {}
+  })();
 
   const form = useForm({
     initialValues: {
