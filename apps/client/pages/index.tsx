@@ -18,7 +18,8 @@ import { Hero } from '../components/Hero';
 import { JoinOurCommunity } from '../components/JoinOurCommunity';
 import { ProjectsTable } from '../components/ProjectsTable';
 import TrackVitalsDisclaimer from '../components/TrackVitalsDisclaimer';
-import { getBlogPosts, getProjectsCount, getProjectsForTable, getTrendingProjects } from '../data/getters';
+import { getBlogPosts, getProjectsCount, getProjectsForTable } from '../data/getters';
+import { getTrendingProjects } from 'data/getters/server/getTrendingProjects';
 
 type HomeProps = {
   projects: [];
