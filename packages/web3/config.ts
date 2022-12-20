@@ -1,6 +1,6 @@
 const config = {
   caller: '0x95fa0fe94d66e98e8ee009db8ee6efc5cf977092',
-  receiver: '0x6c957d7030FbaC6E070C84B4370E3C8cb6E99cd7',
+  receiver: '0xb1B3280238339807D746E0F2dec6b3F76E3575F7',
   referralReceiver: '0x6c957d7030FbaC6E070C84B4370E3C8cb6E99cd7',
   initialChunks: 2000,
   chunks: 300, // Based on 1 block per 3 seconds over 10 minutes
