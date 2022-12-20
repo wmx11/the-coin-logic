@@ -71,7 +71,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const quiz = await prismaClient.quiz.findUnique({
       where: {
-        id: quizId,
+        id: quizId || undefined,
       },
     });
 

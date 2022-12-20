@@ -23,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params, quer
   const canEditProject = await isProjectEditor({ userId: session?.id as string, slug: query[QUERY_PROJECT] as string });
   const content = await getBlogContentBySlug(slug as string);
 
-  if (!session || !canEditProject || session.id !== content.user.id) {
+  if (!session || !canEditProject || session?.id !== content?.user?.id) {
     return {
       redirect: {
         destination: '/',

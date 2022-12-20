@@ -54,7 +54,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const article = await prismaClient.content.findUnique({
       where: {
-        id: articleId,
+        id: articleId || undefined,
       },
     });
 

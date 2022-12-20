@@ -57,7 +57,7 @@ const Events: FC<EventsProps> = ({ events, count }) => {
             <GrayBox>
               {eventsData
                 ? 'The following project has no events or the events are not tracked.'
-                : 'Looks like there are no events here.'}
+                : 'Looks like there are no events here 😮'}
             </GrayBox>
           </div>
         )}

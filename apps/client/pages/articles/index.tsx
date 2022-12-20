@@ -48,7 +48,7 @@ const Articles: FC<ArticlesProps> = ({ blogPosts, blogPostsCount }) => {
           <BlogPosts data={articles || blogPosts} />
         ) : (
           <div className="py-10">
-            <GrayBox>No articles were found by given search parameters.</GrayBox>
+            <GrayBox>No articles here 😮</GrayBox>
           </div>
         )}
 

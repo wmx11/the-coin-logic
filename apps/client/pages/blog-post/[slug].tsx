@@ -84,7 +84,7 @@ const index: FC<ContentTypes> = ({ content }) => {
           {user && (user?.id === author?.id || user?.isAdmin) ? (
             <Link
               href={`${routes.articleUpdate.replace('${slug}', slug as string)}${
-                project ? `?${QUERY_PROJECT}=${project.slug}` : null
+                project ? `?${QUERY_PROJECT}=${project.slug}` : ''
               }`}
             >
               <a>

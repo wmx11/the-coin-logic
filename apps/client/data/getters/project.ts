@@ -1,4 +1,4 @@
-import { endOfYesterday, formatISO, sub } from 'date-fns';
+import { formatISO, startOfYesterday } from 'date-fns';
 import { prismaClient } from 'tcl-packages/prismaClient';
 import { MarketStat, Project } from 'types';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
@@ -15,7 +15,7 @@ import {
   GET_PROJECT_AND_MARKET_STATS_BY_ID,
   GET_PROJECT_AVERAGE_MARKET_CHANGE_FOR_PERIOD_OF_TIME,
   GET_PROJECT_ID_BY_SLUG,
-  MARKET_STAT_CHANGES
+  MARKET_STAT_CHANGES,
 } from './constatnts/project';
 import { getData } from './getters';
 
@@ -66,7 +66,7 @@ export const getProjectPreviousDayMarketStatsByProjectIdAndDate = async (project
     return null;
   }
 
-  const lastDay = formatISO(sub(new Date(date), { days: 1 }));
+  const lastDay = formatISO(startOfYesterday());
 
   const { marketStats, socialStats } = await getData({
     query: GET_PREVIOUS_DAY_MARKET_STATS,
@@ -94,7 +94,7 @@ export const getProjectsForTable = async () => {
       fetchPolicy: 'network-only',
       variables: {
         projectId: project.id,
-        date: endOfYesterday(),
+        date: startOfYesterday(),
       },
     });
 
@@ -216,7 +216,7 @@ export const getTrendingProjects = async (limit = 3) => {
     },
     where: {
       dateAdded: {
-        lt: sub(new Date(), { days: 1 }),
+        lt: startOfYesterday(),
       },
     },
     orderBy: {

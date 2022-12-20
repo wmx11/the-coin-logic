@@ -64,7 +64,7 @@ const Announcements: FC<AnnouncementsProps> = ({ announcements, count }) => {
         ) : (
           <div className="py-10">
             <GrayBox>
-              {announcementsData && announcementsData.length ? '' : 'Looks like there are no announcements here.'}
+              {announcementsData && announcementsData.length ? '' : 'Looks like there are no announcements here 😮'}
             </GrayBox>
           </div>
         )}
