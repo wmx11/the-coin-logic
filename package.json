@@ -39,6 +39,7 @@
     "@graphql-codegen/cli": "^2.11.5",
     "@graphql-codegen/typescript": "^2.7.3",
     "@ipregistry/client": "^4.5.0",
+    "@tailwindcss/typography": "^0.5.8",
     "@types/express-useragent": "^1.0.2",
     "@types/gtag.js": "^0.0.12",
     "@types/node-cron": "^3.0.2",
@@ -79,8 +80,5 @@
     "winston": "^3.8.1",
     "xlsx": "^0.18.5",
     "zod": "^3.17.3"
-  },
-  "devDependencies": {
-    "@tailwindcss/typography": "^0.5.8"
   }
 }
