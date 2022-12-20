@@ -51,6 +51,10 @@ const QuizResults: FC<QuizResultsProps> = ({ quiz, results }) => {
       : false;
 
   const addWinner = async () => {
+    if (value.playCount > 1) {
+      return;
+    }
+
     const { data } = await signedRequest<IsSafeAuth>(
       { type: 'post', data: { id }, url: routes.api.products.quiz.addWinner },
       id,
@@ -86,9 +90,9 @@ const QuizResults: FC<QuizResultsProps> = ({ quiz, results }) => {
           points += 1;
         }
 
-        if (answer.isCorrect && answer.selected && totalPoints !== points) {
+        if (answer.isCorrect && answer.selected) {
           if (answer.allCorrect) {
-            return (totalPoints = answers.length);
+            return (totalPoints += answers.length);
           }
 
           totalPoints += 1;
@@ -210,9 +214,7 @@ const QuizResults: FC<QuizResultsProps> = ({ quiz, results }) => {
         </Paper>
       </div>
       <div className="flex-1">
-        <GradientTitle order={2}>
-          {title}
-        </GradientTitle>
+        <GradientTitle order={2}>{title}</GradientTitle>
         <GradientTitle order={4} className="mb-4">
           Review
         </GradientTitle>
