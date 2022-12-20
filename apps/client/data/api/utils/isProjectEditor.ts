@@ -1,4 +1,4 @@
-import { prismaClient } from 'tcl-packages/prismaClient';
+import prisma from '../../prisma';
 
 export const isProjectEditor = async ({
   userId,
@@ -11,7 +11,7 @@ export const isProjectEditor = async ({
 }) => {
   const action = projectId ? { id: projectId } : { slug: { equals: slug } };
 
-  const canEditProject = await prismaClient?.user.findFirst({
+  const canEditProject = await prisma?.user.findFirst({
     where: {
       id: userId,
       OR: [

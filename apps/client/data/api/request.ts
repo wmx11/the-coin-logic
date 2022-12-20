@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { prismaClient } from 'tcl-packages/prismaClient';
+import prisma from '../prisma';
 import { response } from './response';
 
 export type Auth = {
@@ -59,7 +59,7 @@ const request = (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const decoded = jwt.verify(authToken, secret) as { id: string };
 
-      const user = await prismaClient?.user.findFirst({
+      const user = await prisma?.user.findFirst({
         where: {
           id: decoded?.id,
         },
