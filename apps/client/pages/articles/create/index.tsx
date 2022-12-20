@@ -13,6 +13,7 @@ export default article;
 export const getServerSideProps: GetServerSideProps = async ({ req, params, query }) => {
   const session = await getSession({ req });
   const canEditProject = await isProjectEditor({ userId: session?.id as string, slug: query[QUERY_PROJECT] as string });
+  
   if (!session || !canEditProject) {
     return {
       redirect: {

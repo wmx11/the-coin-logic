@@ -17,10 +17,10 @@ type ArticlesProps = {
 const Articles: FC<ArticlesProps> = ({ data }) => {
   const { isProjectEditor, user } = useUserStore((state) => state);
   const { content: blogPosts, slug, id } = data;
+  
   return (
     <div>
       <TitleWithIcon title="Related Content" Icon={Icons.Article} />
-
       {user && isProjectEditor(user, id) ? (
         <div className="mb-4">
           <Link href={`${routes.articleCreate}?${QUERY_PROJECT}=${slug}`} passHref>
