@@ -7,6 +7,7 @@ export const getHoldersCountByProjectIdFrom = (projectId: string, from: number) 
     return prismaClient.holder.count({
       where: {
         projectsId: projectId,
+        isContract: false,
         balance: {
           gte: from,
         },
@@ -26,6 +27,7 @@ export const getAverageHoldingsByProjectId = async (projectId: string) => {
       },
       where: {
         projectsId: projectId,
+        isContract: false,
       },
     });
     return _avg.balance;

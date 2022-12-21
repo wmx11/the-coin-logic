@@ -29,7 +29,7 @@ type HomeProps = {
   highlights: {
     eventsHighlights: DiscordEvent[];
     announcementsHighlights: DiscordAnnouncement[];
-    trendingHighlights: { name: string; slug: string; logo: string; change: number }[];
+    trendingHighlights: { name: string; slug: string; logo: string; change: number; votes: number }[];
   };
 };
 
@@ -84,7 +84,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, query }) => 
       withRedisCache('topCoins', getTopCoins, 10 * 60),
       getEventsHighlights(),
       getAnnouncementsHighlights(),
-      getTrendingProjects(5),
+      withRedisCache('trending_projects', () => getTrendingProjects(5), 10 * 60),
     ]);
 
   setRefCookie({ res, query });

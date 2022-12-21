@@ -17,7 +17,7 @@ type ArticlesProps = {
 const Articles: FC<ArticlesProps> = ({ data }) => {
   const { isProjectEditor, user } = useUserStore((state) => state);
   const { content: blogPosts, slug, id } = data;
-  
+
   return (
     <div>
       <TitleWithIcon title="Related Content" Icon={Icons.Article} />
@@ -39,7 +39,7 @@ const Articles: FC<ArticlesProps> = ({ data }) => {
             ))}
           </div>
         ) : (
-          <GrayBox className="flex-1">This project currently has no content</GrayBox>
+          <GrayBox className="flex-1">No articles here 😮</GrayBox>
         )}
         {blogPosts && blogPosts.length ? (
           <div className="flex gap-2 items-center text-sm text-violet mt-8 md:mt-0">

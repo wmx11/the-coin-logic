@@ -39,7 +39,7 @@ const Interactions: FC<InteractionsProps> = ({ data }) => {
             ))}
           </div>
         ) : (
-          <GrayBox className="flex-1">This project currently has no interactions.</GrayBox>
+          <GrayBox className="flex-1">No interactions here 😮</GrayBox>
         )}
         {quizzes && quizzes.length ? (
           <div className="flex gap-2 items-center text-sm text-violet mt-8 md:mt-0">

@@ -1,7 +1,7 @@
-import { Avatar, Button, Divider, Text, Title } from '@mantine/core';
+import { Avatar, Button, Text } from '@mantine/core';
 import Paper from 'components/Paper';
 import GradientTitle from 'components/Text/GradientTitle';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Project } from 'types';
 
 type MarketsProps = {
@@ -17,7 +17,7 @@ const Markets: FC<MarketsProps> = ({ data }) => {
 
   const alerts = notifications?.filter(({ type }) => type === 'alert');
 
-  const liquidityPairs = liquidityPair.map(({ name, exchange, tokenAddress }, index) => {
+  const liquidityPairs = liquidityPair.map(({ name, exchange, tokenAddress, customExchangeAddress }, index) => {
     return (
       <div className="mb-4" key={`market_${index}`}>
         <div className="flex justify-between items-center">
@@ -28,7 +28,7 @@ const Markets: FC<MarketsProps> = ({ data }) => {
         {exchange ? (
           <Button
             component="a"
-            href={`${exchange?.tradeUrl}${tokenAddress}`}
+            href={customExchangeAddress || `${exchange?.tradeUrl}${tokenAddress}`}
             target="_blank"
             color="violet"
             variant="outline"

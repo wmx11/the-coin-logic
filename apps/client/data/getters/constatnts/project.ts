@@ -236,6 +236,7 @@ query($projectId: ID, $date: DateTime) {
       liquidityPair {
         name
         tokenAddress
+        customExchangeAddress
         address
         isPrimary
         order
