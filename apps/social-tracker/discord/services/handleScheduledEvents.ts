@@ -64,6 +64,10 @@ export const addAllScheduledEventsByGuildId = async (client: Client, guildId: st
     }
 
     const events = await guild.scheduledEvents.fetch();
+    const test = guild.scheduledEvents.cache;
+
+    console.log(test);
+    
 
     if (!events || events?.size === 0) {
       return undefined;
