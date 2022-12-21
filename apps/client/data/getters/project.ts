@@ -100,7 +100,7 @@ export const getProjectsForTable = async () => {
     const today = todayArr[0] || undefined;
     const yesterday = yesterdayArr[0] || undefined;
 
-    if (today && yesterday) {
+    if (today) {
       const getChanges = getChangesPartial(today, yesterday || today);
       const marketStatsWithChanges = { ...today, project };
       MARKET_STAT_CHANGES.forEach((value) => Object.assign(marketStatsWithChanges, getChanges(value)));
