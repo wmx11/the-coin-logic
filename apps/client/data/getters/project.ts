@@ -1,4 +1,4 @@
-import { formatISO, startOfYesterday } from 'date-fns';
+import { formatISO, endOfYesterday } from 'date-fns';
 import { MarketStat, Project } from 'types';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import getChangesPartial from 'utils/getChangesPartial';
@@ -65,7 +65,7 @@ export const getProjectPreviousDayMarketStatsByProjectIdAndDate = async (project
     return null;
   }
 
-  const lastDay = formatISO(startOfYesterday());
+  const lastDay = formatISO(endOfYesterday());
 
   const { marketStats, socialStats } = await getData({
     query: GET_PREVIOUS_DAY_MARKET_STATS,
@@ -93,7 +93,7 @@ export const getProjectsForTable = async () => {
       fetchPolicy: 'network-only',
       variables: {
         projectId: project.id,
-        date: startOfYesterday(),
+        date: endOfYesterday(),
       },
     });
 
@@ -149,7 +149,13 @@ export const getProjectAndMarketStatsBySlug = async (
   const socialStatsLastDay = marketStatsLastDayData?.socialStats;
 
   if (!marketStatsLastDay) {
-    return { ...marketStats, relatedProjects: marketStatsArray.relatedProjects };
+    return {
+      ...marketStats,
+      ...marketStatsArray.socialStats[0],
+      relatedProjects: marketStatsArray.relatedProjects,
+      quizzes: marketStatsArray?.quizzes,
+      paymentPlans: marketStatsArray?.paymentPlans,
+    };
   }
 
   // Extract customData labels and their appropriate values

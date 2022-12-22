@@ -1,4 +1,5 @@
 import { Container } from '@mantine/core';
+import Meta from 'components/Meta';
 import { getQuizBySlug } from 'data/getters/product';
 import { GetServerSideProps } from 'next';
 import { FC, useState } from 'react';
@@ -14,9 +15,16 @@ const Quiz: FC<QuizProps> = ({ quiz }) => {
   const [hasStarted, setHasStarted] = useState(false);
 
   return (
-    <Container className="py-10">
-      {hasStarted ? <QuizGame quiz={quiz} /> : <QuizPage quiz={quiz} startQuiz={() => setHasStarted(true)} />}
-    </Container>
+    <>
+      <Meta
+        title={`${quiz.title} | Coin Logic`}
+        description={`Test your cryptocurrency knowledge and win rewards with The Coin Logic Quizzes! | ${quiz.title}!`}
+        image={quiz.image?.url}
+      />
+      <Container className="py-10">
+        {hasStarted ? <QuizGame quiz={quiz} /> : <QuizPage quiz={quiz} startQuiz={() => setHasStarted(true)} />}
+      </Container>
+    </>
   );
 };
 
