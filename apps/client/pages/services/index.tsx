@@ -5,10 +5,10 @@ import Paper from 'components/Paper';
 import GradientTitle from 'components/Text/GradientTitle';
 import Image from 'next/image';
 import AMAs from 'public/images/amas.svg';
+import AssureDefi from 'public/images/assure_defi_logo.svg';
 import CommunityEvents from 'public/images/community_events.svg';
-import ContractAudits from 'public/images/contract_audits.svg';
-import KYC from 'public/images/kyc.svg';
 import Marketing from 'public/images/marketing.svg';
+import PrismaShield from 'public/images/prisma_shield_logo.svg';
 import Tracking from 'public/images/tracking.svg';
 import { FC } from 'react';
 import { animated, useSpring } from 'react-spring';
@@ -25,10 +25,10 @@ const ServiceCard: FC<ServiceCardProps> = ({ title, description, image }) => {
 
   return (
     <>
-      <animated.div className="" ref={ref} style={{ ...styles }}>
+      <animated.div ref={ref} style={{ ...styles }}>
         <Paper>
           <div className="flex justify-center">
-            <Image src={image as string} width={200} height={200} />
+            <Image src={image as string} width={250} height={250} layout="intrinsic" />
           </div>
           <GradientTitle className="mb-2">{title}</GradientTitle>
           <Text size="sm">{description}</Text>
@@ -57,13 +57,13 @@ const index = () => {
           />
           <ServiceCard
             title="Contract Audits"
-            description="Smart contract audits are one of the best ways to ensure your project is secure and free of logic errors. Audits can help you spot bugs way before the project grows to sizes where migrations are a headache to handle. Audit your project smart contract with one of the most competitive prices in the space through our partners at Cardinal House! They are revolutionizing the space in a couple key ways in addition to all audit standards. Firstly, Cardinal House Audits do a manual review of the smart contracts to ensure that all intended functionalities are present. Secondly, they also do Unit/Integration Testing as a secondary service to dive deeper into all the edge cases."
-            image={ContractAudits}
+            description={`Prisma Shield’s Deep Logic Audit is a thorough review of smart contracts that are conducted by humans. It not only checks for security vulnerabilities but also examines the code's mathematical precision and logical consistency to ensure that the smart contract adheres to the requirements outlined in the project's whitepaper and functions properly. As part of this service, Prisma Shield also performs testing on the main net and works closely with the project’s team to fully understand the project and provide the highest quality code reviews.`}
+            image={PrismaShield}
           />
           <ServiceCard
             title="K.Y.C"
-            description="K.Y.C is one way to make you and your project transparent. Having you and your team complete a full K.Y.C will bring trust to the community and will set a certain mindframe for future actions and management of the project. Our partners at Assure DeFi provide the best legal K.Y.C services!"
-            image={KYC}
+            description={`Assure is an impartial service that verifies, records, and securely stores identity information and project roles for individuals who go through the verification process. While Assure does not make decisions about potential criminal activity, they do assist with investigations if investors suspect fraud on a verified project.`}
+            image={AssureDefi}
           />
           <ServiceCard
             title="Marketing"
