@@ -1,8 +1,10 @@
+import { Annotation } from 'types/Charts';
 import create from 'zustand';
 
 export type ChartData = {
   date: string;
   value: string;
+  annotation: Annotation;
 };
 
 type ChartDataStore = {
