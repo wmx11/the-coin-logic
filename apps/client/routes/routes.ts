@@ -8,6 +8,7 @@ const DISCORD_API = process.env.NEXT_PUBLIC_DISCORD_API;
 
 const routes = {
   base: isDev ? 'http://localhost:3000' : 'https://thecoinlogic.com',
+  authCheck: '/auth-check',
   aboutUs: `/about-us`,
   articles: `/articles`,
   articleCreate: `/articles/create`,
