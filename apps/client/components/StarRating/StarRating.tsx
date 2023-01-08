@@ -31,7 +31,11 @@ const StarRating: FC<StarRatingProps> = ({ rating, providerId, readOnly }) => {
 
   return (
     <div className="flex items-center gap-2">
-      <Rating value={ratings?.averageRating} onChange={handleChange} readOnly={readOnly || ratings?.hasVoted} />
+      <Rating
+        value={readOnly || ratings?.hasVoted ? ratings?.averageRating : 0}
+        onChange={handleChange}
+        readOnly={readOnly || ratings?.hasVoted}
+      />
       <Text size="xs" color="dimmed">
         ({toLocaleString(ratings?.votesCount || rating || 0)})
       </Text>
