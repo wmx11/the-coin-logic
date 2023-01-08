@@ -42,6 +42,8 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
   const adapter = KeystoneAdapter(prismaClient as PrismaClient, req, res);
 
+  const useSecureCookies = process.env.PRODUCTION_URL?.includes(req.headers.host as string);
+
   return await NextAuth(req, res, {
     adapter,
     providers: providers,
@@ -85,13 +87,17 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
               userId: (userAuth?.id as string) || '',
             });
 
-            console.log(isDev);
-
             const cookies = new Cookies(req, res);
 
-            cookies.set(isDev ? NEXT_AUTH_SESSION_TOKEN : NEXT_AUTH_SESSION_TOKEN_SECURE, session.sessionToken, {
-              expires,
-            });
+            console.log(useSecureCookies ? NEXT_AUTH_SESSION_TOKEN_SECURE : NEXT_AUTH_SESSION_TOKEN);
+
+            cookies.set(
+              useSecureCookies ? NEXT_AUTH_SESSION_TOKEN_SECURE : NEXT_AUTH_SESSION_TOKEN,
+              session.sessionToken,
+              {
+                expires,
+              },
+            );
           }
           return true;
         }
@@ -122,7 +128,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
           req.method === 'POST'
         ) {
           const cookies = new Cookies(req, res);
-          const cookie = cookies.get(NEXT_AUTH_SESSION_TOKEN);
+          const cookie = cookies.get(useSecureCookies ? NEXT_AUTH_SESSION_TOKEN_SECURE : NEXT_AUTH_SESSION_TOKEN);
 
           if (cookie) {
             return cookie;
@@ -144,6 +150,18 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
         // Revert to default behaviour when not in the credentials provider callback flow
         return decode(token);
+      },
+    },
+    useSecureCookies: useSecureCookies,
+    cookies: {
+      sessionToken: {
+        name: useSecureCookies ? NEXT_AUTH_SESSION_TOKEN_SECURE : NEXT_AUTH_SESSION_TOKEN,
+        options: {
+          httpOnly: true,
+          sameSite: 'lax',
+          path: '/',
+          secure: useSecureCookies,
+        },
       },
     },
     session: {
