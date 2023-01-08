@@ -10,7 +10,7 @@ import { responsiveStylesForLayoutWithSideMenu } from 'components/Table/mainThem
 import GradientText from 'components/Text/GradientText';
 import GradientTitle from 'components/Text/GradientTitle';
 import useCart from 'hooks/useCart';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useUserStore from 'store/useUserStore';
 import { CartItem } from 'types';
 import { formateDateWithHours } from 'utils/formatters';
@@ -20,8 +20,12 @@ import toLocaleString from 'utils/toLocaleString';
 
 const Funding = () => {
   const { user } = useUserStore((state) => state);
-  const { cart, addItem } = useCart();
+  const { cart, addItem, clearItems } = useCart();
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    clearItems();
+  }, []);
 
   const columns: Column[] = [
     { label: 'Date', renderCell: (token) => formateDateWithHours(token.dateAdded) },
