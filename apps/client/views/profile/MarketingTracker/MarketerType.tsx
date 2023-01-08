@@ -6,13 +6,9 @@ type MarketerTypeProps = {
 };
 
 const MarketerType: FC<MarketerTypeProps> = ({ campaign }) => {
-  const { isInternal, creator, agency, agencyUrl } = campaign;
+  const { isInternal, agency, agencyUrl } = campaign;
   if (isInternal) {
     return <>Internal</>;
-  }
-
-  if (creator) {
-    return <>{creator.name}</>;
   }
 
   if (agency) {

@@ -9,8 +9,8 @@ type ProfileControlsProps = {
 
 const ProfileControls: FC<ProfileControlsProps> = ({ provider }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const Modal = dynamic(() => import('components/Modal'));
-  const CreateOrUpdateNexusProfile = dynamic(() => import('views/profile/Nexus/CreateOrUpdateNexusProfile'));
+  const Modal = dynamic<any>(() => import('components/Modal'));
+  const CreateOrUpdateNexusProfile = dynamic<any>(() => import('views/profile/Nexus/CreateOrUpdateNexusProfile'));
 
   const handleClick = async () => {
     setIsOpen((o) => !o);

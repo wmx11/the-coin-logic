@@ -36,8 +36,8 @@ const web3Config = {
 const ProvidersWrapper: FC<ProvidersWrapperTypes> = ({ children }): React.ReactElement => {
   const [scroll, scrollTo] = useWindowScroll();
 
-  const ConfirmationModal = dynamic(() => import('components/Modals/ConfirmationModal'), { ssr: false });
-  const Web3Modal = dynamic(() => import('@web3modal/react').then((mod) => mod.Web3Modal), { ssr: false });
+  const ConfirmationModal = dynamic<any>(() => import('components/Modals/ConfirmationModal'), { ssr: false });
+  const Web3Modal = dynamic<any>(() => import('@web3modal/react').then((mod) => mod.Web3Modal), { ssr: false });
 
   return (
     <GoogleReCaptchaProvider

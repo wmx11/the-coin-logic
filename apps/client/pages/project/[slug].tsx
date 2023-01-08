@@ -66,12 +66,12 @@ const project: FC<ProjectProps> = ({ projectData }) => {
     );
   }
 
-  const SocialAnalysisData = dynamic(() => import('views/project/SocialAnalysisData'));
-  const AreaChartGroup = dynamic(() => import('components/Charts/AreaChartGroup'));
-  const HoldersData = dynamic(() => import('../../views/project/HoldersData'));
-  const Articles = dynamic(() => import('views/project/Articles'));
-  const Transcriptions = dynamic(() => import('views/project/Transcriptions'));
-  const Interactions = dynamic(() => import('views/project/Interactions'));
+  const SocialAnalysisData = dynamic<any>(() => import('views/project/SocialAnalysisData'));
+  const AreaChartGroup = dynamic<any>(() => import('components/Charts/AreaChartGroup'));
+  const HoldersData = dynamic<any>(() => import('../../views/project/HoldersData'));
+  const Articles = dynamic<any>(() => import('views/project/Articles'));
+  const Transcriptions = dynamic<any>(() => import('views/project/Transcriptions'));
+  const Interactions = dynamic<any>(() => import('views/project/Interactions'));
 
   // Clear all charts data on unmount
   useEffect(() => () => chartStore.clearAll(), []);

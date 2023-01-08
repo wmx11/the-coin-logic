@@ -36,17 +36,16 @@ const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts, topCoin
   const { token } = useResetToken();
   const { query } = router;
 
-  const Highlights = dynamic(() => import('views/home/Highlights'));
-
-  const CryptocurrenciesTable = dynamic(() => import('components/CryptocurrenciesTable'));
-
-  const JoinOurCommunity = dynamic(() => import('../components/JoinOurCommunity').then((mod) => mod.JoinOurCommunity), {
-    ssr: false,
-  });
-
-  const SubscribeToEmail = dynamic(() => import('components/SubscribeToEmail'), { ssr: false });
-
-  const TrackVitalsDisclaimer = dynamic(() => import('../components/TrackVitalsDisclaimer'), { ssr: false });
+  const Highlights = dynamic<any>(() => import('views/home/Highlights'));
+  const CryptocurrenciesTable = dynamic<any>(() => import('components/CryptocurrenciesTable'));
+  const JoinOurCommunity = dynamic<any>(
+    () => import('../components/JoinOurCommunity').then((mod) => mod.JoinOurCommunity),
+    {
+      ssr: false,
+    },
+  );
+  const SubscribeToEmail = dynamic<any>(() => import('components/SubscribeToEmail'), { ssr: false });
+  const TrackVitalsDisclaimer = dynamic<any>(() => import('../components/TrackVitalsDisclaimer'), { ssr: false });
 
   const openLogInOrPasswordResetModal = useCallback(() => {
     if (query.signIn) {

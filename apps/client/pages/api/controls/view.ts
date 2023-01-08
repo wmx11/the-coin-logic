@@ -20,12 +20,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const addView = async () => {
     const { articleId, providerId, transcriptionId, quizId }: HandleViewAndLikeTypes = req.body;
 
-    const getUpdater = <T>(id: string, data: unknown extends T ? any : any) => ({
+    const getUpdater = <T>(id: string, data: T) => ({
       where: {
         id: id || '',
       },
       data: {
-        views: (data?.views || 0) + 1,
+        views: ((data as unknown as { views: number })?.views || 0) + 1,
       },
       select: {
         views: true,
@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
 
       await prismaClient?.content.update({
-        ...getUpdater<Content>(articleId, data),
+        ...getUpdater<Content>(articleId, data as Content),
       });
 
       return responseHandler.ok();
@@ -54,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
 
       await prismaClient?.provider.update({
-        ...getUpdater<Provider>(providerId, data),
+        ...getUpdater<Provider>(providerId, data as Provider),
       });
 
       return responseHandler.ok();
@@ -68,7 +68,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
 
       await prismaClient?.transcription.update({
-        ...getUpdater<Transcription>(transcriptionId, data),
+        ...getUpdater<Transcription>(transcriptionId, data as Transcription),
       });
 
       return responseHandler.ok();
@@ -82,7 +82,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
 
       await prismaClient?.quiz.update({
-        ...getUpdater<Quiz>(quizId, data),
+        ...getUpdater<Quiz>(quizId, data as Quiz),
       });
 
       return responseHandler.ok();

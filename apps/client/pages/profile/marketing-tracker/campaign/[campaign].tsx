@@ -1,5 +1,4 @@
 import HasSubscriptionProvider from 'components/HasSubscriptionProvider';
-import Campaign from 'views/profile/Campaign';
 import {
   AverageMarketChangeForPeriodOfTime,
   getProjectAndMarketStatsBySlug,
@@ -7,12 +6,12 @@ import {
 } from 'data/getters';
 import { getCampaignByCampaignId, getCampaignResultsByCampaignId } from 'data/getters/campaigns';
 import { GetServerSideProps } from 'next';
-import { unstable_getServerSession } from 'next-auth';
-import { authOptions } from 'pages/api/auth/[...nextauth]';
+import { getSession } from 'next-auth/react';
 import { FC } from 'react';
 import { MarketingCampaign, MarketingTrackerResult } from 'types';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import { hasMarketingTrackerSubscription } from 'utils/utils';
+import Campaign from 'views/profile/Campaign';
 
 type CampaignProps = {
   campaign: MarketingCampaign;
@@ -37,8 +36,8 @@ const CampaignPage: FC<CampaignProps> = ({ campaign, projectData, campaignResult
 export default CampaignPage;
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }) => {
+  const session = await getSession({ req });
   const campaignId = params?.campaign as string;
-  const session = await unstable_getServerSession(req, res, authOptions);
 
   if (!session) {
     return {

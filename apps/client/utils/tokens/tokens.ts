@@ -5,7 +5,7 @@ export const tokens = {
     const iat = Math.floor(Date.now() / 1000);
     const exp = iat + 60 * 60; // one hour
 
-    return new SignJWT({ ...(payload as JWTPayload) })
+    return new SignJWT({ ...(payload as unknown as JWTPayload) })
       .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
       .setExpirationTime(exp)
       .setIssuedAt(iat)
@@ -14,6 +14,6 @@ export const tokens = {
   },
   verify: async <T>(token: string, secret: string): Promise<T> => {
     const { payload } = await jwtVerify(token, new TextEncoder().encode(secret));
-    return payload as T;
+    return payload as unknown as T;
   },
 };
