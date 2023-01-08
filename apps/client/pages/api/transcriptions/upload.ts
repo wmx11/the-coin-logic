@@ -59,14 +59,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const length = await getVideoDurationInSeconds(file?.path as string);
 
-    if (!user || (user?.serviceTokens?.amount as number)) {
+    if (!user?.serviceTokens || (user?.serviceTokens?.amount as number)) {
       const requiredTokens =
         length * productsServices.transcription.audioTokens +
         productsServices.transcription.textTokens *
           ((length * productsServices.transcription.approxWordsInMinute) /
             productsServices.transcription.minuteVideoDuration);
 
-      if ((user?.serviceTokens?.amount as number) < requiredTokens) {
+      if (!user?.serviceTokens || ((user?.serviceTokens?.amount as number) || 0) < requiredTokens) {
         return responseHandler.badRequest(
           `You do not have enough tokens to transcribe this video. You need approximately ${toLocaleString(
             requiredTokens,

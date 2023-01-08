@@ -41,7 +41,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const videoLength = (await ytdl.getBasicInfo(url)).videoDetails.lengthSeconds;
 
-    if (!user || (user?.serviceTokens?.amount as number)) {
+    if (!user?.serviceTokens || (user?.serviceTokens?.amount as number)) {
       const length = parseInt(videoLength, 10);
 
       const requiredTokens =
@@ -50,7 +50,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           ((length * productsServices.transcription.approxWordsInMinute) /
             productsServices.transcription.minuteVideoDuration);
 
-      if ((user?.serviceTokens?.amount as number) < requiredTokens) {
+      if (!user?.serviceTokens || ((user?.serviceTokens?.amount as number) || 0) < requiredTokens) {
         return responseHandler.badRequest(
           `You do not have enough tokens to transcribe this video. You need approximately ${toLocaleString(
             requiredTokens,
