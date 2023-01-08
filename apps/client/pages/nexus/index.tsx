@@ -28,7 +28,7 @@ const NexusPage: FC<NexusPageProps> = ({ data }) => {
   return (
     <>
       <Meta
-        title="TCL NEXUS - Cryptocurrency, blockchain networking hub | Coin Logic"
+        title="NEXUS - Cryptocurrency, blockchain networking hub | Coin Logic"
         description="Dive into the NEXUS. Discover cryptocurrency Enthusiasts, YouTubers, Developers, Influencers, Community Managers, and more! Network with people and build meaningful connections."
       />
       <BackgroundWrapper className="min-h-screen flex items-center">
