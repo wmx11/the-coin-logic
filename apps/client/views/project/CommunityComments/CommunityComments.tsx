@@ -1,35 +1,45 @@
-import { Button, ScrollArea, Text, UnstyledButton } from '@mantine/core';
+import { ScrollArea, Text, UnstyledButton } from '@mantine/core';
 import CommentCard from 'components/Comments/CommentCard';
 import CommentInput from 'components/Comments/CommentInput';
 import GrayBox from 'components/GrayBox';
 import Paper from 'components/Paper';
 import GradientText from 'components/Text/GradientText';
-import { getProjectCommentsById } from 'data/getters/comments';
+import { getProjectCommentsById, getProviderCommentsById } from 'data/getters/comments';
 import useComments from 'hooks/useComments';
 import { FC, useEffect } from 'react';
 import useCommentsStore from 'store/useCommentsStore';
-import { Project } from 'types';
+import { Project, Provider } from 'types';
 
 type CommunityCommentsProps = {
-  project: Project;
+  project?: Project;
+  provider?: Provider;
 };
 
-const CommunityComments: FC<CommunityCommentsProps> = ({ project }) => {
+const CommunityComments: FC<CommunityCommentsProps> = ({ project, provider }) => {
   const { page, comments, isLastPage, loadMoreComments, fetchComments } = useComments();
   const { recentComment } = useCommentsStore((state) => state);
 
   useEffect(() => {
-    fetchComments((pagination) => getProjectCommentsById({ id: project.id, ...pagination }));
+    fetchComments((pagination) => {
+      if (project) {
+        return getProjectCommentsById({ id: project.id, ...pagination });
+      }
+
+      if (provider) {
+        return getProviderCommentsById({ id: provider.id, ...pagination });
+      }
+
+      return new Promise((res) => res([[], 0]));
+    });
   }, [page, recentComment]);
-  
 
   return (
-    <Paper>
+    <Paper withBorder>
       <div className="mb-2">
         <GradientText weight={700}>Community Discussion</GradientText>
       </div>
 
-      <CommentInput projectId={project.id} />
+      <CommentInput projectId={project?.id} providerId={provider?.id} />
 
       {comments && comments.length ? (
         <div className="bg-zinc-50 p-2">

@@ -12,6 +12,7 @@ import DeleteAccount from './DeleteAccount';
 import PersonalInformation from './PersonalInformation';
 import Referrals from './Referrals';
 import SubscriptionInformation from './SubscriptionInformation';
+import toLocaleString from 'utils/toLocaleString';
 
 type ProfileDataType = {
   className?: string;
@@ -27,7 +28,7 @@ const ProfileData: FC<ProfileDataType> = ({ className }) => {
     return null;
   }
 
-  const { name, referralCode, dateCreated, onboardedProjects, referredUsers } = user;
+  const { name, referralCode, dateCreated, onboardedProjects, referredUsers, serviceTokens } = user;
 
   const referralLink = `${routes.referral}${referralCode}`;
 
@@ -40,7 +41,10 @@ const ProfileData: FC<ProfileDataType> = ({ className }) => {
               <UserAvatar name={name as string} />
               <GradientTitle order={2}>{name}</GradientTitle>
             </div>
-            <Text className="mb-2" color="dimmed">
+            <Text size="xs" color="dimmed">
+              Account Balance: {toLocaleString(serviceTokens?.amount || 0) || 0} tokens (credits)
+            </Text>
+            <Text className="mb-2" size="xs" color="dimmed">
               Joined {formatDate(new Date(dateCreated))}
             </Text>
           </div>

@@ -36,6 +36,7 @@ const User: Lists = {
           read: isAdminOrPerson,
         },
       }),
+      userAuth: relationship({ ref: 'UserAuth.user'}),
       roles: relationship({
         ref: 'Role.users',
         many: true,
@@ -89,6 +90,9 @@ const User: Lists = {
       projects: relationship({ ref: 'Project.user', many: true }),
       managedProjects: relationship({ ref: 'Project', many: true }),
       marketingCampaigns: relationship({ ref: 'MarketingCampaign.users', many: true }),
+      followedProviders: relationship({ ref: 'Provider.followers', many: true }),
+      serviceTokens: relationship({ ref: 'ServiceToken.user' }),
+      providerProfile: relationship({ ref: 'Provider.user' }),
       dateCreated: timestamp({ defaultValue: { kind: 'now' } }),
       subscriptionStatus: virtual({
         field: graphql.field({

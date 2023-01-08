@@ -1,4 +1,5 @@
 import { Button, Container, Space, Title } from '@mantine/core';
+import BackgroundWrapper from 'components/BackgroundWrapper';
 import GradientButton from 'components/Buttons/GradientButton';
 import Partners from 'components/Partners';
 import GradientText from 'components/Text/GradientText';
@@ -18,12 +19,12 @@ function Hero() {
   }, []);
 
   return (
-    <div className="bg-[url('../public/images/waves.svg')] bg-lightBlue bg-no-repeat bg-bottom bg-cover relative overflow-hidden">
+    <BackgroundWrapper>
       <div className="w-full min-h-[100vh] flex items-center relative">
         <Container>
           <div className="flex text-center fade-in">
             <div className="text-white flex-1 z-10">
-              <div className="mb-8">
+              <div className="mb-16">
                 <Title order={1} className="text-5xl md:text-7xl mb-10">
                   <span>Get More </span>
                   <TextTransition inline springConfig={presets.gentle} direction="up">
@@ -65,7 +66,7 @@ function Hero() {
           />
         </g>
       </svg>
-    </div>
+    </BackgroundWrapper>
   );
 }
 

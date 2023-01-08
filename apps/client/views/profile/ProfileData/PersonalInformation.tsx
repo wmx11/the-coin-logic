@@ -9,7 +9,7 @@ type PersonalInformationProps = {
 };
 
 const PersonalInformation: FC<PersonalInformationProps> = ({ user }) => {
-  const { firstName, lastName, email, projectsCount, walletAddress } = user;
+  const { firstName, lastName, email, projectsCount, walletAddress, isSubscribedToEmail } = user;
   return (
     <div className="mb-10">
       <GradientTitle order={3} className="flex gap-2 items-center mb-2">
@@ -33,6 +33,9 @@ const PersonalInformation: FC<PersonalInformationProps> = ({ user }) => {
       </Text>
       <Text className="mb-2">
         <strong>Listed Projects:</strong> {projectsCount}
+      </Text>
+      <Text className="mb-2">
+        <strong>Subscribed to TCL newsletter:</strong> {isSubscribedToEmail ? 'Yes' : 'No'}
       </Text>
     </div>
   );

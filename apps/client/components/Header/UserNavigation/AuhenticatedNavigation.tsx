@@ -1,4 +1,4 @@
-import { Menu } from '@mantine/core';
+import { Menu, Text } from '@mantine/core';
 import UserAvatar from 'components/UserAvatar';
 import UserNavigationLinks from 'components/UserNavigationLinks';
 import useMobileScreen from 'hooks/useMobileScreen';
@@ -27,14 +27,14 @@ const AuhenticatedNavigation: FC<AuhenticatedNavigationProps> = ({ session, setI
     }
 
     return (
-      <Menu shadow="md" trigger="hover">
+      <Menu shadow="md" trigger="hover" withArrow width={200}>
         <Menu.Target>
           <div>
             <UserAvatar name={userName as string} />
           </div>
         </Menu.Target>
         <Menu.Dropdown>
-        <Menu.Label>{userName}</Menu.Label>
+          <Menu.Label>{userName}</Menu.Label>
           <UserNavigationLinks />
         </Menu.Dropdown>
       </Menu>

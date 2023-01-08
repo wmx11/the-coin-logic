@@ -43,7 +43,7 @@ query($slug: String){
   projects(where: { slug: { equals: $slug } } ) {
     id
   }
-}`
+}`;
 
 export const GET_MARKETSTATS_BY_PROJECT_ID_FOR_TABLE = `
 query($projectId: ID, $date: DateTime) {
@@ -161,7 +161,7 @@ export const GET_ENABLED_AND_LISTED_PROJECTS = `{
   }
 }`;
 
-export const GET_ENABLED_PROJECTS_FOR_FILTERING =`{
+export const GET_ENABLED_PROJECTS_FOR_FILTERING = `{
   projects(
     where: {
       enabled: { equals: true }
@@ -380,6 +380,22 @@ query($projectId: ID, $date: DateTime) {
     likesCount
     startDate
     dateAdded
+  }
+  transcriptions(
+    where: { project: { id: { equals: $projectId } } }
+    orderBy: { dateAdded: desc }
+    take: 3
+  ) {
+    id
+    title
+    slug
+    summary
+    user {
+      name
+    }
+    dateAdded
+    views
+    likesCount
   }
 }
 `;

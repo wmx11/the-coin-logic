@@ -1,4 +1,5 @@
 import { Container } from '@mantine/core';
+import BackgroundWrapper from 'components/BackgroundWrapper';
 import { Discord, Twitter } from 'components/Socials/Socials';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,7 +8,7 @@ import routes from 'routes';
 
 function Footer() {
   return (
-    <div className="bg-gradient-to-br from-violet to-grape bg-no-repeat bg-cover bg-bottom w-full overflow-hidden">
+    <BackgroundWrapper>
       <svg xmlns="http://www.w3.org/2000/svg" width="3840" height="70" className="rotate-180">
         <g>
           <path
@@ -88,7 +89,7 @@ function Footer() {
           </div>
         </footer>
       </Container>
-    </div>
+    </BackgroundWrapper>
   );
 }
 

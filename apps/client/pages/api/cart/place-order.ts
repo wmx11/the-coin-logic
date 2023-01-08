@@ -5,13 +5,14 @@ import request, { Auth } from 'data/api/request';
 import { response } from 'data/api/response';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import routes from 'routes';
+import config from 'tcl-packages/email/config';
 import { Cart, CartItem } from 'types';
+import { productCodes } from 'utils/products';
 import { signedRequest } from 'utils/signedRequest';
 import toCurrency from 'utils/toCurrency';
 import { calculateItemTotal } from 'utils/utils';
 import prisma from '../../../data/prisma';
 import { paymentPlans } from '../../../utils/paymentPlans/config';
-import config from 'tcl-packages/email/config';
 
 type OrderInfo = {
   firstName: string;
@@ -47,6 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         email: true,
         firstName: true,
         lastName: true,
+        serviceTokens: true,
       },
     });
 
@@ -117,10 +119,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const paymentPlanKey = item?.paymentPlan?.slug as string;
     const paymentPlanConfig = paymentPlans[paymentPlanKey as keyof typeof paymentPlans]?.config;
+    const isServiceToken = item?.product?.sku?.includes(productCodes.serviceTokens);
 
     const project = await prisma?.project.findUnique({
       where: {
-        id: orderInfo.project,
+        id: orderInfo.project || '',
       },
       select: {
         id: true,
@@ -141,6 +144,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           id: project.id || undefined,
         },
       });
+    }
+
+    if (isServiceToken) {
+      if (user.serviceTokens) {
+        await prisma?.serviceToken.update({
+          where: {
+            id: user.serviceTokens.id,
+          },
+          data: {
+            amount: (user.serviceTokens.amount || (0 as number)) + ((item?.price as number) || 0),
+          },
+        });
+      } else {
+        await prisma?.serviceToken.create({
+          data: {
+            amount: item.price,
+            userId: user.id,
+          },
+        });
+      }
     }
 
     await prisma?.cart.update({
@@ -166,14 +189,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           templateId: PURCHASE_CONFIRMATION_ID,
           dynamicTemplateData: {
             product_name: `${item?.product?.name} ${
-              item.paymentPlan ? `(Payment plan: ${item.paymentPlan.name})` : null
+              item.paymentPlan ? `(Payment plan: ${item.paymentPlan.name})` : ''
             }`,
             order_number: `#${order?.orderNumber}`,
             price: toCurrency(total) || '$0',
             transaction_hash: orderInfo.transactionHash,
             proof_of_payment: `${paymentNetwork?.txScanner}/${orderInfo.transactionHash}`,
-            project_listing_text: project ? 'You can find your project listing on ' : null,
-            project_url: project ? `${routes.base}${routes.project}/${project.slug}` : null,
+            project_listing_text: project ? 'You can find your project listing on ' : '',
+            project_url: project ? `${routes.base}${routes.project}/${project.slug}` : '',
           },
         },
       },
@@ -198,7 +221,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    if (item?.product?.isMonthly || paymentPlanConfig.marketingTrackerDuration) {
+    if (item?.product?.isMonthly || paymentPlanConfig?.marketingTrackerDuration) {
       await signedRequest(
         {
           type: 'post',

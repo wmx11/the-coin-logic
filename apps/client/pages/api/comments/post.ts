@@ -9,7 +9,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const responseHandler = response(res);
 
   const postComment = async () => {
-    const { content, sentiment, userId, projectId, creatorId } = req.body;
+    const { content, sentiment, userId, projectId, providerId } = req.body;
 
     if (!content || !userId) {
       return responseHandler.badRequest();
@@ -20,7 +20,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         content,
         sentiment: parseInt(sentiment, 10),
         projectId: projectId || undefined,
-        creatorId: creatorId || undefined,
+        providerId: providerId || undefined,
         userId,
       },
       include: {

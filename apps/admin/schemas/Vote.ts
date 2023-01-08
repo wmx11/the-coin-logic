@@ -21,7 +21,7 @@ const Vote: Lists = {
       }),
       user: relationship({ ref: 'User' }),
       project: relationship({ ref: 'Project.votes' }),
-      creator: relationship({ ref: 'Creator.votes' }),
+      provider: relationship({ ref: 'Provider.votes' }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
       updatedAt: timestamp({
         db: {

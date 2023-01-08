@@ -1,14 +1,12 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import request, { Auth } from 'data/api/request';
 import { response } from 'data/api/response';
+import { FileType, formDataConfig, handleFormData } from 'data/api/utils/handleFormData';
+import { handleImageUpload } from 'data/api/utils/uploadImage';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { prismaClient } from 'tcl-packages/prismaClient';
 import slug from 'slug';
-import { formDataConfig, handleFormData } from 'data/api/utils/handleFormData';
-import { ContentCreateInput } from 'types';
-import sharp from 'sharp';
-import { v4 as uuidv4 } from 'uuid';
-import { resolveImagePaths } from 'utils/utils';
+import { prismaClient } from 'tcl-packages/prismaClient';
+import { Content, ContentCreateInput } from 'types';
 
 type Fields = {
   projectSlug: string;
@@ -95,19 +93,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       },
     });
 
-    const imageData = formData.files.image;
-
-    const image = imageData && sharp(imageData?.path);
-    const metaData = imageData && (await image?.metadata());
-    const imageName = uuidv4();
-
-    const imageDataObj = {
-      image_id: imageData ? imageName : article?.image_id || undefined,
-      image_extension: imageData ? metaData?.format : article?.image_extension || undefined,
-      image_filesize: imageData ? imageData?.size : article?.image_filesize || undefined,
-      image_height: imageData ? metaData?.height : article?.image_height || undefined,
-      image_width: imageData ? metaData?.width : article?.image_width || undefined,
-    };
+    const imageData = await handleImageUpload<Content>({
+      image: formData.files.image as FileType,
+      prefix: 'image',
+      isUpdate,
+      instance: (article as Content) || null,
+    });
 
     const articleData = {
       title,
@@ -118,12 +109,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       projectId: project?.id || undefined,
       blockNameId: blogBlock?.id || undefined,
       userId: userId || undefined,
-      ...imageDataObj,
+      ...imageData,
     };
-
-    if (imageData) {
-      await image?.toFile(`${resolveImagePaths().images}/${imageName}.${metaData?.format}`);
-    }
 
     if (isUpdate) {
       const data = await prismaClient?.content.update({

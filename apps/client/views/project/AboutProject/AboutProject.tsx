@@ -10,6 +10,7 @@ import { NetworkBadge } from '../../../components/NetworkBadge';
 import { formatDate } from '../../../utils/formatters';
 import CommunityComments from '../CommunityComments';
 import CommunityVotes from '../CommunityVotes';
+import { SocialBadges } from 'components/Socials/Socials';
 
 type AboutProjectProps = {
   data: Project;
@@ -34,6 +35,7 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
     isNft,
     displayCommunityVotes,
     displayCommunityComments,
+    youtube,
   } = data;
 
   const socials = [
@@ -119,34 +121,17 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
           </div>
         )}
 
-        {socials.length && (
-          <div className="mb-4">
-            <Text size="sm" weight={700} className="mb-2">
-              {name} Social Media
-            </Text>
-            <div className="flex items-center gap-2">
-              {socials.map(({ title, href, Icon }, index) => {
-                return (
-                  href && (
-                    <Badge
-                      color="violet"
-                      variant="outline"
-                      size="md"
-                      key={`${title}_${index}`}
-                      component="a"
-                      href={`${href}`}
-                      target="_blank"
-                      className="cursor-pointer"
-                      leftSection={<Icon />}
-                    >
-                      {title}
-                    </Badge>
-                  )
-                );
-              })}
-            </div>
-          </div>
-        )}
+        <SocialBadges
+          data={{
+            name: name as string,
+            discord: discord as string,
+            github: github as string,
+            reddit: reddit as string,
+            telegram: telegram as string,
+            twitter: twitter as string,
+            youtube: youtube as string,
+          }}
+        />
 
         <div className="flex justify-end my-2">
           <Badge color="violet" leftSection={<BiUserCheck />}>

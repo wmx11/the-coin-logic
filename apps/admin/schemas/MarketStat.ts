@@ -1,7 +1,7 @@
-import { list } from '@keystone-6/core';
-import { CacheScope } from 'apollo-cache-control';
 import { Lists } from '.keystone/types';
-import { float, json, relationship, timestamp, text } from '@keystone-6/core/fields';
+import { list } from '@keystone-6/core';
+import { float, json, relationship, timestamp } from '@keystone-6/core/fields';
+import { CacheScope } from 'apollo-cache-control';
 
 const MarketStat: Lists = {
   MarketStat: list({
@@ -26,7 +26,7 @@ const MarketStat: Lists = {
       newHolders: float({ isIndexed: true }),
       leavingHolders: float({ isIndexed: true }),
       recurringHolders: float({ isIndexed: true }),
-      annotation: text({ isIndexed: true }),
+      annotation: json({ defaultValue: { title: null, description: null, href: null } }),
       customTrackers: json({ defaultValue: [] }),
       project: relationship({ ref: 'Project', db: { foreignKey: true } }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' }, isIndexed: true }),

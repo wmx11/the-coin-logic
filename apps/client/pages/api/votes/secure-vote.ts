@@ -14,7 +14,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const ip = getIpAddress(req);
 
   const secureVote = async () => {
-    const { value, type, projectId, userId, creatorId } = req.body;
+    const { value, type, projectId, userId, providerId } = req.body;
 
     if (value === undefined || !type) {
       return responseHandler.forbidden();
@@ -38,7 +38,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         ip,
         userId: userId || undefined,
         projectId: projectId || undefined,
-        creatorId: creatorId || undefined,
+        providerId: providerId || undefined,
       },
     });
 

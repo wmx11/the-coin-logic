@@ -21,12 +21,14 @@ const PaymentPlans: FC<PaymentPlansProps> = ({ paymentPlans }) => {
 
   return (
     <>
-      <GradientTitle order={2}>Choose from our available project listing plans</GradientTitle>
-      <Text size="sm" color="dimmed">
-        Our payment plans help any project get involved with The Coin Logic. Starting from a free Copper all the way up
-        to our premium Palladium tier. Payment plans are applied to project listings. You can also upgrade at any time
-        from your project's page.
-      </Text>
+      <div className="mb-8 text-center">
+        <GradientTitle order={2}>Choose from our available project listing plans</GradientTitle>
+        <Text size="sm" color="dimmed">
+          Our payment plans help any project get involved with The Coin Logic. Starting from a free Copper all the way
+          up to our premium Palladium tier. Payment plans are applied to project listings. You can also upgrade at any
+          time from your project's page.
+        </Text>
+      </div>
 
       <div className="flex gap-4 justify-between my-4 flex-wrap">
         {paymentPlans.map((plan, index) => {

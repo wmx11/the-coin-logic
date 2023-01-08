@@ -1,9 +1,14 @@
-import { Container, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { Stack, Text, TextInput, Textarea, Title } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import axios from 'axios';
+import BackgroundWrapper from 'components/BackgroundWrapper';
+import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundWrapper';
 import GradientButton from 'components/Buttons/GradientButton';
 import ErrorMessage from 'components/ErrorMessage';
+import Meta from 'components/Meta';
 import { Discord, Twitter } from 'components/Socials/Socials';
+import GradientTitle from 'components/Text/GradientTitle';
+import TrackVitalsDisclaimer from 'components/TrackVitalsDisclaimer';
 import useRecaptcha from 'hooks/useRecaptcha';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -58,29 +63,30 @@ const index = () => {
   };
 
   return (
-    <Container className="py-10">
-      <div className="bg-gradient-to-r from-violet to-grape md:p-16 rounded-md flex flex-wrap justify-between gap-8 w-full mb-8">
-        <div className="text-white flex-1">
-          <Title order={1}>Contact us</Title>
-          <Text size="md">Leave your email and we will get back to you within 24 hours</Text>
-          <Text size="md" className="mb-8">
-            You can also contact us on Discord or directly via email info@thecoinlogic.com
-          </Text>
-          <Text size="md" className="mb-2">
-            Our socials
-          </Text>
-          <div className="flex gap-6 items-center">
-            <Discord size={22} />
-            <Twitter size={22} />
-          </div>
-        </div>
-
-        <div className="p-5 rounded-md shadow-md bg-white w-full md:max-w-[400px] md:min-w-[400px]">
+    <>
+      <Meta
+        title="Contact Us | Coin Logic"
+        description="Do you have a question or have a proposal? Let's get in touch!"
+      />
+      <SmallBackgroundWrapper>
+        <GradientTitle align="center">Contact us!</GradientTitle>
+        <Text size="sm" align="center" color="dimmed">
+          Do you have a question or have a proposal? Let's get in touch!
+        </Text>
+      </SmallBackgroundWrapper>
+      <BackgroundWrapper className="py-24 flex flex-col items-center justify-center">
+        <div className="p-5 rounded-md shadow-md bg-white w-full md:max-w-[600px] md:min-w-[400px] mb-16">
           <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
             <Stack spacing="md">
               <ErrorMessage message={errorMessage} />
-              <TextInput label="Email" placeholder="your@email.com" required {...form.getInputProps('email')} />
-              <TextInput label="Name" placeholder="John Doe" required {...form.getInputProps('name')} />
+              <TextInput
+                label="Email"
+                placeholder="your@email.com"
+                required
+                size="md"
+                {...form.getInputProps('email')}
+              />
+              <TextInput label="Name" placeholder="John Doe" required size="md" {...form.getInputProps('name')} />
               <Textarea
                 placeholder="Your message"
                 description="2,000 characters long"
@@ -97,8 +103,18 @@ const index = () => {
             </Stack>
           </form>
         </div>
-      </div>
-    </Container>
+        <div>
+          <Title order={2} color="white" className="mb-4">
+            Find us on social media!
+          </Title>
+          <div className="text-white flex items-center gap-8">
+            <Discord size={35} />
+            <Twitter size={35} />
+          </div>
+        </div>
+      </BackgroundWrapper>
+      <TrackVitalsDisclaimer />
+    </>
   );
 };
 

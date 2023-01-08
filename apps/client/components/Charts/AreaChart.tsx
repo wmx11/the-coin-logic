@@ -2,11 +2,13 @@ import React from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsReact from 'highcharts-react-official';
+import { Annotation } from 'types/Charts';
 
 type ChartTypes = {
   data: {
     date: string;
     value: string | number;
+    annotation: Annotation;
   }[];
   title: string;
 };
@@ -43,20 +45,48 @@ const AreaChart = ({ data, title }: ChartTypes) => {
     series: [
       {
         data: data.map(({ date, value }) => [new Date(date).getTime(), value]),
-        type: 'spline',
+        type: 'areaspline',
         name: title,
         threshold: null,
         tooltip: {
-          valueDecimals: 6,
+          valueDecimals: 9,
         },
-        color: {
+        fillColor: {
           linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
           stops: [
-            [0, '#7950f2'],
-            [1, '#aa8efd'],
+            [0, 'rgba(121, 80, 242, 0.7)'],
+            [1, 'rgba(170, 142, 253, 0.8)'],
           ],
         },
         id: title.replaceAll(' ', '-'),
+      },
+      {
+        type: 'flags',
+        name: 'Flags on series',
+        data: data.reduce((arr, curr) => {
+          if (curr?.annotation?.title === null) {
+            return arr;
+          }
+
+          const data = {
+            x: new Date(curr?.date).getTime(),
+            title: curr?.annotation?.title,
+            text: curr?.annotation?.description,
+            events: {
+              click: () => {
+                if (curr?.annotation?.href) {
+                  window.open(curr?.annotation?.href, '__blank');
+                }
+              },
+            },
+          };
+
+          arr.push(data);
+
+          return arr;
+        }, [] as any),
+        onSeries: title.replaceAll(' ', '-'),
+        shape: 'squarepin',
       },
     ],
     responsive: {

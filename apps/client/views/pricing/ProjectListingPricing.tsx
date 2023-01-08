@@ -5,7 +5,7 @@ import { FC } from 'react';
 import routes from 'routes';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 import { Product } from 'types';
-import { products as productsSku } from 'types/Products';
+import { products as productsSku } from 'utils/products';
 import ProjectListing from 'public/images/project_listing_and_analytics.svg';
 
 type ProjectListingPricingProps = {

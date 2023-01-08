@@ -1,5 +1,5 @@
 import { DocumentNode, useMutation } from '@apollo/client';
-import { Button, Checkbox, PasswordInput, Stack, Text, TextInput } from '@mantine/core';
+import { Button, Checkbox, Divider, PasswordInput, Stack, Text, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import GradientButton from 'components/Buttons/GradientButton';
 import ErrorMessage from 'components/ErrorMessage';
@@ -12,6 +12,7 @@ import routes from 'routes';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 import { CREATE_USER } from '../../../data/mutations';
 import { User, userSchema } from '../../../schemas/user';
+import AuthGoogleButton from 'components/Auth/AuthGoogleButton';
 
 const SignUpModalForm = () => {
   const { validate, errorMessage } = useRecaptcha();
@@ -99,6 +100,10 @@ const SignUpModalForm = () => {
         <GradientButton type="submit" loading={loading} size="md">
           Create an account
         </GradientButton>
+
+        <Divider label="Or" labelPosition="center" />
+
+        <AuthGoogleButton>Sign Up with Google</AuthGoogleButton>
 
         <Text size="sm" align="center">
           By proceeding, you agree to The Coin Logic's{' '}

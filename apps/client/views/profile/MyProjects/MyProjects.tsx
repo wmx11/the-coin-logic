@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { toast } from 'react-toastify';
 import routes from 'routes';
 import { Project } from 'types';
-import { products } from 'types/Products';
+import { products } from 'utils/products';
 import { formatDate } from 'utils/formatters';
 import { Icons } from 'utils/icons';
 

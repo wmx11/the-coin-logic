@@ -1,5 +1,6 @@
 import { Container, Text } from '@mantine/core';
 import { useResizeObserver } from '@mantine/hooks';
+import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundWrapper';
 import Meta from 'components/Meta';
 import Paper from 'components/Paper';
 import GradientTitle from 'components/Text/GradientTitle';
@@ -26,7 +27,7 @@ const ServiceCard: FC<ServiceCardProps> = ({ title, description, image }) => {
   return (
     <>
       <animated.div ref={ref} style={{ ...styles }}>
-        <Paper>
+        <Paper withBorder>
           <div className="flex justify-center">
             <Image src={image as string} width={250} height={250} layout="intrinsic" />
           </div>
@@ -42,13 +43,15 @@ const index = () => {
   return (
     <>
       <Meta title="Listing, tracking, audits, KYC, and other services | Coin Logic" />
-      <Container className="py-10">
-        <div className="mb-16">
-          <GradientTitle>Our Features and Services</GradientTitle>
-          <Text size="xs" color="dimmed">
+      <SmallBackgroundWrapper>
+        <div className="text-center">
+          <GradientTitle>Our Features and services</GradientTitle>
+          <Text size="sm" color="dimmed">
             Taking care and helping new, and already established projects
           </Text>
         </div>
+      </SmallBackgroundWrapper>
+      <Container className="py-10">
         <div className="grid md:grid-cols-3 gap-8">
           <ServiceCard
             title="Listing & Tracking"

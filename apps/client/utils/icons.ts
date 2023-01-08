@@ -1,5 +1,7 @@
-import { BsThreeDots } from 'react-icons/bs';
+import { AiOutlineCloudUpload } from 'react-icons/ai';
+import { BsThreeDots, BsThreeDotsVertical } from 'react-icons/bs';
 import {
+  FaCalendarAlt,
   FaCalendarDay,
   FaCheck,
   FaChevronDown,
@@ -20,40 +22,66 @@ import {
   FaTimes,
   FaTrash,
   FaTrophy,
+  FaUserCog,
 } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
+import { FiLogOut } from 'react-icons/fi';
 import { GoTriangleDown, GoTriangleUp } from 'react-icons/go';
-import { IoTicketOutline } from 'react-icons/io5';
-import { MdAnnouncement, MdOutlineArticle, MdOutlineEmojiEmotions, MdOutlineQuiz } from 'react-icons/md';
 import { GrMoney } from 'react-icons/gr';
+import { HiLink } from 'react-icons/hi';
+import { IoPlanetSharp, IoTicketOutline } from 'react-icons/io5';
+import {
+  MdAnnouncement,
+  MdOutlineAddChart,
+  MdOutlineArticle,
+  MdOutlineEmojiEmotions,
+  MdOutlineQuiz,
+  MdTrackChanges
+} from 'react-icons/md';
+import { RiFileTextFill, RiFoldersLine } from 'react-icons/ri';
+import { SiBitcoin } from 'react-icons/si';
 
 export const Icons = {
-  Edit: FaRegEdit,
-  Delete: FaTrash,
   Add: FaPlus,
-  Stop: FaStop,
-  ThumbsUp: FaThumbsUp,
-  ThumbsDown: FaThumbsDown,
-  ExportFile: FaFileExport,
-  Event: FaCalendarDay,
+  AddProject: MdOutlineAddChart,
   Announcement: MdAnnouncement,
-  ChevronRight: FaChevronRight,
+  Article: MdOutlineArticle,
+  Check: FaCheck,
   ChevronDown: FaChevronDown,
-  Fire: FaFireAlt,
-  Emoji: MdOutlineEmojiEmotions,
-  TrendUp: GoTriangleUp,
-  TrendDown: GoTriangleDown,
-  Heart: FaHeart,
+  ChevronRight: FaChevronRight,
+  Coins: GrMoney,
+  Money: SiBitcoin,
+  Cross: FaTimes,
+  Crown: FaCrown,
+  Delete: FaTrash,
   Dots: BsThreeDots,
+  DotsVertical: BsThreeDotsVertical,
+  Edit: FaRegEdit,
+  Emoji: MdOutlineEmojiEmotions,
+  Event: FaCalendarDay,
+  Calendar: FaCalendarAlt,
+  ExportFile: FaFileExport,
   Eye: FaRegEye,
   EyeSlashed: FaRegEyeSlash,
+  Fire: FaFireAlt,
   Game: FaGamepad,
-  Ticket: IoTicketOutline,
-  Star: FaStar,
-  Article: MdOutlineArticle,
-  Trophy: FaTrophy,
-  Coins: GrMoney,
-  Cross: FaTimes,
-  Check: FaCheck,
+  Heart: FaHeart,
+  Projects: RiFoldersLine,
   Quiz: MdOutlineQuiz,
-  Crown: FaCrown,
+  Star: FaStar,
+  Stop: FaStop,
+  Text: RiFileTextFill,
+  ThumbsDown: FaThumbsDown,
+  ThumbsUp: FaThumbsUp,
+  Ticket: IoTicketOutline,
+  Track: MdTrackChanges,
+  TrendDown: GoTriangleDown,
+  TrendUp: GoTriangleUp,
+  Trophy: FaTrophy,
+  User: FaUserCog,
+  LogOut: FiLogOut,
+  Upload: AiOutlineCloudUpload,
+  Nexus: IoPlanetSharp,
+  Link: HiLink,
+  Google: FcGoogle,
 };

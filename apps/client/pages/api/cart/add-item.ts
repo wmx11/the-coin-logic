@@ -38,18 +38,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    const project = await prisma?.project.findFirst({
+    const project = await prisma?.project.findUnique({
       where: {
-        id: projectId,
+        id: projectId || '',
       },
       include: {
         paymentPlan: true,
       },
     });
 
-    const paymentPlan = await prisma?.paymentPlan.findFirst({
+    const paymentPlan = await prisma?.paymentPlan.findUnique({
       where: {
-        id: paymentPlanId,
+        id: paymentPlanId || '',
       },
     });
 
@@ -80,9 +80,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const cartItem = await prisma?.cartItem.create({
       data: {
         cartId: cart.id,
-        productId: product.id,
+        productId: product.id || undefined,
         price: getPrice(),
-        paymentPlanId: paymentPlanId ? paymentPlanId : project?.paymentPlan?.id || undefined,
+        paymentPlanId: project?.paymentPlan?.id || undefined,
         quantity: 1,
         discount: getDiscount(),
       },

@@ -15,7 +15,7 @@ const Comment: Lists = {
       reports: relationship({ ref: 'User', many: true, ui: { displayMode: 'count' } }),
       user: relationship({ ref: 'User' }),
       project: relationship({ ref: 'Project.comments' }),
-      creator: relationship({ ref: 'Creator.comments' }),
+      provider: relationship({ ref: 'Provider.comments' }),
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
       updatedAt: timestamp({
         db: {

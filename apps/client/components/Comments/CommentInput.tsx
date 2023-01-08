@@ -10,10 +10,10 @@ import EmojiSelector from './EmojiSelector';
 
 type CommentInputProps = {
   projectId?: string;
-  creatorId?: string;
+  providerId?: string;
 };
 
-const CommentInput: FC<CommentInputProps> = ({ projectId, creatorId }) => {
+const CommentInput: FC<CommentInputProps> = ({ projectId, providerId }) => {
   const { user } = useUser();
   const { postComment, loading } = useComments();
   const ref = useRef<HTMLTextAreaElement | null>(null);
@@ -27,7 +27,7 @@ const CommentInput: FC<CommentInputProps> = ({ projectId, creatorId }) => {
 
   const handleSubmit = async (values: typeof form.values) => {
     try {
-      const data = await postComment({ ...values, userId: user?.id as string, projectId, creatorId });
+      const data = await postComment({ ...values, userId: user?.id as string, projectId, providerId });
 
       if (!data) {
         return;
@@ -79,7 +79,7 @@ const CommentInput: FC<CommentInputProps> = ({ projectId, creatorId }) => {
 
         <div className="flex justify-between items-center mb-4">
           <div className="text-lg cursor-pointer">
-            <EmojiSelector inputRef={ref} form={form} inputName="content"/>
+            <EmojiSelector inputRef={ref} form={form} inputName="content" />
           </div>
           <GradientButton type="submit" loading={loading}>
             Post

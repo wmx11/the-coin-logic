@@ -1,6 +1,8 @@
 import { DocumentRendererProps } from '@keystone-6/document-renderer';
 import { Center, Container, Text } from '@mantine/core';
 import Controls from 'components/Controls/Controls';
+import HighlightsCollectionForContent from 'components/HighlightCard/HighlightsCollectionForContent';
+import { LargeImage } from 'components/Images/Images';
 import Meta from 'components/Meta';
 import { NotFound } from 'components/NotFound';
 import { ProjectTitle } from 'components/ProjectTitle';
@@ -9,22 +11,24 @@ import GradientTitle from 'components/Text/GradientTitle';
 import TextContent from 'components/TextContent';
 import { QUERY_PROJECT } from 'constants/general';
 import { getBlogContentBySlug } from 'data/getters';
+import { getTrendingProjects } from 'data/getters/server/getTrendingProjects';
+import withRedisCache from 'data/redis';
 import useControls from 'hooks/useControls';
 import useUser from 'hooks/useUser';
-import Image from 'next/image';
 import Link from 'next/link';
 import { FC, useEffect } from 'react';
 import routes from 'routes';
 import { Content } from 'types';
+import { TrendingHighlights } from 'types/Project';
 import { formatDate } from 'utils/formatters';
 
 type ContentTypes = {
   content: Content & {
     content: DocumentRendererProps;
   };
-};
+} & TrendingHighlights;
 
-const index: FC<ContentTypes> = ({ content }) => {
+const index: FC<ContentTypes> = ({ content, trendingHighlights }) => {
   if (!content) {
     return (
       <Container className="py-10 h-screen flex items-center justify-center">
@@ -49,11 +53,11 @@ const index: FC<ContentTypes> = ({ content }) => {
     likesCount,
   } = content;
 
-  const { likes, handleLike, handleView } = useControls(likesCount as number);
+  const { likes, handleLike, handleView } = useControls({ initialLikes: likesCount as number });
   const { user } = useUser();
 
   useEffect(() => {
-    handleView(content.id, routes.api.article.view);
+    handleView({ articleId: content?.id });
   }, []);
 
   return (
@@ -65,18 +69,10 @@ const index: FC<ContentTypes> = ({ content }) => {
         url={`${routes.base}${routes.blogPost.replace('${slug}', slug as string)}`}
       />
 
-      <Container className="py-10">
+      <Container className="py-10 grid grid-reverse-cols-1 md:grid-cols-[1fr,400px] gap-4">
         <section className="prose prose-md max-w-none">
           <div className="mb-2">
-            <Image
-              className="rounded-md"
-              src={image ? image.url : ''}
-              alt={title as string}
-              width="800px"
-              height="450px"
-              layout="intrinsic"
-              loading="lazy"
-            />
+            <LargeImage image={image ? image.url : ''} alt={title as string} />
           </div>
 
           <GradientTitle order={1}>{title}</GradientTitle>
@@ -122,7 +118,7 @@ const index: FC<ContentTypes> = ({ content }) => {
             <Controls
               views={views as number}
               likes={likes as number}
-              likeCallback={() => handleLike(content.id, routes.api.article.like)}
+              likeCallback={() => handleLike({ articleId: content.id })}
             />
           </div>
 
@@ -140,6 +136,9 @@ const index: FC<ContentTypes> = ({ content }) => {
 
           <TextContent content={content} richContent={richContent} className="max-w-none" />
         </section>
+        <section>
+          <HighlightsCollectionForContent trendingHighlights={trendingHighlights} />
+        </section>
       </Container>
     </>
   );
@@ -155,11 +154,13 @@ type Params = {
 
 export const getServerSideProps = async ({ params }: Params) => {
   const slug = params.slug;
-  const content = await getBlogContentBySlug(slug);
+  const content = await withRedisCache(`blog_content_${slug}`, () => getBlogContentBySlug(slug));
+  const trendingHighlights = await withRedisCache('trending_projects', () => getTrendingProjects(5), 10 * 60);
 
   return {
     props: {
       content,
+      trendingHighlights,
     },
   };
 };

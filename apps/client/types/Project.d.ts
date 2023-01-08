@@ -1,4 +1,4 @@
-import { MarketStat, PaymentPlan, Project, Quiz, SocialStat } from 'types';
+import { MarketStat, PaymentPlan, Project, Quiz, SocialStat, Transcription } from 'types';
 import { MarketStatChanges } from './MarketData';
 
 export type ProjectWithMarketStatsAndChanges = {
@@ -6,5 +6,10 @@ export type ProjectWithMarketStatsAndChanges = {
   relatedProjects: Project[];
   paymentPlans: PaymentPlan[];
   quizzes: Quiz[];
+  transcriptions: Transcription[];
 } & MarketStat &
   SocialStat & { socialsDateAdded?: string } & MarketStatChanges;
+
+export type TrendingHighlights = {
+  trendingHighlights: { name: string; slug: string; logo: string; change: number; votes: number }[];
+};

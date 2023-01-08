@@ -17,7 +17,7 @@ const ProjectsFilter: FC<ProjectsFilterProps> = ({ label, placeholder, descripti
   const { projects, isSet } = useProjectsFilter();
 
   const handleChange = (value: string) => {
-    router.push({ query: { [QUERY_PROJECT]: value } });
+    router.push({ query: { [QUERY_PROJECT]: value } }, undefined, { scroll: false });
     setValue(value);
     onChangeCallback && onChangeCallback(value);
   };
@@ -34,6 +34,7 @@ const ProjectsFilter: FC<ProjectsFilterProps> = ({ label, placeholder, descripti
       value={value}
       onChange={handleChange}
       searchable
+      clearable
       nothingFound="No results"
       data={
         projects && isSet ? projects.map(({ name, slug }) => ({ label: name as string, value: slug as string })) : []

@@ -47,6 +47,9 @@ const StatTab: FC<StatTabProps> = ({
   };
 
   const handleChartEntry = async (entry: string) => {
+    if (!isChartDefaultOpen) {
+      chartStore.setIsInitial(false);
+    }
     chartStore.setLoading(true);
     const data = await getChartEntryData(entry);
     chartStore.setLoading(false);
@@ -60,6 +63,9 @@ const StatTab: FC<StatTabProps> = ({
   };
 
   const handleCompareChartEntry = async (entry: string) => {
+    if (!isChartDefaultOpen) {
+      chartStore.setIsInitial(false);
+    }
     chartStore.setLoading(true);
     const data = await getChartEntryData(entry);
     chartStore.setLoading(false);
@@ -72,6 +78,7 @@ const StatTab: FC<StatTabProps> = ({
   useEffect(() => {
     if (isChartDefaultOpen && !chartStore.loading && chartStore.chartData.length < 1) {
       handleChartEntry(chartEntry as string);
+      chartStore.setIsInitial(true);
     }
   }, []);
 

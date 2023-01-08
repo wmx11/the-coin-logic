@@ -47,7 +47,7 @@ const AddProject: FC<AddProjectProps> = ({ networks }) => {
       contractAddress: '',
       networkId: '',
       paymentPlanId: '',
-      isNft: '',
+      isNft: false,
       pairAddress: '',
       description: '',
       kycLink: '',
@@ -76,7 +76,9 @@ const AddProject: FC<AddProjectProps> = ({ networks }) => {
       const fd = new FormData();
       fd.append('user', user?.id as string);
       fd.append('image', logoData as Blob);
-      Object.keys(form.values).forEach((key) => fd.append(key, form.values[key as keyof typeof form.values]));
+      Object.keys(form.values).forEach((key) =>
+        fd.append(key, form.values[key as keyof typeof form.values].toString()),
+      );
 
       const { data } = await signedRequest(
         { type: 'post', url: routes.api.project.create, data: fd, headers: { 'Content-Type': 'multipart/form-data' } },
@@ -137,9 +139,9 @@ const AddProject: FC<AddProjectProps> = ({ networks }) => {
         <Checkbox
           label="Is your project an NFT?"
           description="Please check this box if your project is an NFT."
-          checked={form.values.isNft === 'true' ? true : false}
+          checked={form.values.isNft}
           onChange={(event) => {
-            form.setFieldValue('isNft', event.currentTarget.checked.toString());
+            form.setFieldValue('isNft', event.currentTarget.checked);
             setIsPaymentPlanSelected(false);
           }}
         />
@@ -153,7 +155,7 @@ const AddProject: FC<AddProjectProps> = ({ networks }) => {
             form.setFieldValue('paymentPlanId', value);
             setIsPaymentPlanSelected(value !== null ? true : false);
           }}
-          isNft={form.values.isNft === 'true' ? true : false}
+          isNft={form.values.isNft}
         />
       </div>
       {isPaymentPlanSelected ? (

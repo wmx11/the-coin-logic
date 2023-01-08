@@ -14,6 +14,7 @@ type ImageUploadProps<T> = {
   previewTetxt?: string;
   setImageBlob?: (image: Blob) => void;
   initialImageUrl?: string;
+  fit?: 'contain' | 'fill' | 'cover' | 'inside' | 'outside';
   size?: {
     width: number;
     height: number;
@@ -33,6 +34,7 @@ const ImageUpload = <T,>({
   size,
   setImageBlob,
   initialImageUrl,
+  fit,
 }: ImageUploadProps<T>) => {
   const { user } = useUser();
   const [loading, setIsLoading] = useState(false);
@@ -67,6 +69,10 @@ const ImageUpload = <T,>({
         fd.append('imageData', new Blob([result as ArrayBuffer]));
         fd.append('height', size?.height?.toString() as string);
         fd.append('width', size?.width?.toString() as string);
+
+        if (fit) {
+          fd.append('fit', (fit as string) || '');
+        }
 
         const { data } = await signedRequest(
           {
@@ -112,7 +118,11 @@ const ImageUpload = <T,>({
 
       <div
         className="w-full h-full rounded-md relative flex p-2 items-center justify-center border-dashed border-violet border cursor-pointer"
-        style={{ ...size, width: (size?.width as number) / 2, height: (size?.height as number) / 2 }}
+        style={{
+          ...size,
+          width: (size?.width as number) / 2,
+          height: (size?.height as number) / 2,
+        }}
         onClick={handleClick}
       >
         <LoadingOverlay visible={loading} overlayBlur={2} />

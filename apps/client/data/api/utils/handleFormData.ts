@@ -1,7 +1,7 @@
 import multiparty from 'multiparty';
 import { NextApiRequest } from 'next';
 
-type Image = {
+export type FileType = {
   fieldName: string;
   originalFilename: string;
   path: string;
@@ -10,21 +10,25 @@ type Image = {
 
 type Files = {
   files: {
-    image: Image[];
+    image: FileType[];
+    images: FileType & { [key: string]: any };
+    file: FileType[];
   };
 };
 
 type FormData<Fields> = {
-  fields: { [key: string]: any } & Fields[];
+  fields: Fields;
   files: {
-    image?: Image;
+    image?: FileType;
+    images: FileType & { [key: string]: any };
+    file?: FileType;
   };
 };
 
 export const handleFormData = async <Fields>(req: NextApiRequest): Promise<FormData<Fields> | null> => {
   try {
     const form = new multiparty.Form();
-    const data: FormData<Fields> & Files = await new Promise((resolve, reject) => {
+    const data: FormData<{ [key: string]: any }> & Files = await new Promise((resolve, reject) => {
       form.parse(req, function (err, fields, files) {
         if (err) {
           reject({ err });
@@ -34,7 +38,7 @@ export const handleFormData = async <Fields>(req: NextApiRequest): Promise<FormD
     });
 
     const fields = Object.keys(data.fields).reduce((obj, key) => {
-      let value = data.fields[key][0];
+      let value = JSON.parse(JSON.stringify(data.fields[key][0])).trim();
 
       if (value === 'true') {
         value = true;
@@ -48,17 +52,20 @@ export const handleFormData = async <Fields>(req: NextApiRequest): Promise<FormD
         value = undefined;
       }
 
-      if (parseInt(value, 10)) {
+      if (/('\d+')/.test(`'${value}'`)) {
         value = parseInt(value, 10);
       }
 
-      Object.assign(obj, { [key]: value || undefined });
+      
+      Object.assign(obj, { [key]: value ?? '' });
+
       return obj;
-    }, {}) as Fields[];
+    }, {}) as Fields;
 
     const image = data.files.image ? data.files.image[0] : undefined;
+    const file = data.files.file ? data.files.file[0] : undefined;
 
-    return { fields, files: { image } };
+    return { fields, files: { image, file, images: data.files as unknown as FileType & { [key: string]: any } } };
   } catch (error) {
     console.log(error);
     return null;

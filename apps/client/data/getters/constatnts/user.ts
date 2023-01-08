@@ -20,6 +20,21 @@ query($id: ID) {
     }
     referralCode
     dateCreated
+    serviceTokens {
+      id
+      amount
+      discount
+      tokenUsage(orderBy: { dateAdded: desc }, take: 20) {
+        used
+        description
+        dateAdded
+      }
+      dateAdded
+    }
+    providerProfile {
+      id
+      slug
+    }
   }
   ordersCount(
     where: {
@@ -52,11 +67,6 @@ query($email: String) {
       description
       agency
       agencyUrl
-      creator {
-        name
-        slug
-        enabled
-      }
       project {
         name
         slug

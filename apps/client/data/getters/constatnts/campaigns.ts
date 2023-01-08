@@ -18,11 +18,6 @@ query($campaignId: String, $userId: ID) {
     description
     agency
     agencyUrl
-    creator {
-      name
-      slug
-      enabled
-    }
     project {
       id
       name

@@ -18,6 +18,110 @@ export type Scalars = {
   Upload: any;
 };
 
+export type Account = {
+  __typename?: 'Account';
+  access_token?: Maybe<Scalars['String']>;
+  expires_at?: Maybe<Scalars['Int']>;
+  id: Scalars['ID'];
+  id_token?: Maybe<Scalars['String']>;
+  provider?: Maybe<Scalars['String']>;
+  providerAccountId?: Maybe<Scalars['String']>;
+  refresh_token?: Maybe<Scalars['String']>;
+  scope?: Maybe<Scalars['String']>;
+  session_state?: Maybe<Scalars['String']>;
+  token_type?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  user?: Maybe<UserAuth>;
+};
+
+export type AccountCreateInput = {
+  access_token?: InputMaybe<Scalars['String']>;
+  expires_at?: InputMaybe<Scalars['Int']>;
+  id_token?: InputMaybe<Scalars['String']>;
+  provider?: InputMaybe<Scalars['String']>;
+  providerAccountId?: InputMaybe<Scalars['String']>;
+  refresh_token?: InputMaybe<Scalars['String']>;
+  scope?: InputMaybe<Scalars['String']>;
+  session_state?: InputMaybe<Scalars['String']>;
+  token_type?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<UserAuthRelateToOneForCreateInput>;
+};
+
+export type AccountManyRelationFilter = {
+  every?: InputMaybe<AccountWhereInput>;
+  none?: InputMaybe<AccountWhereInput>;
+  some?: InputMaybe<AccountWhereInput>;
+};
+
+export type AccountOrderByInput = {
+  access_token?: InputMaybe<OrderDirection>;
+  expires_at?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+  id_token?: InputMaybe<OrderDirection>;
+  provider?: InputMaybe<OrderDirection>;
+  providerAccountId?: InputMaybe<OrderDirection>;
+  refresh_token?: InputMaybe<OrderDirection>;
+  scope?: InputMaybe<OrderDirection>;
+  session_state?: InputMaybe<OrderDirection>;
+  token_type?: InputMaybe<OrderDirection>;
+  type?: InputMaybe<OrderDirection>;
+};
+
+export type AccountRelateToManyForCreateInput = {
+  connect?: InputMaybe<Array<AccountWhereUniqueInput>>;
+  create?: InputMaybe<Array<AccountCreateInput>>;
+};
+
+export type AccountRelateToManyForUpdateInput = {
+  connect?: InputMaybe<Array<AccountWhereUniqueInput>>;
+  create?: InputMaybe<Array<AccountCreateInput>>;
+  disconnect?: InputMaybe<Array<AccountWhereUniqueInput>>;
+  set?: InputMaybe<Array<AccountWhereUniqueInput>>;
+};
+
+export type AccountUpdateArgs = {
+  data: AccountUpdateInput;
+  where: AccountWhereUniqueInput;
+};
+
+export type AccountUpdateInput = {
+  access_token?: InputMaybe<Scalars['String']>;
+  expires_at?: InputMaybe<Scalars['Int']>;
+  id_token?: InputMaybe<Scalars['String']>;
+  provider?: InputMaybe<Scalars['String']>;
+  providerAccountId?: InputMaybe<Scalars['String']>;
+  refresh_token?: InputMaybe<Scalars['String']>;
+  scope?: InputMaybe<Scalars['String']>;
+  session_state?: InputMaybe<Scalars['String']>;
+  token_type?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<UserAuthRelateToOneForUpdateInput>;
+};
+
+export type AccountWhereInput = {
+  AND?: InputMaybe<Array<AccountWhereInput>>;
+  NOT?: InputMaybe<Array<AccountWhereInput>>;
+  OR?: InputMaybe<Array<AccountWhereInput>>;
+  access_token?: InputMaybe<StringFilter>;
+  expires_at?: InputMaybe<IntNullableFilter>;
+  id?: InputMaybe<IdFilter>;
+  id_token?: InputMaybe<StringFilter>;
+  provider?: InputMaybe<StringFilter>;
+  providerAccountId?: InputMaybe<StringFilter>;
+  refresh_token?: InputMaybe<StringFilter>;
+  scope?: InputMaybe<StringFilter>;
+  session_state?: InputMaybe<StringFilter>;
+  token_type?: InputMaybe<StringFilter>;
+  type?: InputMaybe<StringFilter>;
+  user?: InputMaybe<UserAuthWhereInput>;
+};
+
+export type AccountWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+  providerAccountId?: InputMaybe<Scalars['String']>;
+};
+
 export type Audit = {
   __typename?: 'Audit';
   auditor?: Maybe<Auditor>;
@@ -447,12 +551,12 @@ export type CartWhereUniqueInput = {
 export type Comment = {
   __typename?: 'Comment';
   content?: Maybe<Scalars['JSON']>;
-  creator?: Maybe<Creator>;
   dateAdded?: Maybe<Scalars['DateTime']>;
   id: Scalars['ID'];
   likes?: Maybe<Array<User>>;
   likesCount?: Maybe<Scalars['Int']>;
   project?: Maybe<Project>;
+  provider?: Maybe<Provider>;
   reports?: Maybe<Array<User>>;
   reportsCount?: Maybe<Scalars['Int']>;
   sentiment?: Maybe<Scalars['Int']>;
@@ -488,10 +592,10 @@ export type CommentReportsCountArgs = {
 
 export type CommentCreateInput = {
   content?: InputMaybe<Scalars['JSON']>;
-  creator?: InputMaybe<CreatorRelateToOneForCreateInput>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   likes?: InputMaybe<UserRelateToManyForCreateInput>;
   project?: InputMaybe<ProjectRelateToOneForCreateInput>;
+  provider?: InputMaybe<ProviderRelateToOneForCreateInput>;
   reports?: InputMaybe<UserRelateToManyForCreateInput>;
   sentiment?: InputMaybe<Scalars['Int']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -530,10 +634,10 @@ export type CommentUpdateArgs = {
 
 export type CommentUpdateInput = {
   content?: InputMaybe<Scalars['JSON']>;
-  creator?: InputMaybe<CreatorRelateToOneForUpdateInput>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   likes?: InputMaybe<UserRelateToManyForUpdateInput>;
   project?: InputMaybe<ProjectRelateToOneForUpdateInput>;
+  provider?: InputMaybe<ProviderRelateToOneForUpdateInput>;
   reports?: InputMaybe<UserRelateToManyForUpdateInput>;
   sentiment?: InputMaybe<Scalars['Int']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -544,11 +648,11 @@ export type CommentWhereInput = {
   AND?: InputMaybe<Array<CommentWhereInput>>;
   NOT?: InputMaybe<Array<CommentWhereInput>>;
   OR?: InputMaybe<Array<CommentWhereInput>>;
-  creator?: InputMaybe<CreatorWhereInput>;
   dateAdded?: InputMaybe<DateTimeNullableFilter>;
   id?: InputMaybe<IdFilter>;
   likes?: InputMaybe<UserManyRelationFilter>;
   project?: InputMaybe<ProjectWhereInput>;
+  provider?: InputMaybe<ProviderWhereInput>;
   reports?: InputMaybe<UserManyRelationFilter>;
   sentiment?: InputMaybe<IntNullableFilter>;
   updatedAt?: InputMaybe<DateTimeNullableFilter>;
@@ -976,185 +1080,6 @@ export type CreateInitialUserInput = {
   email?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
-};
-
-export type Creator = {
-  __typename?: 'Creator';
-  comments?: Maybe<Array<Comment>>;
-  commentsCount?: Maybe<Scalars['Int']>;
-  dateAdded?: Maybe<Scalars['DateTime']>;
-  description?: Maybe<Scalars['String']>;
-  discord?: Maybe<Scalars['String']>;
-  enabled?: Maybe<Scalars['Boolean']>;
-  id: Scalars['ID'];
-  image?: Maybe<ImageFieldOutput>;
-  isListed?: Maybe<Scalars['Boolean']>;
-  marketingCampaigns?: Maybe<Array<MarketingCampaign>>;
-  marketingCampaignsCount?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
-  nickname?: Maybe<Scalars['String']>;
-  priceFrom?: Maybe<Scalars['Float']>;
-  priceTo?: Maybe<Scalars['Float']>;
-  reddit?: Maybe<Scalars['String']>;
-  slug?: Maybe<Scalars['String']>;
-  telegram?: Maybe<Scalars['String']>;
-  twitter?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  votes?: Maybe<Array<Vote>>;
-  votesCount?: Maybe<Scalars['Int']>;
-  website?: Maybe<Scalars['String']>;
-  youtube?: Maybe<Scalars['String']>;
-};
-
-
-export type CreatorCommentsArgs = {
-  orderBy?: Array<CommentOrderByInput>;
-  skip?: Scalars['Int'];
-  take?: InputMaybe<Scalars['Int']>;
-  where?: CommentWhereInput;
-};
-
-
-export type CreatorCommentsCountArgs = {
-  where?: CommentWhereInput;
-};
-
-
-export type CreatorMarketingCampaignsArgs = {
-  orderBy?: Array<MarketingCampaignOrderByInput>;
-  skip?: Scalars['Int'];
-  take?: InputMaybe<Scalars['Int']>;
-  where?: MarketingCampaignWhereInput;
-};
-
-
-export type CreatorMarketingCampaignsCountArgs = {
-  where?: MarketingCampaignWhereInput;
-};
-
-
-export type CreatorVotesArgs = {
-  orderBy?: Array<VoteOrderByInput>;
-  skip?: Scalars['Int'];
-  take?: InputMaybe<Scalars['Int']>;
-  where?: VoteWhereInput;
-};
-
-
-export type CreatorVotesCountArgs = {
-  where?: VoteWhereInput;
-};
-
-export type CreatorCreateInput = {
-  comments?: InputMaybe<CommentRelateToManyForCreateInput>;
-  dateAdded?: InputMaybe<Scalars['DateTime']>;
-  description?: InputMaybe<Scalars['String']>;
-  discord?: InputMaybe<Scalars['String']>;
-  enabled?: InputMaybe<Scalars['Boolean']>;
-  image?: InputMaybe<ImageFieldInput>;
-  isListed?: InputMaybe<Scalars['Boolean']>;
-  marketingCampaigns?: InputMaybe<MarketingCampaignRelateToManyForCreateInput>;
-  name?: InputMaybe<Scalars['String']>;
-  nickname?: InputMaybe<Scalars['String']>;
-  priceFrom?: InputMaybe<Scalars['Float']>;
-  priceTo?: InputMaybe<Scalars['Float']>;
-  reddit?: InputMaybe<Scalars['String']>;
-  slug?: InputMaybe<Scalars['String']>;
-  telegram?: InputMaybe<Scalars['String']>;
-  twitter?: InputMaybe<Scalars['String']>;
-  updatedAt?: InputMaybe<Scalars['DateTime']>;
-  votes?: InputMaybe<VoteRelateToManyForCreateInput>;
-  website?: InputMaybe<Scalars['String']>;
-  youtube?: InputMaybe<Scalars['String']>;
-};
-
-export type CreatorOrderByInput = {
-  dateAdded?: InputMaybe<OrderDirection>;
-  description?: InputMaybe<OrderDirection>;
-  discord?: InputMaybe<OrderDirection>;
-  enabled?: InputMaybe<OrderDirection>;
-  id?: InputMaybe<OrderDirection>;
-  isListed?: InputMaybe<OrderDirection>;
-  name?: InputMaybe<OrderDirection>;
-  nickname?: InputMaybe<OrderDirection>;
-  priceFrom?: InputMaybe<OrderDirection>;
-  priceTo?: InputMaybe<OrderDirection>;
-  reddit?: InputMaybe<OrderDirection>;
-  slug?: InputMaybe<OrderDirection>;
-  telegram?: InputMaybe<OrderDirection>;
-  twitter?: InputMaybe<OrderDirection>;
-  updatedAt?: InputMaybe<OrderDirection>;
-  website?: InputMaybe<OrderDirection>;
-  youtube?: InputMaybe<OrderDirection>;
-};
-
-export type CreatorRelateToOneForCreateInput = {
-  connect?: InputMaybe<CreatorWhereUniqueInput>;
-  create?: InputMaybe<CreatorCreateInput>;
-};
-
-export type CreatorRelateToOneForUpdateInput = {
-  connect?: InputMaybe<CreatorWhereUniqueInput>;
-  create?: InputMaybe<CreatorCreateInput>;
-  disconnect?: InputMaybe<Scalars['Boolean']>;
-};
-
-export type CreatorUpdateArgs = {
-  data: CreatorUpdateInput;
-  where: CreatorWhereUniqueInput;
-};
-
-export type CreatorUpdateInput = {
-  comments?: InputMaybe<CommentRelateToManyForUpdateInput>;
-  dateAdded?: InputMaybe<Scalars['DateTime']>;
-  description?: InputMaybe<Scalars['String']>;
-  discord?: InputMaybe<Scalars['String']>;
-  enabled?: InputMaybe<Scalars['Boolean']>;
-  image?: InputMaybe<ImageFieldInput>;
-  isListed?: InputMaybe<Scalars['Boolean']>;
-  marketingCampaigns?: InputMaybe<MarketingCampaignRelateToManyForUpdateInput>;
-  name?: InputMaybe<Scalars['String']>;
-  nickname?: InputMaybe<Scalars['String']>;
-  priceFrom?: InputMaybe<Scalars['Float']>;
-  priceTo?: InputMaybe<Scalars['Float']>;
-  reddit?: InputMaybe<Scalars['String']>;
-  slug?: InputMaybe<Scalars['String']>;
-  telegram?: InputMaybe<Scalars['String']>;
-  twitter?: InputMaybe<Scalars['String']>;
-  updatedAt?: InputMaybe<Scalars['DateTime']>;
-  votes?: InputMaybe<VoteRelateToManyForUpdateInput>;
-  website?: InputMaybe<Scalars['String']>;
-  youtube?: InputMaybe<Scalars['String']>;
-};
-
-export type CreatorWhereInput = {
-  AND?: InputMaybe<Array<CreatorWhereInput>>;
-  NOT?: InputMaybe<Array<CreatorWhereInput>>;
-  OR?: InputMaybe<Array<CreatorWhereInput>>;
-  comments?: InputMaybe<CommentManyRelationFilter>;
-  dateAdded?: InputMaybe<DateTimeNullableFilter>;
-  description?: InputMaybe<StringFilter>;
-  discord?: InputMaybe<StringFilter>;
-  enabled?: InputMaybe<BooleanFilter>;
-  id?: InputMaybe<IdFilter>;
-  isListed?: InputMaybe<BooleanFilter>;
-  marketingCampaigns?: InputMaybe<MarketingCampaignManyRelationFilter>;
-  name?: InputMaybe<StringFilter>;
-  nickname?: InputMaybe<StringFilter>;
-  priceFrom?: InputMaybe<FloatNullableFilter>;
-  priceTo?: InputMaybe<FloatNullableFilter>;
-  reddit?: InputMaybe<StringFilter>;
-  slug?: InputMaybe<StringFilter>;
-  telegram?: InputMaybe<StringFilter>;
-  twitter?: InputMaybe<StringFilter>;
-  updatedAt?: InputMaybe<DateTimeNullableFilter>;
-  votes?: InputMaybe<VoteManyRelationFilter>;
-  website?: InputMaybe<StringFilter>;
-  youtube?: InputMaybe<StringFilter>;
-};
-
-export type CreatorWhereUniqueInput = {
-  id?: InputMaybe<Scalars['ID']>;
 };
 
 export type CustomTracker = {
@@ -1681,6 +1606,53 @@ export type DiscordEventWhereInput = {
 };
 
 export type DiscordEventWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type EmailList = {
+  __typename?: 'EmailList';
+  dateAdded?: Maybe<Scalars['DateTime']>;
+  email?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type EmailListCreateInput = {
+  dateAdded?: InputMaybe<Scalars['DateTime']>;
+  email?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type EmailListOrderByInput = {
+  dateAdded?: InputMaybe<OrderDirection>;
+  email?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+  updatedAt?: InputMaybe<OrderDirection>;
+};
+
+export type EmailListUpdateArgs = {
+  data: EmailListUpdateInput;
+  where: EmailListWhereUniqueInput;
+};
+
+export type EmailListUpdateInput = {
+  dateAdded?: InputMaybe<Scalars['DateTime']>;
+  email?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type EmailListWhereInput = {
+  AND?: InputMaybe<Array<EmailListWhereInput>>;
+  NOT?: InputMaybe<Array<EmailListWhereInput>>;
+  OR?: InputMaybe<Array<EmailListWhereInput>>;
+  dateAdded?: InputMaybe<DateTimeNullableFilter>;
+  email?: InputMaybe<StringFilter>;
+  id?: InputMaybe<IdFilter>;
+  updatedAt?: InputMaybe<DateTimeNullableFilter>;
+};
+
+export type EmailListWhereUniqueInput = {
+  email?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
 };
 
@@ -2355,7 +2327,7 @@ export type LiquidityPairWhereUniqueInput = {
 
 export type MarketStat = {
   __typename?: 'MarketStat';
-  annotation?: Maybe<Scalars['String']>;
+  annotation?: Maybe<Scalars['JSON']>;
   avgHoldings?: Maybe<Scalars['Float']>;
   burnedTokens?: Maybe<Scalars['Float']>;
   customTrackers?: Maybe<Scalars['JSON']>;
@@ -2377,7 +2349,7 @@ export type MarketStat = {
 };
 
 export type MarketStatCreateInput = {
-  annotation?: InputMaybe<Scalars['String']>;
+  annotation?: InputMaybe<Scalars['JSON']>;
   avgHoldings?: InputMaybe<Scalars['Float']>;
   burnedTokens?: InputMaybe<Scalars['Float']>;
   customTrackers?: InputMaybe<Scalars['JSON']>;
@@ -2398,7 +2370,6 @@ export type MarketStatCreateInput = {
 };
 
 export type MarketStatOrderByInput = {
-  annotation?: InputMaybe<OrderDirection>;
   avgHoldings?: InputMaybe<OrderDirection>;
   burnedTokens?: InputMaybe<OrderDirection>;
   dateAdded?: InputMaybe<OrderDirection>;
@@ -2421,7 +2392,7 @@ export type MarketStatUpdateArgs = {
 };
 
 export type MarketStatUpdateInput = {
-  annotation?: InputMaybe<Scalars['String']>;
+  annotation?: InputMaybe<Scalars['JSON']>;
   avgHoldings?: InputMaybe<Scalars['Float']>;
   burnedTokens?: InputMaybe<Scalars['Float']>;
   customTrackers?: InputMaybe<Scalars['JSON']>;
@@ -2445,7 +2416,6 @@ export type MarketStatWhereInput = {
   AND?: InputMaybe<Array<MarketStatWhereInput>>;
   NOT?: InputMaybe<Array<MarketStatWhereInput>>;
   OR?: InputMaybe<Array<MarketStatWhereInput>>;
-  annotation?: InputMaybe<StringFilter>;
   avgHoldings?: InputMaybe<FloatNullableFilter>;
   burnedTokens?: InputMaybe<FloatNullableFilter>;
   dateAdded?: InputMaybe<DateTimeNullableFilter>;
@@ -2473,7 +2443,6 @@ export type MarketingCampaign = {
   agencyUrl?: Maybe<Scalars['String']>;
   budget?: Maybe<Scalars['Float']>;
   campaignId?: Maybe<Scalars['String']>;
-  creator?: Maybe<Creator>;
   dateAdded?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
   discordGoal?: Maybe<Scalars['Float']>;
@@ -2521,7 +2490,6 @@ export type MarketingCampaignCreateInput = {
   agencyUrl?: InputMaybe<Scalars['String']>;
   budget?: InputMaybe<Scalars['Float']>;
   campaignId?: InputMaybe<Scalars['String']>;
-  creator?: InputMaybe<CreatorRelateToOneForCreateInput>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   discordGoal?: InputMaybe<Scalars['Float']>;
@@ -2617,7 +2585,6 @@ export type MarketingCampaignUpdateInput = {
   agencyUrl?: InputMaybe<Scalars['String']>;
   budget?: InputMaybe<Scalars['Float']>;
   campaignId?: InputMaybe<Scalars['String']>;
-  creator?: InputMaybe<CreatorRelateToOneForUpdateInput>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   discordGoal?: InputMaybe<Scalars['Float']>;
@@ -2653,7 +2620,6 @@ export type MarketingCampaignWhereInput = {
   agencyUrl?: InputMaybe<StringFilter>;
   budget?: InputMaybe<FloatNullableFilter>;
   campaignId?: InputMaybe<StringFilter>;
-  creator?: InputMaybe<CreatorWhereInput>;
   dateAdded?: InputMaybe<DateTimeNullableFilter>;
   description?: InputMaybe<StringFilter>;
   discordGoal?: InputMaybe<FloatNullableFilter>;
@@ -2818,6 +2784,8 @@ export type MarketingTrackerResultWhereUniqueInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   authenticateUserWithPassword?: Maybe<UserAuthenticationWithPasswordResult>;
+  createAccount?: Maybe<Account>;
+  createAccounts?: Maybe<Array<Maybe<Account>>>;
   createAudit?: Maybe<Audit>;
   createAuditor?: Maybe<Auditor>;
   createAuditors?: Maybe<Array<Maybe<Auditor>>>;
@@ -2838,8 +2806,6 @@ export type Mutation = {
   createContents?: Maybe<Array<Maybe<Content>>>;
   createCoupon?: Maybe<Coupon>;
   createCoupons?: Maybe<Array<Maybe<Coupon>>>;
-  createCreator?: Maybe<Creator>;
-  createCreators?: Maybe<Array<Maybe<Creator>>>;
   createCustomTracker?: Maybe<CustomTracker>;
   createCustomTrackers?: Maybe<Array<Maybe<CustomTracker>>>;
   createDiscordAnnouncement?: Maybe<DiscordAnnouncement>;
@@ -2850,6 +2816,8 @@ export type Mutation = {
   createDiscordConfigs?: Maybe<Array<Maybe<DiscordConfig>>>;
   createDiscordEvent?: Maybe<DiscordEvent>;
   createDiscordEvents?: Maybe<Array<Maybe<DiscordEvent>>>;
+  createEmailList?: Maybe<EmailList>;
+  createEmailLists?: Maybe<Array<Maybe<EmailList>>>;
   createExchange?: Maybe<Exchange>;
   createExchanges?: Maybe<Array<Maybe<Exchange>>>;
   createHolder?: Maybe<Holder>;
@@ -2883,10 +2851,18 @@ export type Mutation = {
   createProducts?: Maybe<Array<Maybe<Product>>>;
   createProject?: Maybe<Project>;
   createProjects?: Maybe<Array<Maybe<Project>>>;
+  createProvider?: Maybe<Provider>;
+  createProviders?: Maybe<Array<Maybe<Provider>>>;
   createQuiz?: Maybe<Quiz>;
   createQuizzes?: Maybe<Array<Maybe<Quiz>>>;
   createRole?: Maybe<Role>;
   createRoles?: Maybe<Array<Maybe<Role>>>;
+  createServiceToken?: Maybe<ServiceToken>;
+  createServiceTokenUsage?: Maybe<ServiceTokenUsage>;
+  createServiceTokenUsages?: Maybe<Array<Maybe<ServiceTokenUsage>>>;
+  createServiceTokens?: Maybe<Array<Maybe<ServiceToken>>>;
+  createSession?: Maybe<Session>;
+  createSessions?: Maybe<Array<Maybe<Session>>>;
   createSocialStat?: Maybe<SocialStat>;
   createSocialStats?: Maybe<Array<Maybe<SocialStat>>>;
   createStableLiquidityPair?: Maybe<StableLiquidityPair>;
@@ -2897,14 +2873,22 @@ export type Mutation = {
   createTags?: Maybe<Array<Maybe<Tag>>>;
   createToken?: Maybe<Token>;
   createTokens?: Maybe<Array<Maybe<Token>>>;
+  createTranscription?: Maybe<Transcription>;
+  createTranscriptions?: Maybe<Array<Maybe<Transcription>>>;
   createTransfer?: Maybe<Transfer>;
   createTransfers?: Maybe<Array<Maybe<Transfer>>>;
   createTransparencyRating?: Maybe<TransparencyRating>;
   createTransparencyRatings?: Maybe<Array<Maybe<TransparencyRating>>>;
   createUser?: Maybe<User>;
+  createUserAuth?: Maybe<UserAuth>;
+  createUserAuths?: Maybe<Array<Maybe<UserAuth>>>;
   createUsers?: Maybe<Array<Maybe<User>>>;
+  createVerificationToken?: Maybe<VerificationToken>;
+  createVerificationTokens?: Maybe<Array<Maybe<VerificationToken>>>;
   createVote?: Maybe<Vote>;
   createVotes?: Maybe<Array<Maybe<Vote>>>;
+  deleteAccount?: Maybe<Account>;
+  deleteAccounts?: Maybe<Array<Maybe<Account>>>;
   deleteAudit?: Maybe<Audit>;
   deleteAuditor?: Maybe<Auditor>;
   deleteAuditors?: Maybe<Array<Maybe<Auditor>>>;
@@ -2925,8 +2909,6 @@ export type Mutation = {
   deleteContents?: Maybe<Array<Maybe<Content>>>;
   deleteCoupon?: Maybe<Coupon>;
   deleteCoupons?: Maybe<Array<Maybe<Coupon>>>;
-  deleteCreator?: Maybe<Creator>;
-  deleteCreators?: Maybe<Array<Maybe<Creator>>>;
   deleteCustomTracker?: Maybe<CustomTracker>;
   deleteCustomTrackers?: Maybe<Array<Maybe<CustomTracker>>>;
   deleteDiscordAnnouncement?: Maybe<DiscordAnnouncement>;
@@ -2937,6 +2919,8 @@ export type Mutation = {
   deleteDiscordConfigs?: Maybe<Array<Maybe<DiscordConfig>>>;
   deleteDiscordEvent?: Maybe<DiscordEvent>;
   deleteDiscordEvents?: Maybe<Array<Maybe<DiscordEvent>>>;
+  deleteEmailList?: Maybe<EmailList>;
+  deleteEmailLists?: Maybe<Array<Maybe<EmailList>>>;
   deleteExchange?: Maybe<Exchange>;
   deleteExchanges?: Maybe<Array<Maybe<Exchange>>>;
   deleteHolder?: Maybe<Holder>;
@@ -2969,10 +2953,18 @@ export type Mutation = {
   deleteProducts?: Maybe<Array<Maybe<Product>>>;
   deleteProject?: Maybe<Project>;
   deleteProjects?: Maybe<Array<Maybe<Project>>>;
+  deleteProvider?: Maybe<Provider>;
+  deleteProviders?: Maybe<Array<Maybe<Provider>>>;
   deleteQuiz?: Maybe<Quiz>;
   deleteQuizzes?: Maybe<Array<Maybe<Quiz>>>;
   deleteRole?: Maybe<Role>;
   deleteRoles?: Maybe<Array<Maybe<Role>>>;
+  deleteServiceToken?: Maybe<ServiceToken>;
+  deleteServiceTokenUsage?: Maybe<ServiceTokenUsage>;
+  deleteServiceTokenUsages?: Maybe<Array<Maybe<ServiceTokenUsage>>>;
+  deleteServiceTokens?: Maybe<Array<Maybe<ServiceToken>>>;
+  deleteSession?: Maybe<Session>;
+  deleteSessions?: Maybe<Array<Maybe<Session>>>;
   deleteSocialStat?: Maybe<SocialStat>;
   deleteSocialStats?: Maybe<Array<Maybe<SocialStat>>>;
   deleteStableLiquidityPair?: Maybe<StableLiquidityPair>;
@@ -2983,17 +2975,25 @@ export type Mutation = {
   deleteTags?: Maybe<Array<Maybe<Tag>>>;
   deleteToken?: Maybe<Token>;
   deleteTokens?: Maybe<Array<Maybe<Token>>>;
+  deleteTranscription?: Maybe<Transcription>;
+  deleteTranscriptions?: Maybe<Array<Maybe<Transcription>>>;
   deleteTransfer?: Maybe<Transfer>;
   deleteTransfers?: Maybe<Array<Maybe<Transfer>>>;
   deleteTransparencyRating?: Maybe<TransparencyRating>;
   deleteTransparencyRatings?: Maybe<Array<Maybe<TransparencyRating>>>;
   deleteUser?: Maybe<User>;
+  deleteUserAuth?: Maybe<UserAuth>;
+  deleteUserAuths?: Maybe<Array<Maybe<UserAuth>>>;
   deleteUsers?: Maybe<Array<Maybe<User>>>;
+  deleteVerificationToken?: Maybe<VerificationToken>;
+  deleteVerificationTokens?: Maybe<Array<Maybe<VerificationToken>>>;
   deleteVote?: Maybe<Vote>;
   deleteVotes?: Maybe<Array<Maybe<Vote>>>;
   endSession: Scalars['Boolean'];
   redeemUserPasswordResetToken?: Maybe<RedeemUserPasswordResetTokenResult>;
   sendUserPasswordResetLink: Scalars['Boolean'];
+  updateAccount?: Maybe<Account>;
+  updateAccounts?: Maybe<Array<Maybe<Account>>>;
   updateAudit?: Maybe<Audit>;
   updateAuditor?: Maybe<Auditor>;
   updateAuditors?: Maybe<Array<Maybe<Auditor>>>;
@@ -3014,8 +3014,6 @@ export type Mutation = {
   updateContents?: Maybe<Array<Maybe<Content>>>;
   updateCoupon?: Maybe<Coupon>;
   updateCoupons?: Maybe<Array<Maybe<Coupon>>>;
-  updateCreator?: Maybe<Creator>;
-  updateCreators?: Maybe<Array<Maybe<Creator>>>;
   updateCustomTracker?: Maybe<CustomTracker>;
   updateCustomTrackers?: Maybe<Array<Maybe<CustomTracker>>>;
   updateDiscordAnnouncement?: Maybe<DiscordAnnouncement>;
@@ -3026,6 +3024,8 @@ export type Mutation = {
   updateDiscordConfigs?: Maybe<Array<Maybe<DiscordConfig>>>;
   updateDiscordEvent?: Maybe<DiscordEvent>;
   updateDiscordEvents?: Maybe<Array<Maybe<DiscordEvent>>>;
+  updateEmailList?: Maybe<EmailList>;
+  updateEmailLists?: Maybe<Array<Maybe<EmailList>>>;
   updateExchange?: Maybe<Exchange>;
   updateExchanges?: Maybe<Array<Maybe<Exchange>>>;
   updateHolder?: Maybe<Holder>;
@@ -3058,10 +3058,18 @@ export type Mutation = {
   updateProducts?: Maybe<Array<Maybe<Product>>>;
   updateProject?: Maybe<Project>;
   updateProjects?: Maybe<Array<Maybe<Project>>>;
+  updateProvider?: Maybe<Provider>;
+  updateProviders?: Maybe<Array<Maybe<Provider>>>;
   updateQuiz?: Maybe<Quiz>;
   updateQuizzes?: Maybe<Array<Maybe<Quiz>>>;
   updateRole?: Maybe<Role>;
   updateRoles?: Maybe<Array<Maybe<Role>>>;
+  updateServiceToken?: Maybe<ServiceToken>;
+  updateServiceTokenUsage?: Maybe<ServiceTokenUsage>;
+  updateServiceTokenUsages?: Maybe<Array<Maybe<ServiceTokenUsage>>>;
+  updateServiceTokens?: Maybe<Array<Maybe<ServiceToken>>>;
+  updateSession?: Maybe<Session>;
+  updateSessions?: Maybe<Array<Maybe<Session>>>;
   updateSocialStat?: Maybe<SocialStat>;
   updateSocialStats?: Maybe<Array<Maybe<SocialStat>>>;
   updateStableLiquidityPair?: Maybe<StableLiquidityPair>;
@@ -3072,12 +3080,18 @@ export type Mutation = {
   updateTags?: Maybe<Array<Maybe<Tag>>>;
   updateToken?: Maybe<Token>;
   updateTokens?: Maybe<Array<Maybe<Token>>>;
+  updateTranscription?: Maybe<Transcription>;
+  updateTranscriptions?: Maybe<Array<Maybe<Transcription>>>;
   updateTransfer?: Maybe<Transfer>;
   updateTransfers?: Maybe<Array<Maybe<Transfer>>>;
   updateTransparencyRating?: Maybe<TransparencyRating>;
   updateTransparencyRatings?: Maybe<Array<Maybe<TransparencyRating>>>;
   updateUser?: Maybe<User>;
+  updateUserAuth?: Maybe<UserAuth>;
+  updateUserAuths?: Maybe<Array<Maybe<UserAuth>>>;
   updateUsers?: Maybe<Array<Maybe<User>>>;
+  updateVerificationToken?: Maybe<VerificationToken>;
+  updateVerificationTokens?: Maybe<Array<Maybe<VerificationToken>>>;
   updateVote?: Maybe<Vote>;
   updateVotes?: Maybe<Array<Maybe<Vote>>>;
 };
@@ -3086,6 +3100,16 @@ export type Mutation = {
 export type MutationAuthenticateUserWithPasswordArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationCreateAccountArgs = {
+  data: AccountCreateInput;
+};
+
+
+export type MutationCreateAccountsArgs = {
+  data: Array<AccountCreateInput>;
 };
 
 
@@ -3189,16 +3213,6 @@ export type MutationCreateCouponsArgs = {
 };
 
 
-export type MutationCreateCreatorArgs = {
-  data: CreatorCreateInput;
-};
-
-
-export type MutationCreateCreatorsArgs = {
-  data: Array<CreatorCreateInput>;
-};
-
-
 export type MutationCreateCustomTrackerArgs = {
   data: CustomTrackerCreateInput;
 };
@@ -3246,6 +3260,16 @@ export type MutationCreateDiscordEventArgs = {
 
 export type MutationCreateDiscordEventsArgs = {
   data: Array<DiscordEventCreateInput>;
+};
+
+
+export type MutationCreateEmailListArgs = {
+  data: EmailListCreateInput;
+};
+
+
+export type MutationCreateEmailListsArgs = {
+  data: Array<EmailListCreateInput>;
 };
 
 
@@ -3414,6 +3438,16 @@ export type MutationCreateProjectsArgs = {
 };
 
 
+export type MutationCreateProviderArgs = {
+  data: ProviderCreateInput;
+};
+
+
+export type MutationCreateProvidersArgs = {
+  data: Array<ProviderCreateInput>;
+};
+
+
 export type MutationCreateQuizArgs = {
   data: QuizCreateInput;
 };
@@ -3431,6 +3465,36 @@ export type MutationCreateRoleArgs = {
 
 export type MutationCreateRolesArgs = {
   data: Array<RoleCreateInput>;
+};
+
+
+export type MutationCreateServiceTokenArgs = {
+  data: ServiceTokenCreateInput;
+};
+
+
+export type MutationCreateServiceTokenUsageArgs = {
+  data: ServiceTokenUsageCreateInput;
+};
+
+
+export type MutationCreateServiceTokenUsagesArgs = {
+  data: Array<ServiceTokenUsageCreateInput>;
+};
+
+
+export type MutationCreateServiceTokensArgs = {
+  data: Array<ServiceTokenCreateInput>;
+};
+
+
+export type MutationCreateSessionArgs = {
+  data: SessionCreateInput;
+};
+
+
+export type MutationCreateSessionsArgs = {
+  data: Array<SessionCreateInput>;
 };
 
 
@@ -3484,6 +3548,16 @@ export type MutationCreateTokensArgs = {
 };
 
 
+export type MutationCreateTranscriptionArgs = {
+  data: TranscriptionCreateInput;
+};
+
+
+export type MutationCreateTranscriptionsArgs = {
+  data: Array<TranscriptionCreateInput>;
+};
+
+
 export type MutationCreateTransferArgs = {
   data: TransferCreateInput;
 };
@@ -3509,8 +3583,28 @@ export type MutationCreateUserArgs = {
 };
 
 
+export type MutationCreateUserAuthArgs = {
+  data: UserAuthCreateInput;
+};
+
+
+export type MutationCreateUserAuthsArgs = {
+  data: Array<UserAuthCreateInput>;
+};
+
+
 export type MutationCreateUsersArgs = {
   data: Array<UserCreateInput>;
+};
+
+
+export type MutationCreateVerificationTokenArgs = {
+  data: VerificationTokenCreateInput;
+};
+
+
+export type MutationCreateVerificationTokensArgs = {
+  data: Array<VerificationTokenCreateInput>;
 };
 
 
@@ -3521,6 +3615,16 @@ export type MutationCreateVoteArgs = {
 
 export type MutationCreateVotesArgs = {
   data: Array<VoteCreateInput>;
+};
+
+
+export type MutationDeleteAccountArgs = {
+  where: AccountWhereUniqueInput;
+};
+
+
+export type MutationDeleteAccountsArgs = {
+  where: Array<AccountWhereUniqueInput>;
 };
 
 
@@ -3624,16 +3728,6 @@ export type MutationDeleteCouponsArgs = {
 };
 
 
-export type MutationDeleteCreatorArgs = {
-  where: CreatorWhereUniqueInput;
-};
-
-
-export type MutationDeleteCreatorsArgs = {
-  where: Array<CreatorWhereUniqueInput>;
-};
-
-
 export type MutationDeleteCustomTrackerArgs = {
   where: CustomTrackerWhereUniqueInput;
 };
@@ -3681,6 +3775,16 @@ export type MutationDeleteDiscordEventArgs = {
 
 export type MutationDeleteDiscordEventsArgs = {
   where: Array<DiscordEventWhereUniqueInput>;
+};
+
+
+export type MutationDeleteEmailListArgs = {
+  where: EmailListWhereUniqueInput;
+};
+
+
+export type MutationDeleteEmailListsArgs = {
+  where: Array<EmailListWhereUniqueInput>;
 };
 
 
@@ -3844,6 +3948,16 @@ export type MutationDeleteProjectsArgs = {
 };
 
 
+export type MutationDeleteProviderArgs = {
+  where: ProviderWhereUniqueInput;
+};
+
+
+export type MutationDeleteProvidersArgs = {
+  where: Array<ProviderWhereUniqueInput>;
+};
+
+
 export type MutationDeleteQuizArgs = {
   where: QuizWhereUniqueInput;
 };
@@ -3861,6 +3975,36 @@ export type MutationDeleteRoleArgs = {
 
 export type MutationDeleteRolesArgs = {
   where: Array<RoleWhereUniqueInput>;
+};
+
+
+export type MutationDeleteServiceTokenArgs = {
+  where: ServiceTokenWhereUniqueInput;
+};
+
+
+export type MutationDeleteServiceTokenUsageArgs = {
+  where: ServiceTokenUsageWhereUniqueInput;
+};
+
+
+export type MutationDeleteServiceTokenUsagesArgs = {
+  where: Array<ServiceTokenUsageWhereUniqueInput>;
+};
+
+
+export type MutationDeleteServiceTokensArgs = {
+  where: Array<ServiceTokenWhereUniqueInput>;
+};
+
+
+export type MutationDeleteSessionArgs = {
+  where: SessionWhereUniqueInput;
+};
+
+
+export type MutationDeleteSessionsArgs = {
+  where: Array<SessionWhereUniqueInput>;
 };
 
 
@@ -3914,6 +4058,16 @@ export type MutationDeleteTokensArgs = {
 };
 
 
+export type MutationDeleteTranscriptionArgs = {
+  where: TranscriptionWhereUniqueInput;
+};
+
+
+export type MutationDeleteTranscriptionsArgs = {
+  where: Array<TranscriptionWhereUniqueInput>;
+};
+
+
 export type MutationDeleteTransferArgs = {
   where: TransferWhereUniqueInput;
 };
@@ -3939,8 +4093,28 @@ export type MutationDeleteUserArgs = {
 };
 
 
+export type MutationDeleteUserAuthArgs = {
+  where: UserAuthWhereUniqueInput;
+};
+
+
+export type MutationDeleteUserAuthsArgs = {
+  where: Array<UserAuthWhereUniqueInput>;
+};
+
+
 export type MutationDeleteUsersArgs = {
   where: Array<UserWhereUniqueInput>;
+};
+
+
+export type MutationDeleteVerificationTokenArgs = {
+  where: VerificationTokenWhereUniqueInput;
+};
+
+
+export type MutationDeleteVerificationTokensArgs = {
+  where: Array<VerificationTokenWhereUniqueInput>;
 };
 
 
@@ -3963,6 +4137,17 @@ export type MutationRedeemUserPasswordResetTokenArgs = {
 
 export type MutationSendUserPasswordResetLinkArgs = {
   email: Scalars['String'];
+};
+
+
+export type MutationUpdateAccountArgs = {
+  data: AccountUpdateInput;
+  where: AccountWhereUniqueInput;
+};
+
+
+export type MutationUpdateAccountsArgs = {
+  data: Array<AccountUpdateArgs>;
 };
 
 
@@ -4076,17 +4261,6 @@ export type MutationUpdateCouponsArgs = {
 };
 
 
-export type MutationUpdateCreatorArgs = {
-  data: CreatorUpdateInput;
-  where: CreatorWhereUniqueInput;
-};
-
-
-export type MutationUpdateCreatorsArgs = {
-  data: Array<CreatorUpdateArgs>;
-};
-
-
 export type MutationUpdateCustomTrackerArgs = {
   data: CustomTrackerUpdateInput;
   where: CustomTrackerWhereUniqueInput;
@@ -4139,6 +4313,17 @@ export type MutationUpdateDiscordEventArgs = {
 
 export type MutationUpdateDiscordEventsArgs = {
   data: Array<DiscordEventUpdateArgs>;
+};
+
+
+export type MutationUpdateEmailListArgs = {
+  data: EmailListUpdateInput;
+  where: EmailListWhereUniqueInput;
+};
+
+
+export type MutationUpdateEmailListsArgs = {
+  data: Array<EmailListUpdateArgs>;
 };
 
 
@@ -4318,6 +4503,17 @@ export type MutationUpdateProjectsArgs = {
 };
 
 
+export type MutationUpdateProviderArgs = {
+  data: ProviderUpdateInput;
+  where: ProviderWhereUniqueInput;
+};
+
+
+export type MutationUpdateProvidersArgs = {
+  data: Array<ProviderUpdateArgs>;
+};
+
+
 export type MutationUpdateQuizArgs = {
   data: QuizUpdateInput;
   where: QuizWhereUniqueInput;
@@ -4337,6 +4533,39 @@ export type MutationUpdateRoleArgs = {
 
 export type MutationUpdateRolesArgs = {
   data: Array<RoleUpdateArgs>;
+};
+
+
+export type MutationUpdateServiceTokenArgs = {
+  data: ServiceTokenUpdateInput;
+  where: ServiceTokenWhereUniqueInput;
+};
+
+
+export type MutationUpdateServiceTokenUsageArgs = {
+  data: ServiceTokenUsageUpdateInput;
+  where: ServiceTokenUsageWhereUniqueInput;
+};
+
+
+export type MutationUpdateServiceTokenUsagesArgs = {
+  data: Array<ServiceTokenUsageUpdateArgs>;
+};
+
+
+export type MutationUpdateServiceTokensArgs = {
+  data: Array<ServiceTokenUpdateArgs>;
+};
+
+
+export type MutationUpdateSessionArgs = {
+  data: SessionUpdateInput;
+  where: SessionWhereUniqueInput;
+};
+
+
+export type MutationUpdateSessionsArgs = {
+  data: Array<SessionUpdateArgs>;
 };
 
 
@@ -4395,6 +4624,17 @@ export type MutationUpdateTokensArgs = {
 };
 
 
+export type MutationUpdateTranscriptionArgs = {
+  data: TranscriptionUpdateInput;
+  where: TranscriptionWhereUniqueInput;
+};
+
+
+export type MutationUpdateTranscriptionsArgs = {
+  data: Array<TranscriptionUpdateArgs>;
+};
+
+
 export type MutationUpdateTransferArgs = {
   data: TransferUpdateInput;
   where: TransferWhereUniqueInput;
@@ -4423,8 +4663,30 @@ export type MutationUpdateUserArgs = {
 };
 
 
+export type MutationUpdateUserAuthArgs = {
+  data: UserAuthUpdateInput;
+  where: UserAuthWhereUniqueInput;
+};
+
+
+export type MutationUpdateUserAuthsArgs = {
+  data: Array<UserAuthUpdateArgs>;
+};
+
+
 export type MutationUpdateUsersArgs = {
   data: Array<UserUpdateArgs>;
+};
+
+
+export type MutationUpdateVerificationTokenArgs = {
+  data: VerificationTokenUpdateInput;
+  where: VerificationTokenWhereUniqueInput;
+};
+
+
+export type MutationUpdateVerificationTokensArgs = {
+  data: Array<VerificationTokenUpdateArgs>;
 };
 
 
@@ -5732,8 +5994,273 @@ export type ProjectWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
+export type Provider = {
+  __typename?: 'Provider';
+  about?: Maybe<Scalars['String']>;
+  backgroundImage?: Maybe<ImageFieldOutput>;
+  comments?: Maybe<Array<Comment>>;
+  commentsCount?: Maybe<Scalars['Int']>;
+  contactEmail?: Maybe<Scalars['String']>;
+  dateAdded?: Maybe<Scalars['DateTime']>;
+  discord?: Maybe<Scalars['String']>;
+  displayEmail?: Maybe<Scalars['Boolean']>;
+  displayPrices?: Maybe<Scalars['Boolean']>;
+  enabled?: Maybe<Scalars['Boolean']>;
+  followers?: Maybe<Array<User>>;
+  followersCount?: Maybe<Scalars['Int']>;
+  id: Scalars['ID'];
+  image?: Maybe<ImageFieldOutput>;
+  isListed?: Maybe<Scalars['Boolean']>;
+  isPromoted?: Maybe<Scalars['Boolean']>;
+  name?: Maybe<Scalars['String']>;
+  nickname?: Maybe<Scalars['String']>;
+  offers?: Maybe<Scalars['String']>;
+  openForWork?: Maybe<Scalars['Boolean']>;
+  priceFrom?: Maybe<Scalars['Float']>;
+  priceTo?: Maybe<Scalars['Float']>;
+  reddit?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  summary?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Tag>>;
+  tagsCount?: Maybe<Scalars['Int']>;
+  telegram?: Maybe<Scalars['String']>;
+  twitter?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  user?: Maybe<User>;
+  views?: Maybe<Scalars['Float']>;
+  votes?: Maybe<Array<Vote>>;
+  votesCount?: Maybe<Scalars['Int']>;
+  website?: Maybe<Scalars['String']>;
+  youtube?: Maybe<Scalars['String']>;
+};
+
+
+export type ProviderCommentsArgs = {
+  orderBy?: Array<CommentOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: CommentWhereInput;
+};
+
+
+export type ProviderCommentsCountArgs = {
+  where?: CommentWhereInput;
+};
+
+
+export type ProviderFollowersArgs = {
+  orderBy?: Array<UserOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: UserWhereInput;
+};
+
+
+export type ProviderFollowersCountArgs = {
+  where?: UserWhereInput;
+};
+
+
+export type ProviderTagsArgs = {
+  orderBy?: Array<TagOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: TagWhereInput;
+};
+
+
+export type ProviderTagsCountArgs = {
+  where?: TagWhereInput;
+};
+
+
+export type ProviderVotesArgs = {
+  orderBy?: Array<VoteOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: VoteWhereInput;
+};
+
+
+export type ProviderVotesCountArgs = {
+  where?: VoteWhereInput;
+};
+
+export type ProviderCreateInput = {
+  about?: InputMaybe<Scalars['String']>;
+  backgroundImage?: InputMaybe<ImageFieldInput>;
+  comments?: InputMaybe<CommentRelateToManyForCreateInput>;
+  contactEmail?: InputMaybe<Scalars['String']>;
+  dateAdded?: InputMaybe<Scalars['DateTime']>;
+  discord?: InputMaybe<Scalars['String']>;
+  displayEmail?: InputMaybe<Scalars['Boolean']>;
+  displayPrices?: InputMaybe<Scalars['Boolean']>;
+  enabled?: InputMaybe<Scalars['Boolean']>;
+  followers?: InputMaybe<UserRelateToManyForCreateInput>;
+  image?: InputMaybe<ImageFieldInput>;
+  isListed?: InputMaybe<Scalars['Boolean']>;
+  isPromoted?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  nickname?: InputMaybe<Scalars['String']>;
+  offers?: InputMaybe<Scalars['String']>;
+  openForWork?: InputMaybe<Scalars['Boolean']>;
+  priceFrom?: InputMaybe<Scalars['Float']>;
+  priceTo?: InputMaybe<Scalars['Float']>;
+  reddit?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
+  summary?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<TagRelateToManyForCreateInput>;
+  telegram?: InputMaybe<Scalars['String']>;
+  twitter?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  user?: InputMaybe<UserRelateToOneForCreateInput>;
+  views?: InputMaybe<Scalars['Float']>;
+  votes?: InputMaybe<VoteRelateToManyForCreateInput>;
+  website?: InputMaybe<Scalars['String']>;
+  youtube?: InputMaybe<Scalars['String']>;
+};
+
+export type ProviderManyRelationFilter = {
+  every?: InputMaybe<ProviderWhereInput>;
+  none?: InputMaybe<ProviderWhereInput>;
+  some?: InputMaybe<ProviderWhereInput>;
+};
+
+export type ProviderOrderByInput = {
+  about?: InputMaybe<OrderDirection>;
+  contactEmail?: InputMaybe<OrderDirection>;
+  dateAdded?: InputMaybe<OrderDirection>;
+  discord?: InputMaybe<OrderDirection>;
+  displayEmail?: InputMaybe<OrderDirection>;
+  displayPrices?: InputMaybe<OrderDirection>;
+  enabled?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+  isListed?: InputMaybe<OrderDirection>;
+  isPromoted?: InputMaybe<OrderDirection>;
+  name?: InputMaybe<OrderDirection>;
+  nickname?: InputMaybe<OrderDirection>;
+  offers?: InputMaybe<OrderDirection>;
+  openForWork?: InputMaybe<OrderDirection>;
+  priceFrom?: InputMaybe<OrderDirection>;
+  priceTo?: InputMaybe<OrderDirection>;
+  reddit?: InputMaybe<OrderDirection>;
+  slug?: InputMaybe<OrderDirection>;
+  summary?: InputMaybe<OrderDirection>;
+  telegram?: InputMaybe<OrderDirection>;
+  twitter?: InputMaybe<OrderDirection>;
+  updatedAt?: InputMaybe<OrderDirection>;
+  views?: InputMaybe<OrderDirection>;
+  website?: InputMaybe<OrderDirection>;
+  youtube?: InputMaybe<OrderDirection>;
+};
+
+export type ProviderRelateToManyForCreateInput = {
+  connect?: InputMaybe<Array<ProviderWhereUniqueInput>>;
+  create?: InputMaybe<Array<ProviderCreateInput>>;
+};
+
+export type ProviderRelateToManyForUpdateInput = {
+  connect?: InputMaybe<Array<ProviderWhereUniqueInput>>;
+  create?: InputMaybe<Array<ProviderCreateInput>>;
+  disconnect?: InputMaybe<Array<ProviderWhereUniqueInput>>;
+  set?: InputMaybe<Array<ProviderWhereUniqueInput>>;
+};
+
+export type ProviderRelateToOneForCreateInput = {
+  connect?: InputMaybe<ProviderWhereUniqueInput>;
+  create?: InputMaybe<ProviderCreateInput>;
+};
+
+export type ProviderRelateToOneForUpdateInput = {
+  connect?: InputMaybe<ProviderWhereUniqueInput>;
+  create?: InputMaybe<ProviderCreateInput>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type ProviderUpdateArgs = {
+  data: ProviderUpdateInput;
+  where: ProviderWhereUniqueInput;
+};
+
+export type ProviderUpdateInput = {
+  about?: InputMaybe<Scalars['String']>;
+  backgroundImage?: InputMaybe<ImageFieldInput>;
+  comments?: InputMaybe<CommentRelateToManyForUpdateInput>;
+  contactEmail?: InputMaybe<Scalars['String']>;
+  dateAdded?: InputMaybe<Scalars['DateTime']>;
+  discord?: InputMaybe<Scalars['String']>;
+  displayEmail?: InputMaybe<Scalars['Boolean']>;
+  displayPrices?: InputMaybe<Scalars['Boolean']>;
+  enabled?: InputMaybe<Scalars['Boolean']>;
+  followers?: InputMaybe<UserRelateToManyForUpdateInput>;
+  image?: InputMaybe<ImageFieldInput>;
+  isListed?: InputMaybe<Scalars['Boolean']>;
+  isPromoted?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  nickname?: InputMaybe<Scalars['String']>;
+  offers?: InputMaybe<Scalars['String']>;
+  openForWork?: InputMaybe<Scalars['Boolean']>;
+  priceFrom?: InputMaybe<Scalars['Float']>;
+  priceTo?: InputMaybe<Scalars['Float']>;
+  reddit?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
+  summary?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<TagRelateToManyForUpdateInput>;
+  telegram?: InputMaybe<Scalars['String']>;
+  twitter?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  user?: InputMaybe<UserRelateToOneForUpdateInput>;
+  views?: InputMaybe<Scalars['Float']>;
+  votes?: InputMaybe<VoteRelateToManyForUpdateInput>;
+  website?: InputMaybe<Scalars['String']>;
+  youtube?: InputMaybe<Scalars['String']>;
+};
+
+export type ProviderWhereInput = {
+  AND?: InputMaybe<Array<ProviderWhereInput>>;
+  NOT?: InputMaybe<Array<ProviderWhereInput>>;
+  OR?: InputMaybe<Array<ProviderWhereInput>>;
+  about?: InputMaybe<StringFilter>;
+  comments?: InputMaybe<CommentManyRelationFilter>;
+  contactEmail?: InputMaybe<StringFilter>;
+  dateAdded?: InputMaybe<DateTimeNullableFilter>;
+  discord?: InputMaybe<StringFilter>;
+  displayEmail?: InputMaybe<BooleanFilter>;
+  displayPrices?: InputMaybe<BooleanFilter>;
+  enabled?: InputMaybe<BooleanFilter>;
+  followers?: InputMaybe<UserManyRelationFilter>;
+  id?: InputMaybe<IdFilter>;
+  isListed?: InputMaybe<BooleanFilter>;
+  isPromoted?: InputMaybe<BooleanFilter>;
+  name?: InputMaybe<StringFilter>;
+  nickname?: InputMaybe<StringFilter>;
+  offers?: InputMaybe<StringFilter>;
+  openForWork?: InputMaybe<BooleanFilter>;
+  priceFrom?: InputMaybe<FloatNullableFilter>;
+  priceTo?: InputMaybe<FloatNullableFilter>;
+  reddit?: InputMaybe<StringFilter>;
+  slug?: InputMaybe<StringFilter>;
+  summary?: InputMaybe<StringFilter>;
+  tags?: InputMaybe<TagManyRelationFilter>;
+  telegram?: InputMaybe<StringFilter>;
+  twitter?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeNullableFilter>;
+  user?: InputMaybe<UserWhereInput>;
+  views?: InputMaybe<FloatNullableFilter>;
+  votes?: InputMaybe<VoteManyRelationFilter>;
+  website?: InputMaybe<StringFilter>;
+  youtube?: InputMaybe<StringFilter>;
+};
+
+export type ProviderWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
 export type Query = {
   __typename?: 'Query';
+  account?: Maybe<Account>;
+  accounts?: Maybe<Array<Account>>;
+  accountsCount?: Maybe<Scalars['Int']>;
   audit?: Maybe<Audit>;
   auditor?: Maybe<Auditor>;
   auditors?: Maybe<Array<Auditor>>;
@@ -5765,9 +6292,6 @@ export type Query = {
   coupon?: Maybe<Coupon>;
   coupons?: Maybe<Array<Coupon>>;
   couponsCount?: Maybe<Scalars['Int']>;
-  creator?: Maybe<Creator>;
-  creators?: Maybe<Array<Creator>>;
-  creatorsCount?: Maybe<Scalars['Int']>;
   customTracker?: Maybe<CustomTracker>;
   customTrackers?: Maybe<Array<CustomTracker>>;
   customTrackersCount?: Maybe<Scalars['Int']>;
@@ -5783,6 +6307,9 @@ export type Query = {
   discordEvent?: Maybe<DiscordEvent>;
   discordEvents?: Maybe<Array<DiscordEvent>>;
   discordEventsCount?: Maybe<Scalars['Int']>;
+  emailList?: Maybe<EmailList>;
+  emailLists?: Maybe<Array<EmailList>>;
+  emailListsCount?: Maybe<Scalars['Int']>;
   exchange?: Maybe<Exchange>;
   exchanges?: Maybe<Array<Exchange>>;
   exchangesCount?: Maybe<Scalars['Int']>;
@@ -5832,12 +6359,24 @@ export type Query = {
   project?: Maybe<Project>;
   projects?: Maybe<Array<Project>>;
   projectsCount?: Maybe<Scalars['Int']>;
+  provider?: Maybe<Provider>;
+  providers?: Maybe<Array<Provider>>;
+  providersCount?: Maybe<Scalars['Int']>;
   quiz?: Maybe<Quiz>;
   quizzes?: Maybe<Array<Quiz>>;
   quizzesCount?: Maybe<Scalars['Int']>;
   role?: Maybe<Role>;
   roles?: Maybe<Array<Role>>;
   rolesCount?: Maybe<Scalars['Int']>;
+  serviceToken?: Maybe<ServiceToken>;
+  serviceTokenUsage?: Maybe<ServiceTokenUsage>;
+  serviceTokenUsages?: Maybe<Array<ServiceTokenUsage>>;
+  serviceTokenUsagesCount?: Maybe<Scalars['Int']>;
+  serviceTokens?: Maybe<Array<ServiceToken>>;
+  serviceTokensCount?: Maybe<Scalars['Int']>;
+  session?: Maybe<Session>;
+  sessions?: Maybe<Array<Session>>;
+  sessionsCount?: Maybe<Scalars['Int']>;
   socialStat?: Maybe<SocialStat>;
   socialStats?: Maybe<Array<SocialStat>>;
   socialStatsCount?: Maybe<Scalars['Int']>;
@@ -5853,6 +6392,9 @@ export type Query = {
   token?: Maybe<Token>;
   tokens?: Maybe<Array<Token>>;
   tokensCount?: Maybe<Scalars['Int']>;
+  transcription?: Maybe<Transcription>;
+  transcriptions?: Maybe<Array<Transcription>>;
+  transcriptionsCount?: Maybe<Scalars['Int']>;
   transfer?: Maybe<Transfer>;
   transfers?: Maybe<Array<Transfer>>;
   transfersCount?: Maybe<Scalars['Int']>;
@@ -5860,12 +6402,36 @@ export type Query = {
   transparencyRatings?: Maybe<Array<TransparencyRating>>;
   transparencyRatingsCount?: Maybe<Scalars['Int']>;
   user?: Maybe<User>;
+  userAuth?: Maybe<UserAuth>;
+  userAuths?: Maybe<Array<UserAuth>>;
+  userAuthsCount?: Maybe<Scalars['Int']>;
   users?: Maybe<Array<User>>;
   usersCount?: Maybe<Scalars['Int']>;
   validateUserPasswordResetToken?: Maybe<ValidateUserPasswordResetTokenResult>;
+  verificationToken?: Maybe<VerificationToken>;
+  verificationTokens?: Maybe<Array<VerificationToken>>;
+  verificationTokensCount?: Maybe<Scalars['Int']>;
   vote?: Maybe<Vote>;
   votes?: Maybe<Array<Vote>>;
   votesCount?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryAccountArgs = {
+  where: AccountWhereUniqueInput;
+};
+
+
+export type QueryAccountsArgs = {
+  orderBy?: Array<AccountOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: AccountWhereInput;
+};
+
+
+export type QueryAccountsCountArgs = {
+  where?: AccountWhereInput;
 };
 
 
@@ -6049,24 +6615,6 @@ export type QueryCouponsCountArgs = {
 };
 
 
-export type QueryCreatorArgs = {
-  where: CreatorWhereUniqueInput;
-};
-
-
-export type QueryCreatorsArgs = {
-  orderBy?: Array<CreatorOrderByInput>;
-  skip?: Scalars['Int'];
-  take?: InputMaybe<Scalars['Int']>;
-  where?: CreatorWhereInput;
-};
-
-
-export type QueryCreatorsCountArgs = {
-  where?: CreatorWhereInput;
-};
-
-
 export type QueryCustomTrackerArgs = {
   where: CustomTrackerWhereUniqueInput;
 };
@@ -6154,6 +6702,24 @@ export type QueryDiscordEventsArgs = {
 
 export type QueryDiscordEventsCountArgs = {
   where?: DiscordEventWhereInput;
+};
+
+
+export type QueryEmailListArgs = {
+  where: EmailListWhereUniqueInput;
+};
+
+
+export type QueryEmailListsArgs = {
+  orderBy?: Array<EmailListOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: EmailListWhereInput;
+};
+
+
+export type QueryEmailListsCountArgs = {
+  where?: EmailListWhereInput;
 };
 
 
@@ -6445,6 +7011,24 @@ export type QueryProjectsCountArgs = {
 };
 
 
+export type QueryProviderArgs = {
+  where: ProviderWhereUniqueInput;
+};
+
+
+export type QueryProvidersArgs = {
+  orderBy?: Array<ProviderOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: ProviderWhereInput;
+};
+
+
+export type QueryProvidersCountArgs = {
+  where?: ProviderWhereInput;
+};
+
+
 export type QueryQuizArgs = {
   where: QuizWhereUniqueInput;
 };
@@ -6478,6 +7062,60 @@ export type QueryRolesArgs = {
 
 export type QueryRolesCountArgs = {
   where?: RoleWhereInput;
+};
+
+
+export type QueryServiceTokenArgs = {
+  where: ServiceTokenWhereUniqueInput;
+};
+
+
+export type QueryServiceTokenUsageArgs = {
+  where: ServiceTokenUsageWhereUniqueInput;
+};
+
+
+export type QueryServiceTokenUsagesArgs = {
+  orderBy?: Array<ServiceTokenUsageOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: ServiceTokenUsageWhereInput;
+};
+
+
+export type QueryServiceTokenUsagesCountArgs = {
+  where?: ServiceTokenUsageWhereInput;
+};
+
+
+export type QueryServiceTokensArgs = {
+  orderBy?: Array<ServiceTokenOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: ServiceTokenWhereInput;
+};
+
+
+export type QueryServiceTokensCountArgs = {
+  where?: ServiceTokenWhereInput;
+};
+
+
+export type QuerySessionArgs = {
+  where: SessionWhereUniqueInput;
+};
+
+
+export type QuerySessionsArgs = {
+  orderBy?: Array<SessionOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: SessionWhereInput;
+};
+
+
+export type QuerySessionsCountArgs = {
+  where?: SessionWhereInput;
 };
 
 
@@ -6571,6 +7209,24 @@ export type QueryTokensCountArgs = {
 };
 
 
+export type QueryTranscriptionArgs = {
+  where: TranscriptionWhereUniqueInput;
+};
+
+
+export type QueryTranscriptionsArgs = {
+  orderBy?: Array<TranscriptionOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: TranscriptionWhereInput;
+};
+
+
+export type QueryTranscriptionsCountArgs = {
+  where?: TranscriptionWhereInput;
+};
+
+
 export type QueryTransferArgs = {
   where: TransferWhereUniqueInput;
 };
@@ -6612,6 +7268,24 @@ export type QueryUserArgs = {
 };
 
 
+export type QueryUserAuthArgs = {
+  where: UserAuthWhereUniqueInput;
+};
+
+
+export type QueryUserAuthsArgs = {
+  orderBy?: Array<UserAuthOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: UserAuthWhereInput;
+};
+
+
+export type QueryUserAuthsCountArgs = {
+  where?: UserAuthWhereInput;
+};
+
+
 export type QueryUsersArgs = {
   orderBy?: Array<UserOrderByInput>;
   skip?: Scalars['Int'];
@@ -6628,6 +7302,24 @@ export type QueryUsersCountArgs = {
 export type QueryValidateUserPasswordResetTokenArgs = {
   email: Scalars['String'];
   token: Scalars['String'];
+};
+
+
+export type QueryVerificationTokenArgs = {
+  where: VerificationTokenWhereUniqueInput;
+};
+
+
+export type QueryVerificationTokensArgs = {
+  orderBy?: Array<VerificationTokenOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: VerificationTokenWhereInput;
+};
+
+
+export type QueryVerificationTokensCountArgs = {
+  where?: VerificationTokenWhereInput;
 };
 
 
@@ -6908,8 +7600,230 @@ export type RoleWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
+export type ServiceToken = {
+  __typename?: 'ServiceToken';
+  amount?: Maybe<Scalars['Float']>;
+  dateAdded?: Maybe<Scalars['DateTime']>;
+  discount?: Maybe<Scalars['Float']>;
+  id: Scalars['ID'];
+  tokenUsage?: Maybe<Array<ServiceTokenUsage>>;
+  tokenUsageCount?: Maybe<Scalars['Int']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  user?: Maybe<User>;
+};
+
+
+export type ServiceTokenTokenUsageArgs = {
+  orderBy?: Array<ServiceTokenUsageOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: ServiceTokenUsageWhereInput;
+};
+
+
+export type ServiceTokenTokenUsageCountArgs = {
+  where?: ServiceTokenUsageWhereInput;
+};
+
+export type ServiceTokenCreateInput = {
+  amount?: InputMaybe<Scalars['Float']>;
+  dateAdded?: InputMaybe<Scalars['DateTime']>;
+  discount?: InputMaybe<Scalars['Float']>;
+  tokenUsage?: InputMaybe<ServiceTokenUsageRelateToManyForCreateInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  user?: InputMaybe<UserRelateToOneForCreateInput>;
+};
+
+export type ServiceTokenOrderByInput = {
+  amount?: InputMaybe<OrderDirection>;
+  dateAdded?: InputMaybe<OrderDirection>;
+  discount?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+  updatedAt?: InputMaybe<OrderDirection>;
+};
+
+export type ServiceTokenRelateToOneForCreateInput = {
+  connect?: InputMaybe<ServiceTokenWhereUniqueInput>;
+  create?: InputMaybe<ServiceTokenCreateInput>;
+};
+
+export type ServiceTokenRelateToOneForUpdateInput = {
+  connect?: InputMaybe<ServiceTokenWhereUniqueInput>;
+  create?: InputMaybe<ServiceTokenCreateInput>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type ServiceTokenUpdateArgs = {
+  data: ServiceTokenUpdateInput;
+  where: ServiceTokenWhereUniqueInput;
+};
+
+export type ServiceTokenUpdateInput = {
+  amount?: InputMaybe<Scalars['Float']>;
+  dateAdded?: InputMaybe<Scalars['DateTime']>;
+  discount?: InputMaybe<Scalars['Float']>;
+  tokenUsage?: InputMaybe<ServiceTokenUsageRelateToManyForUpdateInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  user?: InputMaybe<UserRelateToOneForUpdateInput>;
+};
+
+export type ServiceTokenUsage = {
+  __typename?: 'ServiceTokenUsage';
+  dateAdded?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  serviceToken?: Maybe<ServiceToken>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  used?: Maybe<Scalars['Float']>;
+};
+
+export type ServiceTokenUsageCreateInput = {
+  dateAdded?: InputMaybe<Scalars['DateTime']>;
+  description?: InputMaybe<Scalars['String']>;
+  serviceToken?: InputMaybe<ServiceTokenRelateToOneForCreateInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  used?: InputMaybe<Scalars['Float']>;
+};
+
+export type ServiceTokenUsageManyRelationFilter = {
+  every?: InputMaybe<ServiceTokenUsageWhereInput>;
+  none?: InputMaybe<ServiceTokenUsageWhereInput>;
+  some?: InputMaybe<ServiceTokenUsageWhereInput>;
+};
+
+export type ServiceTokenUsageOrderByInput = {
+  dateAdded?: InputMaybe<OrderDirection>;
+  description?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+  updatedAt?: InputMaybe<OrderDirection>;
+  used?: InputMaybe<OrderDirection>;
+};
+
+export type ServiceTokenUsageRelateToManyForCreateInput = {
+  connect?: InputMaybe<Array<ServiceTokenUsageWhereUniqueInput>>;
+  create?: InputMaybe<Array<ServiceTokenUsageCreateInput>>;
+};
+
+export type ServiceTokenUsageRelateToManyForUpdateInput = {
+  connect?: InputMaybe<Array<ServiceTokenUsageWhereUniqueInput>>;
+  create?: InputMaybe<Array<ServiceTokenUsageCreateInput>>;
+  disconnect?: InputMaybe<Array<ServiceTokenUsageWhereUniqueInput>>;
+  set?: InputMaybe<Array<ServiceTokenUsageWhereUniqueInput>>;
+};
+
+export type ServiceTokenUsageUpdateArgs = {
+  data: ServiceTokenUsageUpdateInput;
+  where: ServiceTokenUsageWhereUniqueInput;
+};
+
+export type ServiceTokenUsageUpdateInput = {
+  dateAdded?: InputMaybe<Scalars['DateTime']>;
+  description?: InputMaybe<Scalars['String']>;
+  serviceToken?: InputMaybe<ServiceTokenRelateToOneForUpdateInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  used?: InputMaybe<Scalars['Float']>;
+};
+
+export type ServiceTokenUsageWhereInput = {
+  AND?: InputMaybe<Array<ServiceTokenUsageWhereInput>>;
+  NOT?: InputMaybe<Array<ServiceTokenUsageWhereInput>>;
+  OR?: InputMaybe<Array<ServiceTokenUsageWhereInput>>;
+  dateAdded?: InputMaybe<DateTimeNullableFilter>;
+  description?: InputMaybe<StringFilter>;
+  id?: InputMaybe<IdFilter>;
+  serviceToken?: InputMaybe<ServiceTokenWhereInput>;
+  updatedAt?: InputMaybe<DateTimeNullableFilter>;
+  used?: InputMaybe<FloatNullableFilter>;
+};
+
+export type ServiceTokenUsageWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type ServiceTokenWhereInput = {
+  AND?: InputMaybe<Array<ServiceTokenWhereInput>>;
+  NOT?: InputMaybe<Array<ServiceTokenWhereInput>>;
+  OR?: InputMaybe<Array<ServiceTokenWhereInput>>;
+  amount?: InputMaybe<FloatNullableFilter>;
+  dateAdded?: InputMaybe<DateTimeNullableFilter>;
+  discount?: InputMaybe<FloatNullableFilter>;
+  id?: InputMaybe<IdFilter>;
+  tokenUsage?: InputMaybe<ServiceTokenUsageManyRelationFilter>;
+  updatedAt?: InputMaybe<DateTimeNullableFilter>;
+  user?: InputMaybe<UserWhereInput>;
+};
+
+export type ServiceTokenWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type Session = {
+  __typename?: 'Session';
+  expires?: Maybe<Scalars['DateTime']>;
+  id: Scalars['ID'];
+  sessionToken?: Maybe<Scalars['String']>;
+  user?: Maybe<UserAuth>;
+};
+
+export type SessionCreateInput = {
+  expires?: InputMaybe<Scalars['DateTime']>;
+  sessionToken?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<UserAuthRelateToOneForCreateInput>;
+};
+
+export type SessionManyRelationFilter = {
+  every?: InputMaybe<SessionWhereInput>;
+  none?: InputMaybe<SessionWhereInput>;
+  some?: InputMaybe<SessionWhereInput>;
+};
+
+export type SessionOrderByInput = {
+  expires?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+  sessionToken?: InputMaybe<OrderDirection>;
+};
+
+export type SessionRelateToManyForCreateInput = {
+  connect?: InputMaybe<Array<SessionWhereUniqueInput>>;
+  create?: InputMaybe<Array<SessionCreateInput>>;
+};
+
+export type SessionRelateToManyForUpdateInput = {
+  connect?: InputMaybe<Array<SessionWhereUniqueInput>>;
+  create?: InputMaybe<Array<SessionCreateInput>>;
+  disconnect?: InputMaybe<Array<SessionWhereUniqueInput>>;
+  set?: InputMaybe<Array<SessionWhereUniqueInput>>;
+};
+
+export type SessionUpdateArgs = {
+  data: SessionUpdateInput;
+  where: SessionWhereUniqueInput;
+};
+
+export type SessionUpdateInput = {
+  expires?: InputMaybe<Scalars['DateTime']>;
+  sessionToken?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<UserAuthRelateToOneForUpdateInput>;
+};
+
+export type SessionWhereInput = {
+  AND?: InputMaybe<Array<SessionWhereInput>>;
+  NOT?: InputMaybe<Array<SessionWhereInput>>;
+  OR?: InputMaybe<Array<SessionWhereInput>>;
+  expires?: InputMaybe<DateTimeNullableFilter>;
+  id?: InputMaybe<IdFilter>;
+  sessionToken?: InputMaybe<StringFilter>;
+  user?: InputMaybe<UserAuthWhereInput>;
+};
+
+export type SessionWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+  sessionToken?: InputMaybe<Scalars['String']>;
+};
+
 export type SocialStat = {
   __typename?: 'SocialStat';
+  annotation?: Maybe<Scalars['JSON']>;
   dateAdded?: Maybe<Scalars['DateTime']>;
   discord?: Maybe<Scalars['Float']>;
   id: Scalars['ID'];
@@ -6919,6 +7833,7 @@ export type SocialStat = {
 };
 
 export type SocialStatCreateInput = {
+  annotation?: InputMaybe<Scalars['JSON']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   discord?: InputMaybe<Scalars['Float']>;
   project?: InputMaybe<ProjectRelateToOneForCreateInput>;
@@ -6940,6 +7855,7 @@ export type SocialStatUpdateArgs = {
 };
 
 export type SocialStatUpdateInput = {
+  annotation?: InputMaybe<Scalars['JSON']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   discord?: InputMaybe<Scalars['Float']>;
   project?: InputMaybe<ProjectRelateToOneForUpdateInput>;
@@ -7172,6 +8088,9 @@ export type Tag = {
   name?: Maybe<Scalars['String']>;
   projects?: Maybe<Array<Project>>;
   projectsCount?: Maybe<Scalars['Int']>;
+  providers?: Maybe<Array<Provider>>;
+  providersCount?: Maybe<Scalars['Int']>;
+  type?: Maybe<Scalars['String']>;
 };
 
 
@@ -7187,10 +8106,25 @@ export type TagProjectsCountArgs = {
   where?: ProjectWhereInput;
 };
 
+
+export type TagProvidersArgs = {
+  orderBy?: Array<ProviderOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: ProviderWhereInput;
+};
+
+
+export type TagProvidersCountArgs = {
+  where?: ProviderWhereInput;
+};
+
 export type TagCreateInput = {
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   name?: InputMaybe<Scalars['String']>;
   projects?: InputMaybe<ProjectRelateToManyForCreateInput>;
+  providers?: InputMaybe<ProviderRelateToManyForCreateInput>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 export type TagManyRelationFilter = {
@@ -7203,6 +8137,7 @@ export type TagOrderByInput = {
   dateAdded?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
+  type?: InputMaybe<OrderDirection>;
 };
 
 export type TagRelateToManyForCreateInput = {
@@ -7226,6 +8161,8 @@ export type TagUpdateInput = {
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   name?: InputMaybe<Scalars['String']>;
   projects?: InputMaybe<ProjectRelateToManyForUpdateInput>;
+  providers?: InputMaybe<ProviderRelateToManyForUpdateInput>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 export type TagWhereInput = {
@@ -7236,6 +8173,8 @@ export type TagWhereInput = {
   id?: InputMaybe<IdFilter>;
   name?: InputMaybe<StringFilter>;
   projects?: InputMaybe<ProjectManyRelationFilter>;
+  providers?: InputMaybe<ProviderManyRelationFilter>;
+  type?: InputMaybe<StringNullableFilter>;
 };
 
 export type TagWhereUniqueInput = {
@@ -7315,6 +8254,111 @@ export type TokenWhereInput = {
 };
 
 export type TokenWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type Transcription = {
+  __typename?: 'Transcription';
+  content?: Maybe<Scalars['JSON']>;
+  contentUrl?: Maybe<Scalars['String']>;
+  dateAdded?: Maybe<Scalars['DateTime']>;
+  id: Scalars['ID'];
+  isPublic?: Maybe<Scalars['Boolean']>;
+  likes?: Maybe<Array<User>>;
+  likesCount?: Maybe<Scalars['Int']>;
+  project?: Maybe<Project>;
+  slug?: Maybe<Scalars['String']>;
+  summary?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  transcriptionId?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  user?: Maybe<User>;
+  views?: Maybe<Scalars['Int']>;
+};
+
+
+export type TranscriptionLikesArgs = {
+  orderBy?: Array<UserOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: UserWhereInput;
+};
+
+
+export type TranscriptionLikesCountArgs = {
+  where?: UserWhereInput;
+};
+
+export type TranscriptionCreateInput = {
+  content?: InputMaybe<Scalars['JSON']>;
+  contentUrl?: InputMaybe<Scalars['String']>;
+  dateAdded?: InputMaybe<Scalars['DateTime']>;
+  isPublic?: InputMaybe<Scalars['Boolean']>;
+  likes?: InputMaybe<UserRelateToManyForCreateInput>;
+  project?: InputMaybe<ProjectRelateToOneForCreateInput>;
+  slug?: InputMaybe<Scalars['String']>;
+  summary?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  transcriptionId?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  user?: InputMaybe<UserRelateToOneForCreateInput>;
+  views?: InputMaybe<Scalars['Int']>;
+};
+
+export type TranscriptionOrderByInput = {
+  contentUrl?: InputMaybe<OrderDirection>;
+  dateAdded?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+  isPublic?: InputMaybe<OrderDirection>;
+  slug?: InputMaybe<OrderDirection>;
+  summary?: InputMaybe<OrderDirection>;
+  title?: InputMaybe<OrderDirection>;
+  transcriptionId?: InputMaybe<OrderDirection>;
+  updatedAt?: InputMaybe<OrderDirection>;
+  views?: InputMaybe<OrderDirection>;
+};
+
+export type TranscriptionUpdateArgs = {
+  data: TranscriptionUpdateInput;
+  where: TranscriptionWhereUniqueInput;
+};
+
+export type TranscriptionUpdateInput = {
+  content?: InputMaybe<Scalars['JSON']>;
+  contentUrl?: InputMaybe<Scalars['String']>;
+  dateAdded?: InputMaybe<Scalars['DateTime']>;
+  isPublic?: InputMaybe<Scalars['Boolean']>;
+  likes?: InputMaybe<UserRelateToManyForUpdateInput>;
+  project?: InputMaybe<ProjectRelateToOneForUpdateInput>;
+  slug?: InputMaybe<Scalars['String']>;
+  summary?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  transcriptionId?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  user?: InputMaybe<UserRelateToOneForUpdateInput>;
+  views?: InputMaybe<Scalars['Int']>;
+};
+
+export type TranscriptionWhereInput = {
+  AND?: InputMaybe<Array<TranscriptionWhereInput>>;
+  NOT?: InputMaybe<Array<TranscriptionWhereInput>>;
+  OR?: InputMaybe<Array<TranscriptionWhereInput>>;
+  contentUrl?: InputMaybe<StringFilter>;
+  dateAdded?: InputMaybe<DateTimeNullableFilter>;
+  id?: InputMaybe<IdFilter>;
+  isPublic?: InputMaybe<BooleanFilter>;
+  likes?: InputMaybe<UserManyRelationFilter>;
+  project?: InputMaybe<ProjectWhereInput>;
+  slug?: InputMaybe<StringFilter>;
+  summary?: InputMaybe<StringFilter>;
+  title?: InputMaybe<StringFilter>;
+  transcriptionId?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeNullableFilter>;
+  user?: InputMaybe<UserWhereInput>;
+  views?: InputMaybe<IntNullableFilter>;
+};
+
+export type TranscriptionWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
@@ -7500,6 +8544,8 @@ export type User = {
   dateCreated?: Maybe<Scalars['DateTime']>;
   email?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
+  followedProviders?: Maybe<Array<Provider>>;
+  followedProvidersCount?: Maybe<Scalars['Int']>;
   id: Scalars['ID'];
   ip?: Maybe<Scalars['String']>;
   isAdmin?: Maybe<Scalars['Boolean']>;
@@ -7518,12 +8564,15 @@ export type User = {
   passwordResetToken?: Maybe<PasswordState>;
   projects?: Maybe<Array<Project>>;
   projectsCount?: Maybe<Scalars['Int']>;
+  providerProfile?: Maybe<Provider>;
   referralCode?: Maybe<Scalars['String']>;
   referrer?: Maybe<Scalars['String']>;
   roles?: Maybe<Array<Role>>;
   rolesCount?: Maybe<Scalars['Int']>;
+  serviceTokens?: Maybe<ServiceToken>;
   subscription?: Maybe<Subscription>;
   subscriptionStatus?: Maybe<SubscriptionStatus>;
+  userAuth?: Maybe<UserAuth>;
   walletAddress?: Maybe<Scalars['String']>;
 };
 
@@ -7538,6 +8587,19 @@ export type UserContentArgs = {
 
 export type UserContentCountArgs = {
   where?: ContentWhereInput;
+};
+
+
+export type UserFollowedProvidersArgs = {
+  orderBy?: Array<ProviderOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: ProviderWhereInput;
+};
+
+
+export type UserFollowedProvidersCountArgs = {
+  where?: ProviderWhereInput;
 };
 
 
@@ -7597,6 +8659,114 @@ export type UserSubscriptionStatusArgs = {
   userId?: InputMaybe<Scalars['ID']>;
 };
 
+export type UserAuth = {
+  __typename?: 'UserAuth';
+  access_token?: Maybe<Scalars['String']>;
+  accounts?: Maybe<Array<Account>>;
+  accountsCount?: Maybe<Scalars['Int']>;
+  email?: Maybe<Scalars['String']>;
+  emailVerified?: Maybe<Scalars['DateTime']>;
+  id: Scalars['ID'];
+  image?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  sessions?: Maybe<Array<Session>>;
+  sessionsCount?: Maybe<Scalars['Int']>;
+  user?: Maybe<User>;
+};
+
+
+export type UserAuthAccountsArgs = {
+  orderBy?: Array<AccountOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: AccountWhereInput;
+};
+
+
+export type UserAuthAccountsCountArgs = {
+  where?: AccountWhereInput;
+};
+
+
+export type UserAuthSessionsArgs = {
+  orderBy?: Array<SessionOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: SessionWhereInput;
+};
+
+
+export type UserAuthSessionsCountArgs = {
+  where?: SessionWhereInput;
+};
+
+export type UserAuthCreateInput = {
+  access_token?: InputMaybe<Scalars['String']>;
+  accounts?: InputMaybe<AccountRelateToManyForCreateInput>;
+  email?: InputMaybe<Scalars['String']>;
+  emailVerified?: InputMaybe<Scalars['DateTime']>;
+  image?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  sessions?: InputMaybe<SessionRelateToManyForCreateInput>;
+  user?: InputMaybe<UserRelateToOneForCreateInput>;
+};
+
+export type UserAuthOrderByInput = {
+  access_token?: InputMaybe<OrderDirection>;
+  email?: InputMaybe<OrderDirection>;
+  emailVerified?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+  image?: InputMaybe<OrderDirection>;
+  name?: InputMaybe<OrderDirection>;
+};
+
+export type UserAuthRelateToOneForCreateInput = {
+  connect?: InputMaybe<UserAuthWhereUniqueInput>;
+  create?: InputMaybe<UserAuthCreateInput>;
+};
+
+export type UserAuthRelateToOneForUpdateInput = {
+  connect?: InputMaybe<UserAuthWhereUniqueInput>;
+  create?: InputMaybe<UserAuthCreateInput>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type UserAuthUpdateArgs = {
+  data: UserAuthUpdateInput;
+  where: UserAuthWhereUniqueInput;
+};
+
+export type UserAuthUpdateInput = {
+  access_token?: InputMaybe<Scalars['String']>;
+  accounts?: InputMaybe<AccountRelateToManyForUpdateInput>;
+  email?: InputMaybe<Scalars['String']>;
+  emailVerified?: InputMaybe<Scalars['DateTime']>;
+  image?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  sessions?: InputMaybe<SessionRelateToManyForUpdateInput>;
+  user?: InputMaybe<UserRelateToOneForUpdateInput>;
+};
+
+export type UserAuthWhereInput = {
+  AND?: InputMaybe<Array<UserAuthWhereInput>>;
+  NOT?: InputMaybe<Array<UserAuthWhereInput>>;
+  OR?: InputMaybe<Array<UserAuthWhereInput>>;
+  access_token?: InputMaybe<StringFilter>;
+  accounts?: InputMaybe<AccountManyRelationFilter>;
+  email?: InputMaybe<StringFilter>;
+  emailVerified?: InputMaybe<DateTimeNullableFilter>;
+  id?: InputMaybe<IdFilter>;
+  image?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  sessions?: InputMaybe<SessionManyRelationFilter>;
+  user?: InputMaybe<UserWhereInput>;
+};
+
+export type UserAuthWhereUniqueInput = {
+  email?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+};
+
 export type UserAuthenticationWithPasswordFailure = {
   __typename?: 'UserAuthenticationWithPasswordFailure';
   message: Scalars['String'];
@@ -7615,6 +8785,7 @@ export type UserCreateInput = {
   dateCreated?: InputMaybe<Scalars['DateTime']>;
   email?: InputMaybe<Scalars['String']>;
   firstName?: InputMaybe<Scalars['String']>;
+  followedProviders?: InputMaybe<ProviderRelateToManyForCreateInput>;
   ip?: InputMaybe<Scalars['String']>;
   isAdmin?: InputMaybe<Scalars['Boolean']>;
   isNotChargeable?: InputMaybe<Scalars['Boolean']>;
@@ -7629,10 +8800,13 @@ export type UserCreateInput = {
   passwordResetRedeemedAt?: InputMaybe<Scalars['DateTime']>;
   passwordResetToken?: InputMaybe<Scalars['String']>;
   projects?: InputMaybe<ProjectRelateToManyForCreateInput>;
+  providerProfile?: InputMaybe<ProviderRelateToOneForCreateInput>;
   referralCode?: InputMaybe<Scalars['String']>;
   referrer?: InputMaybe<Scalars['String']>;
   roles?: InputMaybe<RoleRelateToManyForCreateInput>;
+  serviceTokens?: InputMaybe<ServiceTokenRelateToOneForCreateInput>;
   subscription?: InputMaybe<SubscriptionRelateToOneForCreateInput>;
+  userAuth?: InputMaybe<UserAuthRelateToOneForCreateInput>;
   walletAddress?: InputMaybe<Scalars['String']>;
 };
 
@@ -7694,6 +8868,7 @@ export type UserUpdateInput = {
   dateCreated?: InputMaybe<Scalars['DateTime']>;
   email?: InputMaybe<Scalars['String']>;
   firstName?: InputMaybe<Scalars['String']>;
+  followedProviders?: InputMaybe<ProviderRelateToManyForUpdateInput>;
   ip?: InputMaybe<Scalars['String']>;
   isAdmin?: InputMaybe<Scalars['Boolean']>;
   isNotChargeable?: InputMaybe<Scalars['Boolean']>;
@@ -7708,10 +8883,13 @@ export type UserUpdateInput = {
   passwordResetRedeemedAt?: InputMaybe<Scalars['DateTime']>;
   passwordResetToken?: InputMaybe<Scalars['String']>;
   projects?: InputMaybe<ProjectRelateToManyForUpdateInput>;
+  providerProfile?: InputMaybe<ProviderRelateToOneForUpdateInput>;
   referralCode?: InputMaybe<Scalars['String']>;
   referrer?: InputMaybe<Scalars['String']>;
   roles?: InputMaybe<RoleRelateToManyForUpdateInput>;
+  serviceTokens?: InputMaybe<ServiceTokenRelateToOneForUpdateInput>;
   subscription?: InputMaybe<SubscriptionRelateToOneForUpdateInput>;
+  userAuth?: InputMaybe<UserAuthRelateToOneForUpdateInput>;
   walletAddress?: InputMaybe<Scalars['String']>;
 };
 
@@ -7723,6 +8901,7 @@ export type UserWhereInput = {
   dateCreated?: InputMaybe<DateTimeNullableFilter>;
   email?: InputMaybe<StringFilter>;
   firstName?: InputMaybe<StringFilter>;
+  followedProviders?: InputMaybe<ProviderManyRelationFilter>;
   id?: InputMaybe<IdFilter>;
   ip?: InputMaybe<StringFilter>;
   isAdmin?: InputMaybe<BooleanFilter>;
@@ -7737,10 +8916,13 @@ export type UserWhereInput = {
   passwordResetRedeemedAt?: InputMaybe<DateTimeNullableFilter>;
   passwordResetToken?: InputMaybe<PasswordFilter>;
   projects?: InputMaybe<ProjectManyRelationFilter>;
+  providerProfile?: InputMaybe<ProviderWhereInput>;
   referralCode?: InputMaybe<StringFilter>;
   referrer?: InputMaybe<StringFilter>;
   roles?: InputMaybe<RoleManyRelationFilter>;
+  serviceTokens?: InputMaybe<ServiceTokenWhereInput>;
   subscription?: InputMaybe<SubscriptionWhereInput>;
+  userAuth?: InputMaybe<UserAuthWhereInput>;
   walletAddress?: InputMaybe<StringFilter>;
 };
 
@@ -7755,13 +8937,60 @@ export type ValidateUserPasswordResetTokenResult = {
   message: Scalars['String'];
 };
 
+export type VerificationToken = {
+  __typename?: 'VerificationToken';
+  expires?: Maybe<Scalars['DateTime']>;
+  id: Scalars['ID'];
+  identifier?: Maybe<Scalars['String']>;
+  token?: Maybe<Scalars['String']>;
+};
+
+export type VerificationTokenCreateInput = {
+  expires?: InputMaybe<Scalars['DateTime']>;
+  identifier?: InputMaybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
+};
+
+export type VerificationTokenOrderByInput = {
+  expires?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+  identifier?: InputMaybe<OrderDirection>;
+  token?: InputMaybe<OrderDirection>;
+};
+
+export type VerificationTokenUpdateArgs = {
+  data: VerificationTokenUpdateInput;
+  where: VerificationTokenWhereUniqueInput;
+};
+
+export type VerificationTokenUpdateInput = {
+  expires?: InputMaybe<Scalars['DateTime']>;
+  identifier?: InputMaybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
+};
+
+export type VerificationTokenWhereInput = {
+  AND?: InputMaybe<Array<VerificationTokenWhereInput>>;
+  NOT?: InputMaybe<Array<VerificationTokenWhereInput>>;
+  OR?: InputMaybe<Array<VerificationTokenWhereInput>>;
+  expires?: InputMaybe<DateTimeNullableFilter>;
+  id?: InputMaybe<IdFilter>;
+  identifier?: InputMaybe<StringFilter>;
+  token?: InputMaybe<StringFilter>;
+};
+
+export type VerificationTokenWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+  token?: InputMaybe<Scalars['String']>;
+};
+
 export type Vote = {
   __typename?: 'Vote';
-  creator?: Maybe<Creator>;
   dateAdded?: Maybe<Scalars['DateTime']>;
   id: Scalars['ID'];
   ip?: Maybe<Scalars['String']>;
   project?: Maybe<Project>;
+  provider?: Maybe<Provider>;
   type?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   user?: Maybe<User>;
@@ -7769,10 +8998,10 @@ export type Vote = {
 };
 
 export type VoteCreateInput = {
-  creator?: InputMaybe<CreatorRelateToOneForCreateInput>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   ip?: InputMaybe<Scalars['String']>;
   project?: InputMaybe<ProjectRelateToOneForCreateInput>;
+  provider?: InputMaybe<ProviderRelateToOneForCreateInput>;
   type?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   user?: InputMaybe<UserRelateToOneForCreateInput>;
@@ -7812,10 +9041,10 @@ export type VoteUpdateArgs = {
 };
 
 export type VoteUpdateInput = {
-  creator?: InputMaybe<CreatorRelateToOneForUpdateInput>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   ip?: InputMaybe<Scalars['String']>;
   project?: InputMaybe<ProjectRelateToOneForUpdateInput>;
+  provider?: InputMaybe<ProviderRelateToOneForUpdateInput>;
   type?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   user?: InputMaybe<UserRelateToOneForUpdateInput>;
@@ -7826,11 +9055,11 @@ export type VoteWhereInput = {
   AND?: InputMaybe<Array<VoteWhereInput>>;
   NOT?: InputMaybe<Array<VoteWhereInput>>;
   OR?: InputMaybe<Array<VoteWhereInput>>;
-  creator?: InputMaybe<CreatorWhereInput>;
   dateAdded?: InputMaybe<DateTimeNullableFilter>;
   id?: InputMaybe<IdFilter>;
   ip?: InputMaybe<StringFilter>;
   project?: InputMaybe<ProjectWhereInput>;
+  provider?: InputMaybe<ProviderWhereInput>;
   type?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeNullableFilter>;
   user?: InputMaybe<UserWhereInput>;

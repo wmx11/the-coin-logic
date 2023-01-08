@@ -13,7 +13,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const ipAddress = getIpAddress(req);
 
   const checkIfUserCanVoteAgain = async () => {
-    const { projectId, creatorId, userId, type, ip } = req.body;
+    const { projectId, providerId, userId, type, ip } = req.body;
 
     const vote = await prismaClient?.vote.findFirst({
       where: {
@@ -24,7 +24,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           equals: type,
         },
         projectId: projectId || undefined,
-        creatorId: creatorId || undefined,
+        providerId: providerId || undefined,
         userId: userId || undefined,
       },
       orderBy: {

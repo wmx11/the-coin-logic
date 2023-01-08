@@ -2,16 +2,16 @@ import { ApolloProvider } from '@apollo/client';
 import { Affix, MantineProvider, Transition } from '@mantine/core';
 import { useWindowScroll } from '@mantine/hooks';
 import { chains, providers } from '@web3modal/ethereum';
-import { Web3Modal } from '@web3modal/react';
+// import { Web3Modal } from '@web3modal/react';
 import GradientButton from 'components/Buttons/GradientButton';
-import ConfirmationModal from 'components/Modals/ConfirmationModal';
+import { mantineCache } from 'mantine-cache';
 import { SessionProvider } from 'next-auth/react';
+import dynamic from 'next/dynamic';
 import React, { FC } from 'react';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import { FaArrowUp } from 'react-icons/fa';
 import Layout from '../components/Layout';
 import client from '../data/apollo-client';
-import { mantineCache } from 'mantine-cache';
 
 type ProvidersWrapperTypes = {
   children: React.ReactElement;
@@ -35,6 +35,9 @@ const web3Config = {
 
 const ProvidersWrapper: FC<ProvidersWrapperTypes> = ({ children }): React.ReactElement => {
   const [scroll, scrollTo] = useWindowScroll();
+
+  const ConfirmationModal = dynamic(() => import('components/Modals/ConfirmationModal'), { ssr: false });
+  const Web3Modal = dynamic(() => import('@web3modal/react').then((mod) => mod.Web3Modal), { ssr: false });
 
   return (
     <GoogleReCaptchaProvider

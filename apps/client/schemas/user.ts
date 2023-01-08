@@ -4,8 +4,8 @@ const trimString = (u: unknown) => (typeof u === 'string' ? u.trim() : u);
 
 export const commons = {
   username: z.string().min(3, { message: 'Username must be at least 3 characters long.' }).max(24),
-  firstName: z.nullable(z.string().min(2, { message: 'First Name must be at least 2 characters long.' }).max(24)),
-  lastName: z.nullable(z.string().min(2, { message: 'Last Name must be at least 2 characters long.' }).max(24)),
+  firstName: z.string().min(2, { message: 'First Name must be at least 2 characters long.' }).max(24).optional().or(z.literal('')),
+  lastName: z.string().min(2, { message: 'Last Name must be at least 2 characters long.' }).max(24).optional().or(z.literal('')),
   email: z.preprocess(
     trimString,
     z
@@ -43,12 +43,11 @@ export const userProfileSchema = z.object({
   firstName: commons.firstName,
   lastName: commons.lastName,
   subscribeToEmail: commons.subscribeToEmail,
-  walletAddress: z.nullable(
-    z
-      .string()
-      .min(42, { message: "Invalid wallet address. Make sure it's 42 characters long and has no spaces." })
-      .max(42),
-  ),
+  walletAddress: z
+    .string()
+    .min(42, { message: "Invalid wallet address. Make sure it's 42 characters long and has no spaces." })
+    .max(42)
+    .optional().or(z.literal('')),
 });
 
 export const userOrderSchema = z.object({

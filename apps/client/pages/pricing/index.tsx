@@ -11,6 +11,7 @@ import PaymentPlans from 'views/pricing/PaymentPlans';
 import Products from 'views/pricing/Products';
 import RegularPricing from 'views/pricing/RegularPricing';
 import prisma from '../../data/prisma';
+import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundWrapper';
 
 type Props = {
   products: Product[];
@@ -25,16 +26,18 @@ const index: FC<Props> = ({ products, paymentPlans, usersWithTheSameIp }) => {
         title="Cryptocurrency Project Listing, Marketing Tracking & More | Coin Logic"
         description="Get the tools you need for your cryptocurrency project. Track all marketing efforts, measure the success of your campaigns, and get an analytics report that's actionable and useful."
       />
-      <Container className="py-10">
-        <div className="mb-16">
-          <GradientTitle>Our Products and Pricing</GradientTitle>
-          <Text size="xs" color="dimmed">
+      <SmallBackgroundWrapper>
+        <div className="text-center">
+          <GradientTitle>Our Products and pricing</GradientTitle>
+          <Text size="sm" color="dimmed">
             Explore our products and their pricing. Find the best suitable one for you. Have questions? Reach out to us!
           </Text>
         </div>
+      </SmallBackgroundWrapper>
+      <Container className="py-10">
         <div>
           <div className="mb-16">
-            <div className="mb-8">
+            <div className="mb-16">
               <Products />
             </div>
             <div className="mb-8">

@@ -9,7 +9,7 @@ import useUser from './useUser';
 type IdValues = {
   userId?: string;
   projectId?: string;
-  creatorId?: string;
+  providerId?: string;
 };
 
 type VoteTypes = {
@@ -30,11 +30,18 @@ export type VoteReturnType = {
   negativePercentage: number;
 };
 
+export type RateReturnType = {
+  hasVoted: boolean;
+  votesCount: number;
+  averageRating: number;
+};
+
 const useVotes = () => {
   const [loading, setLoading] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
   const [canVote, setCanVote] = useState(true);
   const [votes, setVotes] = useState<VoteReturnType>();
+  const [ratings, setRatings] = useState<RateReturnType>();
   const { user } = useUser();
   const { requireLogin } = useRequireLogin();
 
@@ -43,6 +50,17 @@ const useVotes = () => {
     try {
       const { data } = await axios.post(routes.api.votes.getVotes, { ...values });
       setVotes(data?.data?.votes as VoteReturnType);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+
+  const fetchRatings = async (values: IdValues) => {
+    setLoading(true);
+    try {
+      const { data } = await axios.post(routes.api.votes.getRatings, { ...values });
+      setRatings(data?.data as RateReturnType);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -145,17 +163,39 @@ const useVotes = () => {
     }
   };
 
+  const rateSecure = async (values: VoteValues) => {
+    if (requireLogin()) {
+      return false;
+    }
+
+    setLoading(true);
+
+    try {
+      await signedRequest(
+        { type: 'post', url: routes.api.votes.secureRate, data: { ...values, userId: user?.id } },
+        user?.id as string,
+      );
+      setLoading(false);
+      setHasVoted(true);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+
   return {
+    ratings,
     votes,
     canVote,
     loading,
     hasVoted,
+    fetchRatings,
     fetchVotes,
     canUserVoteToday,
     vote,
     voteSecure,
     recalculateTransparency,
     rateProjectAsTcl,
+    rateSecure,
   };
 };
 

@@ -48,7 +48,7 @@ const QuizPage: FC<QuizPageProps> = ({ quiz, startQuiz }) => {
   } = quiz;
 
   const { user } = useUser();
-  const { likes, handleLike, handleView } = useControls(likesCount as number);
+  const { likes, handleLike, handleView } = useControls({ initialLikes: likesCount as number });
   const [value] = useLocalStorage(`${QUIZ_TOKEN}=${id}`, { playCount: 0 });
 
   const hasRewards = isDistributingRewards && winners !== totalWinners;
@@ -57,7 +57,7 @@ const QuizPage: FC<QuizPageProps> = ({ quiz, startQuiz }) => {
     : true;
 
   useEffect(() => {
-    handleView(id, routes.api.products.quiz.view);
+    handleView({ quizId: id });
   }, []);
 
   return (
@@ -102,11 +102,7 @@ const QuizPage: FC<QuizPageProps> = ({ quiz, startQuiz }) => {
       ) : null}
 
       <div className="mb-8">
-        <Controls
-          views={views as number}
-          likes={likes as number}
-          likeCallback={() => handleLike(id, routes.api.products.quiz.like)}
-        />
+        <Controls views={views as number} likes={likes as number} likeCallback={() => handleLike({ quizId: id })} />
       </div>
 
       <div className="mb-8">
