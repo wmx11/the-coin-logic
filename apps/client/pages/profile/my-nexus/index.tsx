@@ -57,13 +57,17 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     if (pendingProviderIds) {
       for (const item of pendingProviderIds) {
-        const data = await getProviderByIdForUser((item.id as string) || '');
+        const data = await getProviderByIdForUser((item.id as string) || (session?.id as string));
         pendingProviders.push(data);
       }
     }
   }
 
-  const provider = await getProviderByIdForUser((providerId?.providerProfile?.id as string) || '');
+  let provider;
+
+  if (providerId?.providerProfile?.id) {
+    provider = await getProviderByIdForUser((providerId?.providerProfile?.id as string) || (session?.id as string));
+  }
 
   return {
     props: {
