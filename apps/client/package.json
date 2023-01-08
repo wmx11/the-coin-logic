@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/cookies": "^0.7.7",
     "@apollo/client": "^3.6.9",
     "@emotion/react": "^11.10.4",
     "@emotion/server": "^11.10.0",
@@ -65,7 +66,6 @@
     "zustand": "^4.1.1"
   },
   "devDependencies": {
-    "@types/cookies": "^0.7.7",
     "@types/gtag.js": "^0.0.11",
     "@types/node": "18.0.4",
     "@types/react": "18.0.15",
