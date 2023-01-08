@@ -5,7 +5,7 @@ export const projectSchema = z.object({
   contractAddress: z.string(),
   networkId: z.string(),
   paymentPlanId: z.string(),
-  isNft: z.string(),
+  isNft: z.boolean(),
   pairAddress: z.string(),
   description: z
     .string()

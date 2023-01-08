@@ -1,12 +1,16 @@
-import type { NextAuthOptions } from 'next-auth';
-import { DocumentNode } from 'graphql';
+import { NEXT_AUTH_SESSION_TOKEN } from 'constants/general';
+import Cookies from 'cookies';
+import { KeystoneAdapter } from 'data/auth/KeystoneAdapter';
+import { keystoneAuthenticate } from 'data/auth/keystoneAuthenticate';
+import { NextApiRequest, NextApiResponse } from 'next';
 import NextAuth from 'next-auth';
+import { decode, encode } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import client from '../../../data/apollo-client';
-import { AUTHENTICATE_USER } from '../../../data/mutations';
+import GoogleProvider from 'next-auth/providers/google';
+import { PrismaClient, prismaClient } from 'tcl-packages/prismaClient';
 
-export const authOptions: NextAuthOptions = {
-  providers: [
+export default async function auth(req: NextApiRequest, res: NextApiResponse) {
+  const providers = [
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
@@ -15,17 +19,10 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials, req) {
         try {
-          const {
-            data: { authenticateUserWithPassword },
-          } = await client.mutate({
-            mutation: AUTHENTICATE_USER as DocumentNode,
-            variables: {
-              email: credentials?.email,
-              password: credentials?.password,
-            },
+          const { user, sessionToken } = await keystoneAuthenticate({
+            email: credentials?.email as string,
+            password: credentials?.password as string,
           });
-
-          const { item: user, sessionToken } = authenticateUserWithPassword;
 
           if (user) {
             return user.isVerified ? { ...user, sessionToken } : false;
@@ -35,33 +32,123 @@ export const authOptions: NextAuthOptions = {
         }
       },
     }),
-  ],
-  callbacks: {
-    async jwt({ token, account, user }) {
-      if (user) {
-        token.id = user.id;
-        token.sessionToken = user.sessionToken;
-        token.isAdmin = user.isAdmin;
-      }
+    GoogleProvider({
+      clientId: process.env.GOOGLE_AUTH_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET || '',
+      authorization: { params: { scope: 'openid email profile' } },
+    }),
+  ];
 
-      return token;
+  const adapter = KeystoneAdapter(prismaClient as PrismaClient, req, res);
+
+  return await NextAuth(req, res, {
+    adapter,
+    providers: providers,
+    callbacks: {
+      async signIn({ user, account, profile, email, credentials }) {
+        if (
+          req?.query?.nextauth?.includes('callback') &&
+          req?.query?.nextauth?.includes('credentials') &&
+          req?.method === 'POST'
+        ) {
+          if (user) {
+            const sessionToken = (user?.sessionToken as string) || '';
+            const expires = new Date(new Date().getTime() + 30 * 60 * 1000);
+
+            const userAccount = await adapter.getUserByAccount({
+              providerAccountId: (account?.providerAccountId as string) || '',
+              provider: account?.provider,
+            });
+
+            let userAuth = await adapter.getUserByEmail(user?.email as string);
+
+            if (userAuth === null) {
+              userAuth = await adapter.createUser({
+                name: user.name,
+                email: user.email,
+              });
+            }
+
+            if (userAccount === null) {
+              adapter.linkAccount({
+                ...account,
+                userId: userAuth?.id,
+                access_token: sessionToken,
+                expires_at: new Date(expires).getTime(),
+              });
+            }
+
+            const session = await adapter.createSession({
+              expires,
+              sessionToken,
+              userId: (userAuth?.id as string) || '',
+            });
+
+            const cookies = new Cookies(req, res);
+
+            cookies.set(NEXT_AUTH_SESSION_TOKEN, session.sessionToken, {
+              expires,
+            });
+          }
+          return true;
+        }
+        return true;
+      },
+      async jwt({ token, account, user }) {
+        if (user) {
+          token.id = user.id;
+          token.sessionToken = user.sessionToken;
+          token.isAdmin = user.isAdmin;
+        }
+        return token;
+      },
+      async session({ session, user, token }) {
+        if (token || user) {
+          session.id = (token || user).id;
+          session.token = (token || user).sessionToken;
+          session.isAdmin = (token || user).isAdmin;
+        }
+        return session;
+      },
     },
-    async session({ session, user, token }) {
-      if (token) {
-        session.id = token.id;
-        session.token = token.sessionToken;
-        session.isAdmin = token.isAdmin;
-      }
+    jwt: {
+      encode: async (token) => {
+        if (
+          req?.query?.nextauth?.includes('callback') &&
+          req?.query?.nextauth?.includes('credentials') &&
+          req.method === 'POST'
+        ) {
+          const cookies = new Cookies(req, res);
+          const cookie = cookies.get(NEXT_AUTH_SESSION_TOKEN);
 
-      return session;
+          if (cookie) {
+            return cookie;
+          }
+
+          return '';
+        }
+        // Revert to default behaviour when not in the credentials provider callback flow
+        return encode(token);
+      },
+      decode: async (token) => {
+        if (
+          req?.query?.nextauth?.includes('callback') &&
+          req?.query?.nextauth?.includes('credentials') &&
+          req.method === 'POST'
+        ) {
+          return null;
+        }
+
+        // Revert to default behaviour when not in the credentials provider callback flow
+        return decode(token);
+      },
     },
-  },
-  session: {
-    maxAge: 30 * 60,
-  },
-  pages: {
-    signIn: '/?signIn=true',
-  },
-};
-
-export default NextAuth(authOptions);
+    session: {
+      strategy: 'database',
+      maxAge: 30 * 60,
+    },
+    pages: {
+      signIn: '/?signIn=true',
+    },
+  });
+}

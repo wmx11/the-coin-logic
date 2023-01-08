@@ -2,7 +2,7 @@ import PricingCard from 'components/PricingCard';
 import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 import { Product } from 'types';
-import { products as productsSku } from 'types/Products';
+import { products as productsSku } from 'utils/products';
 import Regular from 'public/images/regular_product.svg';
 
 type RegularPricingProps = {

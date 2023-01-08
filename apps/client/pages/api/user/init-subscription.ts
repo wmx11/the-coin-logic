@@ -7,7 +7,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import routes from 'routes';
 import config from 'tcl-packages/email/config';
 import { Order, Product } from 'types';
-import { products } from 'types/Products';
+import { products } from 'utils/products';
 import { formateDateWithHours } from 'utils/formatters';
 import { signedRequest } from 'utils/signedRequest';
 import prisma from '../../../data/prisma';

@@ -6,7 +6,7 @@ import { isProjectEditor } from 'data/api/utils/isProjectEditor';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import sharp from 'sharp';
 import slug from 'slug';
-import { prismaClient } from 'tcl-packages/prismaClient';
+import { PrismaSchema, prismaClient } from 'tcl-packages/prismaClient';
 import { QuizCreateInput } from 'types';
 import { resolveImagePaths } from 'utils/utils';
 import { v4 as uuidv4 } from 'uuid';
@@ -19,6 +19,8 @@ type Fields = {
   userId: string;
   articleId: string;
   isUpdate: boolean;
+  projectId: string;
+  quizId: string;
 } & QuizCreateInput;
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -62,7 +64,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const project = await prismaClient?.project.findUnique({
       where: {
-        id: projectId,
+        id: projectId || '',
       },
       select: {
         id: true,
@@ -104,12 +106,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       slug: slug(title || ''),
       enabled,
       hasRewards,
-      rewardsAmount: parseInt(rewardsAmount, 10),
+      rewardsAmount: parseInt(rewardsAmount as unknown as string, 10),
       rewardType,
       description,
       onWinDescription,
       onEndDescription,
-      totalWinners: parseInt(totalWinners, 10),
+      totalWinners: parseInt(totalWinners as unknown as string, 10),
       timePerQuestion,
       startDate: startDate ? new Date(startDate) : undefined,
       endDate: endDate ? new Date(endDate) : undefined,
@@ -129,7 +131,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           id: quizId,
         },
         data: {
-          ...quizData,
+          ...(quizData as PrismaSchema.QuizCreateInput),
         },
         select: {
           slug: true,
@@ -145,7 +147,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const data = await prismaClient?.quiz.create({
       data: {
-        ...quizData,
+        ...(quizData as PrismaSchema.QuizCreateInput),
       },
       select: {
         slug: true,

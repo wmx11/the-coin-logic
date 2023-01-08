@@ -1,5 +1,6 @@
 import { Container, Text } from '@mantine/core';
 import AnnouncementCard from 'components/AnnouncementCard';
+import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundWrapper';
 import PaginationFilter from 'components/Filters/PaginationFilter';
 import PerPageFilter from 'components/Filters/PerPageFilter';
 import ProjectsFilter from 'components/Filters/ProjectsFilter';
@@ -35,16 +36,17 @@ const Announcements: FC<AnnouncementsProps> = ({ announcements, count }) => {
         title="Cryptocurrency projects Discord Announcements tracker | Coin Logic"
         description="Keep track of the latest project announcements with our Discord Announcements integration."
       />
-      <Container className="py-10">
-        <div className="mb-8">
+      <SmallBackgroundWrapper>
+        <div className="text-center">
           <GradientTitle>Project Announcements</GradientTitle>
-          <Text size="xs" color="dimmed">
+          <Text size="sm" color="dimmed">
             We monitor the servers and aggregate all incoming new announcements in a single place. You can filter the
             announcements by project, directly view them in their Discord server, and share them with your social
             groups.
           </Text>
         </div>
-
+      </SmallBackgroundWrapper>
+      <Container className="py-10">
         <div className="my-4">
           <ProjectsFilter description="Choose a project to narrow down your results." />
         </div>

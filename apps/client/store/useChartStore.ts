@@ -6,6 +6,7 @@ export type ChartData = {
 };
 
 type ChartDataStore = {
+  isInitial: boolean;
   loading: boolean;
   chartData: ChartData[];
   compareChartData: ChartData[];
@@ -14,6 +15,7 @@ type ChartDataStore = {
   chartSection: string | 'marketData' | 'holdersData' | 'socialMediaData';
   network: string;
   pairAddress: string;
+  setIsInitial: (isInitial: boolean) => void;
   setLoading: (loading: boolean) => void;
   setChartData: (chartData: ChartData[]) => void;
   setChartTitle: (chartTitle: string) => void;
@@ -28,6 +30,7 @@ type ChartDataStore = {
 };
 
 const initialSate = {
+  isInitial: true,
   loading: false,
   chartData: [],
   compareChartData: [],
@@ -40,6 +43,7 @@ const initialSate = {
 
 const useChartStore = create<ChartDataStore>((set) => ({
   ...initialSate,
+  setIsInitial: (isInitial: boolean) => set(() => ({ isInitial })),
   setLoading: (loading: boolean) => set(() => ({ loading })),
   setChartData: (chartData: ChartData[]) => set(() => ({ chartData })),
   setChartTitle: (chartTitle: string) => set(() => ({ chartTitle })),

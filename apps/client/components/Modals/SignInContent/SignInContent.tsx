@@ -1,4 +1,4 @@
-import { Button, PasswordInput, Stack, TextInput } from '@mantine/core';
+import { Button, Divider, PasswordInput, Stack, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import GradientButton from 'components/Buttons/GradientButton';
 import ErrorMessage from 'components/ErrorMessage';
@@ -10,6 +10,8 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 import { UserLogin, userLoginSchema } from '../../../schemas/user';
+import AuthGoogleButton from 'components/Auth/AuthGoogleButton';
+import { tokens } from 'utils/tokens/tokens';
 
 const ERROR_MESSAGE = 'Your email address or password is invalid. Please try again.';
 
@@ -37,13 +39,18 @@ const SignInContent = () => {
 
       if (data?.status === 200) {
         const session = await getSession();
-        setValue(session?.token || '');
+        const token = await tokens.verify<{ accessToken: string }>(
+          session?.token as string,
+          process.env.NEXT_PUBLIC_SIGNED_SECRET || '',
+        );
+        setValue(token?.accessToken || '');
         toast.success('You have successfully logged in!');
         resetAll();
         setErrorMessage('');
         setLoginSuccess(true);
       }
     } catch (error) {
+      console.log(error);
       toast.error('Uh oh, looks like there was an issue logging in');
       return setErrorMessage(ERROR_MESSAGE);
     }
@@ -76,6 +83,10 @@ const SignInContent = () => {
         <GradientButton type="submit" size="md">
           Sign In
         </GradientButton>
+
+        <Divider label="Or" labelPosition="center" />
+
+        <AuthGoogleButton />
       </Stack>
     </form>
   );

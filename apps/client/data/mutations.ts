@@ -19,6 +19,7 @@ export const CREATE_USER = gql`
         ip: $ip
       }
     ) {
+      id
       name
       referrer
       email

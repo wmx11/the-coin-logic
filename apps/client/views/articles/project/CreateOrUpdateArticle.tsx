@@ -1,6 +1,7 @@
 import { Container, Text, Textarea, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { CKEditor, CKEditorEventPayload } from 'ckeditor4-react';
+import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundWrapper';
 import GradientButton from 'components/Buttons/GradientButton';
 import GoBack from 'components/GoBack';
 import ImageUpload from 'components/ImageUpload';
@@ -87,45 +88,50 @@ const CreateOrUpdateArticle: FC<CreateOrUpdateArticleProps> = ({ article, isUpda
   };
 
   return (
-    <Container className="py-10">
-      <GoBack />
-      <div className="mb-4">
-        <GradientTitle>{isUpdate ? 'Update' : 'Create'} content</GradientTitle>
-        {isUpdate ? null : (
-          <Text size="xs" color="dimmed">
-            Create a new article for the project. AMA summaries, reviews, news, announcements.
-          </Text>
-        )}
-      </div>
-      <form onSubmit={form.onSubmit(handleSubmit)}>
-        <div className="flex flex-col gap-4">
-          <TextInput label="Title" required withAsterisk {...form.getInputProps('title')} />
-          <ImageUpload
-            label="Header Image"
-            previewTetxt="Upload a header image. 800 x 450"
-            accept="image/jpeg,image/png,image/jpg"
-            size={{ width: 800, height: 450, maxHeigth: '', maxWidth: '' }}
-            setImageBlob={(image: Blob) => setImageData(image)}
-            initialImageUrl={article?.image?.url || ''}
-          />
-          <Textarea
-            label="Summary"
-            required
-            withAsterisk
-            description="Provide a short summary of the content"
-            minRows={5}
-            {...form.getInputProps('summary')}
-          />
-          <CKEditor
-            initData={form.values.richContent || ''}
-            onInstanceReady={(data) => {
-              setEditor(data);
-            }}
-          />
-          <GradientButton type="submit">{isUpdate ? 'Update' : 'Create'}</GradientButton>
+    <>
+      <SmallBackgroundWrapper>
+        <GoBack />
+        <div className="mb-8 text-center">
+          <GradientTitle>{isUpdate ? 'Update an' : 'Create a new'} article</GradientTitle>
+          {isUpdate ? null : (
+            <Text size="xs" color="dimmed">
+              Create a new article for the project. AMA summaries, reviews, news, announcements.
+            </Text>
+          )}
         </div>
-      </form>
-    </Container>
+      </SmallBackgroundWrapper>
+
+      <Container className="py-10">
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+          <div className="flex flex-col gap-4">
+            <TextInput label="Title" required withAsterisk {...form.getInputProps('title')} />
+            <ImageUpload
+              label="Header Image"
+              previewTetxt="Upload a header image. 800 x 450"
+              accept="image/jpeg,image/png,image/jpg"
+              size={{ width: 800, height: 450, maxHeigth: '', maxWidth: '' }}
+              setImageBlob={(image: Blob) => setImageData(image)}
+              initialImageUrl={article?.image?.url || ''}
+            />
+            <Textarea
+              label="Summary"
+              required
+              withAsterisk
+              description="Provide a short summary of the content"
+              minRows={5}
+              {...form.getInputProps('summary')}
+            />
+            <CKEditor
+              initData={form.values.richContent || ''}
+              onInstanceReady={(data) => {
+                setEditor(data);
+              }}
+            />
+            <GradientButton type="submit">{isUpdate ? 'Update' : 'Create'}</GradientButton>
+          </div>
+        </form>
+      </Container>
+    </>
   );
 };
 

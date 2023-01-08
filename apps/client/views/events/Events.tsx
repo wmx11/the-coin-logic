@@ -1,4 +1,5 @@
 import { Container, Text } from '@mantine/core';
+import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundWrapper';
 import EventCard from 'components/EventCard';
 import PaginationFilter from 'components/Filters/PaginationFilter';
 import PerPageFilter from 'components/Filters/PerPageFilter';
@@ -29,15 +30,16 @@ const Events: FC<EventsProps> = ({ events, count }) => {
         title="Cryptocurrency projects Discord Events tracker | Coin Logic"
         description="Discover project events with our Discord Events integration."
       />
-      <Container className="py-10">
-        <div className="mb-8">
+      <SmallBackgroundWrapper>
+        <div className="text-center">
           <GradientTitle>Project Events</GradientTitle>
-          <Text size="xs" color="dimmed">
+          <Text size="sm" color="dimmed">
             We aggregate the data and present it to our viewers in a single place. You can filter the events by project,
             and date, easily participate, and share them with your social groups.
           </Text>
         </div>
-
+      </SmallBackgroundWrapper>
+      <Container className="py-10">
         <div className="my-4">
           <ProjectsFilter description="Choose a project to narrow down your results." />
         </div>

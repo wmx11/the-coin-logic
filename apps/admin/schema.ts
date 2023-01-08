@@ -20,7 +20,7 @@ import {
   Image,
   Holders,
   CustomTracker,
-  Creator,
+  Provider,
   MarketingCampaign,
   MarketingTrackerResult,
   SocialStat,
@@ -42,6 +42,14 @@ import {
   PaymentPlan,
   Coupon,
   Quiz,
+  Transcription,
+  EmailList,
+  ServiceToken,
+  ServiceTokenUsage,
+  Account,
+  Session,
+  VerificationToken,
+  UserAuth
 } from './schemas';
 
 export const lists: Lists = {
@@ -74,7 +82,7 @@ export const lists: Lists = {
   ...ContentType,
   ...Image,
   ...Holders,
-  ...Creator,
+  ...Provider,
   ...Auditor,
   ...KycGroup,
   ...TransparencyRating,
@@ -86,4 +94,12 @@ export const lists: Lists = {
   ...OrderItem,
   ...Vote,
   ...Quiz,
+  ...Transcription,
+  ...EmailList,
+  ...ServiceToken,
+  ...ServiceTokenUsage,
+  ...Account,
+  ...Session,
+  ...VerificationToken,
+  ...UserAuth
 };

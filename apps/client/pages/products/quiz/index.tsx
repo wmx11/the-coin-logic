@@ -1,4 +1,5 @@
 import { Container, Text } from '@mantine/core';
+import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundWrapper';
 import PaginationFilter from 'components/Filters/PaginationFilter';
 import PerPageFilter from 'components/Filters/PerPageFilter';
 import ProjectsFilter from 'components/Filters/ProjectsFilter';
@@ -31,14 +32,16 @@ const QuizzesPage: FC<QuizzesProps> = ({ quizzes, quizzesCount }) => {
         title="Cryptocurrency project quizzes. Test your knowledge, earn rewards | Coin Logic"
         description="Test your knowledge by taking projects specific quizzes and win rewards!"
       />
-      <Container className="py-10">
-        <div className="mb-8">
+      <SmallBackgroundWrapper>
+        <div className="text-center">
           <GradientTitle>Project Quizzes</GradientTitle>
-          <Text size="xs" color="dimmed">
+          <Text size="sm" color="dimmed">
             Projects can create quizzes and distribute rewards to winners. Test your knowledge by taking TCL quizzes and
             be eligible to earn rewards!
           </Text>
         </div>
+      </SmallBackgroundWrapper>
+      <Container className="py-10">
         <div className="my-4">
           <ProjectsFilter description="Choose a project to narrow down your results." />
         </div>

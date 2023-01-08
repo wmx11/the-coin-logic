@@ -5,7 +5,7 @@ import CampaignTracking from 'public/images/campaign_tracking.svg';
 import { FC } from 'react';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 import { Product } from 'types';
-import { products as productsSku } from 'types/Products';
+import { products as productsSku } from 'utils/products';
 
 type CampaignTrackerPricingProps = {
   products: Product[];

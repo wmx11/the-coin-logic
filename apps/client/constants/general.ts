@@ -1,3 +1,6 @@
+import { isDev } from 'utils/utils';
+
+export const NEXT_AUTH_SESSION_TOKEN = isDev ? 'next-auth.session-token' : '__Secure-next-auth.session-token';
 export const REF_COOKIE_NAME = 'tcl_ref';
 export const SESSION_TOKEN = 'session_token';
 export const QUIZ_TOKEN = 'quiz_token';

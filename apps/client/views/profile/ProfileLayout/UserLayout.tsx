@@ -27,15 +27,15 @@ const ProfileLayout = (props: ProfileLayoutProps) => {
   }
 
   return (
-    <Container className="py-10 min-h-screen">
-      <div className="flex gap-x-8">
+    <Container className=" min-h-screen">
+      <div className="flex">
         {(!isMobileScreen || props.withNoMenu) && (
-          <div className="w-full md:min-w-[150px] md:max-w-[200px] ">
+          <div className="w-full md:min-w-[150px] md:max-w-[200px] py-10 pr-2">
             <UserNavigation />
           </div>
         )}
-        <div className="flex-1">
-          <div className="flex items-start justify-between gap-8 mb-4 ">{props.children}</div>
+        <div className="flex-1 border-x p-10">
+          <div className="flex flex-1 items-start justify-between gap-8 mb-4 ">{props.children}</div>
         </div>
       </div>
     </Container>

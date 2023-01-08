@@ -155,6 +155,7 @@ export const getProjectAndMarketStatsBySlug = async (
       relatedProjects: marketStatsArray.relatedProjects,
       quizzes: marketStatsArray?.quizzes,
       paymentPlans: marketStatsArray?.paymentPlans,
+      transcriptions: marketStatsArray?.transcriptions,
     };
   }
 
@@ -177,6 +178,7 @@ export const getProjectAndMarketStatsBySlug = async (
     relatedProjects: marketStatsArray?.relatedProjects,
     paymentPlans: marketStatsArray?.paymentPlans,
     quizzes: marketStatsArray?.quizzes,
+    transcriptions: marketStatsArray?.transcriptions,
   };
 
   MARKET_STAT_CHANGES.forEach((value) => Object.assign(newMarketStats, getChanges(value)));

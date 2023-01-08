@@ -8,6 +8,7 @@ type User {
   lastName: String
   email: String
   ip: String
+  userAuth: UserAuth
   roles(
     where: RoleWhereInput! = {}
     orderBy: [RoleOrderByInput!]! = []
@@ -52,6 +53,15 @@ type User {
     skip: Int! = 0
   ): [MarketingCampaign!]
   marketingCampaignsCount(where: MarketingCampaignWhereInput! = {}): Int
+  followedProviders(
+    where: ProviderWhereInput! = {}
+    orderBy: [ProviderOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Provider!]
+  followedProvidersCount(where: ProviderWhereInput! = {}): Int
+  serviceTokens: ServiceToken
+  providerProfile: Provider
   dateCreated: DateTime
   subscriptionStatus(userId: ID): subscriptionStatus
   passwordResetToken: PasswordState
@@ -88,6 +98,7 @@ input UserWhereInput {
   lastName: StringFilter
   email: StringFilter
   ip: StringFilter
+  userAuth: UserAuthWhereInput
   roles: RoleManyRelationFilter
   isAdmin: BooleanFilter
   isSubscribedToEmail: BooleanFilter
@@ -101,6 +112,9 @@ input UserWhereInput {
   projects: ProjectManyRelationFilter
   managedProjects: ProjectManyRelationFilter
   marketingCampaigns: MarketingCampaignManyRelationFilter
+  followedProviders: ProviderManyRelationFilter
+  serviceTokens: ServiceTokenWhereInput
+  providerProfile: ProviderWhereInput
   dateCreated: DateTimeNullableFilter
   passwordResetToken: PasswordFilter
   passwordResetIssuedAt: DateTimeNullableFilter
@@ -181,6 +195,12 @@ input MarketingCampaignManyRelationFilter {
   none: MarketingCampaignWhereInput
 }
 
+input ProviderManyRelationFilter {
+  every: ProviderWhereInput
+  some: ProviderWhereInput
+  none: ProviderWhereInput
+}
+
 input DateTimeNullableFilter {
   equals: DateTime
   in: [DateTime!]
@@ -226,6 +246,7 @@ input UserUpdateInput {
   lastName: String
   email: String
   ip: String
+  userAuth: UserAuthRelateToOneForUpdateInput
   roles: RoleRelateToManyForUpdateInput
   password: String
   isAdmin: Boolean
@@ -240,10 +261,19 @@ input UserUpdateInput {
   projects: ProjectRelateToManyForUpdateInput
   managedProjects: ProjectRelateToManyForUpdateInput
   marketingCampaigns: MarketingCampaignRelateToManyForUpdateInput
+  followedProviders: ProviderRelateToManyForUpdateInput
+  serviceTokens: ServiceTokenRelateToOneForUpdateInput
+  providerProfile: ProviderRelateToOneForUpdateInput
   dateCreated: DateTime
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
+}
+
+input UserAuthRelateToOneForUpdateInput {
+  create: UserAuthCreateInput
+  connect: UserAuthWhereUniqueInput
+  disconnect: Boolean
 }
 
 input RoleRelateToManyForUpdateInput {
@@ -280,6 +310,25 @@ input MarketingCampaignRelateToManyForUpdateInput {
   connect: [MarketingCampaignWhereUniqueInput!]
 }
 
+input ProviderRelateToManyForUpdateInput {
+  disconnect: [ProviderWhereUniqueInput!]
+  set: [ProviderWhereUniqueInput!]
+  create: [ProviderCreateInput!]
+  connect: [ProviderWhereUniqueInput!]
+}
+
+input ServiceTokenRelateToOneForUpdateInput {
+  create: ServiceTokenCreateInput
+  connect: ServiceTokenWhereUniqueInput
+  disconnect: Boolean
+}
+
+input ProviderRelateToOneForUpdateInput {
+  create: ProviderCreateInput
+  connect: ProviderWhereUniqueInput
+  disconnect: Boolean
+}
+
 input UserUpdateArgs {
   where: UserWhereUniqueInput!
   data: UserUpdateInput!
@@ -291,6 +340,7 @@ input UserCreateInput {
   lastName: String
   email: String
   ip: String
+  userAuth: UserAuthRelateToOneForCreateInput
   roles: RoleRelateToManyForCreateInput
   password: String
   isAdmin: Boolean
@@ -305,10 +355,18 @@ input UserCreateInput {
   projects: ProjectRelateToManyForCreateInput
   managedProjects: ProjectRelateToManyForCreateInput
   marketingCampaigns: MarketingCampaignRelateToManyForCreateInput
+  followedProviders: ProviderRelateToManyForCreateInput
+  serviceTokens: ServiceTokenRelateToOneForCreateInput
+  providerProfile: ProviderRelateToOneForCreateInput
   dateCreated: DateTime
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
+}
+
+input UserAuthRelateToOneForCreateInput {
+  create: UserAuthCreateInput
+  connect: UserAuthWhereUniqueInput
 }
 
 input RoleRelateToManyForCreateInput {
@@ -334,6 +392,21 @@ input ProjectRelateToManyForCreateInput {
 input MarketingCampaignRelateToManyForCreateInput {
   create: [MarketingCampaignCreateInput!]
   connect: [MarketingCampaignWhereUniqueInput!]
+}
+
+input ProviderRelateToManyForCreateInput {
+  create: [ProviderCreateInput!]
+  connect: [ProviderWhereUniqueInput!]
+}
+
+input ServiceTokenRelateToOneForCreateInput {
+  create: ServiceTokenCreateInput
+  connect: ServiceTokenWhereUniqueInput
+}
+
+input ProviderRelateToOneForCreateInput {
+  create: ProviderCreateInput
+  connect: ProviderWhereUniqueInput
 }
 
 type Subscription {
@@ -1864,7 +1937,7 @@ type MarketStat {
   newHolders: Float
   leavingHolders: Float
   recurringHolders: Float
-  annotation: String
+  annotation: JSON
   customTrackers: JSON
   project: Project
   dateAdded: DateTime
@@ -1891,7 +1964,6 @@ input MarketStatWhereInput {
   newHolders: FloatNullableFilter
   leavingHolders: FloatNullableFilter
   recurringHolders: FloatNullableFilter
-  annotation: StringFilter
   project: ProjectWhereInput
   dateAdded: DateTimeNullableFilter
 }
@@ -1910,7 +1982,6 @@ input MarketStatOrderByInput {
   newHolders: OrderDirection
   leavingHolders: OrderDirection
   recurringHolders: OrderDirection
-  annotation: OrderDirection
   dateAdded: OrderDirection
 }
 
@@ -1929,7 +2000,7 @@ input MarketStatUpdateInput {
   newHolders: Float
   leavingHolders: Float
   recurringHolders: Float
-  annotation: String
+  annotation: JSON
   customTrackers: JSON
   project: ProjectRelateToOneForUpdateInput
   dateAdded: DateTime
@@ -1955,7 +2026,7 @@ input MarketStatCreateInput {
   newHolders: Float
   leavingHolders: Float
   recurringHolders: Float
-  annotation: String
+  annotation: JSON
   customTrackers: JSON
   project: ProjectRelateToOneForCreateInput
   dateAdded: DateTime
@@ -1966,6 +2037,7 @@ type SocialStat {
   twitter: Float
   telegram: Float
   discord: Float
+  annotation: JSON
   project: Project
   dateAdded: DateTime
 }
@@ -1998,6 +2070,7 @@ input SocialStatUpdateInput {
   twitter: Float
   telegram: Float
   discord: Float
+  annotation: JSON
   project: ProjectRelateToOneForUpdateInput
   dateAdded: DateTime
 }
@@ -2011,6 +2084,7 @@ input SocialStatCreateInput {
   twitter: Float
   telegram: Float
   discord: Float
+  annotation: JSON
   project: ProjectRelateToOneForCreateInput
   dateAdded: DateTime
 }
@@ -2241,6 +2315,7 @@ input ExchangeRelateToOneForCreateInput {
 type Tag {
   id: ID!
   name: String
+  type: String
   projects(
     where: ProjectWhereInput! = {}
     orderBy: [ProjectOrderByInput!]! = []
@@ -2248,6 +2323,13 @@ type Tag {
     skip: Int! = 0
   ): [Project!]
   projectsCount(where: ProjectWhereInput! = {}): Int
+  providers(
+    where: ProviderWhereInput! = {}
+    orderBy: [ProviderOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Provider!]
+  providersCount(where: ProviderWhereInput! = {}): Int
   dateAdded: DateTime
 }
 
@@ -2261,19 +2343,24 @@ input TagWhereInput {
   NOT: [TagWhereInput!]
   id: IDFilter
   name: StringFilter
+  type: StringNullableFilter
   projects: ProjectManyRelationFilter
+  providers: ProviderManyRelationFilter
   dateAdded: DateTimeNullableFilter
 }
 
 input TagOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  type: OrderDirection
   dateAdded: OrderDirection
 }
 
 input TagUpdateInput {
   name: String
+  type: String
   projects: ProjectRelateToManyForUpdateInput
+  providers: ProviderRelateToManyForUpdateInput
   dateAdded: DateTime
 }
 
@@ -2284,7 +2371,9 @@ input TagUpdateArgs {
 
 input TagCreateInput {
   name: String
+  type: String
   projects: ProjectRelateToManyForCreateInput
+  providers: ProviderRelateToManyForCreateInput
   dateAdded: DateTime
 }
 
@@ -3013,7 +3102,7 @@ type Comment {
   reportsCount(where: UserWhereInput! = {}): Int
   user: User
   project: Project
-  creator: Creator
+  provider: Provider
   dateAdded: DateTime
   updatedAt: DateTime
 }
@@ -3032,7 +3121,7 @@ input CommentWhereInput {
   reports: UserManyRelationFilter
   user: UserWhereInput
   project: ProjectWhereInput
-  creator: CreatorWhereInput
+  provider: ProviderWhereInput
   dateAdded: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -3051,15 +3140,9 @@ input CommentUpdateInput {
   reports: UserRelateToManyForUpdateInput
   user: UserRelateToOneForUpdateInput
   project: ProjectRelateToOneForUpdateInput
-  creator: CreatorRelateToOneForUpdateInput
+  provider: ProviderRelateToOneForUpdateInput
   dateAdded: DateTime
   updatedAt: DateTime
-}
-
-input CreatorRelateToOneForUpdateInput {
-  create: CreatorCreateInput
-  connect: CreatorWhereUniqueInput
-  disconnect: Boolean
 }
 
 input CommentUpdateArgs {
@@ -3074,14 +3157,9 @@ input CommentCreateInput {
   reports: UserRelateToManyForCreateInput
   user: UserRelateToOneForCreateInput
   project: ProjectRelateToOneForCreateInput
-  creator: CreatorRelateToOneForCreateInput
+  provider: ProviderRelateToOneForCreateInput
   dateAdded: DateTime
   updatedAt: DateTime
-}
-
-input CreatorRelateToOneForCreateInput {
-  create: CreatorCreateInput
-  connect: CreatorWhereUniqueInput
 }
 
 type ContentBlock {
@@ -3462,15 +3540,30 @@ input TransferRelateToManyForCreateInput {
   connect: [TransferWhereUniqueInput!]
 }
 
-type Creator {
+type Provider {
   id: ID!
   name: String
   slug: String
+  tags(
+    where: TagWhereInput! = {}
+    orderBy: [TagOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
+  contactEmail: String
+  isPromoted: Boolean
   enabled: Boolean
   isListed: Boolean
+  displayEmail: Boolean
+  openForWork: Boolean
+  displayPrices: Boolean
   nickname: String
   image: ImageFieldOutput
-  description: String
+  backgroundImage: ImageFieldOutput
+  summary: String
+  about: String
+  offers: String
   website: String
   twitter: String
   telegram: String
@@ -3479,13 +3572,15 @@ type Creator {
   youtube: String
   priceFrom: Float
   priceTo: Float
-  marketingCampaigns(
-    where: MarketingCampaignWhereInput! = {}
-    orderBy: [MarketingCampaignOrderByInput!]! = []
+  views: Float
+  user: User
+  followers(
+    where: UserWhereInput! = {}
+    orderBy: [UserOrderByInput!]! = []
     take: Int
     skip: Int! = 0
-  ): [MarketingCampaign!]
-  marketingCampaignsCount(where: MarketingCampaignWhereInput! = {}): Int
+  ): [User!]
+  followersCount(where: UserWhereInput! = {}): Int
   votes(
     where: VoteWhereInput! = {}
     orderBy: [VoteOrderByInput!]! = []
@@ -3504,21 +3599,29 @@ type Creator {
   updatedAt: DateTime
 }
 
-input CreatorWhereUniqueInput {
+input ProviderWhereUniqueInput {
   id: ID
 }
 
-input CreatorWhereInput {
-  AND: [CreatorWhereInput!]
-  OR: [CreatorWhereInput!]
-  NOT: [CreatorWhereInput!]
+input ProviderWhereInput {
+  AND: [ProviderWhereInput!]
+  OR: [ProviderWhereInput!]
+  NOT: [ProviderWhereInput!]
   id: IDFilter
   name: StringFilter
   slug: StringFilter
+  tags: TagManyRelationFilter
+  contactEmail: StringFilter
+  isPromoted: BooleanFilter
   enabled: BooleanFilter
   isListed: BooleanFilter
+  displayEmail: BooleanFilter
+  openForWork: BooleanFilter
+  displayPrices: BooleanFilter
   nickname: StringFilter
-  description: StringFilter
+  summary: StringFilter
+  about: StringFilter
+  offers: StringFilter
   website: StringFilter
   twitter: StringFilter
   telegram: StringFilter
@@ -3527,21 +3630,30 @@ input CreatorWhereInput {
   youtube: StringFilter
   priceFrom: FloatNullableFilter
   priceTo: FloatNullableFilter
-  marketingCampaigns: MarketingCampaignManyRelationFilter
+  views: FloatNullableFilter
+  user: UserWhereInput
+  followers: UserManyRelationFilter
   votes: VoteManyRelationFilter
   comments: CommentManyRelationFilter
   dateAdded: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
 
-input CreatorOrderByInput {
+input ProviderOrderByInput {
   id: OrderDirection
   name: OrderDirection
   slug: OrderDirection
+  contactEmail: OrderDirection
+  isPromoted: OrderDirection
   enabled: OrderDirection
   isListed: OrderDirection
+  displayEmail: OrderDirection
+  openForWork: OrderDirection
+  displayPrices: OrderDirection
   nickname: OrderDirection
-  description: OrderDirection
+  summary: OrderDirection
+  about: OrderDirection
+  offers: OrderDirection
   website: OrderDirection
   twitter: OrderDirection
   telegram: OrderDirection
@@ -3550,18 +3662,28 @@ input CreatorOrderByInput {
   youtube: OrderDirection
   priceFrom: OrderDirection
   priceTo: OrderDirection
+  views: OrderDirection
   dateAdded: OrderDirection
   updatedAt: OrderDirection
 }
 
-input CreatorUpdateInput {
+input ProviderUpdateInput {
   name: String
   slug: String
+  tags: TagRelateToManyForUpdateInput
+  contactEmail: String
+  isPromoted: Boolean
   enabled: Boolean
   isListed: Boolean
+  displayEmail: Boolean
+  openForWork: Boolean
+  displayPrices: Boolean
   nickname: String
   image: ImageFieldInput
-  description: String
+  backgroundImage: ImageFieldInput
+  summary: String
+  about: String
+  offers: String
   website: String
   twitter: String
   telegram: String
@@ -3570,26 +3692,37 @@ input CreatorUpdateInput {
   youtube: String
   priceFrom: Float
   priceTo: Float
-  marketingCampaigns: MarketingCampaignRelateToManyForUpdateInput
+  views: Float
+  user: UserRelateToOneForUpdateInput
+  followers: UserRelateToManyForUpdateInput
   votes: VoteRelateToManyForUpdateInput
   comments: CommentRelateToManyForUpdateInput
   dateAdded: DateTime
   updatedAt: DateTime
 }
 
-input CreatorUpdateArgs {
-  where: CreatorWhereUniqueInput!
-  data: CreatorUpdateInput!
+input ProviderUpdateArgs {
+  where: ProviderWhereUniqueInput!
+  data: ProviderUpdateInput!
 }
 
-input CreatorCreateInput {
+input ProviderCreateInput {
   name: String
   slug: String
+  tags: TagRelateToManyForCreateInput
+  contactEmail: String
+  isPromoted: Boolean
   enabled: Boolean
   isListed: Boolean
+  displayEmail: Boolean
+  openForWork: Boolean
+  displayPrices: Boolean
   nickname: String
   image: ImageFieldInput
-  description: String
+  backgroundImage: ImageFieldInput
+  summary: String
+  about: String
+  offers: String
   website: String
   twitter: String
   telegram: String
@@ -3598,7 +3731,9 @@ input CreatorCreateInput {
   youtube: String
   priceFrom: Float
   priceTo: Float
-  marketingCampaigns: MarketingCampaignRelateToManyForCreateInput
+  views: Float
+  user: UserRelateToOneForCreateInput
+  followers: UserRelateToManyForCreateInput
   votes: VoteRelateToManyForCreateInput
   comments: CommentRelateToManyForCreateInput
   dateAdded: DateTime
@@ -3902,7 +4037,6 @@ type MarketingCampaign {
   notes: String
   agency: String
   agencyUrl: String
-  creator: Creator
   project: Project
   marketStatSnapshot: JSON
   finalSnapshot: JSON
@@ -3946,7 +4080,6 @@ input MarketingCampaignWhereInput {
   notes: StringFilter
   agency: StringFilter
   agencyUrl: StringFilter
-  creator: CreatorWhereInput
   project: ProjectWhereInput
   marketBudget: FloatNullableFilter
   socialBudget: FloatNullableFilter
@@ -4017,7 +4150,6 @@ input MarketingCampaignUpdateInput {
   notes: String
   agency: String
   agencyUrl: String
-  creator: CreatorRelateToOneForUpdateInput
   project: ProjectRelateToOneForUpdateInput
   marketStatSnapshot: JSON
   finalSnapshot: JSON
@@ -4055,7 +4187,6 @@ input MarketingCampaignCreateInput {
   notes: String
   agency: String
   agencyUrl: String
-  creator: CreatorRelateToOneForCreateInput
   project: ProjectRelateToOneForCreateInput
   marketStatSnapshot: JSON
   finalSnapshot: JSON
@@ -4567,7 +4698,7 @@ type Vote {
   type: String
   user: User
   project: Project
-  creator: Creator
+  provider: Provider
   dateAdded: DateTime
   updatedAt: DateTime
 }
@@ -4586,7 +4717,7 @@ input VoteWhereInput {
   type: StringNullableFilter
   user: UserWhereInput
   project: ProjectWhereInput
-  creator: CreatorWhereInput
+  provider: ProviderWhereInput
   dateAdded: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -4606,7 +4737,7 @@ input VoteUpdateInput {
   type: String
   user: UserRelateToOneForUpdateInput
   project: ProjectRelateToOneForUpdateInput
-  creator: CreatorRelateToOneForUpdateInput
+  provider: ProviderRelateToOneForUpdateInput
   dateAdded: DateTime
   updatedAt: DateTime
 }
@@ -4622,7 +4753,7 @@ input VoteCreateInput {
   type: String
   user: UserRelateToOneForCreateInput
   project: ProjectRelateToOneForCreateInput
-  creator: CreatorRelateToOneForCreateInput
+  provider: ProviderRelateToOneForCreateInput
   dateAdded: DateTime
   updatedAt: DateTime
 }
@@ -4763,6 +4894,576 @@ input QuizCreateInput {
   endDate: DateTime
   dateAdded: DateTime
   updatedAt: DateTime
+}
+
+type Transcription {
+  id: ID!
+  title: String
+  slug: String
+  summary: String
+  transcriptionId: String
+  isPublic: Boolean
+  contentUrl: String
+  content: JSON
+  user: User
+  project: Project
+  views: Int
+  likes(
+    where: UserWhereInput! = {}
+    orderBy: [UserOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [User!]
+  likesCount(where: UserWhereInput! = {}): Int
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input TranscriptionWhereUniqueInput {
+  id: ID
+}
+
+input TranscriptionWhereInput {
+  AND: [TranscriptionWhereInput!]
+  OR: [TranscriptionWhereInput!]
+  NOT: [TranscriptionWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  slug: StringFilter
+  summary: StringFilter
+  transcriptionId: StringFilter
+  isPublic: BooleanFilter
+  contentUrl: StringFilter
+  user: UserWhereInput
+  project: ProjectWhereInput
+  views: IntNullableFilter
+  likes: UserManyRelationFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input TranscriptionOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  slug: OrderDirection
+  summary: OrderDirection
+  transcriptionId: OrderDirection
+  isPublic: OrderDirection
+  contentUrl: OrderDirection
+  views: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input TranscriptionUpdateInput {
+  title: String
+  slug: String
+  summary: String
+  transcriptionId: String
+  isPublic: Boolean
+  contentUrl: String
+  content: JSON
+  user: UserRelateToOneForUpdateInput
+  project: ProjectRelateToOneForUpdateInput
+  views: Int
+  likes: UserRelateToManyForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input TranscriptionUpdateArgs {
+  where: TranscriptionWhereUniqueInput!
+  data: TranscriptionUpdateInput!
+}
+
+input TranscriptionCreateInput {
+  title: String
+  slug: String
+  summary: String
+  transcriptionId: String
+  isPublic: Boolean
+  contentUrl: String
+  content: JSON
+  user: UserRelateToOneForCreateInput
+  project: ProjectRelateToOneForCreateInput
+  views: Int
+  likes: UserRelateToManyForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+type EmailList {
+  id: ID!
+  email: String
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input EmailListWhereUniqueInput {
+  id: ID
+  email: String
+}
+
+input EmailListWhereInput {
+  AND: [EmailListWhereInput!]
+  OR: [EmailListWhereInput!]
+  NOT: [EmailListWhereInput!]
+  id: IDFilter
+  email: StringFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input EmailListOrderByInput {
+  id: OrderDirection
+  email: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input EmailListUpdateInput {
+  email: String
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input EmailListUpdateArgs {
+  where: EmailListWhereUniqueInput!
+  data: EmailListUpdateInput!
+}
+
+input EmailListCreateInput {
+  email: String
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+type ServiceToken {
+  id: ID!
+  amount: Float
+  discount: Float
+  user: User
+  tokenUsage(
+    where: ServiceTokenUsageWhereInput! = {}
+    orderBy: [ServiceTokenUsageOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [ServiceTokenUsage!]
+  tokenUsageCount(where: ServiceTokenUsageWhereInput! = {}): Int
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ServiceTokenWhereUniqueInput {
+  id: ID
+}
+
+input ServiceTokenWhereInput {
+  AND: [ServiceTokenWhereInput!]
+  OR: [ServiceTokenWhereInput!]
+  NOT: [ServiceTokenWhereInput!]
+  id: IDFilter
+  amount: FloatNullableFilter
+  discount: FloatNullableFilter
+  user: UserWhereInput
+  tokenUsage: ServiceTokenUsageManyRelationFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input ServiceTokenUsageManyRelationFilter {
+  every: ServiceTokenUsageWhereInput
+  some: ServiceTokenUsageWhereInput
+  none: ServiceTokenUsageWhereInput
+}
+
+input ServiceTokenOrderByInput {
+  id: OrderDirection
+  amount: OrderDirection
+  discount: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input ServiceTokenUpdateInput {
+  amount: Float
+  discount: Float
+  user: UserRelateToOneForUpdateInput
+  tokenUsage: ServiceTokenUsageRelateToManyForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ServiceTokenUsageRelateToManyForUpdateInput {
+  disconnect: [ServiceTokenUsageWhereUniqueInput!]
+  set: [ServiceTokenUsageWhereUniqueInput!]
+  create: [ServiceTokenUsageCreateInput!]
+  connect: [ServiceTokenUsageWhereUniqueInput!]
+}
+
+input ServiceTokenUpdateArgs {
+  where: ServiceTokenWhereUniqueInput!
+  data: ServiceTokenUpdateInput!
+}
+
+input ServiceTokenCreateInput {
+  amount: Float
+  discount: Float
+  user: UserRelateToOneForCreateInput
+  tokenUsage: ServiceTokenUsageRelateToManyForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ServiceTokenUsageRelateToManyForCreateInput {
+  create: [ServiceTokenUsageCreateInput!]
+  connect: [ServiceTokenUsageWhereUniqueInput!]
+}
+
+type ServiceTokenUsage {
+  id: ID!
+  used: Float
+  description: String
+  serviceToken: ServiceToken
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ServiceTokenUsageWhereUniqueInput {
+  id: ID
+}
+
+input ServiceTokenUsageWhereInput {
+  AND: [ServiceTokenUsageWhereInput!]
+  OR: [ServiceTokenUsageWhereInput!]
+  NOT: [ServiceTokenUsageWhereInput!]
+  id: IDFilter
+  used: FloatNullableFilter
+  description: StringFilter
+  serviceToken: ServiceTokenWhereInput
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input ServiceTokenUsageOrderByInput {
+  id: OrderDirection
+  used: OrderDirection
+  description: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input ServiceTokenUsageUpdateInput {
+  used: Float
+  description: String
+  serviceToken: ServiceTokenRelateToOneForUpdateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input ServiceTokenUsageUpdateArgs {
+  where: ServiceTokenUsageWhereUniqueInput!
+  data: ServiceTokenUsageUpdateInput!
+}
+
+input ServiceTokenUsageCreateInput {
+  used: Float
+  description: String
+  serviceToken: ServiceTokenRelateToOneForCreateInput
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+type Account {
+  id: ID!
+  user: UserAuth
+  type: String
+  provider: String
+  providerAccountId: String
+  refresh_token: String
+  access_token: String
+  expires_at: Int
+  token_type: String
+  scope: String
+  id_token: String
+  session_state: String
+}
+
+input AccountWhereUniqueInput {
+  id: ID
+  providerAccountId: String
+}
+
+input AccountWhereInput {
+  AND: [AccountWhereInput!]
+  OR: [AccountWhereInput!]
+  NOT: [AccountWhereInput!]
+  id: IDFilter
+  user: UserAuthWhereInput
+  type: StringFilter
+  provider: StringFilter
+  providerAccountId: StringFilter
+  refresh_token: StringFilter
+  access_token: StringFilter
+  expires_at: IntNullableFilter
+  token_type: StringFilter
+  scope: StringFilter
+  id_token: StringFilter
+  session_state: StringFilter
+}
+
+input AccountOrderByInput {
+  id: OrderDirection
+  type: OrderDirection
+  provider: OrderDirection
+  providerAccountId: OrderDirection
+  refresh_token: OrderDirection
+  access_token: OrderDirection
+  expires_at: OrderDirection
+  token_type: OrderDirection
+  scope: OrderDirection
+  id_token: OrderDirection
+  session_state: OrderDirection
+}
+
+input AccountUpdateInput {
+  user: UserAuthRelateToOneForUpdateInput
+  type: String
+  provider: String
+  providerAccountId: String
+  refresh_token: String
+  access_token: String
+  expires_at: Int
+  token_type: String
+  scope: String
+  id_token: String
+  session_state: String
+}
+
+input AccountUpdateArgs {
+  where: AccountWhereUniqueInput!
+  data: AccountUpdateInput!
+}
+
+input AccountCreateInput {
+  user: UserAuthRelateToOneForCreateInput
+  type: String
+  provider: String
+  providerAccountId: String
+  refresh_token: String
+  access_token: String
+  expires_at: Int
+  token_type: String
+  scope: String
+  id_token: String
+  session_state: String
+}
+
+type Session {
+  id: ID!
+  user: UserAuth
+  sessionToken: String
+  expires: DateTime
+}
+
+input SessionWhereUniqueInput {
+  id: ID
+  sessionToken: String
+}
+
+input SessionWhereInput {
+  AND: [SessionWhereInput!]
+  OR: [SessionWhereInput!]
+  NOT: [SessionWhereInput!]
+  id: IDFilter
+  user: UserAuthWhereInput
+  sessionToken: StringFilter
+  expires: DateTimeNullableFilter
+}
+
+input SessionOrderByInput {
+  id: OrderDirection
+  sessionToken: OrderDirection
+  expires: OrderDirection
+}
+
+input SessionUpdateInput {
+  user: UserAuthRelateToOneForUpdateInput
+  sessionToken: String
+  expires: DateTime
+}
+
+input SessionUpdateArgs {
+  where: SessionWhereUniqueInput!
+  data: SessionUpdateInput!
+}
+
+input SessionCreateInput {
+  user: UserAuthRelateToOneForCreateInput
+  sessionToken: String
+  expires: DateTime
+}
+
+type VerificationToken {
+  id: ID!
+  identifier: String
+  token: String
+  expires: DateTime
+}
+
+input VerificationTokenWhereUniqueInput {
+  id: ID
+  token: String
+}
+
+input VerificationTokenWhereInput {
+  AND: [VerificationTokenWhereInput!]
+  OR: [VerificationTokenWhereInput!]
+  NOT: [VerificationTokenWhereInput!]
+  id: IDFilter
+  identifier: StringFilter
+  token: StringFilter
+  expires: DateTimeNullableFilter
+}
+
+input VerificationTokenOrderByInput {
+  id: OrderDirection
+  identifier: OrderDirection
+  token: OrderDirection
+  expires: OrderDirection
+}
+
+input VerificationTokenUpdateInput {
+  identifier: String
+  token: String
+  expires: DateTime
+}
+
+input VerificationTokenUpdateArgs {
+  where: VerificationTokenWhereUniqueInput!
+  data: VerificationTokenUpdateInput!
+}
+
+input VerificationTokenCreateInput {
+  identifier: String
+  token: String
+  expires: DateTime
+}
+
+type UserAuth {
+  id: ID!
+  name: String
+  email: String
+  emailVerified: DateTime
+  image: String
+  user: User
+  access_token: String
+  accounts(
+    where: AccountWhereInput! = {}
+    orderBy: [AccountOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Account!]
+  accountsCount(where: AccountWhereInput! = {}): Int
+  sessions(
+    where: SessionWhereInput! = {}
+    orderBy: [SessionOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Session!]
+  sessionsCount(where: SessionWhereInput! = {}): Int
+}
+
+input UserAuthWhereUniqueInput {
+  id: ID
+  email: String
+}
+
+input UserAuthWhereInput {
+  AND: [UserAuthWhereInput!]
+  OR: [UserAuthWhereInput!]
+  NOT: [UserAuthWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  email: StringFilter
+  emailVerified: DateTimeNullableFilter
+  image: StringFilter
+  user: UserWhereInput
+  access_token: StringFilter
+  accounts: AccountManyRelationFilter
+  sessions: SessionManyRelationFilter
+}
+
+input AccountManyRelationFilter {
+  every: AccountWhereInput
+  some: AccountWhereInput
+  none: AccountWhereInput
+}
+
+input SessionManyRelationFilter {
+  every: SessionWhereInput
+  some: SessionWhereInput
+  none: SessionWhereInput
+}
+
+input UserAuthOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  email: OrderDirection
+  emailVerified: OrderDirection
+  image: OrderDirection
+  access_token: OrderDirection
+}
+
+input UserAuthUpdateInput {
+  name: String
+  email: String
+  emailVerified: DateTime
+  image: String
+  user: UserRelateToOneForUpdateInput
+  access_token: String
+  accounts: AccountRelateToManyForUpdateInput
+  sessions: SessionRelateToManyForUpdateInput
+}
+
+input AccountRelateToManyForUpdateInput {
+  disconnect: [AccountWhereUniqueInput!]
+  set: [AccountWhereUniqueInput!]
+  create: [AccountCreateInput!]
+  connect: [AccountWhereUniqueInput!]
+}
+
+input SessionRelateToManyForUpdateInput {
+  disconnect: [SessionWhereUniqueInput!]
+  set: [SessionWhereUniqueInput!]
+  create: [SessionCreateInput!]
+  connect: [SessionWhereUniqueInput!]
+}
+
+input UserAuthUpdateArgs {
+  where: UserAuthWhereUniqueInput!
+  data: UserAuthUpdateInput!
+}
+
+input UserAuthCreateInput {
+  name: String
+  email: String
+  emailVerified: DateTime
+  image: String
+  user: UserRelateToOneForCreateInput
+  access_token: String
+  accounts: AccountRelateToManyForCreateInput
+  sessions: SessionRelateToManyForCreateInput
+}
+
+input AccountRelateToManyForCreateInput {
+  create: [AccountCreateInput!]
+  connect: [AccountWhereUniqueInput!]
+}
+
+input SessionRelateToManyForCreateInput {
+  create: [SessionCreateInput!]
+  connect: [SessionWhereUniqueInput!]
 }
 
 """
@@ -5049,15 +5750,15 @@ type Mutation {
   updateHolders(data: [HolderUpdateArgs!]!): [Holder]
   deleteHolder(where: HolderWhereUniqueInput!): Holder
   deleteHolders(where: [HolderWhereUniqueInput!]!): [Holder]
-  createCreator(data: CreatorCreateInput!): Creator
-  createCreators(data: [CreatorCreateInput!]!): [Creator]
-  updateCreator(
-    where: CreatorWhereUniqueInput!
-    data: CreatorUpdateInput!
-  ): Creator
-  updateCreators(data: [CreatorUpdateArgs!]!): [Creator]
-  deleteCreator(where: CreatorWhereUniqueInput!): Creator
-  deleteCreators(where: [CreatorWhereUniqueInput!]!): [Creator]
+  createProvider(data: ProviderCreateInput!): Provider
+  createProviders(data: [ProviderCreateInput!]!): [Provider]
+  updateProvider(
+    where: ProviderWhereUniqueInput!
+    data: ProviderUpdateInput!
+  ): Provider
+  updateProviders(data: [ProviderUpdateArgs!]!): [Provider]
+  deleteProvider(where: ProviderWhereUniqueInput!): Provider
+  deleteProviders(where: [ProviderWhereUniqueInput!]!): [Provider]
   createAuditor(data: AuditorCreateInput!): Auditor
   createAuditors(data: [AuditorCreateInput!]!): [Auditor]
   updateAuditor(
@@ -5175,6 +5876,100 @@ type Mutation {
   updateQuizzes(data: [QuizUpdateArgs!]!): [Quiz]
   deleteQuiz(where: QuizWhereUniqueInput!): Quiz
   deleteQuizzes(where: [QuizWhereUniqueInput!]!): [Quiz]
+  createTranscription(data: TranscriptionCreateInput!): Transcription
+  createTranscriptions(data: [TranscriptionCreateInput!]!): [Transcription]
+  updateTranscription(
+    where: TranscriptionWhereUniqueInput!
+    data: TranscriptionUpdateInput!
+  ): Transcription
+  updateTranscriptions(data: [TranscriptionUpdateArgs!]!): [Transcription]
+  deleteTranscription(where: TranscriptionWhereUniqueInput!): Transcription
+  deleteTranscriptions(
+    where: [TranscriptionWhereUniqueInput!]!
+  ): [Transcription]
+  createEmailList(data: EmailListCreateInput!): EmailList
+  createEmailLists(data: [EmailListCreateInput!]!): [EmailList]
+  updateEmailList(
+    where: EmailListWhereUniqueInput!
+    data: EmailListUpdateInput!
+  ): EmailList
+  updateEmailLists(data: [EmailListUpdateArgs!]!): [EmailList]
+  deleteEmailList(where: EmailListWhereUniqueInput!): EmailList
+  deleteEmailLists(where: [EmailListWhereUniqueInput!]!): [EmailList]
+  createServiceToken(data: ServiceTokenCreateInput!): ServiceToken
+  createServiceTokens(data: [ServiceTokenCreateInput!]!): [ServiceToken]
+  updateServiceToken(
+    where: ServiceTokenWhereUniqueInput!
+    data: ServiceTokenUpdateInput!
+  ): ServiceToken
+  updateServiceTokens(data: [ServiceTokenUpdateArgs!]!): [ServiceToken]
+  deleteServiceToken(where: ServiceTokenWhereUniqueInput!): ServiceToken
+  deleteServiceTokens(where: [ServiceTokenWhereUniqueInput!]!): [ServiceToken]
+  createServiceTokenUsage(
+    data: ServiceTokenUsageCreateInput!
+  ): ServiceTokenUsage
+  createServiceTokenUsages(
+    data: [ServiceTokenUsageCreateInput!]!
+  ): [ServiceTokenUsage]
+  updateServiceTokenUsage(
+    where: ServiceTokenUsageWhereUniqueInput!
+    data: ServiceTokenUsageUpdateInput!
+  ): ServiceTokenUsage
+  updateServiceTokenUsages(
+    data: [ServiceTokenUsageUpdateArgs!]!
+  ): [ServiceTokenUsage]
+  deleteServiceTokenUsage(
+    where: ServiceTokenUsageWhereUniqueInput!
+  ): ServiceTokenUsage
+  deleteServiceTokenUsages(
+    where: [ServiceTokenUsageWhereUniqueInput!]!
+  ): [ServiceTokenUsage]
+  createAccount(data: AccountCreateInput!): Account
+  createAccounts(data: [AccountCreateInput!]!): [Account]
+  updateAccount(
+    where: AccountWhereUniqueInput!
+    data: AccountUpdateInput!
+  ): Account
+  updateAccounts(data: [AccountUpdateArgs!]!): [Account]
+  deleteAccount(where: AccountWhereUniqueInput!): Account
+  deleteAccounts(where: [AccountWhereUniqueInput!]!): [Account]
+  createSession(data: SessionCreateInput!): Session
+  createSessions(data: [SessionCreateInput!]!): [Session]
+  updateSession(
+    where: SessionWhereUniqueInput!
+    data: SessionUpdateInput!
+  ): Session
+  updateSessions(data: [SessionUpdateArgs!]!): [Session]
+  deleteSession(where: SessionWhereUniqueInput!): Session
+  deleteSessions(where: [SessionWhereUniqueInput!]!): [Session]
+  createVerificationToken(
+    data: VerificationTokenCreateInput!
+  ): VerificationToken
+  createVerificationTokens(
+    data: [VerificationTokenCreateInput!]!
+  ): [VerificationToken]
+  updateVerificationToken(
+    where: VerificationTokenWhereUniqueInput!
+    data: VerificationTokenUpdateInput!
+  ): VerificationToken
+  updateVerificationTokens(
+    data: [VerificationTokenUpdateArgs!]!
+  ): [VerificationToken]
+  deleteVerificationToken(
+    where: VerificationTokenWhereUniqueInput!
+  ): VerificationToken
+  deleteVerificationTokens(
+    where: [VerificationTokenWhereUniqueInput!]!
+  ): [VerificationToken]
+  createUserAuth(data: UserAuthCreateInput!): UserAuth
+  createUserAuths(data: [UserAuthCreateInput!]!): [UserAuth]
+  updateUserAuth(
+    where: UserAuthWhereUniqueInput!
+    data: UserAuthUpdateInput!
+  ): UserAuth
+  updateUserAuths(data: [UserAuthUpdateArgs!]!): [UserAuth]
+  deleteUserAuth(where: UserAuthWhereUniqueInput!): UserAuth
+  deleteUserAuths(where: [UserAuthWhereUniqueInput!]!): [UserAuth]
   endSession: Boolean!
   authenticateUserWithPassword(
     email: String!
@@ -5474,14 +6269,14 @@ type Query {
   ): [Holder!]
   holder(where: HolderWhereUniqueInput!): Holder
   holdersCount(where: HolderWhereInput! = {}): Int
-  creators(
-    where: CreatorWhereInput! = {}
-    orderBy: [CreatorOrderByInput!]! = []
+  providers(
+    where: ProviderWhereInput! = {}
+    orderBy: [ProviderOrderByInput!]! = []
     take: Int
     skip: Int! = 0
-  ): [Creator!]
-  creator(where: CreatorWhereUniqueInput!): Creator
-  creatorsCount(where: CreatorWhereInput! = {}): Int
+  ): [Provider!]
+  provider(where: ProviderWhereUniqueInput!): Provider
+  providersCount(where: ProviderWhereInput! = {}): Int
   auditors(
     where: AuditorWhereInput! = {}
     orderBy: [AuditorOrderByInput!]! = []
@@ -5578,6 +6373,74 @@ type Query {
   ): [Quiz!]
   quiz(where: QuizWhereUniqueInput!): Quiz
   quizzesCount(where: QuizWhereInput! = {}): Int
+  transcriptions(
+    where: TranscriptionWhereInput! = {}
+    orderBy: [TranscriptionOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Transcription!]
+  transcription(where: TranscriptionWhereUniqueInput!): Transcription
+  transcriptionsCount(where: TranscriptionWhereInput! = {}): Int
+  emailLists(
+    where: EmailListWhereInput! = {}
+    orderBy: [EmailListOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [EmailList!]
+  emailList(where: EmailListWhereUniqueInput!): EmailList
+  emailListsCount(where: EmailListWhereInput! = {}): Int
+  serviceTokens(
+    where: ServiceTokenWhereInput! = {}
+    orderBy: [ServiceTokenOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [ServiceToken!]
+  serviceToken(where: ServiceTokenWhereUniqueInput!): ServiceToken
+  serviceTokensCount(where: ServiceTokenWhereInput! = {}): Int
+  serviceTokenUsages(
+    where: ServiceTokenUsageWhereInput! = {}
+    orderBy: [ServiceTokenUsageOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [ServiceTokenUsage!]
+  serviceTokenUsage(
+    where: ServiceTokenUsageWhereUniqueInput!
+  ): ServiceTokenUsage
+  serviceTokenUsagesCount(where: ServiceTokenUsageWhereInput! = {}): Int
+  accounts(
+    where: AccountWhereInput! = {}
+    orderBy: [AccountOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Account!]
+  account(where: AccountWhereUniqueInput!): Account
+  accountsCount(where: AccountWhereInput! = {}): Int
+  sessions(
+    where: SessionWhereInput! = {}
+    orderBy: [SessionOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Session!]
+  session(where: SessionWhereUniqueInput!): Session
+  sessionsCount(where: SessionWhereInput! = {}): Int
+  verificationTokens(
+    where: VerificationTokenWhereInput! = {}
+    orderBy: [VerificationTokenOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [VerificationToken!]
+  verificationToken(
+    where: VerificationTokenWhereUniqueInput!
+  ): VerificationToken
+  verificationTokensCount(where: VerificationTokenWhereInput! = {}): Int
+  userAuths(
+    where: UserAuthWhereInput! = {}
+    orderBy: [UserAuthOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [UserAuth!]
+  userAuth(where: UserAuthWhereUniqueInput!): UserAuth
+  userAuthsCount(where: UserAuthWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(

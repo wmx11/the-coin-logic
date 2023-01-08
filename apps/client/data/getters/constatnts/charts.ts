@@ -2,6 +2,7 @@ const withBase = (selector: string) => `query($projectId: ID) {
   marketStats(where: { project: { id: { equals: $projectId } } }, orderBy: { dateAdded: asc }) {
     value: ${selector}
     date: dateAdded
+    annotation
   }
   projects(where: { id: { equals: $projectId } }) {
     network {

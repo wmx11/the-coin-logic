@@ -4,11 +4,9 @@ import { SESSION_TOKEN } from 'constants/general';
 import useLocalStorage from 'hooks/useLocalStorage';
 import { signOut } from 'next-auth/react';
 import { FC } from 'react';
-import { FaUserCog } from 'react-icons/fa';
-import { FiLogOut } from 'react-icons/fi';
-import { MdOutlineAddChart, MdTrackChanges } from 'react-icons/md';
-import { RiFoldersLine } from 'react-icons/ri';
 import routes from 'routes';
+import useUserStore from 'store/useUserStore';
+import { Icons } from 'utils/icons';
 
 type UserNavigationLinksProps = {
   isInMenuProvider?: boolean;
@@ -16,30 +14,42 @@ type UserNavigationLinksProps = {
 };
 
 const UserNavigationLinks: FC<UserNavigationLinksProps> = ({ isInMenuProvider, setIsOpen }) => {
+  const { user } = useUserStore((state) => state);
   const onClick = setIsOpen ? () => setIsOpen(false) : () => false;
   const [storedValue, setValue] = useLocalStorage(SESSION_TOKEN, '');
 
   return (
     <>
-      <MenuNavLink href={routes.profile} icon={<FaUserCog />} isInMenu={isInMenuProvider} onClick={onClick}>
+      <MenuNavLink href={routes.profile} icon={<Icons.User />} isInMenu={isInMenuProvider} onClick={onClick}>
         Profile
       </MenuNavLink>
 
-      <MenuNavLink href={routes.addProject} icon={<MdOutlineAddChart />} isInMenu={isInMenuProvider} onClick={onClick}>
+      <MenuNavLink href={routes.addProject} icon={<Icons.AddProject />} isInMenu={isInMenuProvider} onClick={onClick}>
         Add project
       </MenuNavLink>
 
-      <MenuNavLink href={routes.myProjects} icon={<RiFoldersLine />} isInMenu={isInMenuProvider} onClick={onClick}>
+      {user?.providerProfile?.id || user?.isAdmin ? (
+        <MenuNavLink href={routes.myNexus} icon={<Icons.Nexus />} isInMenu={isInMenuProvider} onClick={onClick}>
+          My Nexus
+        </MenuNavLink>
+      ) : null}
+
+      {!user?.providerProfile?.id || user?.isAdmin ? (
+        <MenuNavLink href={routes.applyForNexus} icon={<Icons.Add />} isInMenu={isInMenuProvider} onClick={onClick}>
+          Apply For Nexus
+        </MenuNavLink>
+      ) : null}
+
+      <MenuNavLink href={routes.myProjects} icon={<Icons.Projects />} isInMenu={isInMenuProvider} onClick={onClick}>
         My projects
       </MenuNavLink>
 
-      <MenuNavLink
-        href={routes.marketingTracker}
-        icon={<MdTrackChanges />}
-        isInMenu={isInMenuProvider}
-        onClick={onClick}
-      >
+      <MenuNavLink href={routes.marketingTracker} icon={<Icons.Track />} isInMenu={isInMenuProvider} onClick={onClick}>
         Marketing Tracker
+      </MenuNavLink>
+
+      <MenuNavLink href={routes.funding} icon={<Icons.Money />} isInMenu={isInMenuProvider} onClick={onClick}>
+        Funding
       </MenuNavLink>
 
       {/* @TODO - Return this with proper invoices generated from Orders */}
@@ -51,7 +61,7 @@ const UserNavigationLinks: FC<UserNavigationLinksProps> = ({ isInMenuProvider, s
       <Divider className="my-2" />
 
       <MenuNavLink
-        icon={<FiLogOut />}
+        icon={<Icons.LogOut />}
         isInMenu={isInMenuProvider}
         onClick={() => {
           setValue('');

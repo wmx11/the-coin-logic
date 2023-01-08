@@ -16,6 +16,11 @@ const routes = {
   quizzes: '/products/quiz',
   quizCreate: `/products/quiz/create`,
   quizUpdate: '/products/quiz/update/${slug}',
+  transcription: '/products/transcription/slug/${slug}',
+  transcriptionId: '/products/transcription/${slug}',
+  transcriptions: '/products/transcription',
+  transcriptionCreate: `/products/transcription/create`,
+  transcriptionUpdate: '/products/transcription/update/${slug}',
   advertisement: `${TEXT_CONTENT}/advertisement`,
   announcements: '/announcements',
   branding: `${TEXT_CONTENT}/branding`,
@@ -34,11 +39,16 @@ const routes = {
   privacyPolicy: `/privacy-policy`,
   projects: `/projects`,
   events: `/events`,
+  nexus: '/nexus',
+  nexusBySlug: '/nexus/${slug}',
   project: `/project`,
   projectArticle: '/project/article/${slug}',
   profile: PROFILE,
   addProject: `${PROFILE}/add-project`,
   myProjects: `${PROFILE}/my-projects`,
+  funding: `${PROFILE}/funding`,
+  applyForNexus: `${PROFILE}/apply-for-nexus`,
+  myNexus: `${PROFILE}/my-nexus`,
   referAProject: `${TEXT_CONTENT}/refer-a-project`,
   referral: `${process.env.NEXT_PUBLIC_BASE_URL}?ref=`,
   resources: `/resources`,
@@ -52,6 +62,11 @@ const routes = {
     ? 'http://localhost:2000/${campaignId}/${target}'
     : 'https://${target}.tclmt.io/${campaignId}',
   api: {
+    controls: {
+      like: `${API}/controls/like`,
+      view: `${API}/controls/view`,
+      follow: `${API}/controls/follow`,
+    },
     cart: {
       createCart: `${API}/cart/create-cart`,
       updateCart: `${API}/cart/update-cart`,
@@ -67,11 +82,13 @@ const routes = {
     },
     user: {
       initSubscription: `${API}/user/init-subscription`,
+      emailSubscribe: `${API}/user/email-subscribe`,
     },
     article: {
       createUpdate: `${API}/article/create-update`,
-      like: `${API}/article/like`,
-      view: `${API}/article/view`,
+    },
+    nexus: {
+      createUpdate: `${API}/nexus/create-update`,
     },
     project: {
       transparency: {
@@ -82,12 +99,13 @@ const routes = {
     },
     votes: {
       getVotes: `${API}/votes/get-votes`,
+      getRatings: `${API}/votes/get-ratings`,
       vote: `${API}/votes/vote`,
       secureVote: `${API}/votes/secure-vote`,
+      secureRate: `${API}/votes/secure-rate`,
       voteCheck: `${API}/votes/vote-check`,
     },
     comments: {
-      like: `${API}/comments/like`,
       report: `${API}/comments/report`,
       remove: `${API}/comments/remove`,
       post: `${API}/comments/post`,
@@ -101,10 +119,13 @@ const routes = {
     products: {
       quiz: {
         createUpdate: `${API}/products/quiz/create-update`,
-        like: `${API}/products/quiz/like`,
-        view: `${API}/products/quiz/view`,
         addWinner: `${API}/products/quiz/add-winner`,
       },
+    },
+    transcribe: {
+      youtube: `${API}/transcriptions/youtube`,
+      upload: `${API}/transcriptions/upload`,
+      check: `${API}/transcriptions/check`,
     },
   },
   external: {

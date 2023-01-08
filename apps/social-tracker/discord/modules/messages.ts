@@ -1,5 +1,6 @@
 import { Message, PartialMessage } from 'discord.js';
 import { prismaClient } from 'tcl-packages/prismaClient';
+import routes from '../api/routes/routes';
 
 type Config = {
   announcementsChannelId: string;
@@ -39,19 +40,60 @@ export const createAnnouncement = async (message: Message, config: Config) => {
       return null;
     }
 
-    const extractedTitle = content.substring(0, 35).concat('', '...');
+    const sanitizedContent = content
+      .replace(/(@everyone)/g, 'everyone')
+      .replace(/(\*\*)/g, '')
+      .trim();
 
-    await prismaClient?.discordAnnouncement.create({
+    const extractedTitle = sanitizedContent.substring(0, 35).concat('', '...');
+    const briefSummary = sanitizedContent.trim().substring(0, 400).concat('', '...');
+
+    const announcement = await prismaClient?.discordAnnouncement.create({
       data: {
         channelId,
         content,
         guildId,
         messageId: id,
         messageUrl: url,
-        projectId: announcementChannel.project.id,
+        projectId: announcementChannel?.project?.id || '',
         title: extractedTitle,
       },
     });
+
+    const project = await prismaClient.project.findUnique({
+      where: {
+        id: announcementChannel?.project?.id || '',
+      },
+      select: {
+        trackData: true,
+      },
+    });
+
+    if (project.trackData) {
+      const marketStat = await prismaClient.marketStat.findFirst({
+        where: {
+          projectId: announcementChannel?.project?.id || '',
+        },
+        orderBy: {
+          dateAdded: 'desc',
+        },
+        take: 1,
+      });
+
+      delete marketStat.id;
+      delete marketStat.dateAdded;
+
+      await prismaClient.marketStat.create({
+        data: {
+          ...marketStat,
+          annotation: JSON.stringify({
+            title: extractedTitle || null,
+            description: briefSummary || null,
+            href: `${routes.tclAnnouncement}${announcement.id}`,
+          }),
+        },
+      });
+    }
   } catch (error) {
     console.log(error);
     return null;

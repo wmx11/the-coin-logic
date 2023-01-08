@@ -1,16 +1,17 @@
 import { Center, Container, Text } from '@mantine/core';
 import GradientButton from 'components/Buttons/GradientButton';
-import AreaChartGroup from 'components/Charts/AreaChartGroup';
 import Meta from 'components/Meta';
 import NotificationBar from 'components/NotificationBar';
 import Paper from 'components/Paper';
 import PaymentPlanBadge from 'components/PaymentPlans/PaymentPlanBadge';
+import SubscribeToEmail from 'components/SubscribeToEmail';
 import GradientText from 'components/Text/GradientText';
 import GradientTitle from 'components/Text/GradientTitle';
 import { Trend } from 'components/Trend';
-import withRedisCache from 'data/withRedisCache';
+import withRedisCache from 'data/redis';
 import useUser from 'hooks/useUser';
 import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import { FC, useEffect } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
 import useChartStore from 'store/useChartStore';
@@ -18,14 +19,11 @@ import { PaymentPlan, Tag } from 'types';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import toCurrency from 'utils/toCurrency';
 import Announcements from 'views/project/Announcements';
-import Articles from 'views/project/Articles';
 import AuditsAndKyc from 'views/project/AuditsAndKyc';
 import Controls from 'views/project/Controls';
 import Events from 'views/project/Events';
-import Interactions from 'views/project/Interactions';
 import Markets from 'views/project/Markets';
 import RelatedProjects from 'views/project/RelatedProjects';
-import SocialAnalysisData from 'views/project/SocialAnalysisData';
 import TransactionVolume from 'views/project/TransactionVolume';
 import TransparencyScore from 'views/project/TransparencyScore';
 import { Badges } from '../../components/Badges';
@@ -34,7 +32,6 @@ import { ProjectTitle } from '../../components/ProjectTitle';
 import TrackVitalsDisclaimer from '../../components/TrackVitalsDisclaimer';
 import { getProjectAndMarketStatsBySlug } from '../../data/getters';
 import AboutProject from '../../views/project/AboutProject';
-import HoldersData from '../../views/project/HoldersData';
 import MarketData from '../../views/project/MarketData';
 
 type ProjectProps = {
@@ -43,7 +40,9 @@ type ProjectProps = {
 
 const project: FC<ProjectProps> = ({ projectData }) => {
   const chartStore = useChartStore((state) => state);
+
   const { project } = projectData;
+
   const {
     notifications,
     displayTransparencyScore,
@@ -54,6 +53,7 @@ const project: FC<ProjectProps> = ({ projectData }) => {
     trackPrice,
     trackMarketCap,
   } = project;
+
   const { user } = useUser();
 
   if (!project) {
@@ -65,6 +65,13 @@ const project: FC<ProjectProps> = ({ projectData }) => {
       </Container>
     );
   }
+
+  const SocialAnalysisData = dynamic(() => import('views/project/SocialAnalysisData'));
+  const AreaChartGroup = dynamic(() => import('components/Charts/AreaChartGroup'));
+  const HoldersData = dynamic(() => import('../../views/project/HoldersData'));
+  const Articles = dynamic(() => import('views/project/Articles'));
+  const Transcriptions = dynamic(() => import('views/project/Transcriptions'));
+  const Interactions = dynamic(() => import('views/project/Interactions'));
 
   // Clear all charts data on unmount
   useEffect(() => () => chartStore.clearAll(), []);
@@ -190,6 +197,10 @@ const project: FC<ProjectProps> = ({ projectData }) => {
       </div>
 
       <Container className="py-10">
+        {(trackData || trackPrice) && chartStore.isInitial ? (
+          <div className="my-4">{chartStore.chartSection === 'marketData' && <AreaChartGroup />}</div>
+        ) : null}
+
         {trackData ? (
           <div className="my-16">
             <TransactionVolume data={projectData} />
@@ -197,10 +208,14 @@ const project: FC<ProjectProps> = ({ projectData }) => {
         ) : null}
 
         {trackData ? (
-          <div className="my-16">
-            <MarketData data={projectData} />
-            <div className="my-4">{chartStore.chartSection === 'marketData' && <AreaChartGroup />}</div>
-          </div>
+          <>
+            <div className="my-16">
+              <MarketData data={projectData} />
+            </div>
+            {!chartStore.isInitial ? (
+              <div className="my-4">{chartStore.chartSection === 'marketData' && <AreaChartGroup />}</div>
+            ) : null}
+          </>
         ) : null}
 
         {trackHolders ? (
@@ -224,11 +239,15 @@ const project: FC<ProjectProps> = ({ projectData }) => {
         ) : null}
 
         <div className="mb-16">
-          <Interactions data={projectData} />
+          <Transcriptions data={projectData} />
         </div>
 
-        <TrackVitalsDisclaimer />
+        <div className="mb-16">
+          <Interactions data={projectData} />
+        </div>
       </Container>
+      <SubscribeToEmail />
+      <TrackVitalsDisclaimer />
     </>
   );
 };

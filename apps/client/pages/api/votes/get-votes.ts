@@ -10,7 +10,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const responseHandler = response(res);
 
   const getVotes = async () => {
-    const { type, projectId, creatorId, isStartOfDay } = req.body;
+    const { type, projectId, providerId, isStartOfDay } = req.body;
 
     const selectStartOfDay = isStartOfDay ? { dateAdded: { gte: startOfDay(new Date()) } } : {};
 
@@ -24,7 +24,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           equals: type,
         },
         projectId: projectId || undefined,
-        creatorId: creatorId || undefined,
+        providerId: providerId || undefined,
         ...selectStartOfDay,
       },
     });

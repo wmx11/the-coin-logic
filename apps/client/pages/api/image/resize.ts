@@ -10,6 +10,7 @@ type ImageRequest = {
     top: string;
     height: string;
     width: string;
+    fit: 'contain' | 'fill' | 'cover' | 'inside' | 'outside';
   };
   files: {
     imageData: {
@@ -36,7 +37,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         });
       });
 
-      const { height, width } = data.fields;
+      const { height, width, fit } = data.fields;
 
       if (!height || !width) {
         return responseHandler.badRequest('Heigh and width properties must be specified.');
@@ -59,7 +60,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .resize({
           width: parseFloat(width as string),
           height: parseFloat(height as string),
-          fit: 'contain',
+          fit: fit || 'contain',
           background: { r: 0, g: 0, b: 0, alpha: 0 },
         })
         .png({ progressive: true, compressionLevel: 9 })

@@ -87,7 +87,7 @@ const PaymentForm: FC<PaymentFormProps> = ({ item }) => {
           <div>
             <Text weight={600}>Product</Text>
             <Text>{item?.product?.name}</Text>
-            {item.paymentPlan ? (
+            {item?.paymentPlan ? (
               <Text size="xs" color="violet">
                 Payment Plan: {item?.paymentPlan?.name}
               </Text>
@@ -99,7 +99,7 @@ const PaymentForm: FC<PaymentFormProps> = ({ item }) => {
           ) : (
             <div>
               {toCurrency(item?.price as number) || '$0.00'}
-              {item.product?.isMonthly ? '/month' : ''}
+              {item?.product?.isMonthly ? '/month' : ''}
             </div>
           )}
         </div>
@@ -233,9 +233,9 @@ const PaymentForm: FC<PaymentFormProps> = ({ item }) => {
 
             <div className="text-right">
               <Text weight={600}>
-                Discount: {item?.price === 0 ? '0%' : `${item?.product?.discount || item?.discount}%`}
+                Discount: {item?.price === 0 ? '0%' : `${item?.product?.discount || item?.discount || 0}%`}
               </Text>
-              <Text weight={600}>Tax VAT: {item?.price === 0 ? '0%' : `${item?.tax}%`}</Text>
+              <Text weight={600}>Tax VAT: {item?.price === 0 ? '0%' : `${item?.tax || 0}%`}</Text>
               <Text weight={600} size="xl">
                 Total Billed: {item?.price === 0 ? '$0' : toCurrency((total as number) || 0) || '$0'}
               </Text>

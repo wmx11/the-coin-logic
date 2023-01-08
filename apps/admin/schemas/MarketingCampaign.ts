@@ -43,10 +43,6 @@ const MarketingCampaign: Lists = {
       notes: text({ ui: { displayMode: 'textarea' } }),
       agency: text({ ui: { description: 'Name of the agency we are working with.' } }),
       agencyUrl: text({ ui: { description: 'URL of the agency we are working with.' } }),
-      creator: relationship({
-        ref: 'Creator.marketingCampaigns',
-        ui: { description: 'Select from a list of creators on TCL' },
-      }),
       project: relationship({ ref: 'Project' }),
       marketStatSnapshot: json({
         ui: { description: 'A market data snapshot taken when STARTING the campaign.' },

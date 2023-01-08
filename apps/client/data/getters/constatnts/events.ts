@@ -19,16 +19,16 @@ project {
 `;
 
 export const GET_EVENTS = `
-query ($take: Int, $skip: Int, $date: DateTime) {
-  discordEvents(take: $take, skip: $skip, orderBy: { scheduledStartTimestamp: asc }, where: { scheduledStartTimestamp: { gt: $date } }) {
+query ($take: Int, $skip: Int) {
+  discordEvents(take: $take, skip: $skip, orderBy: { scheduledStartTimestamp: desc }) {
     ${EVENTS_SELECTOR}
   }
-  discordEventsCount(where: { scheduledStartTimestamp: { gt: $date } })
+  discordEventsCount
 }`;
 
 export const GET_EVENTS_BY_SLUG = `
 query ($take: Int, $skip: Int, $slug: String, $date: DateTime) {
-  discordEvents(take: $take, skip: $skip, orderBy: { scheduledStartTimestamp: asc }, where: { scheduledStartTimestamp: { gt: $date }, project: { slug: { equals: $slug } } } ) {
+  discordEvents(take: $take, skip: $skip, orderBy: { scheduledStartTimestamp: desc }, where: { project: { slug: { equals: $slug } } } ) {
     ${EVENTS_SELECTOR}
   }
   discordEventsCount(where: { scheduledStartTimestamp: { gt: $date }, project: { slug: { equals: $slug } } } )
@@ -43,7 +43,7 @@ query ($id: ID) {
 
 export const GET_EVENTS_HIGHLIGHTS = `
 query ($date: DateTime) {
-  discordEvents(orderBy: { scheduledStartTimestamp: asc }, where: { scheduledStartTimestamp: { gt: $date } }, take: 3 ) {
+  discordEvents(orderBy: { scheduledStartTimestamp: desc }, where: { scheduledStartTimestamp: { gt: $date } }, take: 3 ) {
     ${EVENTS_SELECTOR}
   }
 }`;

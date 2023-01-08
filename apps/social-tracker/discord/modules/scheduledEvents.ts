@@ -1,6 +1,7 @@
 import { GuildScheduledEvent } from 'discord.js';
 import { prismaClient, PrismaSchema } from 'tcl-packages/prismaClient';
 import { DiscordEventUpdateInput } from 'tcl-packages/types';
+import routes from '../api/routes/routes';
 
 export const createScheduledEvent = async (event: PrismaSchema.DiscordEventUncheckedCreateInput) => {
   try {
@@ -21,6 +22,7 @@ export const createScheduledEvent = async (event: PrismaSchema.DiscordEventUnche
       select: {
         id: true,
         discord: true,
+        trackData: true,
       },
     });
 
@@ -28,13 +30,39 @@ export const createScheduledEvent = async (event: PrismaSchema.DiscordEventUnche
       return null;
     }
 
-    await prismaClient?.discordEvent.create({
+    const discordEvent = await prismaClient?.discordEvent.create({
       data: {
         ...(event as PrismaSchema.DiscordEventUncheckedCreateInput),
         inviteUrl: event?.inviteUrl || project?.discord || undefined,
         projectId: project?.id || undefined,
       },
     });
+
+    if (project.trackData) {
+      const marketStat = await prismaClient.marketStat.findFirst({
+        where: {
+          projectId: project?.id || '',
+        },
+        orderBy: {
+          dateAdded: 'desc',
+        },
+        take: 1,
+      });
+
+      delete marketStat.id;
+      delete marketStat.dateAdded;
+
+      await prismaClient.marketStat.create({
+        data: {
+          ...marketStat,
+          annotation: JSON.stringify({
+            title: event.name || null,
+            description: event.description || null,
+            href: `${routes.tclEvent}${discordEvent?.id}`,
+          }),
+        },
+      });
+    }
   } catch (error) {
     return console.log(error);
   }

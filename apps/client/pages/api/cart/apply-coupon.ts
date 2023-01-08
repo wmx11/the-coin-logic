@@ -76,7 +76,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!revoke && projectId && (acceptFromNetworks.length > 0 || acceptFromReferrers.length > 0)) {
       const project = await prisma?.project.findUnique({
         where: {
-          id: projectId,
+          id: projectId || '',
         },
         select: {
           networkId: true,

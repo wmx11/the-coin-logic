@@ -18,7 +18,7 @@ type PostComment = {
   sentiment?: string;
   userId: string;
   projectId?: string;
-  creatorId?: string;
+  providerId?: string;
 };
 
 const useComments = (data?: UseCommentsProps) => {
@@ -34,7 +34,7 @@ const useComments = (data?: UseCommentsProps) => {
     setCount(commentsCount);
   }, [commentsCount]);
 
-  const postComment = async ({ content, sentiment, userId, projectId, creatorId }: PostComment) => {
+  const postComment = async ({ content, sentiment, userId, projectId, providerId }: PostComment) => {
     if (requireLogin()) {
       return false;
     }
@@ -51,7 +51,7 @@ const useComments = (data?: UseCommentsProps) => {
             sentiment,
             userId,
             projectId,
-            creatorId,
+            providerId,
           },
         },
         userId,
@@ -67,7 +67,13 @@ const useComments = (data?: UseCommentsProps) => {
     }
   };
 
-  const fetchComments = async (fetcher: (pagination: Pagination) => Promise<[Comment[], number]>) => {
+  const fetchComments = async (
+    fetcher: (pagination: Pagination) => Promise<[Comment[], number]>,
+  ): Promise<void | null> => {
+    if (!fetcher) {
+      return null;
+    }
+
     setIsLoading(true);
     try {
       const [data, count] = await fetcher(getPagination());
@@ -93,9 +99,9 @@ const useComments = (data?: UseCommentsProps) => {
       const { data } = await signedRequest<{ id: string; userId: string }>(
         {
           type: 'post',
-          url: routes.api.comments.like,
+          url: routes.api.controls.like,
           data: {
-            id: comment.id,
+            commentId: comment.id,
             userId,
           },
         },

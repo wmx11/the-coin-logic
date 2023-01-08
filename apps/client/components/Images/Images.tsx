@@ -10,6 +10,7 @@ type ImageProps = {
 
 export const ImageWithPlaceholder = ({ image, width, height, alt }: ImageProps) => {
   const [src, setSrc] = useState<string | undefined>(image);
+  
   return src ? (
     <Image
       className="rounded-md"

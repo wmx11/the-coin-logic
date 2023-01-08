@@ -2,8 +2,10 @@ import { isAfter, isToday } from 'date-fns';
 import { IncomingMessage } from 'http';
 import path from 'path';
 import { CartItem } from 'types';
-import { products as productsSku } from 'types/Products';
+import { products as productsSku } from 'utils/products';
 import { formatDate } from './formatters';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
 
 export const isDev = process.env.NODE_ENV !== 'production';
 
@@ -89,7 +91,7 @@ export const getIpAddress = (req: IncomingMessage) => {
 };
 
 export const calculateItemTotal = (item: CartItem, duration: string | number) => {
-  const discount = item.product?.discount ? item.product?.discount : item.discount;
+  const discount = item?.product?.discount ? item?.product?.discount : item?.discount;
   let price = (item?.price as number) * parseInt(duration as string, 10) || 0;
 
   if ((discount as number) > 0) {
@@ -114,6 +116,13 @@ export const hasMarketingTrackerSubscription = (subscription: { sku: string }) =
 
 export const LINKS_REGEX = /(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/g;
 
+export const YOUTUBE_REGEX =
+  /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/g;
+
+export const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+
+export const validateYouTubeUrl = (url: string) => YOUTUBE_REGEX.test(url);
+
 export const addLinksToText = (string: string) =>
   string.replace(
     LINKS_REGEX,
@@ -129,4 +138,32 @@ export const resolveImagePaths = () => {
     logos: getPath('logos'),
     images: getPath('images'),
   };
+};
+
+export const msToTime = (s: number) => {
+  const ms = s % 1000;
+  s = (s - ms) / 1000;
+  const secs = s % 60;
+  s = (s - secs) / 60;
+  const mins = s % 60;
+  const hrs = (s - mins) / 60;
+
+  const seconds = secs < 10 ? `0${secs}` : secs;
+  const minutes = mins < 10 ? `0${mins}` : mins;
+  const hours = hrs < 10 ? `0${hrs}` : hrs;
+
+  if (hrs === 0) {
+    return `${minutes}:${seconds}`;
+  }
+
+  return `${hours}:${minutes}:${seconds}`;
+};
+
+export const handleErrorMessage = (error: unknown, messageSetter?: (message: string) => void) => {
+  if (error === undefined) {
+    return null;
+  }
+  const errors = error as AxiosError<{ errorMessage: string }>;
+  messageSetter && messageSetter(errors?.response?.data?.errorMessage || '');
+  toast.error(errors?.response?.data?.errorMessage);
 };

@@ -1,5 +1,6 @@
 import { Container, Text } from '@mantine/core';
-import { BlogPosts } from 'components/BlogPosts';
+import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundWrapper';
+import { ContentCardsCollection } from 'components/ContentCollection';
 import PaginationFilter from 'components/Filters/PaginationFilter';
 import PerPageFilter from 'components/Filters/PerPageFilter';
 import ProjectsFilter from 'components/Filters/ProjectsFilter';
@@ -8,7 +9,7 @@ import Meta from 'components/Meta';
 import GradientTitle from 'components/Text/GradientTitle';
 import { PER_PAGE } from 'constants/general';
 import { getBlogPosts } from 'data/getters';
-import withRedisCache from 'data/withRedisCache';
+import withRedisCache from 'data/redis';
 import useArticlesFilter from 'hooks/useArticlesFilter';
 import { FC, useEffect } from 'react';
 import { Content } from 'types';
@@ -32,20 +33,22 @@ const Articles: FC<ArticlesProps> = ({ blogPosts, blogPostsCount }) => {
         title="Cryptocurrency articles, news, educational content | Coin Logic"
         description="Explore The Coin Logic product updates, cryptocurrency news, educational content, and how crypto, and DeFi communities can leverage data."
       />
-      <Container className="py-10">
-        <div className="mb-8">
+      <SmallBackgroundWrapper>
+        <div className="text-center">
           <GradientTitle>The Coin Logic Articles & Blog</GradientTitle>
-          <Text size="xs" color="dimmed">
+          <Text size="sm" color="dimmed">
             Jump into The Coin Logic product updates, news, educational content, and how communities, and cryptocurrency
             projects can leverage data
           </Text>
         </div>
+      </SmallBackgroundWrapper>
+      <Container className="py-10">
         <div className="my-4">
           <ProjectsFilter description="Choose a project to narrow down your results." />
         </div>
 
         {(articles || blogPosts) && (articles || blogPosts).length ? (
-          <BlogPosts data={articles || blogPosts} />
+          <ContentCardsCollection data={articles || blogPosts} />
         ) : (
           <div className="py-10">
             <GrayBox>No articles here 😮</GrayBox>
