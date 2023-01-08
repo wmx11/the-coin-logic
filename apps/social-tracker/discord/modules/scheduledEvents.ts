@@ -55,11 +55,11 @@ export const createScheduledEvent = async (event: PrismaSchema.DiscordEventUnche
       await prismaClient.marketStat.create({
         data: {
           ...marketStat,
-          annotation: JSON.stringify({
+          annotation: {
             title: event.name || null,
             description: event.description || null,
             href: `${routes.tclEvent}${discordEvent?.id}`,
-          }),
+          },
         },
       });
     }

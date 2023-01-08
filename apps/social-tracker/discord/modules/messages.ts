@@ -86,11 +86,11 @@ export const createAnnouncement = async (message: Message, config: Config) => {
       await prismaClient.marketStat.create({
         data: {
           ...marketStat,
-          annotation: JSON.stringify({
+          annotation: {
             title: extractedTitle || null,
             description: briefSummary || null,
             href: `${routes.tclAnnouncement}${announcement.id}`,
-          }),
+          },
         },
       });
     }
