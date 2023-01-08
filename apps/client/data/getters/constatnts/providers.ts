@@ -46,6 +46,7 @@ query($slug: String, $userId: ID) {
     slug
     summary
     enabled
+    isListed
     tags {
       id
       name
