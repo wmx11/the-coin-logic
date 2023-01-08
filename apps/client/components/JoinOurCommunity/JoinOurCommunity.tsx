@@ -9,7 +9,7 @@ function JoinOurCommunity() {
     <div className="my-52">
       <BackgroundWrapper className="py-52">
         <Container>
-          <div className="flex flex-row-reverse items-end gap-8">
+          <div className="flex flex-col md:flex-row-reverse items-end gap-8">
             <div>
               <Image src={JoinCommunity} />
             </div>

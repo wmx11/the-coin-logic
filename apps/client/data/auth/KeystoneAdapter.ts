@@ -171,7 +171,9 @@ export function KeystoneAdapter(p: PrismaClient, req: NextApiRequest, res: NextA
 
       // If user is logging in through a provider (Not Credentials)
       if (authUser?.access_token) {
-        const decoded = jwt.verify(authUser?.access_token, process.env.NEXTAUTH_SECRET || '') as { passphrase: string };
+        const decoded = jwt.verify(authUser?.access_token || '', process.env.NEXTAUTH_SECRET || '') as {
+          passphrase: string;
+        };
 
         // Authenticate the user against the keystone DB in order to acquire its access token (Used for interacting with apollo)
         const { sessionToken } = await keystoneAuthenticate({
@@ -183,7 +185,11 @@ export function KeystoneAdapter(p: PrismaClient, req: NextApiRequest, res: NextA
       }
 
       const sessionTokenEncoded = await tokens.sign<{ id: string; email: string; accessToken: string }>(
-        { id: dataCopy.userId as string, email: authUser?.email as string, accessToken: dataCopy.sessionToken },
+        {
+          id: dataCopy.userId as string,
+          email: authUser?.email as string,
+          accessToken: dataCopy.sessionToken,
+        },
         process.env.NEXT_PUBLIC_SIGNED_SECRET || '',
       );
 

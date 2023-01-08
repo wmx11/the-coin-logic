@@ -33,7 +33,7 @@ const SubscribeToEmail = () => {
     <div className="my-52">
       <BackgroundWrapper className="py-52">
         <Container>
-          <div className="flex items-end gap-8">
+          <div className="flex flex-col md:flex-row items-end gap-8">
             <div>
               <Image src={SubscribeImage} />
             </div>
