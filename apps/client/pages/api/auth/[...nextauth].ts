@@ -89,15 +89,9 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
             const cookies = new Cookies(req, res);
 
-            console.log(useSecureCookies ? NEXT_AUTH_SESSION_TOKEN_SECURE : NEXT_AUTH_SESSION_TOKEN);
-
-            cookies.set(
-              useSecureCookies ? NEXT_AUTH_SESSION_TOKEN_SECURE : NEXT_AUTH_SESSION_TOKEN,
-              session.sessionToken,
-              {
-                expires,
-              },
-            );
+            cookies.set(NEXT_AUTH_SESSION_TOKEN, session.sessionToken, {
+              expires,
+            });
           }
           return true;
         }
@@ -128,7 +122,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
           req.method === 'POST'
         ) {
           const cookies = new Cookies(req, res);
-          const cookie = cookies.get(useSecureCookies ? NEXT_AUTH_SESSION_TOKEN_SECURE : NEXT_AUTH_SESSION_TOKEN);
+          const cookie = cookies.get(NEXT_AUTH_SESSION_TOKEN);
 
           if (cookie) {
             return cookie;
@@ -152,10 +146,9 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
         return decode(token);
       },
     },
-    useSecureCookies: useSecureCookies,
     cookies: {
       sessionToken: {
-        name: useSecureCookies ? NEXT_AUTH_SESSION_TOKEN_SECURE : NEXT_AUTH_SESSION_TOKEN,
+        name: NEXT_AUTH_SESSION_TOKEN,
         options: {
           httpOnly: true,
           sameSite: 'lax',
