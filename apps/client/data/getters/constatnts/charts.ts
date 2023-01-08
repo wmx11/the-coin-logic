@@ -16,6 +16,7 @@ const withSocialsBase = (selector: string) => `query($projectId: ID) {
   socialStats(where: { project: { id: { equals: $projectId } } }, orderBy: { dateAdded: asc }) {
     value: ${selector}
     date: dateAdded
+    annotation
   }
 }`;
 

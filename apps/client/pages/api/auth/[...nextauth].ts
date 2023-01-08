@@ -1,4 +1,4 @@
-import { NEXT_AUTH_SESSION_TOKEN } from 'constants/general';
+import { NEXT_AUTH_SESSION_TOKEN, NEXT_AUTH_SESSION_TOKEN_SECURE } from 'constants/general';
 import Cookies from 'cookies';
 import { KeystoneAdapter } from 'data/auth/KeystoneAdapter';
 import { keystoneAuthenticate } from 'data/auth/keystoneAuthenticate';
@@ -8,6 +8,7 @@ import { decode, encode } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import { PrismaClient, prismaClient } from 'tcl-packages/prismaClient';
+import { isDev } from 'utils/utils';
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   const providers = [
@@ -86,7 +87,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
             const cookies = new Cookies(req, res);
 
-            cookies.set(NEXT_AUTH_SESSION_TOKEN, session.sessionToken, {
+            cookies.set(isDev ? NEXT_AUTH_SESSION_TOKEN : NEXT_AUTH_SESSION_TOKEN_SECURE, session.sessionToken, {
               expires,
             });
           }

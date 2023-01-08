@@ -29,7 +29,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return responseHandler.badRequest('Missing URL');
     }
 
-    const user = await prisma?.user.findUnique({
+    const user = await prismaClient?.user.findUnique({
       where: {
         id: auth.id,
       },

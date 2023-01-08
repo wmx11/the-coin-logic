@@ -1,5 +1,6 @@
 import { Button, Divider, PasswordInput, Stack, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
+import AuthGoogleButton from 'components/Auth/AuthGoogleButton';
 import GradientButton from 'components/Buttons/GradientButton';
 import ErrorMessage from 'components/ErrorMessage';
 import ResetPasswordButton from 'components/ResetPasswordButton';
@@ -9,9 +10,8 @@ import { getSession, signIn, useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import useLoginFlowStore from 'store/useLoginFlowStore';
-import { UserLogin, userLoginSchema } from '../../../schemas/user';
-import AuthGoogleButton from 'components/Auth/AuthGoogleButton';
 import { tokens } from 'utils/tokens/tokens';
+import { UserLogin, userLoginSchema } from '../../../schemas/user';
 
 const ERROR_MESSAGE = 'Your email address or password is invalid. Please try again.';
 
@@ -31,7 +31,11 @@ const SignInContent = () => {
 
   const handleSubmit = async ({ email, password }: UserLogin) => {
     try {
-      const data = await signIn('credentials', { redirect: false, email: email.trim().toLowerCase(), password });
+      const data = await signIn('credentials', {
+        redirect: false,
+        email: email.trim().toLowerCase(),
+        password,
+      });
 
       if (data?.status === 401) {
         setErrorMessage(ERROR_MESSAGE);

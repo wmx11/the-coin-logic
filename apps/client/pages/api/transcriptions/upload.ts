@@ -48,7 +48,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return responseHandler.badRequest(`.${extension} is not a supported file format.`);
     }
 
-    const user = await prisma?.user.findUnique({
+    const user = await prismaClient?.user.findUnique({
       where: {
         id: auth.id,
       },

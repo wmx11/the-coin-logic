@@ -10,7 +10,7 @@ export default withAuth(function middleware(req) {}, {
 
       try {
         const verified = await tokens.verify<{ id: string; email: string; accessToken: string }>(
-          cookieSecure || cookie as string,
+          cookieSecure || (cookie as string),
           process.env.NEXT_PUBLIC_SIGNED_SECRET || '',
         );
         return !!verified?.id && !!verified?.email && !!verified?.accessToken;

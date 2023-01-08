@@ -35,7 +35,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     if (data.data.status !== 'completed') {
-      
       if (data.data.status === 'error') {
         await prismaClient?.transcription.delete({
           where: {
@@ -95,7 +94,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       ((content?.duration as number) || 0) * productsServices.transcription.audioTokens +
       productsServices.transcription.textTokens * (results?.usage?.total_tokens as number);
 
-    const serviceToken = await prisma?.serviceToken.update({
+    const serviceToken = await prismaClient?.serviceToken.update({
       where: {
         id: updatedTranscript?.user?.serviceTokens?.id as string,
       },
@@ -104,7 +103,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     });
 
-    await prisma?.serviceTokenUsage.create({
+    await prismaClient?.serviceTokenUsage.create({
       data: {
         used: tokensUsed,
         description: `Transcription. Duration: ${msToTime((content?.duration as number) * 1000)}. Words: ${
