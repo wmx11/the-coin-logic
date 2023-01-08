@@ -32,9 +32,9 @@ const MyNexus: FC<MyNexusProps> = ({ provider }) => {
           </div>
         </>
       ) : (
-        <GrayBox>
+        <GrayBox className="my-4">
           <div className="text-center">
-            <Text>You currently don't have a NEXUS profile</Text>
+            <Text className="mb-4">You currently don't have a NEXUS profile</Text>
             <Link href={routes.applyForNexus} passHref>
               <GradientButton component="a">Apply For NEXUS</GradientButton>
             </Link>
