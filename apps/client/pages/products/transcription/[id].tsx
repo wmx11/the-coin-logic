@@ -10,6 +10,7 @@ import Robot from 'public/images/robot.svg';
 import { FC, useEffect, useState } from 'react';
 import routes from 'routes';
 import useSWR from 'swr';
+import { prismaClient } from 'tcl-packages/prismaClient';
 
 type TranscriptionIdPageProps = {
   transcriptionId: string;
@@ -70,7 +71,7 @@ const TranscriptionIdPage: FC<TranscriptionIdPageProps> = ({ transcriptionId, id
 export default TranscriptionIdPage;
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }) => {
-  const data = await prisma?.transcription.findUnique({
+  const data = await prismaClient?.transcription.findUnique({
     where: { id: params?.id as string },
     select: { transcriptionId: true },
   });

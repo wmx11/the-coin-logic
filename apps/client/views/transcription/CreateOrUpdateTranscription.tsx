@@ -107,6 +107,7 @@ const CreateOrUpdateTranscription = () => {
       if (req) {
         router.push(routes.transcriptionId.replace('${id}', req?.data?.data?.id));
       }
+      setIsLoading(false);
     } catch (error) {
       handleErrorMessage(error, setErrorMessage);
       setIsLoading(false);

@@ -7,6 +7,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import path from 'path';
 import routes from 'routes';
 import { prismaClient } from 'tcl-packages/prismaClient';
+import { Transcription, TranscriptionUpdateArgs } from 'types';
 import { transcribe, upload } from 'utils/audioTranscription/assembly';
 import { productsServices } from 'utils/products';
 import toLocaleString from 'utils/toLocaleString';
@@ -78,7 +79,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const filePath = await videoUploadPromise;
 
-    const videoTranscribePromise = new Promise((resolve, reject) => {
+    const videoTranscribePromise = new Promise((resolve: (data: { id: string }) => void, reject) => {
       fs.readFile(filePath as string, async (err, data) => {
         if (err) {
           return reject(err);
@@ -115,7 +116,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
           });
 
-          resolve(transcription);
+          resolve(transcription as { id: string });
         } catch (error) {
           return reject(error as string);
         }
@@ -130,7 +131,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     });
 
-    return responseHandler.ok(results, fileName);
+    return responseHandler.ok({ id: results?.id }, fileName);
   };
 
   return requestHandler.signedPost(uploadYoutubeVideo);
