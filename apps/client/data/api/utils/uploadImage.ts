@@ -19,7 +19,7 @@ export const handleImageUpload = async <T>({
   prefix,
   isUpdate,
   instance,
-  storageName,
+  storageName = 'images',
 }: HandleImageUploadProps<T>) => {
   if (!image) {
     return {};
@@ -37,7 +37,7 @@ export const handleImageUpload = async <T>({
 
   const resolvedPath = resolveImagePaths();
 
-  if (isUpdate && instance) {
+  if (isUpdate && instance && instance[imageId]) {
     try {
       fs.unlink(
         `${resolvedPath[storageName as keyof typeof resolvedPath]}/${instance[imageId]}.${instance[imageExtension]}`,
