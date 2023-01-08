@@ -3,6 +3,7 @@ id
 name
 nickname
 enabled
+isListed
 slug
 summary
 tags {
