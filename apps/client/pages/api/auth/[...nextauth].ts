@@ -8,6 +8,7 @@ import { decode, encode } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import { PrismaClient, prismaClient } from 'tcl-packages/prismaClient';
+import { isDev } from 'utils/utils';
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   const providers = [
@@ -84,17 +85,13 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
               userId: (userAuth?.id as string) || '',
             });
 
-            console.log(req.headers.host);
+            console.log(isDev);
 
             const cookies = new Cookies(req, res);
 
-            cookies.set(
-              req.headers.host?.includes('https') ? NEXT_AUTH_SESSION_TOKEN_SECURE : NEXT_AUTH_SESSION_TOKEN,
-              session.sessionToken,
-              {
-                expires,
-              },
-            );
+            cookies.set(isDev ? NEXT_AUTH_SESSION_TOKEN : NEXT_AUTH_SESSION_TOKEN_SECURE, session.sessionToken, {
+              expires,
+            });
           }
           return true;
         }
