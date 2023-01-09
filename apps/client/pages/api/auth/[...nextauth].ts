@@ -1,14 +1,14 @@
-import { NEXT_AUTH_SESSION_TOKEN, NEXT_AUTH_SESSION_TOKEN_SECURE } from 'constants/general';
+import { NEXT_AUTH_SESSION_TOKEN } from 'constants/general';
 import Cookies from 'cookies';
 import { KeystoneAdapter } from 'data/auth/KeystoneAdapter';
 import { keystoneAuthenticate } from 'data/auth/keystoneAuthenticate';
+import { addMinutes, getTime } from 'date-fns';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextAuth from 'next-auth';
 import { decode, encode } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import { PrismaClient, prismaClient } from 'tcl-packages/prismaClient';
-import { isDev } from 'utils/utils';
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   const providers = [
@@ -56,7 +56,8 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
         ) {
           if (user) {
             const sessionToken = (user?.sessionToken as string) || '';
-            const expires = new Date(new Date().getTime() + 30 * 60 * 1000);
+
+            const expires = addMinutes(new Date(), 30);
 
             const userAccount = await adapter.getUserByAccount({
               providerAccountId: (account?.providerAccountId as string) || '',
@@ -73,11 +74,11 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
             }
 
             if (userAccount === null) {
-              adapter.linkAccount({
+              await adapter.linkAccount({
                 ...account,
                 userId: userAuth?.id,
                 access_token: sessionToken,
-                expires_at: new Date(expires).getTime(),
+                expires_at: Math.trunc(getTime(expires) / 1000),
               });
             }
 
