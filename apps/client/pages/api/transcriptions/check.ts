@@ -63,7 +63,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         duration: audio_duration,
         utterances: utterances,
         wordCount: words.length,
-        generatedText,
+        generatedText: cleanedGeneratedText
       };
 
       const updatedTranscript = await prismaClient?.transcription.update({
