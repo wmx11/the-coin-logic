@@ -29,6 +29,10 @@ type ProfilePageProps = {
 };
 
 const ProfilePage: FC<ProfilePageProps> = ({ data }) => {
+  if (!data) {
+    return null;
+  }
+
   const {
     id,
     name,

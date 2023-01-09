@@ -54,13 +54,19 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       instance: profile as Provider,
     });
 
+    const tags = formData?.fields?.tags && formData?.fields?.tags?.split(',').map((id) => ({ id }));
+
     const dataObject = {
-      ...(omit(formData.fields, ['isUpdate', 'providerId']) as PrismaSchema.ProviderCreateInput),
-      tags: {
-        connect: formData?.fields?.tags?.split(',').map((id) => ({ id })) || [],
-      },
+      ...(omit(formData.fields, ['isUpdate', 'providerId', 'tags']) as PrismaSchema.ProviderCreateInput),
       priceFrom: parseInt(formData?.fields?.priceFrom as unknown as string, 10) || 0,
       priceTo: parseInt(formData?.fields?.priceTo as unknown as string, 10) || 0,
+      ...(tags.length > 0
+        ? {
+            tags: {
+              connect: tags,
+            },
+          }
+        : {}),
       ...(isUpdate
         ? {}
         : {
@@ -70,7 +76,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
               },
             },
           }),
-
       ...imageData,
       ...backgroundImageData,
     };

@@ -7,11 +7,12 @@ import GradientButton from 'components/Buttons/GradientButton';
 import { mantineCache } from 'mantine-cache';
 import { SessionProvider } from 'next-auth/react';
 import dynamic from 'next/dynamic';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import { FaArrowUp } from 'react-icons/fa';
 import Layout from '../components/Layout';
 import client from '../data/apollo-client';
+import useLoginFlowStore from 'store/useLoginFlowStore';
 
 type ProvidersWrapperTypes = {
   children: React.ReactElement;
@@ -34,7 +35,8 @@ const web3Config = {
 };
 
 const ProvidersWrapper: FC<ProvidersWrapperTypes> = ({ children }): React.ReactElement => {
-  const [scroll, scrollTo] = useWindowScroll();
+  // const isModalOpen = useLoginFlowStore((state) => state.isOpen);
+  // const [scroll, scrollTo] = !isModalOpen ? useWindowScroll() : [null, null];
 
   const ConfirmationModal = dynamic<any>(() => import('components/Modals/ConfirmationModal'), { ssr: false });
   const Web3Modal = dynamic<any>(() => import('@web3modal/react').then((mod) => mod.Web3Modal), { ssr: false });
@@ -71,15 +73,15 @@ const ProvidersWrapper: FC<ProvidersWrapperTypes> = ({ children }): React.ReactE
               {children}
               <ConfirmationModal />
               <Web3Modal config={web3Config} />
-              <Affix position={{ bottom: 20, right: 20 }}>
-                <Transition transition="slide-up" mounted={scroll.y > 0}>
+              {/* <Affix position={{ bottom: 20, right: 20 }}>
+                <Transition transition="slide-up" mounted={win?.scrollY > 0}>
                   {(transitionStyles) => (
                     <GradientButton style={transitionStyles} onClick={() => scrollTo({ y: 0 })}>
                       <FaArrowUp size={16} />
                     </GradientButton>
                   )}
                 </Transition>
-              </Affix>
+              </Affix> */}
             </Layout>
           </MantineProvider>
         </ApolloProvider>
