@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import GPT3Tokenizer from 'gpt3-tokenizer';
 import { Configuration, OpenAIApi } from 'openai';
 import { productsServices } from 'utils/products';
@@ -19,12 +20,12 @@ const openAi = new OpenAIApi(config);
 export const generateTitleSummaryKeyPoints = async (text: string) => {
   const fullText = `Generate a title, a short summary, and key points from the following text: "${text}"`;
   const encoded = tokenizer.encode(fullText);
-  const tokens = encoded.bpe;
+  let tokens = [...encoded.bpe];
 
   if (tokens.length > productsServices.transcription.maxAllowedTokens) {
-    tokens.splice(
-      encoded.bpe.length - productsServices.transcription.maxAllowedTokens,
-      encoded.bpe.length - productsServices.transcription.maxAllowedTokens + 50,
+    tokens = tokens.slice(
+      0,
+      productsServices.transcription.maxAllowedTokens - productsServices.transcription.maxTokens - 25,
     );
   }
 
@@ -43,7 +44,7 @@ export const generateTitleSummaryKeyPoints = async (text: string) => {
     });
     return results.data;
   } catch (error) {
-    console.error(error);
-    return null;
+    const errors = error as AxiosError;
+    console.log(errors.response?.data);
   }
 };

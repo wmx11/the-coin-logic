@@ -51,7 +51,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const results = await generateTitleSummaryKeyPoints(text as string);
       const generatedText = results?.choices[0].text;
-      const title = generatedText?.trim().split('\n')[0].replace('Title: ', '');
+      const splitText = generatedText?.trim().split('\n');
+      const cleanedGeneratedText = splitText?.slice(
+        splitText.findIndex((item) => item.startsWith('Title:')),
+      ) as string[];
+      const title = cleanedGeneratedText[0].replace('Title: ', '');
 
       const content = {
         text: text,
