@@ -58,7 +58,7 @@ const ProviderCard: FC<ProviderCardProps> = ({ provider, isCarouselSlide, showCo
                   </Text>
 
                   <Text size="xs" color="dimmed">
-                    {tags && tags.length ? tags.map((tag) => `${tag.name} `) : null}
+                    {tags && tags.length ? tags.map((tag) => tag?.name).join(', ') : null}
                   </Text>
 
                   <div className="flex items-center justify-center mt-2">

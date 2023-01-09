@@ -91,18 +91,21 @@ const CreateOrUpdateNexusProfile: FC<CreateOrUpdateNexusProfileProps> = ({ provi
   return (
     <div>
       <form onSubmit={form.onSubmit(handleSubmit)} className="flex flex-col gap-4">
-        <div>
-          <ImageUpload
-            fit="cover"
-            size={{ width: 928, height: 250, maxWidth: '100%', maxHeigth: '150px' }}
-            label="Background image"
-            description="Background image will be visible as your cover image on your profile"
-            previewTetxt="Your profile cover image. 928 x 250"
-            accept="image/jpg,image/jpeg,image/png,image/svg"
-            initialImageUrl={provider?.backgroundImage?.url || ''}
-            setImageBlob={setBackgroundImageData}
-          />
-        </div>
+        {isUpdate ? (
+          <div>
+            <ImageUpload
+              fit="cover"
+              size={{ width: 928, height: 250, maxWidth: '100%', maxHeigth: '150px' }}
+              label="Background image"
+              description="Background image will be visible as your cover image on your profile"
+              previewTetxt="Your profile cover image. 928 x 250"
+              accept="image/jpg,image/jpeg,image/png,image/svg"
+              initialImageUrl={provider?.backgroundImage?.url || ''}
+              setImageBlob={setBackgroundImageData}
+            />
+          </div>
+        ) : null}
+
         <div>
           <ImageUpload
             fit="cover"

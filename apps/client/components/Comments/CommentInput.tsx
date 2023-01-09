@@ -74,7 +74,7 @@ const CommentInput: FC<CommentInputProps> = ({ projectId, providerId }) => {
         </div>
 
         <div className="mb-4">
-          <Textarea placeholder="Leave a comment..." minRows={3} {...form.getInputProps('content')} ref={ref} />
+          <Textarea placeholder="Leave a comment..." minRows={5} {...form.getInputProps('content')} ref={ref} />
         </div>
 
         <div className="flex justify-between items-center mb-4">

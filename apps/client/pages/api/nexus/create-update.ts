@@ -61,11 +61,16 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       },
       priceFrom: parseInt(formData?.fields?.priceFrom as unknown as string, 10) || 0,
       priceTo: parseInt(formData?.fields?.priceTo as unknown as string, 10) || 0,
-      user: {
-        connect: {
-          id: auth.id,
-        },
-      },
+      ...(isUpdate
+        ? {}
+        : {
+            user: {
+              connect: {
+                id: auth.id,
+              },
+            },
+          }),
+
       ...imageData,
       ...backgroundImageData,
     };
@@ -77,8 +82,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         },
         data: {
           ...dataObject,
-          enabled: auth.isAdmin ? (formData?.fields.enabled as boolean) : false,
-          isListed: auth.isAdmin ? (formData?.fields.isListed as boolean) : false,
         },
         select: {
           slug: true,

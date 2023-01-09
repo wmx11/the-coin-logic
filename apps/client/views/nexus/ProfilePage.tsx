@@ -121,7 +121,7 @@ const ProfilePage: FC<ProfilePageProps> = ({ data }) => {
                 </Text>
               ) : null}
               <Text size="xs" color="dimmed" className="mb-4">
-                {tags && tags.length ? tags.map((tag) => `${tag.name} `) : null}
+                {tags && tags.length ? tags.map((tag) => tag?.name).join(', ') : null}
               </Text>
               <div className="flex items-center gap-4 mb-4">
                 {website ? (
@@ -189,9 +189,9 @@ const ProfilePage: FC<ProfilePageProps> = ({ data }) => {
           </div>
 
           <div className={`grid grid-cols-1 ${offers ? 'md:grid-cols-2' : ''}  gap-4 mb-4`}>
-            <div>
-              <Spoiler maxHeight={90} showLabel="Show more" hideLabel="Hide" className="mb-4">
-                <Text size="sm">{about}</Text>
+            <div >
+              <Spoiler maxHeight={90} showLabel="Show more" hideLabel="Hide" className="mb-4" >
+                <Text size="sm" >{about}</Text>
               </Spoiler>
             </div>
             {offers ? (
