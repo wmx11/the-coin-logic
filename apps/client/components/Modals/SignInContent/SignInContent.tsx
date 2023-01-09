@@ -33,7 +33,7 @@ const SignInContent = () => {
     try {
       const data = await signIn('credentials', {
         redirect: false,
-        email: email.trim().toLowerCase(),
+        email: email.trim(),
         password,
       });
 
