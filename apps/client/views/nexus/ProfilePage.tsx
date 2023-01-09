@@ -38,6 +38,7 @@ const ProfilePage: FC<ProfilePageProps> = ({ data }) => {
     image,
     about,
     enabled,
+    isListed,
     contactEmail,
     displayEmail,
     tags,
@@ -58,7 +59,9 @@ const ProfilePage: FC<ProfilePageProps> = ({ data }) => {
   const { hovered, ref } = useHover();
 
   useEffect(() => {
-    handleView({ providerId: id });
+    if (id) {
+      handleView({ providerId: id });
+    }
   }, []);
 
   const getFollowText = () => {
@@ -154,7 +157,7 @@ const ProfilePage: FC<ProfilePageProps> = ({ data }) => {
 
             <div>
               <div className="flex justify-end mb-6">
-                {(user && isProvider(id)) || user?.isAdmin ? (
+                {(user && isProvider(id)) || (user?.isAdmin && (!enabled || !isListed)) ? (
                   <ProfileControls provider={data} />
                 ) : (
                   <div ref={ref}>
@@ -189,9 +192,9 @@ const ProfilePage: FC<ProfilePageProps> = ({ data }) => {
           </div>
 
           <div className={`grid grid-cols-1 ${offers ? 'md:grid-cols-2' : ''}  gap-4 mb-4`}>
-            <div >
-              <Spoiler maxHeight={90} showLabel="Show more" hideLabel="Hide" className="mb-4" >
-                <Text size="sm" >{about}</Text>
+            <div>
+              <Spoiler maxHeight={90} showLabel="Show more" hideLabel="Hide" className="mb-4">
+                <Text size="sm">{about}</Text>
               </Spoiler>
             </div>
             {offers ? (
@@ -200,8 +203,12 @@ const ProfilePage: FC<ProfilePageProps> = ({ data }) => {
                   <GradientText weight={600} size="lg">
                     Offers
                   </GradientText>
-                  <div className="whitespace-pre text-left">
-                    <Text size="sm">{offers}</Text>
+                  <div className="text-left">
+                    {offers.split('\n').map((item) => (
+                      <Text size="sm" className="mb-2">
+                        {item.trim()}
+                      </Text>
+                    ))}
                   </div>
                 </Paper>
               </div>
@@ -209,10 +216,14 @@ const ProfilePage: FC<ProfilePageProps> = ({ data }) => {
           </div>
 
           <div>
+            {data?.discord ? (
+              <Text size="sm" color="dimmed" className="mb-2">
+                Discord handle: {data.discord}
+              </Text>
+            ) : null}
             <SocialBadges
               data={{
                 name: name as string,
-                discord: data?.discord as string,
                 reddit: data?.reddit as string,
                 telegram: data?.telegram as string,
                 twitter: data?.twitter as string,
