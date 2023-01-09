@@ -114,7 +114,7 @@ const TranscriptionBySlugPage: FC<TranscriptionBySlugPageProps> = ({ data, trend
             </div>
             <div>
               <GradientTitle className="mb-4">Summary</GradientTitle>
-              <div className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: generatedText.trim() }}></div>
+              <div className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: generatedText?.trim() }}></div>
               <div className="mt-4">
                 <HighlightsCollectionForContent trendingHighlights={trendingHighlights} />
               </div>
