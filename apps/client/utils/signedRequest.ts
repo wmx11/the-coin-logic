@@ -26,5 +26,7 @@ export const signedRequest = <T>(
     method: type,
     data: data,
     headers: { Authorization: `Bearer ${authToken}`, ...headers },
+    maxBodyLength: 209715200,
+    maxContentLength: 209715200
   });
 };
