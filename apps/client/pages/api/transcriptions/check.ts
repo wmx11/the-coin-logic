@@ -48,72 +48,68 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const { text, summary, audio_duration, utterances, words } = data.data;
 
-    const exceedsMaxWords = words.length < productsServices.transcription.maxWords;
+    try {
+      const results = await generateTitleSummaryKeyPoints(text as string);
+      const generatedText = results?.choices[0].text;
+      const title = generatedText?.trim().split('\n')[0].replace('Title: ', '');
 
-    const textToUse = exceedsMaxWords
-      ? text
-          ?.split(' ')
-          .slice(0, productsServices.transcription.maxWords - productsServices.transcription.maxTokens)
-          .join(' ')
-      : text;
+      const content = {
+        text: text,
+        summary: summary,
+        duration: audio_duration,
+        utterances: utterances,
+        wordCount: words.length,
+        generatedText,
+      };
 
-    const results = await generateTitleSummaryKeyPoints(textToUse as string);
-    const generatedText = results?.choices[0].text;
-    const title = generatedText?.trim().split('\n')[0].replace('Title: ', '');
-
-    const content = {
-      text: text,
-      summary: summary,
-      duration: audio_duration,
-      utterances: utterances,
-      wordCount: words.length,
-      generatedText,
-    };
-
-    const updatedTranscript = await prismaClient?.transcription.update({
-      where: {
-        id: (existingTranscript?.id as string) || undefined,
-      },
-      data: {
-        title,
-        slug: slug(title as string),
-        summary: data.data.summary,
-        content: content,
-      },
-      select: {
-        user: {
-          include: {
-            serviceTokens: true,
-          },
+      const updatedTranscript = await prismaClient?.transcription.update({
+        where: {
+          id: (existingTranscript?.id as string) || undefined,
         },
-        slug: true,
-      },
-    });
+        data: {
+          title,
+          slug: slug(title as string),
+          summary: data.data.summary,
+          content: content,
+        },
+        select: {
+          user: {
+            include: {
+              serviceTokens: true,
+            },
+          },
+          slug: true,
+        },
+      });
 
-    const tokensUsed =
-      ((content?.duration as number) || 0) * productsServices.transcription.audioTokens +
-      productsServices.transcription.textTokens * (results?.usage?.total_tokens as number);
+      const tokensUsed =
+        ((content?.duration as number) || 0) * productsServices.transcription.audioTokens +
+        productsServices.transcription.textTokens * (results?.usage?.total_tokens as number);
 
-    const serviceToken = await prismaClient?.serviceToken.update({
-      where: {
-        id: updatedTranscript?.user?.serviceTokens?.id as string,
-      },
-      data: {
-        amount: (updatedTranscript?.user?.serviceTokens?.amount as number) - tokensUsed,
-      },
-    });
+      const serviceToken = await prismaClient?.serviceToken.update({
+        where: {
+          id: updatedTranscript?.user?.serviceTokens?.id as string,
+        },
+        data: {
+          amount: (updatedTranscript?.user?.serviceTokens?.amount as number) - tokensUsed,
+        },
+      });
 
-    await prismaClient?.serviceTokenUsage.create({
-      data: {
-        used: tokensUsed,
-        description: `Transcription. Duration: ${msToTime((content?.duration as number) * 1000)}. Words: ${
-          words.length
-        }. Title: ${title}`,
-        serviceTokenId: serviceToken?.id,
-      },
-    });
+      await prismaClient?.serviceTokenUsage.create({
+        data: {
+          used: tokensUsed,
+          description: `Transcription. Duration: ${msToTime((content?.duration as number) * 1000)}. Words: ${
+            words.length
+          }. Title: ${title}`,
+          serviceTokenId: serviceToken?.id,
+        },
+      });
 
-    return responseHandler.ok({ redirect: updatedTranscript?.slug });
+      return responseHandler.ok({ redirect: updatedTranscript?.slug });
+    } catch (error) {
+      console.log(error);
+      return responseHandler.ok({ error: error });
+    }
   };
 
   return requestHandler.post(handleWebhook);

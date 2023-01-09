@@ -28,6 +28,7 @@ export const productsServices = {
   transcription: {
     maxWords: 3000,
     maxTokens: 256,
+    maxAllowedTokens: 4000,
     minimumRequiredTokens: 0.1,
     approxWordsInMinute: 200,
     minuteVideoDuration: 60,
