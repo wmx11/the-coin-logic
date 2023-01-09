@@ -33,6 +33,7 @@ import TrackVitalsDisclaimer from '../../components/TrackVitalsDisclaimer';
 import { getProjectAndMarketStatsBySlug } from '../../data/getters';
 import AboutProject from '../../views/project/AboutProject';
 import MarketData from '../../views/project/MarketData';
+import toLocaleString from 'utils/toLocaleString';
 
 type ProjectProps = {
   projectData: ProjectWithMarketStatsAndChanges;
@@ -76,12 +77,18 @@ const project: FC<ProjectProps> = ({ projectData }) => {
   // Clear all charts data on unmount
   useEffect(() => () => chartStore.clearAll(), []);
 
+  const changeText = projectData?.priceChange?.percentage <= 0 ? 'down' : 'up';
+
   return (
     <>
       <Meta
-        title={`${project.name} Price today, analytics, holders, charts | Coin Logic`}
+        title={`${project.name} Live Price Chart, News, Analytics | Coin Logic`}
         image={project.logo?.url}
-        description={`Get the latest ${project.name} price, market cap, analytics, holders, charts from Coin Logic - The Trusted and Transparent DeFi Analytics Platform.`}
+        description={`${project?.name} price today is ${toCurrency((projectData.price as number) || 0)}. ${
+          project?.name
+        } price is ${changeText} ${toLocaleString(
+          projectData?.priceChange?.percentage || 0,
+        )}% in the last 24 hours. It has a market cap of ${toLocaleString(projectData?.marketCap || 0)}.`}
       />
       <div className="bg-zinc-50">
         <Container className="py-10">
