@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { MAX_BODY_LENGTH, MAX_CONTENT_LENGTH } from 'constants/general';
 import jwt from 'jsonwebtoken';
 
 type SignedRequest<T> = {
@@ -26,7 +27,7 @@ export const signedRequest = <T>(
     method: type,
     data: data,
     headers: { Authorization: `Bearer ${authToken}`, ...headers },
-    maxBodyLength: 209715200,
-    maxContentLength: 209715200
+    maxBodyLength: MAX_BODY_LENGTH,
+    maxContentLength: MAX_CONTENT_LENGTH,
   });
 };

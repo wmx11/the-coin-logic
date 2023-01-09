@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { AssemblyResponse, AssemblyUploadResponse } from './AssemblyTypes';
+import { MAX_BODY_LENGTH, MAX_CONTENT_LENGTH } from 'constants/general';
 
 const API_TOKEN = process.env.NEXT_PUBLIC_ASSEMBLY_API_KEY || '';
 
@@ -13,6 +14,8 @@ const assembly = axios.create({
   headers: {
     authorization: API_TOKEN,
   },
+  maxBodyLength: MAX_BODY_LENGTH,
+  maxContentLength: MAX_CONTENT_LENGTH,
 });
 
 export const transcribe = (audioUrl: string, webhook?: string): Promise<{ data: AssemblyResponse }> | null => {
