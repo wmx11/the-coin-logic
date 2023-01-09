@@ -72,7 +72,14 @@ const SignUpModalForm = () => {
 
         <ErrorMessage message={errorMessage} />
 
-        <TextInput {...form.getInputProps('username')} placeholder="Username" label="Username" required size="md" />
+        <TextInput
+          {...form.getInputProps('username')}
+          placeholder="Username"
+          label="Username"
+          required
+          size="md"
+          autoFocus
+        />
         <TextInput {...form.getInputProps('email')} placeholder="Your email" label="Email address" required size="md" />
         <PasswordInput
           {...form.getInputProps('password')}

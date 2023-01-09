@@ -10,7 +10,7 @@ type ModalProps = {
 
 const Modal: FC<ModalProps> = ({ opened, children, size, onClose }) => {
   return (
-    <MantineModal centered opened={opened} onClose={onClose} withinPortal={false} size={size} trapFocus>
+    <MantineModal centered opened={opened} onClose={onClose} withinPortal={false} size={size} trapFocus={true}>
       {children}
     </MantineModal>
   );
