@@ -4,6 +4,7 @@ export const REF_COOKIE_NAME = 'tcl_ref';
 export const SESSION_TOKEN = 'session_token';
 export const QUIZ_TOKEN = 'quiz_token';
 export const QUERY_PROJECT = 'project';
+export const QUERY_CALLBACK = 'callback';
 export const QUERY_PROJECT_ID = 'projectId';
 export const QUERY_PAYMENT_PLAN_ID = 'ppId';
 export const QUERY_ANNOUNCEMENT = 'announcement';

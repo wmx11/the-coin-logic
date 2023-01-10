@@ -1,6 +1,6 @@
 import { Container, Loader, Text } from '@mantine/core';
 import GrayBox from 'components/GrayBox';
-import { SESSION_TOKEN } from 'constants/general';
+import { QUERY_CALLBACK, SESSION_TOKEN } from 'constants/general';
 import useLocalStorage from 'hooks/useLocalStorage';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -12,6 +12,7 @@ const index = () => {
   const { data: session, status } = useSession();
   const [storedValue, setValue] = useLocalStorage(SESSION_TOKEN, session?.token);
   const router = useRouter();
+  const callbackQuery = router.query[QUERY_CALLBACK];
 
   useEffect(() => {
     if (status === 'authenticated' && !storedValue) {
@@ -21,11 +22,11 @@ const index = () => {
           process.env.NEXT_PUBLIC_SIGNED_SECRET || '',
         );
         setValue(token?.accessToken || '');
-        router.push('/');
+        router.push(callbackQuery ? (callbackQuery as string) : '/');
       })();
     }
     if (storedValue) {
-      router.push('/');
+      router.push(callbackQuery ? (callbackQuery as string) : '/');
     }
   }, [status]);
 

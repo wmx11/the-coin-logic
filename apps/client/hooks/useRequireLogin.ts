@@ -1,8 +1,8 @@
 import useLoginFlowStore from 'store/useLoginFlowStore';
-import useUser from './useUser';
+import useUserStore from 'store/useUserStore';
 
 const useRequireLogin = () => {
-  const { user } = useUser();
+  const user = useUserStore((state) => state.user);
   const { setLogin } = useLoginFlowStore((state) => state);
 
   const requireLogin = () => {
