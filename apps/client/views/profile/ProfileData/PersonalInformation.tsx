@@ -28,7 +28,7 @@ const PersonalInformation: FC<PersonalInformationProps> = ({ user }) => {
       <Text className="mb-2">
         <strong>Email:</strong> {email || '...'}
       </Text>
-      <Text className="mb-2">
+      <Text className="mb-2 break-all">
         <strong>Wallet Address:</strong> {walletAddress || '...'}
       </Text>
       <Text className="mb-2">

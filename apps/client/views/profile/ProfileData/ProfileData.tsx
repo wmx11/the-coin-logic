@@ -35,8 +35,8 @@ const ProfileData: FC<ProfileDataType> = ({ className }) => {
   return (
     <div className={className}>
       <div className="mb-8">
-        <div className="flex justify-between">
-          <div>
+        <div className="flex justify-between flex-col md:flex-row">
+          <div className="flex flex-col gap-2">
             <div className="flex gap-2 items-center">
               <UserAvatar name={name as string} />
               <GradientTitle order={2}>{name}</GradientTitle>

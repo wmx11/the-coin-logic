@@ -63,7 +63,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         duration: audio_duration,
         utterances: utterances,
         wordCount: words.length,
-        generatedText: cleanedGeneratedText.join('\n')
+        generatedText: cleanedGeneratedText.join('\n'),
       };
 
       const updatedTranscript = await prismaClient?.transcription.update({
@@ -111,7 +111,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       return responseHandler.ok({ redirect: updatedTranscript?.slug });
     } catch (error) {
-      console.log(error);
       return responseHandler.ok({ error: error });
     }
   };

@@ -1,7 +1,9 @@
+import GradientText from 'components/Text/GradientText';
 import { getProviderByIdForUser } from 'data/getters/providers';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 import { ReactElement } from 'react';
+import useUserStore from 'store/useUserStore';
 import { prismaClient } from 'tcl-packages/prismaClient';
 import { Provider } from 'types';
 import MyNexus from 'views/profile/Nexus/MyNexus';
@@ -14,6 +16,8 @@ type MyNexusPageProps = {
 };
 
 const MyNexusPage = ({ provider, pendingProviders }: MyNexusPageProps) => {
+  const user = useUserStore((state) => state.user);
+
   return (
     <div className="w-full">
       <MyNexus provider={provider} />
@@ -21,6 +25,8 @@ const MyNexusPage = ({ provider, pendingProviders }: MyNexusPageProps) => {
         <div className="mt-16">
           <PendingProviders pendingProviders={pendingProviders} />
         </div>
+      ) : user?.isAdmin ? (
+        <GradientText className="mt-16">There are no pending Nexus profiles...</GradientText>
       ) : null}
     </div>
   );

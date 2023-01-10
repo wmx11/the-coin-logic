@@ -28,6 +28,10 @@ const UserNavigationLinks: FC<UserNavigationLinksProps> = ({ isInMenuProvider, s
         Add project
       </MenuNavLink>
 
+      <MenuNavLink href={routes.myProjects} icon={<Icons.Projects />} isInMenu={isInMenuProvider} onClick={onClick}>
+        My projects
+      </MenuNavLink>
+
       {user?.providerProfile?.id || user?.isAdmin ? (
         <MenuNavLink href={routes.myNexus} icon={<Icons.Nexus />} isInMenu={isInMenuProvider} onClick={onClick}>
           My Nexus
@@ -39,10 +43,6 @@ const UserNavigationLinks: FC<UserNavigationLinksProps> = ({ isInMenuProvider, s
           Apply For Nexus
         </MenuNavLink>
       ) : null}
-
-      <MenuNavLink href={routes.myProjects} icon={<Icons.Projects />} isInMenu={isInMenuProvider} onClick={onClick}>
-        My projects
-      </MenuNavLink>
 
       <MenuNavLink href={routes.marketingTracker} icon={<Icons.Track />} isInMenu={isInMenuProvider} onClick={onClick}>
         Marketing Tracker

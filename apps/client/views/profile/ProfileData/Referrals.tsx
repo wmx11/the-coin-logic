@@ -24,9 +24,14 @@ const Referrals: FC<ReferralsProps> = ({ referrals }) => {
 
       <Divider size={1} className="my-2" />
 
-      <Text className="flex gap-2 items-center">
+      <Text className="mb-2">
         <strong>Your referral link: </strong>
-        {referralLink} <ClipboardButton copy={referralLink} />
+        <div className="flex items-center">
+          <Text className="break-all" size="sm" color="dimmed">
+            {referralLink}
+          </Text>
+          <ClipboardButton copy={referralLink} />
+        </div>
       </Text>
       <Text size="xs" color="dimmed" className="mb-2">
         Refer projects and earn rewards! For every successfully referred project you will receive a portion of the
