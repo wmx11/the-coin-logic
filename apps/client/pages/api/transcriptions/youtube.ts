@@ -66,7 +66,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const stream = fs.createWriteStream(`${pathName}/${fileName}`);
 
     const videoUploadPromise = new Promise((resolve, reject) => {
-      ytdl(url, { quality: 'highestaudio' }).pipe(stream);
+      ytdl(url, { quality: 'highestaudio', filter: 'audioonly' }).pipe(stream);
 
       stream.on('finish', () => {
         return resolve(`${pathName}/${fileName}`);
