@@ -46,7 +46,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return responseHandler.ok({ status: data.data.status }, data.data.error);
     }
 
-    const { text, summary, audio_duration, utterances, words } = data.data;
+    const { text, summary, audio_duration, utterances, words } = data?.data;
 
     try {
       const results = await generateTitleSummaryKeyPoints(text as string);
@@ -59,7 +59,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       const content = {
         text: text,
-        summary: summary,
+        summary: summary || undefined,
         duration: audio_duration,
         utterances: utterances,
         wordCount: words.length,
@@ -73,7 +73,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         data: {
           title,
           slug: slug(title as string),
-          summary: data.data.summary,
+          summary: data?.data?.summary || undefined,
           content: content,
         },
         select: {
