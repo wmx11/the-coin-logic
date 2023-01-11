@@ -6,10 +6,19 @@ import RequestPasswordResetContent from '../RequestPasswordResetContent/RequestP
 import ResetPasswordContent from '../ResetPasswordContent/ResetPasswordContent';
 import SignInContent from '../SignInContent/SignInContent';
 import SignUpContent from '../SignUpContent/SignUpContent';
+import RequestVerificationContent from '../RequestVerificationContent/RequestVerificationContent';
 
 const LoginFlowModal = () => {
-  const { isRequestResetPassword, isRegister, isLogin, setIsOpen, isOpen, isAccountDelete, isResetPassword } =
-    useLoginFlowStore((state) => state);
+  const {
+    isRequestResetPassword,
+    isRegister,
+    isLogin,
+    setIsOpen,
+    isOpen,
+    isAccountDelete,
+    isResetPassword,
+    isRequestVerification,
+  } = useLoginFlowStore((state) => state);
 
   const DyanmicContent = () => {
     if (isLogin) {
@@ -26,6 +35,10 @@ const LoginFlowModal = () => {
 
     if (isRequestResetPassword) {
       return <RequestPasswordResetContent />;
+    }
+
+    if (isRequestVerification) {
+      return <RequestVerificationContent />;
     }
 
     if (isAccountDelete) {

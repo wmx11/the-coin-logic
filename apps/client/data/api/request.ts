@@ -13,7 +13,7 @@ export type Auth = {
 };
 
 export type IsSafeAuth = {
-  signature: 'email_submit' | 'add_property' | 'get_property';
+  signature: 'email_submit' | 'add_property' | 'get_property' | 'register_user' | 'resend_verification_email';
   trusted: boolean;
 };
 
@@ -58,14 +58,14 @@ const request = (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
       const decoded = jwt.verify(authToken, secret) as { id: string };
-
-      const user = await prisma?.user.findFirst({
+      const user = await prisma?.user.findUnique({
         where: {
           id: decoded?.id,
         },
         select: {
           id: true,
           isAdmin: true,
+          isVerified: true,
           roles: {
             select: {
               isEditor: true,
@@ -76,6 +76,10 @@ const request = (req: NextApiRequest, res: NextApiResponse) => {
       });
 
       if (!user) {
+        return false;
+      }
+
+      if (!user.isVerified) {
         return false;
       }
 

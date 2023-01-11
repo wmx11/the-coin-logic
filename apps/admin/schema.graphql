@@ -5316,7 +5316,7 @@ input SessionCreateInput {
 
 type VerificationToken {
   id: ID!
-  identifier: String
+  user: User
   token: String
   expires: DateTime
 }
@@ -5331,20 +5331,19 @@ input VerificationTokenWhereInput {
   OR: [VerificationTokenWhereInput!]
   NOT: [VerificationTokenWhereInput!]
   id: IDFilter
-  identifier: StringFilter
+  user: UserWhereInput
   token: StringFilter
   expires: DateTimeNullableFilter
 }
 
 input VerificationTokenOrderByInput {
   id: OrderDirection
-  identifier: OrderDirection
   token: OrderDirection
   expires: OrderDirection
 }
 
 input VerificationTokenUpdateInput {
-  identifier: String
+  user: UserRelateToOneForUpdateInput
   token: String
   expires: DateTime
 }
@@ -5355,7 +5354,7 @@ input VerificationTokenUpdateArgs {
 }
 
 input VerificationTokenCreateInput {
-  identifier: String
+  user: UserRelateToOneForCreateInput
   token: String
   expires: DateTime
 }

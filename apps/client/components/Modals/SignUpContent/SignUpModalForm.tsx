@@ -1,23 +1,25 @@
-import { DocumentNode, useMutation } from '@apollo/client';
 import { Button, Checkbox, Divider, PasswordInput, Stack, Text, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
+import AuthGoogleButton from 'components/Auth/AuthGoogleButton';
 import GradientButton from 'components/Buttons/GradientButton';
 import ErrorMessage from 'components/ErrorMessage';
 import { REF_COOKIE_NAME } from 'constants/general';
 import { getCookie } from 'cookies-next';
+import { IsSafeAuth } from 'data/api/request';
 import useRecaptcha from 'hooks/useRecaptcha';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import routes from 'routes';
 import useLoginFlowStore from 'store/useLoginFlowStore';
-import { CREATE_USER } from '../../../data/mutations';
+import { signedRequest } from 'utils/signedRequest';
+import { handleErrorMessage } from 'utils/utils';
 import { User, userSchema } from '../../../schemas/user';
-import AuthGoogleButton from 'components/Auth/AuthGoogleButton';
 
 const SignUpModalForm = () => {
-  const { validate, errorMessage } = useRecaptcha();
-  const [registeruser, { data, loading, error }] = useMutation(CREATE_USER as DocumentNode);
+  const [loading, setLoading] = useState(false);
+  const { validate } = useRecaptcha();
   const { setSuccess, setLogin } = useLoginFlowStore((state) => state);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const refCookie = useMemo(() => {
     return getCookie(REF_COOKIE_NAME);
@@ -35,6 +37,7 @@ const SignUpModalForm = () => {
   });
 
   const handleSubmit = async ({ username, email, password, referrer, subscribeToEmail }: User) => {
+    setLoading(true);
     try {
       const { isValid, ip } = await validate();
 
@@ -42,15 +45,32 @@ const SignUpModalForm = () => {
         return null;
       }
 
-      await registeruser({
-        variables: { name: username, email, password, referrer, isSubscribedToEmail: subscribeToEmail, ip },
-      });
+      await signedRequest<IsSafeAuth>(
+        {
+          type: 'post',
+          url: routes.api.user.register,
+          data: {
+            name: username,
+            email,
+            password,
+            referrer,
+            isSubscribedToEmail: subscribeToEmail,
+            ip,
+          },
+        },
+        email,
+        {
+          trusted: true,
+          signature: 'register_user',
+        },
+      );
 
       setSuccess(true);
-
-      toast.success('You have successfully registered! You may log in now.');
-    } catch (e) {
-      console.log(e);
+      toast.success('You have successfully registered! Please check your inbox for a verification email.');
+      setLoading(false);
+    } catch (error) {
+      handleErrorMessage(error, setErrorMessage);
+      setLoading(false);
     }
   };
 

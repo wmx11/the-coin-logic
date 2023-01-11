@@ -3,11 +3,12 @@ import { useForm, zodResolver } from '@mantine/form';
 import AuthGoogleButton from 'components/Auth/AuthGoogleButton';
 import GradientButton from 'components/Buttons/GradientButton';
 import ErrorMessage from 'components/ErrorMessage';
-import ResetPasswordButton from 'components/ResetPasswordButton';
+import ResetPasswordButton from 'components/RequestResetPasswordOrVerification';
+import RequestVerificationButton from 'components/RequestResetPasswordOrVerification/RequestVerificationButton';
 import { SESSION_TOKEN } from 'constants/general';
 import useLocalStorage from 'hooks/useLocalStorage';
 import { getSession, signIn, useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 import { tokens } from 'utils/tokens/tokens';
@@ -20,6 +21,30 @@ const SignInContent = () => {
   const { setRegister, resetAll, setLoginSuccess } = useLoginFlowStore((state) => state);
   const { data: session, status } = useSession();
   const [storedValue, setValue] = useLocalStorage(SESSION_TOKEN, session?.token);
+  const [loading, setLoading] = useState(false);
+
+  const verifyToken = async (token: string) =>
+    await tokens.verify<{ accessToken: string; isVerified: boolean }>(
+      token as string,
+      process.env.NEXT_PUBLIC_SIGNED_SECRET || '',
+    );
+
+  const checkVerification = useCallback(async () => {
+    if (!session) {
+      return;
+    }
+    const token = await verifyToken((session?.token as string) || '');
+
+    if (!token.isVerified) {
+      setErrorMessage('Your account is not verified.');
+    }
+
+    setErrorMessage('');
+  }, [session]);
+
+  useEffect(() => {
+    checkVerification();
+  }, [session]);
 
   const form = useForm({
     validate: zodResolver(userLoginSchema),
@@ -30,6 +55,7 @@ const SignInContent = () => {
   });
 
   const handleSubmit = async ({ email, password }: UserLogin) => {
+    setLoading(true);
     try {
       const data = await signIn('credentials', {
         redirect: false,
@@ -42,20 +68,29 @@ const SignInContent = () => {
       }
 
       if (data?.status === 200) {
-        const session = await getSession();
-        const token = await tokens.verify<{ accessToken: string }>(
-          session?.token as string,
-          process.env.NEXT_PUBLIC_SIGNED_SECRET || '',
-        );
-        setValue(token?.accessToken || '');
-        toast.success('You have successfully logged in!');
+        await new Promise((resolve, reject) => {
+          setTimeout(async () => {
+            try {
+              const session = await getSession();
+              const token = await verifyToken((session?.token as string) || '');
+              setValue(token?.accessToken || '');
+              toast.success('You have successfully logged in!');
+              resolve(session);
+            } catch (error) {
+              reject(error);
+            }
+          }, 500);
+        });
+
         resetAll();
         setErrorMessage('');
         setLoginSuccess(true);
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
       toast.error('Uh oh, looks like there was an issue logging in');
+      setLoading(false);
       return setErrorMessage(ERROR_MESSAGE);
     }
   };
@@ -84,7 +119,9 @@ const SignInContent = () => {
 
         <ResetPasswordButton />
 
-        <GradientButton type="submit" size="md">
+        <RequestVerificationButton />
+
+        <GradientButton type="submit" size="md" loading={loading}>
           Sign In
         </GradientButton>
 

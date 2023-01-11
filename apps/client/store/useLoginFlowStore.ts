@@ -4,6 +4,7 @@ type LoginFlowState = {
   isLogin: boolean;
   isRegister: boolean;
   isRequestResetPassword: boolean;
+  isRequestVerification: boolean;
   isResetPassword: boolean;
   isAccountDelete: boolean;
   isSuccess: boolean;
@@ -16,6 +17,7 @@ type LoginFlowState = {
   registerCallback: (cb: () => void) => void;
   setRegister: (type: boolean) => void;
   setRequestResetPassword: (type: boolean) => void;
+  setRequestVerification: (type: boolean) => void;
   setResetPassword: (type: boolean) => void;
   setAccountDelete: (type: boolean) => void;
   setSuccess: (type: boolean) => void;
@@ -29,6 +31,7 @@ const initialState = {
   isLogin: false,
   isRegister: false,
   isRequestResetPassword: false,
+  isRequestVerification: false,
   isResetPassword: false,
   isAccountDelete: false,
   isSuccess: false,
@@ -60,6 +63,11 @@ const useLoginFlowStore = create<LoginFlowState>((set) => ({
     set(() => ({
       ...commons,
       isRequestResetPassword: type,
+    })),
+  setRequestVerification: (type: boolean) =>
+    set(() => ({
+      ...commons,
+      isRequestVerification: type,
     })),
   setResetPassword: (type: boolean) =>
     set(() => ({

@@ -1,13 +1,15 @@
 import type { PrismaClient } from '@prisma/client';
-import crypto from 'crypto';
-import jwt from 'jsonwebtoken';
-import type { Adapter, AdapterSession, AdapterUser } from 'next-auth/adapters';
-import { tokens } from 'utils/tokens/tokens';
-import { keystoneAuthenticate, keystoneCreateUser } from './keystoneAuthenticate';
-import { NextApiRequest, NextApiResponse } from 'next';
 import { REF_COOKIE_NAME } from 'constants/general';
 import Cookies from 'cookies';
+import crypto from 'crypto';
+import { addMinutes } from 'date-fns';
+import jwt from 'jsonwebtoken';
+import { NextApiRequest, NextApiResponse } from 'next';
+import type { Adapter, AdapterSession, AdapterUser } from 'next-auth/adapters';
+import { tokens } from 'utils/tokens/tokens';
 import { getIpAddress } from 'utils/utils';
+import { keystoneAuthenticate, keystoneCreateUser } from './keystoneAuthenticate';
+import { sendVerificationEmail } from './sendVerificationEmail';
 
 export function KeystoneAdapter(p: PrismaClient, req: NextApiRequest, res: NextApiResponse): Adapter {
   return {
@@ -16,10 +18,14 @@ export function KeystoneAdapter(p: PrismaClient, req: NextApiRequest, res: NextA
       const passphrase = crypto.randomBytes(32).toString('hex');
       const referrerCookie = cookies.get(REF_COOKIE_NAME);
       const ip = getIpAddress(req);
+      const verificationTokenExpiration = addMinutes(new Date(), 60);
 
-      let existingUser = await p?.user.findUnique({
+      let existingUser = await p?.user.findFirst({
         where: {
-          email: (data?.email as string) || '',
+          email: {
+            equals: (data?.email as string) || '',
+            mode: 'insensitive',
+          },
         },
       });
 
@@ -35,6 +41,16 @@ export function KeystoneAdapter(p: PrismaClient, req: NextApiRequest, res: NextA
           referrer: referrerCookie || '',
         });
         encodedPassphrase = jwt.sign({ passphrase }, process.env.NEXTAUTH_SECRET || '');
+
+        const verificationToken = await p?.verificationToken.create({
+          data: {
+            userId: existingUser?.id || undefined,
+            token: jwt.sign({ id: existingUser?.id }, process.env.NEXTAUTH_SECRET || ''),
+            expires: verificationTokenExpiration,
+          },
+        });
+
+        await sendVerificationEmail(data?.email as string, verificationToken.token);
       }
 
       const authUser = await p.userAuth.create({
@@ -51,17 +67,20 @@ export function KeystoneAdapter(p: PrismaClient, req: NextApiRequest, res: NextA
         },
       });
 
-      return authUser as unknown as AdapterUser;
+      return (authUser ?? null) as unknown as AdapterUser;
     },
 
     getUserByEmail: async (email) => {
-      const authUser = await p?.userAuth.findUnique({
+      const authUser = await p?.userAuth.findFirst({
         where: {
-          email: (email as string) || '',
+          email: {
+            equals: (email as string) || '',
+            mode: 'insensitive',
+          },
         },
       });
 
-      return authUser as unknown as AdapterUser;
+      return (authUser ?? null) as unknown as AdapterUser;
     },
 
     getUserByAccount: async ({ providerAccountId }) => {
@@ -123,7 +142,7 @@ export function KeystoneAdapter(p: PrismaClient, req: NextApiRequest, res: NextA
       });
     },
 
-    getSessionAndUser: async (sessionToken): Promise<{ session: AdapterSession; user: AdapterUser }> => {
+    getSessionAndUser: async (sessionToken): Promise<{ session: AdapterSession; user: AdapterUser } | null> => {
       const session = await p.session.findUnique({
         where: {
           sessionToken: (sessionToken as string) || '',
@@ -146,6 +165,10 @@ export function KeystoneAdapter(p: PrismaClient, req: NextApiRequest, res: NextA
         },
       });
 
+      if (!session) {
+        return null;
+      }
+
       return {
         session: {
           id: session?.id as string,
@@ -164,6 +187,13 @@ export function KeystoneAdapter(p: PrismaClient, req: NextApiRequest, res: NextA
       const authUser = await p.userAuth.findUnique({
         where: {
           id: data.userId,
+        },
+        include: {
+          user: {
+            select: {
+              isVerified: true,
+            },
+          },
         },
       });
 
@@ -184,11 +214,19 @@ export function KeystoneAdapter(p: PrismaClient, req: NextApiRequest, res: NextA
         dataCopy.sessionToken = sessionToken;
       }
 
-      const sessionTokenEncoded = await tokens.sign<{ id: string; email: string; accessToken: string }>(
+      const sessionTokenEncoded = await tokens.sign<{
+        id: string;
+        email: string;
+        accessToken: string;
+        isVerified: boolean;
+        expires: Date;
+      }>(
         {
           id: dataCopy.userId as string,
           email: authUser?.email as string,
           accessToken: dataCopy.sessionToken,
+          isVerified: (authUser?.user?.isVerified as boolean) || false,
+          expires: dataCopy.expires,
         },
         process.env.NEXT_PUBLIC_SIGNED_SECRET || '',
       );
@@ -210,7 +248,7 @@ export function KeystoneAdapter(p: PrismaClient, req: NextApiRequest, res: NextA
         data,
       });
 
-      return session as AdapterSession;
+      return (session ?? null) as AdapterSession;
     },
 
     deleteSession: async (sessionToken) => {
@@ -220,7 +258,7 @@ export function KeystoneAdapter(p: PrismaClient, req: NextApiRequest, res: NextA
         },
       });
 
-      return session as AdapterSession;
+      return (session ?? null) as AdapterSession;
     },
   };
 }

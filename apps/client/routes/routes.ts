@@ -84,6 +84,9 @@ const routes = {
     user: {
       initSubscription: `${API}/user/init-subscription`,
       emailSubscribe: `${API}/user/email-subscribe`,
+      verifyEmail: `${API}/user/verify-email`,
+      resendVerification: `${API}/user/resend-verify`,
+      register: `${API}/user/register`,
     },
     article: {
       createUpdate: `${API}/article/create-update`,

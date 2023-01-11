@@ -26,7 +26,7 @@ model User {
   isAdmin                         Boolean              @default(false)
   isSubscribedToEmail             Boolean              @default(false)
   isNotChargeable                 Boolean              @default(false)
-  isVerified                      Boolean              @default(true)
+  isVerified                      Boolean              @default(false)
   subscription                    Subscription?        @relation("Subscription_user")
   referrer                        String               @default("")
   referralCode                    String               @default("")
@@ -55,6 +55,7 @@ model User {
   from_Quiz_likes                 Quiz[]               @relation("Quiz_likes")
   from_Transcription_user         Transcription[]      @relation("Transcription_user")
   from_Transcription_likes        Transcription[]      @relation("Transcription_likes")
+  from_VerificationToken_user     VerificationToken[]  @relation("VerificationToken_user")
 }
 
 model Subscription {
@@ -1043,11 +1044,13 @@ model Session {
 }
 
 model VerificationToken {
-  id         String    @id @default(cuid())
-  identifier String    @default("")
-  token      String    @unique @default("")
-  expires    DateTime?
+  id      String    @id @default(cuid())
+  user    User?     @relation("VerificationToken_user", fields: [userId], references: [id])
+  userId  String?   @map("user")
+  token   String    @unique @default("")
+  expires DateTime?
 
+  @@index([userId])
   @@map("verificationtokens")
 }
 

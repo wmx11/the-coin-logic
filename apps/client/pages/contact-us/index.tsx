@@ -6,6 +6,7 @@ import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundW
 import GradientButton from 'components/Buttons/GradientButton';
 import ErrorMessage from 'components/ErrorMessage';
 import Meta from 'components/Meta';
+import Paper from 'components/Paper';
 import { Discord, Twitter } from 'components/Socials/Socials';
 import GradientTitle from 'components/Text/GradientTitle';
 import TrackVitalsDisclaimer from 'components/TrackVitalsDisclaimer';
@@ -75,7 +76,7 @@ const index = () => {
         </Text>
       </SmallBackgroundWrapper>
       <BackgroundWrapper className="py-24 flex flex-col items-center justify-center">
-        <div className="p-5 rounded-md shadow-md bg-white w-full md:max-w-[600px] md:min-w-[400px] mb-16">
+        <Paper className="w-full md:max-w-[600px] md:min-w-[400px] mb-16">
           <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
             <Stack spacing="md">
               <ErrorMessage message={errorMessage} />
@@ -102,7 +103,7 @@ const index = () => {
               </div>
             </Stack>
           </form>
-        </div>
+        </Paper>
         <div>
           <Title order={2} color="white" className="mb-4">
             Find us on social media!

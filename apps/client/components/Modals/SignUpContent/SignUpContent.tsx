@@ -14,7 +14,12 @@ const SignUpContent = () => {
             <BsCheck2Circle size={60} color="#7950f2" />
           </Center>
           <Center>
-            <Text>Thank you for registering! You can now sign in!</Text>
+            <div className="text-center">
+              <Text>Thank you for registering!</Text>
+              <Text color="violet" weight={600}>
+                We have sent you an email verification code to your address. Please verify your email before continuing.
+              </Text>
+            </div>
           </Center>
         </>
       );

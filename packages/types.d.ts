@@ -8951,20 +8951,19 @@ export type VerificationToken = {
   __typename?: 'VerificationToken';
   expires?: Maybe<Scalars['DateTime']>;
   id: Scalars['ID'];
-  identifier?: Maybe<Scalars['String']>;
   token?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
 };
 
 export type VerificationTokenCreateInput = {
   expires?: InputMaybe<Scalars['DateTime']>;
-  identifier?: InputMaybe<Scalars['String']>;
   token?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<UserRelateToOneForCreateInput>;
 };
 
 export type VerificationTokenOrderByInput = {
   expires?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
-  identifier?: InputMaybe<OrderDirection>;
   token?: InputMaybe<OrderDirection>;
 };
 
@@ -8975,8 +8974,8 @@ export type VerificationTokenUpdateArgs = {
 
 export type VerificationTokenUpdateInput = {
   expires?: InputMaybe<Scalars['DateTime']>;
-  identifier?: InputMaybe<Scalars['String']>;
   token?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<UserRelateToOneForUpdateInput>;
 };
 
 export type VerificationTokenWhereInput = {
@@ -8985,8 +8984,8 @@ export type VerificationTokenWhereInput = {
   OR?: InputMaybe<Array<VerificationTokenWhereInput>>;
   expires?: InputMaybe<DateTimeNullableFilter>;
   id?: InputMaybe<IdFilter>;
-  identifier?: InputMaybe<StringFilter>;
   token?: InputMaybe<StringFilter>;
+  user?: InputMaybe<UserWhereInput>;
 };
 
 export type VerificationTokenWhereUniqueInput = {

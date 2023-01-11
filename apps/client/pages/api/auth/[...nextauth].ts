@@ -61,7 +61,6 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
             if (cookie) {
               await adapter.deleteSession(cookie);
-              cookies.set(NEXT_AUTH_SESSION_TOKEN, null, { expires: new Date() });
             }
 
             const sessionToken = (user?.sessionToken as string) || '';
@@ -118,6 +117,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
           session.id = (token || user).id;
           session.token = (token || user).sessionToken;
           session.isAdmin = (token || user).isAdmin;
+          session.isVerified = (token || user).isVerified;
         }
         return session;
       },
@@ -168,6 +168,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     session: {
       strategy: 'database',
       maxAge: 30 * 60,
+      updateAge: 15 * 60,
     },
     pages: {
       signIn: '/?signIn=true',

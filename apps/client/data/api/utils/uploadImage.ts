@@ -8,6 +8,7 @@ type HandleImageUploadProps<T> = {
   image: FileType;
   prefix: string;
   isUpdate?: boolean;
+  isRemove?: boolean;
   storageName?: 'images' | 'logos';
   instance?: T & {
     [key: string]: any;
@@ -19,16 +20,9 @@ export const handleImageUpload = async <T>({
   prefix,
   isUpdate,
   instance,
+  isRemove,
   storageName = 'images',
 }: HandleImageUploadProps<T>) => {
-  if (!image) {
-    return {};
-  }
-
-  const data = sharp(image?.path);
-  const metaData = await data?.metadata();
-  const imageName = uuidv4();
-
   const imageId = `${prefix}_id`;
   const imageExtension = `${prefix}_extension`;
   const imageFileSize = `${prefix}_filesize`;
@@ -37,7 +31,7 @@ export const handleImageUpload = async <T>({
 
   const resolvedPath = resolveImagePaths();
 
-  if (isUpdate && instance && instance[imageId]) {
+  if ((isRemove || isUpdate) && instance && instance[imageId]) {
     try {
       fs.unlink(
         `${resolvedPath[storageName as keyof typeof resolvedPath]}/${instance[imageId]}.${instance[imageExtension]}`,
@@ -47,6 +41,24 @@ export const handleImageUpload = async <T>({
       );
     } catch (error) {}
   }
+
+  if (isRemove) {
+    return {
+      [imageId]: undefined,
+      [imageExtension]: undefined,
+      [imageFileSize]: undefined,
+      [imageHeight]: undefined,
+      [imageWidth]: undefined,
+    };
+  }
+
+  if (!image) {
+    return {};
+  }
+
+  const data = sharp(image?.path);
+  const metaData = await data?.metadata();
+  const imageName = uuidv4();
 
   const imageDataOjbect = {
     [imageId]: imageName,

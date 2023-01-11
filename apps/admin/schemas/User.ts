@@ -74,7 +74,7 @@ const User: Lists = {
         },
       }),
       isVerified: checkbox({
-        defaultValue: true,
+        defaultValue: false,
         ui: { description: "Is user's email verified" },
       }),
       subscription: relationship({ ref: 'Subscription.user' }),
