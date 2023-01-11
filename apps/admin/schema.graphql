@@ -3557,6 +3557,7 @@ type Provider {
   isListed: Boolean
   displayEmail: Boolean
   openForWork: Boolean
+  openForApplications: Boolean
   displayPrices: Boolean
   nickname: String
   image: ImageFieldOutput
@@ -3568,6 +3569,7 @@ type Provider {
   twitter: String
   telegram: String
   discord: String
+  discordHandle: String
   reddit: String
   youtube: String
   priceFrom: Float
@@ -3617,6 +3619,7 @@ input ProviderWhereInput {
   isListed: BooleanFilter
   displayEmail: BooleanFilter
   openForWork: BooleanFilter
+  openForApplications: BooleanFilter
   displayPrices: BooleanFilter
   nickname: StringFilter
   summary: StringFilter
@@ -3626,6 +3629,7 @@ input ProviderWhereInput {
   twitter: StringFilter
   telegram: StringFilter
   discord: StringFilter
+  discordHandle: StringFilter
   reddit: StringFilter
   youtube: StringFilter
   priceFrom: FloatNullableFilter
@@ -3649,6 +3653,7 @@ input ProviderOrderByInput {
   isListed: OrderDirection
   displayEmail: OrderDirection
   openForWork: OrderDirection
+  openForApplications: OrderDirection
   displayPrices: OrderDirection
   nickname: OrderDirection
   summary: OrderDirection
@@ -3658,6 +3663,7 @@ input ProviderOrderByInput {
   twitter: OrderDirection
   telegram: OrderDirection
   discord: OrderDirection
+  discordHandle: OrderDirection
   reddit: OrderDirection
   youtube: OrderDirection
   priceFrom: OrderDirection
@@ -3677,6 +3683,7 @@ input ProviderUpdateInput {
   isListed: Boolean
   displayEmail: Boolean
   openForWork: Boolean
+  openForApplications: Boolean
   displayPrices: Boolean
   nickname: String
   image: ImageFieldInput
@@ -3688,6 +3695,7 @@ input ProviderUpdateInput {
   twitter: String
   telegram: String
   discord: String
+  discordHandle: String
   reddit: String
   youtube: String
   priceFrom: Float
@@ -3716,6 +3724,7 @@ input ProviderCreateInput {
   isListed: Boolean
   displayEmail: Boolean
   openForWork: Boolean
+  openForApplications: Boolean
   displayPrices: Boolean
   nickname: String
   image: ImageFieldInput
@@ -3727,6 +3736,7 @@ input ProviderCreateInput {
   twitter: String
   telegram: String
   discord: String
+  discordHandle: String
   reddit: String
   youtube: String
   priceFrom: Float

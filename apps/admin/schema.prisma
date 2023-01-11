@@ -662,6 +662,7 @@ model Provider {
   isListed                  Boolean   @default(false)
   displayEmail              Boolean   @default(false)
   openForWork               Boolean   @default(false)
+  openForApplications       Boolean   @default(false)
   displayPrices             Boolean   @default(false)
   nickname                  String    @default("")
   image_filesize            Int?
@@ -681,6 +682,7 @@ model Provider {
   twitter                   String    @default("")
   telegram                  String    @default("")
   discord                   String    @default("")
+  discordHandle             String    @default("")
   reddit                    String    @default("")
   youtube                   String    @default("")
   priceFrom                 Float?
