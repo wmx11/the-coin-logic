@@ -1,4 +1,4 @@
-import { NumberInput, Switch, TextInput, Textarea } from '@mantine/core';
+import { Divider, NumberInput, Switch, TextInput, Textarea } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import GradientButton from 'components/Buttons/GradientButton';
 import ImageUpload from 'components/ImageUpload';
@@ -11,6 +11,7 @@ import routes from 'routes';
 import { Provider } from 'types';
 import { signedRequest } from 'utils/signedRequest';
 import { nexusProfile } from '../../../schemas/nexusProfile';
+import { Discord } from 'components/Socials/Socials';
 
 type CreateOrUpdateNexusProfileProps = {
   provider?: Provider;
@@ -259,6 +260,10 @@ const CreateOrUpdateNexusProfile: FC<CreateOrUpdateNexusProfileProps> = ({ provi
         <GradientButton type="submit" loading={loading}>
           Submit
         </GradientButton>
+
+        <Divider label="And" labelPosition="center" />
+
+        <Discord type="button" label="Join us on Discord & Leave Feedback!" />
       </form>
     </div>
   );

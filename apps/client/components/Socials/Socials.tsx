@@ -1,18 +1,27 @@
 import { Badge, Text } from '@mantine/core';
+import GradientButton from 'components/Buttons/GradientButton';
 import Link from 'next/link';
 import { FC } from 'react';
 import { FaDiscord, FaGithub, FaReddit, FaTelegram, FaTwitter, FaYoutube } from 'react-icons/fa';
 
 type SocialsProps = {
   size?: number;
+  type?: 'link' | 'button';
+  label?: string;
 };
 
-export const Discord: FC<SocialsProps> = ({ size }) => {
+export const Discord: FC<SocialsProps> = ({ size, type, label }) => {
   return (
-    <Link href="https://discord.gg/mBHYuJKfEX">
-      <a>
-        <FaDiscord size={size || 30} />
-      </a>
+    <Link href="https://discord.gg/mBHYuJKfEX" passHref>
+      {type === 'button' ? (
+        <GradientButton component="a" target="_blank" leftIcon={<FaDiscord size={size || 30} />}>
+          {label || 'Join us on Discord'}
+        </GradientButton>
+      ) : (
+        <a target="_blank">
+          <FaDiscord size={size || 30} />
+        </a>
+      )}
     </Link>
   );
 };
@@ -20,7 +29,7 @@ export const Discord: FC<SocialsProps> = ({ size }) => {
 export const Twitter: FC<SocialsProps> = ({ size }) => {
   return (
     <Link href="https://twitter.com/TheCoinLogic">
-      <a>
+      <a target="_blank">
         <FaTwitter size={size || 28} />
       </a>
     </Link>
