@@ -37,6 +37,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           where: {
             id: (providerId as string) || '',
           },
+          include: {
+            tags: true,
+          },
         })
       : undefined;
 
@@ -55,6 +58,17 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     const tags = formData?.fields?.tags && formData?.fields?.tags?.split(',').map((id) => ({ id }));
+    const tagsToDisconnect =
+      profile &&
+      profile?.tags.reduce((arr, curr) => {
+        const index = tags?.findIndex((item) => item?.id === curr?.id);
+
+        if (index < 0) {
+          arr.push({ id: curr?.id });
+        }
+
+        return arr;
+      }, [] as { id: string }[]);
 
     const dataObject = {
       ...(omit(formData.fields, ['isUpdate', 'providerId', 'tags']) as PrismaSchema.ProviderCreateInput),
@@ -63,6 +77,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       ...(tags.length > 0
         ? {
             tags: {
+              ...(tagsToDisconnect && tagsToDisconnect?.length > 0 ? { disconnect: tagsToDisconnect } : {}),
               connect: tags,
             },
           }

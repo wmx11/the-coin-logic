@@ -1,7 +1,8 @@
-import { FileInput, LoadingOverlay, Text } from '@mantine/core';
+import { Button, FileInput, LoadingOverlay, Text } from '@mantine/core';
 import useUser from 'hooks/useUser';
 import { useRef, useState } from 'react';
 import routes from 'routes';
+import { Icons } from 'utils/icons';
 import { signedRequest } from 'utils/signedRequest';
 
 type ImageUploadProps<T> = {
@@ -12,7 +13,7 @@ type ImageUploadProps<T> = {
   required?: boolean;
   accept?: string;
   previewTetxt?: string;
-  setImageBlob?: (image: Blob) => void;
+  setImageBlob?: (image: Blob | null) => void;
   initialImageUrl?: string;
   fit?: 'contain' | 'fill' | 'cover' | 'inside' | 'outside';
   size?: {
@@ -45,6 +46,11 @@ const ImageUpload = <T,>({
 
   const handleClick = () => {
     ref.current?.click();
+  };
+
+  const handleDelete = () => {
+    setImageUrl('');
+    setImageBlob && setImageBlob(null);
   };
 
   const handleSubmit = async (image: File) => {
@@ -117,7 +123,7 @@ const ImageUpload = <T,>({
       />
 
       <div
-        className="w-full h-full rounded-md relative flex p-2 items-center justify-center border-dashed border-violet border cursor-pointer"
+        className="w-full h-full rounded-md relative flex p-2 items-center justify-center border-dashed border-violet border cursor-pointer mb-2"
         style={{
           ...size,
           width: (size?.width as number) / 2,
@@ -125,7 +131,7 @@ const ImageUpload = <T,>({
         }}
         onClick={handleClick}
       >
-        <LoadingOverlay visible={loading} overlayBlur={2} />
+        <LoadingOverlay visible={loading} overlayBlur={2} color="violet" />
         {imageUrl ? (
           <>
             <img src={imageUrl} className="w-full" />
@@ -136,6 +142,14 @@ const ImageUpload = <T,>({
           </Text>
         )}
       </div>
+
+      {imageUrl ? (
+        <div>
+          <Button size="xs" leftIcon={<Icons.Delete />} color="red" onClick={handleDelete}>
+            Remove
+          </Button>
+        </div>
+      ) : null}
 
       {errorMessage ? (
         <Text color="red" size="sm">

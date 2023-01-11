@@ -106,7 +106,7 @@ const StatTab: FC<StatTabProps> = ({
   });
 
   return (
-    <Paper className="w-full min-h-[120px] md:w-[265px] text-center relative">
+    <Paper withBorder className="w-full min-h-[120px] md:w-[265px] text-center relative">
       <Text className="text-slate-500 font-semibold text-sm">{title}</Text>
       <Text weight={700} className="text-2xl mb-1">
         {getTabValue()}

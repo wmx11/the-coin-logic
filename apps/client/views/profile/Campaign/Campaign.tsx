@@ -10,6 +10,7 @@ import CampaignHeader from './CampaignHeader';
 import CampaignResults from './CampaignResults/CampaignResults';
 import CampaignTraffic from './CampaignTraffic';
 import CampaignUniqueLinks from './CampaignUniqueLinks';
+import useThemeStore from 'store/useThemeStore';
 
 type CampaignProps = {
   campaign: MarketingCampaign;
@@ -19,11 +20,12 @@ type CampaignProps = {
 };
 
 const Campaign: FC<CampaignProps> = ({ campaign, projectData, campaignResults, projectAverages }) => {
+  const theme = useThemeStore((state) => state.theme);
   const { description, notes } = campaign;
 
   return (
     <>
-      <div className="bg-zinc-50">
+      <div className={theme === 'light' ? 'bg-zinc-50' : ''}>
         <Container className="py-10">
           <GoBack />
           {!campaign && (

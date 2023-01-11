@@ -87,34 +87,46 @@ const TranscriptionBySlugPage: FC<TranscriptionBySlugPageProps> = ({ data, trend
               </div>
               <div className="mb-4">
                 <GradientTitle order={4}>TL;DR</GradientTitle>
-                <Text weight={700}>Speaker {summary}</Text>
+                <Text color="dimmed" weight={700}>
+                  {summary}
+                </Text>
               </div>
               {utterances
                 ? utterances.map((item: { speaker: string; start: number; text: string }, index: number) => {
                     const isYoutube = contentUrl?.includes('youtu');
                     return (
-                      <div className="mb-4" key={`utterance_${index}`}>
-                        <div className="flex items-start gap-2">
-                          <Text weight={700}>Speaker {item.speaker}</Text>
-                          <Text size="xs" color="dimmed" className="mt-1">
-                            {isYoutube ? (
-                              <a href={`${contentUrl}&t=${Math.floor(item.start / 1000)}`} target="_blank">
-                                {msToTime(item.start)}
-                              </a>
-                            ) : (
-                              msToTime(item.start)
-                            )}
-                          </Text>
+                      <Text color="dimmed">
+                        <div className="mb-4" key={`utterance_${index}`}>
+                          <div className="flex items-start gap-2">
+                            <Text color="violet" weight={700}>
+                              Speaker {item.speaker}
+                            </Text>
+                            <Text size="xs" color="dimmed" className="mt-1">
+                              {isYoutube ? (
+                                <a
+                                  href={`${contentUrl}&t=${Math.floor(item.start / 1000)}`}
+                                  target="_blank"
+                                  className="link text-violet"
+                                >
+                                  {msToTime(item.start)}
+                                </a>
+                              ) : (
+                                msToTime(item.start)
+                              )}
+                            </Text>
+                          </div>
+                          <Text>{item.text}</Text>
                         </div>
-                        <Text>{item.text}</Text>
-                      </div>
+                      </Text>
                     );
                   })
                 : null}
             </div>
             <div>
               <GradientTitle className="mb-4">Summary</GradientTitle>
-              <div className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: generatedText?.trim() }}></div>
+              <Text color="dimmed">
+                <div className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: generatedText?.trim() }}></div>
+              </Text>
               <div className="mt-4">
                 <HighlightsCollectionForContent trendingHighlights={trendingHighlights} />
               </div>

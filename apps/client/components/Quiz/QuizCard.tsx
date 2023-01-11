@@ -30,8 +30,8 @@ const QuizCard: FC<QuizCardProps> = ({ quiz }) => {
     <Link href={`${routes.quiz.replace('${slug}', slug as string)}`} key={slug}>
       <a>
         <div className="">
-          <div className="w-full max-w-[318px] hover:shadow-md transition-shadow">
-            <Card shadow="sm" p="lg">
+          <div className="w-full max-w-[318px] hover:shadow-md transition-shadow rounded-md">
+            <Card shadow="sm" p="lg" withBorder>
               <Card.Section>
                 <Image src={image ? image.url : ''} width={318} height={180} alt={title as string} />
               </Card.Section>

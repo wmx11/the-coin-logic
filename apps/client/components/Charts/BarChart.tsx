@@ -2,6 +2,8 @@ import React from 'react';
 import Highcharts from 'highcharts/highcharts';
 import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsReact from 'highcharts-react-official';
+import { themeConfig } from 'utils/theme';
+import useThemeStore from 'store/useThemeStore';
 
 type BarChartProps<T> = {
   data: T[];
@@ -16,9 +18,12 @@ const BarChart = <T,>({ data, title, subtitle, yTitle, tooltip }: BarChartProps<
     HighchartsExporting(Highcharts);
   }
 
+  const theme = useThemeStore((state) => state.theme);
+
   const options = {
     chart: {
       type: 'column',
+      backgroundColor: themeConfig[theme].backgroundColor,
     },
     title: {
       text: title,

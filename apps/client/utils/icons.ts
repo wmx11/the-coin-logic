@@ -25,7 +25,7 @@ import {
   FaUserCog,
 } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
-import { FiLogOut } from 'react-icons/fi';
+import { FiLogOut, FiMoon, FiSun } from 'react-icons/fi';
 import { GoTriangleDown, GoTriangleUp } from 'react-icons/go';
 import { GrMoney } from 'react-icons/gr';
 import { HiLink } from 'react-icons/hi';
@@ -36,7 +36,7 @@ import {
   MdOutlineArticle,
   MdOutlineEmojiEmotions,
   MdOutlineQuiz,
-  MdTrackChanges
+  MdTrackChanges,
 } from 'react-icons/md';
 import { RiFileTextFill, RiFoldersLine } from 'react-icons/ri';
 import { SiBitcoin } from 'react-icons/si';
@@ -84,4 +84,6 @@ export const Icons = {
   Nexus: IoPlanetSharp,
   Link: HiLink,
   Google: FcGoogle,
+  Sun: FiSun,
+  Moon: FiMoon,
 };

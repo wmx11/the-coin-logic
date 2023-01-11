@@ -23,6 +23,10 @@ const Provider: Lists = {
       isListed: checkbox({ defaultValue: false, ui: { description: 'Is the provider listed?' } }),
       displayEmail: checkbox({ defaultValue: false, ui: { description: 'Display provider email contact address' } }),
       openForWork: checkbox({ defaultValue: false, ui: { description: 'Is the provider open for work?' } }),
+      openForApplications: checkbox({
+        defaultValue: false,
+        ui: { description: 'Is the provider open for applications?' },
+      }),
       displayPrices: checkbox({ defaultValue: false, ui: { description: 'Display the prices of the provider?' } }),
       nickname: text(),
       image: image({ storage: 'localImages' }), // 400 x 400
@@ -35,7 +39,8 @@ const Provider: Lists = {
       website: text(),
       twitter: text(),
       telegram: text(),
-      discord: text(),
+      discord: text({ ui: { description: 'Discord server' } }),
+      discordHandle: text({ ui: { description: 'Discord user handle' } }),
       reddit: text(),
       youtube: text(),
       priceFrom: float(),

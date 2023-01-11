@@ -2,10 +2,10 @@ import { Divider, Text } from '@mantine/core';
 import MenuNavLink from 'components/MenuNavLink';
 import { SESSION_TOKEN } from 'constants/general';
 import useLocalStorage from 'hooks/useLocalStorage';
+import useUser from 'hooks/useUser';
 import { signOut } from 'next-auth/react';
 import { FC } from 'react';
 import routes from 'routes';
-import useUserStore from 'store/useUserStore';
 import { Icons } from 'utils/icons';
 
 type UserNavigationLinksProps = {
@@ -14,7 +14,7 @@ type UserNavigationLinksProps = {
 };
 
 const UserNavigationLinks: FC<UserNavigationLinksProps> = ({ isInMenuProvider, setIsOpen }) => {
-  const { user } = useUserStore((state) => state);
+  const { user } = useUser();
   const onClick = setIsOpen ? () => setIsOpen(false) : () => false;
   const [storedValue, setValue] = useLocalStorage(SESSION_TOKEN, '');
 

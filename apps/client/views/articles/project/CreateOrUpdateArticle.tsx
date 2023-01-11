@@ -25,7 +25,7 @@ const CreateOrUpdateArticle: FC<CreateOrUpdateArticleProps> = ({ article, isUpda
   const router = useRouter();
   const { user } = useUser();
   const [editor, setEditor] = useState<CKEditorEventPayload<'instanceReady'>>();
-  const [imageData, setImageData] = useState<Blob>();
+  const [imageData, setImageData] = useState<Blob | null>();
 
   const content = (() => {
     try {
@@ -110,7 +110,7 @@ const CreateOrUpdateArticle: FC<CreateOrUpdateArticleProps> = ({ article, isUpda
               previewTetxt="Upload a header image. 800 x 450"
               accept="image/jpeg,image/png,image/jpg"
               size={{ width: 800, height: 450, maxHeigth: '', maxWidth: '' }}
-              setImageBlob={(image: Blob) => setImageData(image)}
+              setImageBlob={setImageData}
               initialImageUrl={article?.image?.url || ''}
             />
             <Textarea

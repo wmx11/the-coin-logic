@@ -40,7 +40,7 @@ const CreateOrUpdateQuiz: FC<CreateOrUpdateQuizProps> = ({ quiz, isUpdate }) => 
   const router = useRouter();
   const { user } = useUser();
   const [editor, setEditor] = useState<CKEditorEventPayload<'instanceReady'>>();
-  const [imageData, setImageData] = useState<Blob>();
+  const [imageData, setImageData] = useState<Blob | null>();
 
   const description = (() => {
     try {
@@ -146,7 +146,7 @@ const CreateOrUpdateQuiz: FC<CreateOrUpdateQuizProps> = ({ quiz, isUpdate }) => 
                   previewTetxt="Upload a quiz cover image. 800 x 450"
                   accept="image/jpeg,image/png,image/jpg"
                   size={{ width: 800, height: 450, maxHeigth: '', maxWidth: '' }}
-                  setImageBlob={(image: Blob) => setImageData(image)}
+                  setImageBlob={setImageData}
                   initialImageUrl={quiz?.image?.url || ''}
                 />
               </div>

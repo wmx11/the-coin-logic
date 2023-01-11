@@ -4,12 +4,14 @@ import { Header } from '../Header';
 import { ToastContainer, Slide } from 'react-toastify';
 import LoginFlowModal from 'components/Modals/LoginFlowModal';
 import Head from 'next/head';
+import useThemeStore from 'store/useThemeStore';
 
 type LayoutProps = {
   children: JSX.Element[];
 };
 
 const Layout: FC<LayoutProps> = ({ children }) => {
+  const theme = useThemeStore((state) => state.theme);
   return (
     <div>
       <Head>
@@ -47,7 +49,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       </Head>
       <Header></Header>
       <main>{children}</main>
-      <ToastContainer position="top-center" autoClose={5000} transition={Slide} />
+      <ToastContainer position="top-center" autoClose={5000} transition={Slide} theme={theme} />
       <LoginFlowModal />
       <Footer></Footer>
     </div>

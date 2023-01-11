@@ -4,12 +4,14 @@ import useUser from 'hooks/useUser';
 import { PropsWithChildren, useEffect } from 'react';
 import useUserStore, { UserWithOrdersCount } from 'store/useUserStore';
 import UserNavigation from '../ProfileNavigation';
+import useThemeStore from 'store/useThemeStore';
 
 type ProfileLayoutProps = {
   withNoMenu?: boolean;
 } & PropsWithChildren;
 
 const ProfileLayout = (props: ProfileLayoutProps) => {
+  const theme = useThemeStore((state) => state.theme);
   const { user, status } = useUser();
   const { isMobileScreen } = useMobileScreen();
   const setUser = useUserStore((state) => state.setUser);
@@ -34,7 +36,7 @@ const ProfileLayout = (props: ProfileLayoutProps) => {
             <UserNavigation />
           </div>
         )}
-        <div className="flex-1 border-x p-10">
+        <div className={`flex-1  border-x ${theme === 'light' ? '' : 'border-x-zinc-800'} p-10`}>
           <div className="flex flex-1 items-start justify-between gap-8 mb-4 ">{props.children}</div>
         </div>
       </div>

@@ -55,6 +55,15 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
           req?.method === 'POST'
         ) {
           if (user) {
+            const cookies = new Cookies(req, res);
+
+            const cookie = cookies.get(NEXT_AUTH_SESSION_TOKEN);
+
+            if (cookie) {
+              await adapter.deleteSession(cookie);
+              cookies.set(NEXT_AUTH_SESSION_TOKEN, null, { expires: new Date() });
+            }
+
             const sessionToken = (user?.sessionToken as string) || '';
 
             const expires = addMinutes(new Date(), 30);
@@ -87,8 +96,6 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
               sessionToken,
               userId: (userAuth?.id as string) || '',
             });
-
-            const cookies = new Cookies(req, res);
 
             cookies.set(NEXT_AUTH_SESSION_TOKEN, session.sessionToken, {
               expires,

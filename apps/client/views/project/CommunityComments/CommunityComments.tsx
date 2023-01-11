@@ -34,7 +34,7 @@ const CommunityComments: FC<CommunityCommentsProps> = ({ project, provider }) =>
   }, [page, recentComment]);
 
   return (
-    <Paper withBorder>
+    <Paper>
       <div className="mb-2">
         <GradientText weight={700}>Community Discussion</GradientText>
       </div>
@@ -42,7 +42,7 @@ const CommunityComments: FC<CommunityCommentsProps> = ({ project, provider }) =>
       <CommentInput projectId={project?.id} providerId={provider?.id} />
 
       {comments && comments.length ? (
-        <div className="bg-zinc-50 p-2">
+        <div className="p-0">
           <ScrollArea style={{ height: 250 }} offsetScrollbars>
             {comments.map((comment) => {
               return <CommentCard comment={comment} key={`comment_${comment?.id}`} />;

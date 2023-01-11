@@ -1,7 +1,8 @@
-import { Popover, UnstyledButton } from '@mantine/core';
+import { ActionIcon, Popover, UnstyledButton } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
-import EmojiPicker, { EmojiClickData, EmojiStyle } from 'emoji-picker-react';
+import EmojiPicker, { EmojiClickData, EmojiStyle, Theme } from 'emoji-picker-react';
 import { MutableRefObject, useState } from 'react';
+import useThemeStore from 'store/useThemeStore';
 import { Icons } from 'utils/icons';
 
 type EmojiSelectorProps<T> = {
@@ -11,6 +12,7 @@ type EmojiSelectorProps<T> = {
 };
 
 const EmojiSelector = <T,>({ inputRef, form, inputName }: EmojiSelectorProps<T>) => {
+  const theme = useThemeStore((state) => state.theme);
   const [opened, setOpened] = useState(false);
 
   const handleEmojiClick = ({ emoji, ...rest }: EmojiClickData) => {
@@ -20,7 +22,7 @@ const EmojiSelector = <T,>({ inputRef, form, inputName }: EmojiSelectorProps<T>)
       cursorPosition as number,
       inputRef.current.value.length,
     );
-    
+
     form.setFieldValue(
       inputName,
       `${textBeforePosition} ${emoji} ${textAfterPosition}` as string extends keyof T ? T[keyof T & string] : unknown,
@@ -30,12 +32,18 @@ const EmojiSelector = <T,>({ inputRef, form, inputName }: EmojiSelectorProps<T>)
   return (
     <Popover opened={opened} onChange={setOpened} position="bottom" withArrow shadow="md" trapFocus>
       <Popover.Target>
-        <UnstyledButton>
+        <ActionIcon variant="filled" color="violet">
           <Icons.Emoji onClick={() => setOpened((o) => !o)} />
-        </UnstyledButton>
+        </ActionIcon>
       </Popover.Target>
       <Popover.Dropdown>
-        <EmojiPicker emojiStyle={'native' as EmojiStyle} emojiVersion="4.0" lazyLoadEmojis={true} onEmojiClick={handleEmojiClick} />
+        <EmojiPicker
+          emojiStyle={'native' as EmojiStyle}
+          emojiVersion="4.0"
+          lazyLoadEmojis={true}
+          onEmojiClick={handleEmojiClick}
+          theme={theme as Theme}
+        />
       </Popover.Dropdown>
     </Popover>
   );

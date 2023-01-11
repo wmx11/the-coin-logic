@@ -21,8 +21,8 @@ const CreateOrUpdateNexusProfile: FC<CreateOrUpdateNexusProfileProps> = ({ provi
   const { user } = useUser();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [backgroundImageData, setBackgroundImageData] = useState<Blob>();
-  const [imageData, setImageData] = useState<Blob>();
+  const [backgroundImageData, setBackgroundImageData] = useState<Blob | null>();
+  const [imageData, setImageData] = useState<Blob | null>();
 
   const form = useForm({
     validate: zodResolver(nexusProfile),
@@ -37,6 +37,7 @@ const CreateOrUpdateNexusProfile: FC<CreateOrUpdateNexusProfileProps> = ({ provi
       twitter: provider?.twitter || '',
       telegram: provider?.telegram || '',
       discord: provider?.discord || '',
+      discordHandle: provider?.discordHandle || '',
       reddit: provider?.reddit || '',
       youtube: provider?.youtube || '',
       tags: provider?.tags?.map(({ id }) => id) || [],
@@ -44,6 +45,7 @@ const CreateOrUpdateNexusProfile: FC<CreateOrUpdateNexusProfileProps> = ({ provi
       priceTo: provider?.priceTo || 0,
       displayEmail: provider?.displayEmail === true ? true : false,
       openForWork: provider?.openForWork === true ? true : false,
+      openForApplications: provider?.openForApplications === true ? true : false,
       displayPrices: provider?.displayPrices === true ? true : false,
       isListed: provider?.isListed === true ? true : false,
       enabled: provider?.enabled === true ? true : false,
@@ -125,27 +127,37 @@ const CreateOrUpdateNexusProfile: FC<CreateOrUpdateNexusProfileProps> = ({ provi
               {...form.getInputProps('enabled', { type: 'checkbox' })}
               label="Enabled"
               description="Is the account enabled and accessible to the public?"
+              color="violet"
             />
             <Switch
               {...form.getInputProps('isListed', { type: 'checkbox' })}
               label="Is Listed"
               description="Is the profile listed on the NEXUS board?"
+              color="violet"
             />
           </div>
         ) : null}
 
-        <TextInput {...form.getInputProps('name')} label="Name" required />
+        <TextInput {...form.getInputProps('name')} label="Name" description="Your name" required />
 
-        <TextInput {...form.getInputProps('nickname')} label="Nickname" required />
+        <TextInput
+          {...form.getInputProps('nickname')}
+          label="Nickname"
+          description="Your nickname used on the web"
+          required
+        />
 
         <TagSelect isPerson={true} form={form} />
 
         <Switch
           {...form.getInputProps('displayEmail', { type: 'checkbox' })}
           label="Display my contact email"
-          description="If you are open to be contacted, yo ucan choose to display your contact email."
+          description="If you are open to be contacted, you can choose to display your contact email."
+          color="violet"
         />
-        {form.values.displayEmail ? <TextInput {...form.getInputProps('contactEmail')} label="Contact email" /> : null}
+        {form.values.displayEmail ? (
+          <TextInput {...form.getInputProps('contactEmail')} label="Contact email" className="ml-4" />
+        ) : null}
 
         <Textarea
           {...form.getInputProps('summary')}
@@ -167,7 +179,8 @@ const CreateOrUpdateNexusProfile: FC<CreateOrUpdateNexusProfileProps> = ({ provi
         <Switch
           {...form.getInputProps('openForWork', { type: 'checkbox' })}
           label="I am open for offers / work"
-          description="If you are open for offers or work, your profile will be included in our newsletters."
+          description="If you are open for offers or work. Your profile will be included in our newsletters."
+          color="violet"
         />
         {form.values.openForWork ? (
           <Textarea
@@ -176,27 +189,72 @@ const CreateOrUpdateNexusProfile: FC<CreateOrUpdateNexusProfileProps> = ({ provi
             description="What do you offer? If you are open for offers, what are you looking for?"
             maxLength={250}
             minRows={4}
+            className="ml-4"
           />
         ) : null}
+
+        <Switch
+          {...form.getInputProps('openForApplications', { type: 'checkbox' })}
+          label="I am open for applications / Looking to hire"
+          description="If you are looking to hire. Your profile will be included in our newsletters."
+          color="violet"
+        />
 
         <Switch
           {...form.getInputProps('displayPrices', { type: 'checkbox' })}
           label="Display my prices"
           description="Do you want to display your price range? If you are offering services, you can choose to publically display your price range."
+          color="violet"
         />
         {form.values.displayPrices ? (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 ml-4">
             <NumberInput {...form.getInputProps('priceFrom')} label="Price from" min={0} hideControls />
             <NumberInput {...form.getInputProps('priceTo')} label="Price to" min={0} hideControls />
           </div>
         ) : null}
 
-        <TextInput {...form.getInputProps('website')} label="Website" />
-        <TextInput {...form.getInputProps('twitter')} label="Twitter" />
-        <TextInput {...form.getInputProps('telegram')} label="Telegram" />
-        <TextInput {...form.getInputProps('discord')} label="Discord" />
-        <TextInput {...form.getInputProps('reddit')} label="Reddit" />
-        <TextInput {...form.getInputProps('youtube')} label="Youtube" />
+        <TextInput
+          {...form.getInputProps('website')}
+          label="Website URL"
+          description="A link to your website"
+          placeholder="https://..."
+        />
+        <TextInput
+          {...form.getInputProps('twitter')}
+          label="Twitter URL"
+          description="A link to your Twitter account"
+          placeholder="https://twitter.com/"
+        />
+        <TextInput
+          {...form.getInputProps('telegram')}
+          label="Telegram group URL"
+          description="A link to your Telegram group"
+          placeholder="https://t.me/"
+        />
+        <TextInput
+          {...form.getInputProps('discord')}
+          label="Discord Channel"
+          description="A link to your Discord channel"
+          placeholder="https://discord.gg/"
+        />
+        <TextInput
+          {...form.getInputProps('discordHandle')}
+          label="Discord Handle"
+          description="Your Discord handle"
+          placeholder="DiscordHandle#0000"
+        />
+        <TextInput
+          {...form.getInputProps('reddit')}
+          label="Reddit URL"
+          description="A link to your Subreddit"
+          placeholder="https://reddit.com/r/"
+        />
+        <TextInput
+          {...form.getInputProps('youtube')}
+          label="YouTube Channel"
+          description="A link to your YouTube Channel"
+          placeholder="https://youtube.com/"
+        />
 
         <GradientButton type="submit" loading={loading}>
           Submit

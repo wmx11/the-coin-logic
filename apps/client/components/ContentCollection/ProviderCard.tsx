@@ -1,6 +1,7 @@
 import { Badge, Text } from '@mantine/core';
 import Controls from 'components/Controls/Controls';
 import { ImageWithPlaceholder } from 'components/Images/Images';
+import Paper from 'components/Paper';
 import StarRating from 'components/StarRating';
 import Link from 'next/link';
 import { FC } from 'react';
@@ -23,6 +24,7 @@ const ProviderCard: FC<ProviderCardProps> = ({ provider, isCarouselSlide, showCo
     backgroundImage,
     image,
     openForWork,
+    openForApplications,
     displayPrices,
     priceFrom,
     priceTo,
@@ -39,7 +41,7 @@ const ProviderCard: FC<ProviderCardProps> = ({ provider, isCarouselSlide, showCo
       <div>
         <Link href={`${routes.nexusBySlug.replace('${slug}', slug as string)}`}>
           <a>
-            <div className="shadow-md rounded md:max-w-[320px] w-full overflow-hidden bg-white">
+            <Paper className="shadow-md md:max-w-[320px] w-full overflow-hidden p-0">
               <div
                 className={`bg-violet h-[140px] bg-no-repeat bg-bottom bg-cover brightness-75`}
                 style={{ backgroundImage: `url(${backgroundImage?.url as string})` }}
@@ -75,6 +77,15 @@ const ProviderCard: FC<ProviderCardProps> = ({ provider, isCarouselSlide, showCo
                     ) : (
                       <div className="h-[30px]"></div>
                     )}
+
+                    {openForApplications ? (
+                      <Badge color="violet" className="mb-2">
+                        Looking to hire
+                      </Badge>
+                    ) : (
+                      <div className="h-[30px]"></div>
+                    )}
+
                     {displayPrices ? (
                       <Text size="xs" color="dimmed">
                         Rates from {toCurrency(priceFrom as number)} - {toCurrency(priceTo as number)}
@@ -97,7 +108,7 @@ const ProviderCard: FC<ProviderCardProps> = ({ provider, isCarouselSlide, showCo
                   </div>
                 ) : null}
               </div>
-            </div>
+            </Paper>
           </a>
         </Link>
       </div>

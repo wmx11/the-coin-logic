@@ -63,7 +63,6 @@ const QuizzesPage: FC<QuizzesProps> = ({ quizzes, quizzesCount }) => {
           ) : null}
         </div>
       </Container>
-      ;
     </>
   );
 };

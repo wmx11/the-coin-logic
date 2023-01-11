@@ -31,8 +31,8 @@ const ContentCard: FC<ContentCardProps> = ({
   return (
     <Link href={(slug ? baseRoute : fallbackRoute).replace('${slug}', slug ? slug : id)} key={slug}>
       <a>
-        <div className="md:max-w-[318px] w-full hover:shadow-md transition-shadow border rounded-md">
-          <Card shadow="sm" p="lg">
+        <div className="md:max-w-[318px] w-full hover:shadow-md transition-shadow rounded-md">
+          <Card shadow="sm" p="lg" withBorder>
             {showImage ? (
               <Card.Section>
                 <ImageWithPlaceholder image={image ? image.url : ''} width={318} height={180} alt={title as string} />

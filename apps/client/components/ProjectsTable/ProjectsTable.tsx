@@ -87,7 +87,7 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
       label: 'Price',
       renderCell: ({ price, priceChange }) => (
         <>
-          {toCurrency(price as number)}
+          {<Text>{toCurrency(price as number)}</Text>}
           {<Trend previousValue={priceChange as PreviousValueTypes} inline={true} />}
         </>
       ),

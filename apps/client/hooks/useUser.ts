@@ -37,6 +37,10 @@ const useUser = () => {
     setUser(data);
   }, [session]);
 
+  useEffect(() => {
+    getUser();
+  }, [session]);
+
   const getSubscription = (): { sku: string; slug: string; name: string } | null => {
     if (!user?.subscriptionStatus?.isValid) {
       return null;
@@ -46,10 +50,6 @@ const useUser = () => {
       Object.keys(products.sku).filter((key) => item.sku === products.sku[key as keyof typeof products.sku]),
     )[0];
   };
-
-  useEffect(() => {
-    getUser();
-  }, [session]);
 
   const isProjectEditor = (projectId: string) => {
     if (user?.isAdmin) {

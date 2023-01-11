@@ -5,15 +5,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import tclLogo from 'public/images/tcl_logo.png';
 import routes from 'routes';
+import useThemeStore from 'store/useThemeStore';
+import { themeConfig } from 'utils/theme';
 
 function Footer() {
+  const theme = useThemeStore((state) => state.theme);
+
   return (
     <BackgroundWrapper>
       <svg xmlns="http://www.w3.org/2000/svg" width="3840" height="70" className="rotate-180">
         <g>
           <path
             stroke="null"
-            fill="#fff"
+            fill={themeConfig[theme].backgroundColor}
             d="m0,2l213.66669,9.31875c213.66669,9.49375 641.00007,27.86875 1068.33346,30.3625c427.33338,2.31875 854.66677,-11.68125 1282.00015,-11.68125c427.33338,0 854.66677,14 1068.33346,21l213.66669,7l0,14l-213.66669,0c-213.66669,0 -641.00007,0 -1068.33346,0c-427.33338,0 -854.66677,0 -1282.00015,0c-427.33338,0 -854.66677,0 -1068.33346,0l-213.66669,0l0,-70z"
             id="svg_1"
           />

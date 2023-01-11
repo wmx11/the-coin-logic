@@ -28,7 +28,7 @@ const AddProject: FC<AddProjectProps> = ({ networks }) => {
   const [isPaymentPlanSelected, setIsPaymentPlanSelected] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState();
-  const [logoData, setLogoData] = useState<Blob>();
+  const [logoData, setLogoData] = useState<Blob | null>();
   const { user } = useUser();
   const { validate } = useRecaptcha();
   const router = useRouter();
@@ -140,6 +140,7 @@ const AddProject: FC<AddProjectProps> = ({ networks }) => {
           label="Is your project an NFT?"
           description="Please check this box if your project is an NFT."
           checked={form.values.isNft}
+          color="violet"
           onChange={(event) => {
             form.setFieldValue('isNft', event.currentTarget.checked);
             setIsPaymentPlanSelected(false);
@@ -165,7 +166,7 @@ const AddProject: FC<AddProjectProps> = ({ networks }) => {
               <GradientText weight={600} size="lg">
                 Primary Information
               </GradientText>
-              <PrimaryInformation form={form} networks={networks} setImageBlob={(image: Blob) => setLogoData(image)} />
+              <PrimaryInformation form={form} networks={networks} setImageBlob={setLogoData} />
             </div>
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-4 mb-4">

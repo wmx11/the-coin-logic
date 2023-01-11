@@ -1,4 +1,4 @@
-import { Burger, Container, Drawer } from '@mantine/core';
+import { ActionIcon, Burger, Container, Drawer } from '@mantine/core';
 import useMobileScreen from 'hooks/useMobileScreen';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -6,10 +6,13 @@ import { useState } from 'react';
 import tclLogo from '../../public/images/tcl_logo.png';
 import Navigation from './Navigation';
 import UserNavigation from './UserNavigation';
+import useThemeStore from 'store/useThemeStore';
+import { Icons } from 'utils/icons';
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const { isMobileScreen } = useMobileScreen();
+  const { theme, toggleTheme } = useThemeStore();
 
   return (
     <div className="z-20 w-full bg-lightBlue relative">
@@ -45,10 +48,17 @@ function Header() {
             {!isMobileScreen && <Navigation />}
           </div>
 
-          {!isMobileScreen && <UserNavigation />}
+          <div className="flex gap-4 items-center">
+            <ActionIcon variant="outline" onClick={toggleTheme}>
+              {theme === 'light' ? <Icons.Moon /> : <Icons.Sun />}
+            </ActionIcon>
+            {!isMobileScreen && <UserNavigation />}
+          </div>
         </div>
 
-        {isMobileScreen && <Burger opened={isOpen} onClick={() => setIsOpen((isOpen) => !isOpen)} color="white" />}
+        {isMobileScreen && (
+          <Burger opened={isOpen} onClick={() => setIsOpen((isOpen) => !isOpen)} color="white" className="ml-4" />
+        )}
       </Container>
     </div>
   );

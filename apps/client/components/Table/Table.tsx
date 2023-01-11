@@ -7,6 +7,7 @@ import { Column } from '@table-library/react-table-library/types/compact';
 import { TableNode } from '@table-library/react-table-library/types/table';
 import { Theme } from '@table-library/react-table-library/types/theme';
 import { Sort } from '@table-library/react-table-library/types/sort';
+import useThemeStore from 'store/useThemeStore';
 
 type TableProps = {
   data: TableNode[];
@@ -16,8 +17,9 @@ type TableProps = {
 };
 
 const Table: FC<TableProps> = ({ data, columns, customTheme = {}, sort }) => {
+  const globalTheme = useThemeStore((state) => state.theme);
   const mantineTheme = getTheme({ highlightOnHover: true, verticalSpacing: 12 });
-  const theme = useTheme([mantineTheme, mainTheme, customTheme]);
+  const theme = useTheme([mantineTheme, mainTheme(globalTheme), customTheme]);
 
   return (
     <CompactTable

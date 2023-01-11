@@ -6,6 +6,7 @@ import { formateDateWithHours } from 'utils/formatters';
 import { Icons } from 'utils/icons';
 import { addLinksToText } from 'utils/utils';
 import CommentControls from './CommentControls';
+import Paper from 'components/Paper';
 
 type CommentCard = {
   comment: Comment;
@@ -16,7 +17,7 @@ const CommentCard: FC<CommentCard> = ({ comment }) => {
   const [hidden, seHidden] = useState((comment?.reportsCount as number) >= REPORTS_COUNT_TO_HIDE);
 
   return (
-    <div className="border-b pb-2 mb-4">
+    <Paper className="mb-4">
       {hidden ? (
         <>
           <Text size="sm" color="dimmed" className="mb-2">
@@ -44,14 +45,17 @@ const CommentCard: FC<CommentCard> = ({ comment }) => {
             </Text>
             <Text size="sm">
               <Spoiler showLabel="Show more" hideLabel="Hide" maxHeight={150}>
-                <div className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: addLinksToText(comment?.content) }}></div>
+                <div
+                  className="whitespace-pre-wrap"
+                  dangerouslySetInnerHTML={{ __html: addLinksToText(comment?.content) }}
+                ></div>
               </Spoiler>
             </Text>
           </div>
           <CommentControls comment={comment} />
         </>
       )}
-    </div>
+    </Paper>
   );
 };
 

@@ -34,14 +34,13 @@ import { getProjectAndMarketStatsBySlug } from '../../data/getters';
 import AboutProject from '../../views/project/AboutProject';
 import MarketData from '../../views/project/MarketData';
 import toLocaleString from 'utils/toLocaleString';
+import useThemeStore from 'store/useThemeStore';
 
 type ProjectProps = {
   projectData: ProjectWithMarketStatsAndChanges;
 };
 
 const project: FC<ProjectProps> = ({ projectData }) => {
-  const chartStore = useChartStore((state) => state);
-
   const { project } = projectData;
 
   const {
@@ -55,8 +54,6 @@ const project: FC<ProjectProps> = ({ projectData }) => {
     trackMarketCap,
   } = project;
 
-  const { user } = useUser();
-
   if (!project) {
     return (
       <Container className="py-10 h-screen flex items-center justify-center">
@@ -66,6 +63,10 @@ const project: FC<ProjectProps> = ({ projectData }) => {
       </Container>
     );
   }
+
+  const theme = useThemeStore((state) => state.theme);
+  const chartStore = useChartStore((state) => state);
+  const { user } = useUser();
 
   const SocialAnalysisData = dynamic<any>(() => import('views/project/SocialAnalysisData'));
   const AreaChartGroup = dynamic<any>(() => import('components/Charts/AreaChartGroup'));
@@ -90,7 +91,7 @@ const project: FC<ProjectProps> = ({ projectData }) => {
           projectData?.priceChange?.percentage || 0,
         )}% in the last 24 hours. It has a market cap of ${toLocaleString(projectData?.marketCap || 0)}.`}
       />
-      <div className="bg-zinc-50">
+      <div className={theme === 'light' ? 'bg-zinc-50' : ''}>
         <Container className="py-10">
           {notifications && (
             <div className="sticky top-[10px] z-[1]">

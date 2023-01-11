@@ -46,7 +46,9 @@ const ProfilePage: FC<ProfilePageProps> = ({ data }) => {
     contactEmail,
     displayEmail,
     tags,
+    discordHandle,
     openForWork,
+    openForApplications,
     displayPrices,
     priceFrom,
     priceTo,
@@ -93,17 +95,15 @@ const ProfilePage: FC<ProfilePageProps> = ({ data }) => {
       />
       <Container size="md" className="pb-10">
         <div>
-          <div className="bg-white/30 top-0 w-full p-2">
-            <div>
-              <GoBack showLabel={false} />
-            </div>
+          <div className="w-full p-2">
+            <GoBack showLabel={false} />
           </div>
           <div
             className={`bg-violet h-[250px] bg-no-repeat bg-bottom bg-cover`}
             style={{ backgroundImage: `url(${backgroundImage?.url as string})` }}
           ></div>
 
-          <div className="p-4 border rounded-md mb-4">
+          <Paper className="mb-4">
             <div className="rounded-full shadow-md w-[140px] h-[140px] mt-[-95px] mb-2 overflow-hidden z-10 border-4 border-white bg-white relative">
               <ImageWithPlaceholder image={image?.url as string} width={140} height={140} alt={name as string} />
             </div>
@@ -187,6 +187,13 @@ const ProfilePage: FC<ProfilePageProps> = ({ data }) => {
                       Open for offers
                     </Badge>
                   ) : null}
+
+                  {openForApplications ? (
+                    <Badge color="violet" className="mb-2">
+                      Looking to hire
+                    </Badge>
+                  ) : null}
+                  
                   {displayPrices ? (
                     <Text size="sm" color="dimmed">
                       Rates from {toCurrency(priceFrom as number)} - {toCurrency(priceTo as number)}
@@ -221,22 +228,23 @@ const ProfilePage: FC<ProfilePageProps> = ({ data }) => {
             </div>
 
             <div>
-              {data?.discord ? (
+              {data?.discordHandle ? (
                 <Text size="sm" color="dimmed" className="mb-2">
-                  Discord handle: {data.discord}
+                  Discord handle: {discordHandle}
                 </Text>
               ) : null}
               <SocialBadges
                 data={{
                   name: name as string,
                   reddit: data?.reddit as string,
+                  discord: data?.discord as string,
                   telegram: data?.telegram as string,
                   twitter: data?.twitter as string,
                   youtube: data?.youtube as string,
                 }}
               />
             </div>
-          </div>
+          </Paper>
 
           <div className="mb-4">
             <CommunityVotes provider={data} />

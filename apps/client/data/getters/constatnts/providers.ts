@@ -17,6 +17,7 @@ backgroundImage {
 }
 isPromoted
 openForWork
+openForApplications
 displayPrices
 priceFrom
 priceTo
@@ -65,10 +66,12 @@ query($slug: String, $userId: ID) {
     twitter
     telegram
     discord
+    discordHandle
     reddit
     youtube
     isPromoted
     openForWork
+    openForApplications
     displayPrices
     priceFrom
     priceTo

@@ -2,6 +2,8 @@ import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts/highmaps';
 import HighchartsExporting from 'highcharts/modules/exporting';
 import { useCallback, useEffect, useState } from 'react';
+import useThemeStore from 'store/useThemeStore';
+import { themeConfig } from 'utils/theme';
 
 type WorldHeatMapProps<T> = {
   data: T[];
@@ -19,6 +21,7 @@ const WorldHeatMap = <T,>({ data, title, subtitle, tooltip }: WorldHeatMapProps<
     return null;
   }
 
+  const theme = useThemeStore((state) => state.theme)
   const [topology, setTopology] = useState(null);
 
   const getTopology = useCallback(async () => {
@@ -42,6 +45,7 @@ const WorldHeatMap = <T,>({ data, title, subtitle, tooltip }: WorldHeatMapProps<
       map: topology,
       borderWidth: 0,
       height: 800,
+      backgroundColor: themeConfig[theme].backgroundColor,
     },
     colors: ['#7950f2'],
     title: {

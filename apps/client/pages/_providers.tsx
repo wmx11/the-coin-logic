@@ -8,6 +8,7 @@ import React, { FC } from 'react';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import Layout from '../components/Layout';
 import client from '../data/apollo-client';
+import useThemeStore from 'store/useThemeStore';
 
 type ProvidersWrapperTypes = {
   children: React.ReactElement;
@@ -30,6 +31,7 @@ const web3Config = {
 };
 
 const ProvidersWrapper: FC<ProvidersWrapperTypes> = ({ children }): React.ReactElement => {
+  const theme = useThemeStore((state) => state.theme);
   const ConfirmationModal = dynamic<any>(() => import('components/Modals/ConfirmationModal'), { ssr: false });
   const Web3Modal = dynamic<any>(() => import('@web3modal/react').then((mod) => mod.Web3Modal), { ssr: false });
 
@@ -51,7 +53,7 @@ const ProvidersWrapper: FC<ProvidersWrapperTypes> = ({ children }): React.ReactE
             withCSSVariables
             emotionCache={mantineCache}
             theme={{
-              colorScheme: 'light',
+              colorScheme: theme,
               components: {
                 Container: {
                   defaultProps: {

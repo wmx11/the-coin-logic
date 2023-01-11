@@ -1,10 +1,9 @@
-import { Container } from '@mantine/core';
-import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundWrapper';
+import { Container, Text } from '@mantine/core';
+import BackgroundWrapper from 'components/BackgroundWrapper/BackgroundWrapper';
 import GradientButton from 'components/Buttons/GradientButton';
 import ProviderCard from 'components/ContentCollection/ProviderCard';
 import { JoinOurCommunity } from 'components/JoinOurCommunity';
 import Meta from 'components/Meta';
-import GradientText from 'components/Text/GradientText';
 import GradientTitle from 'components/Text/GradientTitle';
 import { QUERY_CALLBACK } from 'constants/general';
 import { getProviders } from 'data/getters/providers';
@@ -49,22 +48,28 @@ const NexusPage: FC<NexusPageProps> = ({ data }) => {
         title="NEXUS - Cryptocurrency, blockchain networking hub | Coin Logic"
         description="Dive into the NEXUS. Discover cryptocurrency Enthusiasts, YouTubers, Developers, Influencers, Community Managers, and more! Network with people and build meaningful connections."
       />
-      <SmallBackgroundWrapper>
-        <div className="flex flex-col items-center gap-4">
-          <GradientTitle align="center">Welcome to NEXUS</GradientTitle>
-          <GradientText align="center" size="sm">
-            Welcome to NEXUS, the premier cryptocurrency and blockchain networking hub. Connect with like-minded
-            individuals, learn about the latest developments in the industry, and stay up-to-date on the ever-evolving
-            world of digital currencies. Join our community today and be at the forefront of the blockchain revolution
-          </GradientText>
-          {!user || !user?.providerProfile ? (
-            <GradientButton className="text-center" onClick={handleClick}>
-              Apply for your NEXUS profile
-            </GradientButton>
-          ) : null}
-        </div>
-      </SmallBackgroundWrapper>
-      <Container className="py-10">{providers}</Container>
+      <BackgroundWrapper className="py-24">
+        <Container>
+          <div className="flex flex-col items-center gap-4">
+            <GradientTitle align="center" className="text-6xl">
+              Welcome to NEXUS
+            </GradientTitle>
+            <Text color="white" align="center" size="sm">
+              Welcome to NEXUS, the premier cryptocurrency and blockchain networking hub. Connect with like-minded
+              individuals, learn about the latest developments in the industry, and stay up-to-date on the ever-evolving
+              world of digital currencies. Join our community today and be at the forefront of the blockchain revolution
+            </Text>
+            {!user || !user?.providerProfile ? (
+              <GradientButton className="text-center" onClick={handleClick}>
+                Apply for your NEXUS profile
+              </GradientButton>
+            ) : null}
+          </div>
+        </Container>
+      </BackgroundWrapper>
+      <Container className="py-10">
+        <div>{providers}</div>
+      </Container>
       <JoinOurCommunity />
     </>
   );

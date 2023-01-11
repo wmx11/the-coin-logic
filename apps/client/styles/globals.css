@@ -17,6 +17,26 @@ html, body {
   --toastify-color-info: #5C7CFA !important;
 }
 
+.highcharts-title {
+  fill: #7950f2 !important;
+}
+
+.highcharts-grid.highcharts-yaxis-grid .highcharts-grid-line {
+  stroke: rgba(121,80,242,0.2) !important;
+}
+
+.highcharts-button-box {
+  fill: #7950f2
+}
+
+.highcharts-button text  {
+  fill: white !important;
+}
+
+.highcharts-exporting-group .highcharts-button-symbol {
+  stroke: white;
+}
+
 #dexscreener-embed {
   position: relative;
   width: 100%;

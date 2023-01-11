@@ -10,7 +10,7 @@ const PrimaryInformation = <T,>({
 }: {
   form: UseFormReturnType<T>;
   networks: Network[];
-  setImageBlob?: (image: Blob) => void;
+  setImageBlob?: (image: Blob | null) => void;
 }) => {
   return (
     <>

@@ -3,6 +3,8 @@ import Highcharts from 'highcharts/highstock';
 import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { Annotation } from 'types/Charts';
+import useThemeStore from 'store/useThemeStore';
+import { themeConfig } from 'utils/theme';
 
 type ChartTypes = {
   data: {
@@ -18,9 +20,12 @@ const AreaChart = ({ data, title }: ChartTypes) => {
     HighchartsExporting(Highcharts);
   }
 
+  const theme = useThemeStore((state) => state.theme);
+
   const options = {
     chart: {
       height: 400,
+      backgroundColor: themeConfig[theme].backgroundColor,
     },
     colors: ['#7950f2'],
 

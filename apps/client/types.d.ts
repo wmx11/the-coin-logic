@@ -6003,6 +6003,7 @@ export type Provider = {
   contactEmail?: Maybe<Scalars['String']>;
   dateAdded?: Maybe<Scalars['DateTime']>;
   discord?: Maybe<Scalars['String']>;
+  discordHandle?: Maybe<Scalars['String']>;
   displayEmail?: Maybe<Scalars['Boolean']>;
   displayPrices?: Maybe<Scalars['Boolean']>;
   enabled?: Maybe<Scalars['Boolean']>;
@@ -6015,6 +6016,7 @@ export type Provider = {
   name?: Maybe<Scalars['String']>;
   nickname?: Maybe<Scalars['String']>;
   offers?: Maybe<Scalars['String']>;
+  openForApplications?: Maybe<Scalars['Boolean']>;
   openForWork?: Maybe<Scalars['Boolean']>;
   priceFrom?: Maybe<Scalars['Float']>;
   priceTo?: Maybe<Scalars['Float']>;
@@ -6093,6 +6095,7 @@ export type ProviderCreateInput = {
   contactEmail?: InputMaybe<Scalars['String']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   discord?: InputMaybe<Scalars['String']>;
+  discordHandle?: InputMaybe<Scalars['String']>;
   displayEmail?: InputMaybe<Scalars['Boolean']>;
   displayPrices?: InputMaybe<Scalars['Boolean']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
@@ -6103,6 +6106,7 @@ export type ProviderCreateInput = {
   name?: InputMaybe<Scalars['String']>;
   nickname?: InputMaybe<Scalars['String']>;
   offers?: InputMaybe<Scalars['String']>;
+  openForApplications?: InputMaybe<Scalars['Boolean']>;
   openForWork?: InputMaybe<Scalars['Boolean']>;
   priceFrom?: InputMaybe<Scalars['Float']>;
   priceTo?: InputMaybe<Scalars['Float']>;
@@ -6131,6 +6135,7 @@ export type ProviderOrderByInput = {
   contactEmail?: InputMaybe<OrderDirection>;
   dateAdded?: InputMaybe<OrderDirection>;
   discord?: InputMaybe<OrderDirection>;
+  discordHandle?: InputMaybe<OrderDirection>;
   displayEmail?: InputMaybe<OrderDirection>;
   displayPrices?: InputMaybe<OrderDirection>;
   enabled?: InputMaybe<OrderDirection>;
@@ -6140,6 +6145,7 @@ export type ProviderOrderByInput = {
   name?: InputMaybe<OrderDirection>;
   nickname?: InputMaybe<OrderDirection>;
   offers?: InputMaybe<OrderDirection>;
+  openForApplications?: InputMaybe<OrderDirection>;
   openForWork?: InputMaybe<OrderDirection>;
   priceFrom?: InputMaybe<OrderDirection>;
   priceTo?: InputMaybe<OrderDirection>;
@@ -6189,6 +6195,7 @@ export type ProviderUpdateInput = {
   contactEmail?: InputMaybe<Scalars['String']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   discord?: InputMaybe<Scalars['String']>;
+  discordHandle?: InputMaybe<Scalars['String']>;
   displayEmail?: InputMaybe<Scalars['Boolean']>;
   displayPrices?: InputMaybe<Scalars['Boolean']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
@@ -6199,6 +6206,7 @@ export type ProviderUpdateInput = {
   name?: InputMaybe<Scalars['String']>;
   nickname?: InputMaybe<Scalars['String']>;
   offers?: InputMaybe<Scalars['String']>;
+  openForApplications?: InputMaybe<Scalars['Boolean']>;
   openForWork?: InputMaybe<Scalars['Boolean']>;
   priceFrom?: InputMaybe<Scalars['Float']>;
   priceTo?: InputMaybe<Scalars['Float']>;
@@ -6225,6 +6233,7 @@ export type ProviderWhereInput = {
   contactEmail?: InputMaybe<StringFilter>;
   dateAdded?: InputMaybe<DateTimeNullableFilter>;
   discord?: InputMaybe<StringFilter>;
+  discordHandle?: InputMaybe<StringFilter>;
   displayEmail?: InputMaybe<BooleanFilter>;
   displayPrices?: InputMaybe<BooleanFilter>;
   enabled?: InputMaybe<BooleanFilter>;
@@ -6235,6 +6244,7 @@ export type ProviderWhereInput = {
   name?: InputMaybe<StringFilter>;
   nickname?: InputMaybe<StringFilter>;
   offers?: InputMaybe<StringFilter>;
+  openForApplications?: InputMaybe<BooleanFilter>;
   openForWork?: InputMaybe<BooleanFilter>;
   priceFrom?: InputMaybe<FloatNullableFilter>;
   priceTo?: InputMaybe<FloatNullableFilter>;
