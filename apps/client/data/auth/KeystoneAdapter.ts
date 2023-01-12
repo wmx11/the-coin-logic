@@ -245,7 +245,11 @@ export function KeystoneAdapter(p: PrismaClient, req: NextApiRequest, res: NextA
         where: {
           id: (data?.id as string) || '',
         },
-        data,
+        data: {
+          expires: data?.expires || '',
+          sessionToken: data?.sessionToken || '',
+          userId: data?.userId || '',
+        },
       });
 
       return (session ?? null) as AdapterSession;
