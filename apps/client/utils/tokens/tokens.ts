@@ -1,8 +1,9 @@
+import { getTime, subSeconds } from 'date-fns';
 import { SignJWT, jwtVerify, type JWTPayload } from 'jose';
 
 export const tokens = {
   sign: async <T>(payload: T, secret: string): Promise<string> => {
-    const iat = Math.floor(Date.now() / 1000);
+    const iat = Math.floor(getTime(subSeconds(new Date(), 5)) / 1000);
     const exp = iat + 60 * 60; // one hour
 
     return new SignJWT({ ...(payload as unknown as JWTPayload) })
