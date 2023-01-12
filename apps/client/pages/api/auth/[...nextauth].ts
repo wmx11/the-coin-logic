@@ -1,4 +1,4 @@
-import { NEXT_AUTH_SESSION_TOKEN } from 'constants/general';
+import { NEXT_AUTH_SESSION_TOKEN, QUERY_CALLBACK_ERROR } from 'constants/general';
 import Cookies from 'cookies';
 import { KeystoneAdapter } from 'data/auth/KeystoneAdapter';
 import { keystoneAuthenticate } from 'data/auth/keystoneAuthenticate';
@@ -8,6 +8,7 @@ import NextAuth from 'next-auth';
 import { decode, encode } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
+import routes from 'routes';
 import { PrismaClient, prismaClient } from 'tcl-packages/prismaClient';
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
@@ -49,6 +50,43 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     providers: providers,
     callbacks: {
       async signIn({ user, account, profile, email, credentials }) {
+        if (account.provider === 'google') {
+          const existingUser = await prismaClient?.user.findFirst({
+            where: {
+              email: {
+                equals: (user?.email as string) || '',
+                mode: 'insensitive',
+              },
+            },
+            include: {
+              userAuth: {
+                include: {
+                  accounts: {
+                    select: {
+                      provider: true,
+                    },
+                  },
+                },
+              },
+            },
+          });
+
+          if (!existingUser) {
+            return true;
+          }
+
+          // If there is a user created using oAuth and has no previous credentials account
+          if (existingUser?.userAuth?.access_token) {
+            return true;
+          }
+
+          const error = encodeURIComponent(
+            `You cannot login or create an account using ${account.provider}. Account by this email address already exists. Please sign in using email and password.`,
+          );
+          res.redirect(`${routes.authCheck}?${QUERY_CALLBACK_ERROR}=${error}`);
+          return false;
+        }
+
         if (
           req?.query?.nextauth?.includes('callback') &&
           req?.query?.nextauth?.includes('credentials') &&

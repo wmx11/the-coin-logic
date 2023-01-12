@@ -103,7 +103,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       await deleteToken();
 
-      const message = encodeURIComponent(`${user?.name}, your email has been verified.`);
+      const message = encodeURIComponent(`${user?.name}, your email has been verified. You can log in now.`);
       return res.redirect(`${routes.authCheck}?${QUERY_CALLBACK_SUCCESS}=${message}`);
     } catch (error) {
       return res.redirect(`${routes.authCheck}?${QUERY_CALLBACK_ERROR}=${error}`);

@@ -62,7 +62,7 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
     {
       label: '#',
       renderCell: ({ order }) => (
-        <Text size="xs" color="dimmed">
+        <Text size="xs" color="dimmed" key={`order_${order}`}>
           {order}
         </Text>
       ),
@@ -70,7 +70,7 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
     {
       label: 'Name',
       pinLeft: true,
-      renderCell: ({ project }) => (
+      renderCell: ({ project, order }) => (
         <>
           <ProjectTitle
             component="a"
@@ -79,17 +79,18 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
             size="sm"
             avatar={project.logo ? project.logo.url : ''}
             notifications={project.notifications}
+            key={`project_title_${order}`}
           />
         </>
       ),
     },
     {
       label: 'Price',
-      renderCell: ({ price, priceChange }) => (
-        <>
+      renderCell: ({ price, priceChange, order }) => (
+        <div key={`project_price_${order}`}>
           {<Text>{toCurrency(price as number)}</Text>}
           {<Trend previousValue={priceChange as PreviousValueTypes} inline={true} />}
-        </>
+        </div>
       ),
       sort: {
         sortKey: 'PRICE',
@@ -97,11 +98,11 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
     },
     {
       label: 'Market Cap',
-      renderCell: ({ marketCap, marketCapChange }) => (
-        <>
+      renderCell: ({ marketCap, marketCapChange, order }) => (
+        <div key={`project_mc_${order}`}>
           {toCurrency(marketCap as number)}
           {<Trend previousValue={marketCapChange as PreviousValueTypes} inline={true} />}
-        </>
+        </div>
       ),
       sort: {
         sortKey: 'MARKET_CAP',
@@ -109,11 +110,11 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
     },
     {
       label: 'Holders',
-      renderCell: ({ holders, holdersChange }) => (
-        <>
+      renderCell: ({ holders, holdersChange, order }) => (
+        <div key={`project_holders_${order}`}>
           {toLocaleString(holders as number) || <AiOutlineEllipsis />}
           {<Trend previousValue={holdersChange as PreviousValueTypes} inline={true} />}
-        </>
+        </div>
       ),
       sort: {
         sortKey: 'HOLDERS',
@@ -121,11 +122,11 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
     },
     {
       label: 'Avg. Holdings',
-      renderCell: ({ avgHoldings, avgHoldingsChange }) => (
-        <>
+      renderCell: ({ avgHoldings, avgHoldingsChange, order }) => (
+        <div key={`project_avgHolders_${order}`}>
           {toLocaleString(avgHoldings as number) || <AiOutlineEllipsis />}
           {<Trend previousValue={avgHoldingsChange as PreviousValueTypes} inline={true} />}
-        </>
+        </div>
       ),
       sort: {
         sortKey: 'AVG_HOLDINGS',
@@ -133,16 +134,16 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
     },
     {
       label: 'Avg. Holdings (USD)',
-      renderCell: ({ avgHoldings, price }) => <>{toCurrency(avgHoldings * price) || <AiOutlineEllipsis />}</>,
+      renderCell: ({ avgHoldings, price, order }) => <div key={`project_avgHoldings_${order}`}>{toCurrency(avgHoldings * price) || <AiOutlineEllipsis />}</div>,
     },
-    { label: 'Tags', renderCell: ({ project }) => <Badges badges={project.tags as Tag[]} /> },
+    { label: 'Tags', renderCell: ({ project, order }) => <Badges key={`project_badges_${order}`} badges={project.tags as Tag[]} /> },
     {
       label: 'TCL Plan',
-      renderCell: ({ project }) => <PaymentPlanBadge paymentPlan={project?.paymentPlan} badgeProps={{ size: 'xs' }} />,
+      renderCell: ({ project, order }) => <PaymentPlanBadge key={`project_plan_badge_${order}`} paymentPlan={project?.paymentPlan} badgeProps={{ size: 'xs' }} />,
     },
     {
       label: 'Network',
-      renderCell: ({ project }) => <NetworkBadge network={project.network as Network} showName={false} />,
+      renderCell: ({ project, order }) => <NetworkBadge key={`project_newtork_badge_${order}`} network={project.network as Network} showName={false} />,
     },
   ];
   return (

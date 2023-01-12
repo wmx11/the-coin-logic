@@ -14,7 +14,7 @@ import useLoginFlowStore from 'store/useLoginFlowStore';
 import { tokens } from 'utils/tokens/tokens';
 import { UserLogin, userLoginSchema } from '../../../schemas/user';
 
-const ERROR_MESSAGE = 'Your email address or password is invalid. Please try again.';
+const ERROR_MESSAGE = 'Your email address or password is invalid.';
 
 const SignInContent = () => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -29,22 +29,17 @@ const SignInContent = () => {
       process.env.NEXT_PUBLIC_SIGNED_SECRET || '',
     );
 
-  const checkVerification = useCallback(async () => {
+  const checkAccessToken = async () => {
+    const session = await getSession();    
     if (!session) {
-      return;
+      await new Promise((resolve) => setTimeout(() => resolve(null), 1000));
+      return null;
     }
     const token = await verifyToken((session?.token as string) || '');
-
-    if (!token.isVerified) {
-      setErrorMessage('Your account is not verified.');
-    }
-
-    setErrorMessage('');
-  }, [session]);
-
-  useEffect(() => {
-    checkVerification();
-  }, [session]);
+    setValue(token?.accessToken || '');
+    toast.success('You have successfully logged in!');
+    return true;
+  };
 
   const form = useForm({
     validate: zodResolver(userLoginSchema),
@@ -65,21 +60,18 @@ const SignInContent = () => {
 
       if (data?.status === 401) {
         setErrorMessage(ERROR_MESSAGE);
+        setLoading(false);
       }
 
       if (data?.status === 200) {
-        await new Promise((resolve, reject) => {
-          setTimeout(async () => {
-            try {
-              const session = await getSession();
-              const token = await verifyToken((session?.token as string) || '');
-              setValue(token?.accessToken || '');
-              toast.success('You have successfully logged in!');
-              resolve(session);
-            } catch (error) {
-              reject(error);
-            }
-          }, 500);
+        await new Promise(async (resolve, reject) => {
+          let tokens = await checkAccessToken();
+          if (!tokens) {
+            tokens = await checkAccessToken();
+          }
+          if (tokens) {
+            resolve(tokens);
+          }
         });
 
         resetAll();

@@ -2,7 +2,10 @@ import config from '../config';
 import emailClient from '../emailClient';
 
 const message = {
-  from: config.tclEmail,
+  from: {
+    name: 'TheCoinLogic',
+    email: config.tclEmail,
+  },
   subject: 'TCL - Password Reset Request',
 };
 

@@ -28,7 +28,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
       await emailClient.send({
-        from: config.tclEmail,
+        from: {
+          email: config.tclEmail,
+          name: 'TheCoinLogic',
+        },
         cc,
         to,
         subject,

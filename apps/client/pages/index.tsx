@@ -44,8 +44,8 @@ const Home: NextPage<HomeProps> = ({ projects, projectsCount, blogPosts, topCoin
       ssr: false,
     },
   );
-  const SubscribeToEmail = dynamic<any>(() => import('components/SubscribeToEmail'), { ssr: false });
-  const TrackVitalsDisclaimer = dynamic<any>(() => import('../components/TrackVitalsDisclaimer'), { ssr: false });
+  const SubscribeToEmail = dynamic<any>(() => import('components/SubscribeToEmail'));
+  const TrackVitalsDisclaimer = dynamic<any>(() => import('../components/TrackVitalsDisclaimer'));
 
   const openLogInOrPasswordResetModal = useCallback(() => {
     if (query.signIn) {

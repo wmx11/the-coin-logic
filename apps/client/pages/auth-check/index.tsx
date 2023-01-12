@@ -13,9 +13,9 @@ const index = () => {
   const { data: session, status } = useSession();
   const [storedValue, setValue] = useLocalStorage(SESSION_TOKEN, session?.token);
   const router = useRouter();
-  const callbackQuery = router.query[QUERY_CALLBACK];
-  const callbackErrorQuery = router.query[QUERY_CALLBACK_ERROR];
-  const callbackSuccessQuery = router.query[QUERY_CALLBACK_SUCCESS];
+  const callbackQuery = router.query[QUERY_CALLBACK] || undefined;
+  const callbackErrorQuery = router.query[QUERY_CALLBACK_ERROR] || undefined;
+  const callbackSuccessQuery = router.query[QUERY_CALLBACK_SUCCESS] || undefined;
 
   useEffect(() => {
     if (callbackSuccessQuery) {
