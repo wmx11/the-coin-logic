@@ -243,12 +243,10 @@ export function KeystoneAdapter(p: PrismaClient, req: NextApiRequest, res: NextA
     updateSession: async (data): Promise<AdapterSession> => {
       const session = await p.session.update({
         where: {
-          id: (data?.id as string) || '',
+          sessionToken: (data?.sessionToken as string) || '',
         },
         data: {
           expires: data?.expires || '',
-          sessionToken: data?.sessionToken || '',
-          userId: data?.userId || '',
         },
       });
 

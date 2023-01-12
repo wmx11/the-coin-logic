@@ -205,7 +205,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     },
     session: {
       strategy: 'database',
-      maxAge: 30 * 60,
+      maxAge: 60 * 60,
       updateAge: 15 * 60,
     },
     pages: {

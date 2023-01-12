@@ -8,7 +8,7 @@ import RequestVerificationButton from 'components/RequestResetPasswordOrVerifica
 import { SESSION_TOKEN } from 'constants/general';
 import useLocalStorage from 'hooks/useLocalStorage';
 import { getSession, signIn, useSession } from 'next-auth/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import useLoginFlowStore from 'store/useLoginFlowStore';
 import { tokens } from 'utils/tokens/tokens';
@@ -30,7 +30,7 @@ const SignInContent = () => {
     );
 
   const checkAccessToken = async () => {
-    const session = await getSession();    
+    const session = await getSession();
     if (!session) {
       await new Promise((resolve) => setTimeout(() => resolve(null), 1000));
       return null;
@@ -39,6 +39,34 @@ const SignInContent = () => {
     setValue(token?.accessToken || '');
     toast.success('You have successfully logged in!');
     return true;
+  };
+
+  const tryCheckAccessToken = async () => {
+    let tries = 0;
+    const MAX_TRIES = 5;
+
+    const retry = async () => {
+      console.log(tries);
+
+      await new Promise(async (resolve, reject) => {
+        if (tries > MAX_TRIES) {
+          reject('Please refresh the page and try again.');
+        }
+
+        const tokens = await checkAccessToken();
+
+        if (!tokens) {
+          tries += 1;
+          await retry();
+        }
+
+        if (tokens) {
+          resolve(tokens);
+        }
+      });
+    };
+
+    return await retry();
   };
 
   const form = useForm({
@@ -64,16 +92,7 @@ const SignInContent = () => {
       }
 
       if (data?.status === 200) {
-        await new Promise(async (resolve, reject) => {
-          let tokens = await checkAccessToken();
-          if (!tokens) {
-            tokens = await checkAccessToken();
-          }
-          if (tokens) {
-            resolve(tokens);
-          }
-        });
-
+        await tryCheckAccessToken();
         resetAll();
         setErrorMessage('');
         setLoginSuccess(true);
