@@ -153,10 +153,7 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
         </div>
       ),
     },
-    {
-      label: 'Tags',
-      renderCell: ({ project, order }) => <Badges key={`project_badges_${order}`} badges={project.tags as Tag[]} />,
-    },
+
     {
       label: 'Audit',
       renderCell: (data) => {
@@ -214,6 +211,16 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
       },
     },
     {
+      label: 'Network',
+      renderCell: ({ project, order }) => (
+        <NetworkBadge key={`project_newtork_badge_${order}`} network={project.network as Network} showName={false} />
+      ),
+    },
+    {
+      label: 'Tags',
+      renderCell: ({ project, order }) => <Badges key={`project_badges_${order}`} badges={project.tags as Tag[]} />,
+    },
+    {
       label: 'TCL Plan',
       renderCell: ({ project, order }) => (
         <PaymentPlanBadge
@@ -221,12 +228,6 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
           paymentPlan={project?.paymentPlan}
           badgeProps={{ size: 'xs' }}
         />
-      ),
-    },
-    {
-      label: 'Network',
-      renderCell: ({ project, order }) => (
-        <NetworkBadge key={`project_newtork_badge_${order}`} network={project.network as Network} showName={false} />
       ),
     },
   ];
