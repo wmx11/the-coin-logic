@@ -15,31 +15,26 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <div>
       <Head>
-        <title key="title">Trusted and Transparent data for Cryptocurrency and DeFi Projects | Coin Logic</title>
-
+        <title key="title">Cryptocurrency & DeFi Analytics, Prices, and Charts | Coin Logic</title>
         <meta
           key="og:title"
           property="og:title"
-          content="Trusted and Transparent data for Cryptocurrency and DeFi Projects | Coin Logic"
+          content="Cryptocurrency & DeFi Analytics, Prices, and Charts | Coin Logic"
         />
 
         <meta
           name="description"
           key="description"
-          content="Transparent analytics, historical data for Audited, and KYC DeFi, and Cryptocurrency projects. Free access to data, tools, services, and a global community."
+          content="See cryptocurrency & DeFi prices live. Explore analytics, market cap, trading volume charts, and more. Discover trending projects and their communities."
         />
-
         <meta
           property="og:description"
           key="og:description"
-          content="Transparent analytics, historical data for Audited, and KYC DeFi, and Cryptocurrency projects. Free access to data, tools, services, and a global community."
+          content="See cryptocurrency & DeFi prices live. Explore analytics, market cap, trading volume charts, and more. Discover trending projects and their communities."
         />
-
         <meta key="og:url" property="og:url" content="https://thecoinlogic.com/" />
         <link key="canonical" rel="canonical" href="https://thecoinlogic.com/" />
-
-        <meta key="og:image" property="og:image" content="" />
-
+        <meta key="og:image" property="og:image" content="https://thecoinlogic.com/images/meta_image.png" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="600" />
         <meta property="og:image:height" content="315" />

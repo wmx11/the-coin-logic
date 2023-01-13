@@ -33,12 +33,12 @@ const Announcements: FC<AnnouncementsProps> = ({ announcements, count }) => {
   return (
     <>
       <Meta
-        title="Cryptocurrency projects Discord Announcements tracker | Coin Logic"
-        description="Keep track of the latest project announcements with our Discord Announcements integration."
+        title="Cryptocurrency, DeFi & NFT Projects' Announcements | Coin Logic"
+        description="Stay up to date and track announcements of cryptocurrency, DeFi, and NFT projects listed on TheCoinLogic."
       />
       <SmallBackgroundWrapper>
         <div className="text-center">
-          <GradientTitle>Project Announcements</GradientTitle>
+          <GradientTitle>Projects' Announcements</GradientTitle>
           <Text size="sm" color="dimmed">
             We monitor the servers and aggregate all incoming new announcements in a single place. You can filter the
             announcements by project, directly view them in their Discord server, and share them with your social

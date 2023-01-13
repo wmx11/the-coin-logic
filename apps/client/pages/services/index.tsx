@@ -42,7 +42,10 @@ const ServiceCard: FC<ServiceCardProps> = ({ title, description, image }) => {
 const index = () => {
   return (
     <>
-      <Meta title="Listing, tracking, audits, KYC, and other services | Coin Logic" />
+      <Meta
+        title="TheCoinLogic Services: Listing, Tracking, Analytics and More | Coin Logic"
+        description="TheCoinLogic offers services for cryptocurrency, DeFi, and NFT projects from listing, tracking, analytics, to audits, KYC, community management from partners."
+      />
       <SmallBackgroundWrapper>
         <div className="text-center">
           <GradientTitle>Our Features and services</GradientTitle>

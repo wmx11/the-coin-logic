@@ -34,6 +34,224 @@ volume
 customTrackers
 dateAdded`;
 
+const PROJECT_DATA_GETTERS = `
+id
+name
+slug
+website
+whitepaper
+contractAddress
+pairAddress
+isNft
+trackHolders
+trackHoldersFromTokenAmount
+initialized
+trackData
+trackSocials
+displayTransparencyScore
+displayCommunityVotes
+displayCommunityComments
+displayBlogPosts
+trackMarketCap
+trackPrice
+sellTax
+buyTax
+rebasePeriod
+apy
+calendar
+tclRating
+transparencyScore
+auditBy {
+  url
+  auditor {
+    name
+    image {
+      url
+    }
+  }
+}
+auditByCount
+kycBy {
+  url
+  kycGroup {
+    name
+    image {
+      url
+    }
+  }
+}
+kycByCount
+customVetting
+notifications(where: { enabled: { equals: true } }) {
+  title
+  content
+  type
+}
+liquidityPair {
+  name
+  tokenAddress
+  customExchangeAddress
+  address
+  isPrimary
+  order
+  stablePair {
+    pairToken {
+      name
+      order
+    }
+  }
+  exchange {
+    name
+    url
+    tradeUrl
+    logo {
+      url
+    }
+  }
+}
+network {
+  name
+  scanner
+  tokenScanner
+  logo {
+    url
+  }
+}
+description
+twitter
+discord
+telegram
+reddit
+github
+medium
+dateAdded
+logo {
+  url
+}
+tags {
+  name
+}
+parentProject {
+  name
+  slug
+  logo {
+    url
+  }
+}
+content(take: 3, orderBy: { dateAdded: desc }) {
+  id
+  title
+  slug
+  summary
+  views
+  likesCount
+  contentType {
+    title
+  }
+  image {
+    url
+  }
+  user {
+    name
+  }
+  dateAdded
+}
+events(orderBy: { scheduledStartTimestamp: asc }, where: { scheduledStartTimestamp: { gt: $date } }) {
+  id
+  guildName
+  channelName
+  name
+  description
+  inviteUrl
+  scheduledStartTimestamp
+  scheduledEndTimestamp
+  location
+  image
+}
+announcements(orderBy: { dateAdded: desc }, take: 5) {
+  id
+  title
+  content
+  messageUrl
+  dateAdded
+}
+transparencyHighlights
+paymentPlan {
+  id
+  name
+  slug
+  tooltip
+  description
+  price
+}`;
+
+const PROJECT_DATA_GETTERS_ADDITIONAL = `
+relatedProjects: projects(
+  where: { parentProject: { some: { id: { equals: $projectId } } } }
+) {
+  name
+  slug
+  logo {
+    url
+  }
+}
+socialStats(
+  where: { project: { id: { equals: $projectId } } }
+  take: 1
+  orderBy: { dateAdded: desc }
+) {
+  socialsDateAdded: dateAdded
+  twitter
+  telegram
+  discord
+}
+paymentPlans {
+  id
+  name
+  slug
+  description
+  tooltip
+  price
+  discount
+}
+quizzes(
+  where: { project: { id: { equals: $projectId } } }
+  orderBy: { dateAdded: desc }
+  take: 3
+) {
+  id
+  title
+  slug
+  image {
+    url
+  }
+  hasRewards
+  rewardsAmount
+  rewardType
+  totalWinners
+  winners
+  views
+  likesCount
+  startDate
+  dateAdded
+}
+transcriptions(
+  where: { project: { id: { equals: $projectId } } }
+  orderBy: { dateAdded: desc }
+  take: 3
+) {
+  id
+  title
+  slug
+  summary
+  user {
+    name
+  }
+  dateAdded
+  views
+  likesCount
+}`;
+
 export const GET_PROJECTS_COUNT = `{
   projectsCount(where: { enabled: { equals: true }, isListed: { equals: true } })
 }`;
@@ -136,6 +354,7 @@ export const GET_ENABLED_AND_LISTED_PROJECTS = `{
     slug
     trackPrice
     trackMarketCap
+    transparencyScore
     notifications(where: { enabled: { equals: true } }) {
       title
       content
@@ -157,6 +376,24 @@ export const GET_ENABLED_AND_LISTED_PROJECTS = `{
       tooltip
       name
       slug
+    }
+    kycBy {
+      url
+      kycGroup {
+        name
+        image {
+          url
+        }
+      }
+    }
+    auditBy {
+      url
+      auditor {
+        name
+        image {
+          url
+        }
+      }
     }
   }
 }`;
@@ -181,223 +418,18 @@ query($projectId: ID, $date: DateTime) {
   ) {
     ${COMMON_MARKET_STATS}
     project {
-      id
-      name
-      slug
-      website
-      whitepaper
-      contractAddress
-      pairAddress
-      isNft
-      trackHolders
-      trackHoldersFromTokenAmount
-      initialized
-      trackData
-      trackSocials
-      displayTransparencyScore
-      displayCommunityVotes
-      displayCommunityComments
-      displayBlogPosts
-      trackMarketCap
-      trackPrice
-      sellTax
-      buyTax
-      rebasePeriod
-      apy
-      calendar
-      tclRating
-      transparencyScore
-      auditBy {
-        url
-        auditor {
-          name
-          image {
-            url
-          }
-        }
-      }
-      auditByCount
-      kycBy {
-        url
-        kycGroup {
-          name
-          image {
-            url
-          }
-        }
-      }
-      kycByCount
-      customVetting
-      notifications(where: { enabled: { equals: true } }) {
-        title
-        content
-        type
-      }
-      liquidityPair {
-        name
-        tokenAddress
-        customExchangeAddress
-        address
-        isPrimary
-        order
-        stablePair {
-          pairToken {
-            name
-            order
-          }
-        }
-        exchange {
-          name
-          url
-          tradeUrl
-          logo {
-            url
-          }
-        }
-      }
-      network {
-        name
-        scanner
-        tokenScanner
-        logo {
-          url
-        }
-      }
-      description
-      twitter
-      discord
-      telegram
-      reddit
-      github
-      medium
-      dateAdded
-      logo {
-        url
-      }
-      tags {
-        name
-      }
-      parentProject {
-        name
-        slug
-        logo {
-          url
-        }
-      }
-      content(take: 3, orderBy: { dateAdded: desc }) {
-        id
-        title
-        slug
-        summary
-        views
-        likesCount
-        contentType {
-          title
-        }
-        image {
-          url
-        }
-        user {
-          name
-        }
-        dateAdded
-      }
-      events(orderBy: { scheduledStartTimestamp: asc }, where: { scheduledStartTimestamp: { gt: $date } }) {
-        id
-        guildName
-        channelName
-        name
-        description
-        inviteUrl
-        scheduledStartTimestamp
-        scheduledEndTimestamp
-        location
-        image
-      }
-      announcements(orderBy: { dateAdded: desc }, take: 5) {
-        id
-        title
-        content
-        messageUrl
-        dateAdded
-      }
-      transparencyHighlights
-      paymentPlan {
-        id
-        name
-        slug
-        tooltip
-        description
-        price
-      }
+      ${PROJECT_DATA_GETTERS}
     }
   }
-  relatedProjects: projects(
-    where: { parentProject: { some: { id: { equals: $projectId } } } }
-  ) {
-    name
-    slug
-    logo {
-      url
+  ${PROJECT_DATA_GETTERS_ADDITIONAL}
+}`;
+
+export const GET_PROJECT_AND_MARKET_STATS_BY_ID_FALLBACK = `
+  query($projectId: ID, $date: DateTime) {
+    project(where: { id: $projectId }) {
+      ${PROJECT_DATA_GETTERS}
     }
   }
-  socialStats(
-    where: { project: { id: { equals: $projectId } } }
-    take: 1
-    orderBy: { dateAdded: desc }
-  ) {
-    socialsDateAdded: dateAdded
-    twitter
-    telegram
-    discord
-  }
-  paymentPlans {
-    id
-    name
-    slug
-    description
-    tooltip
-    price
-    discount
-  }
-  quizzes(
-    where: { project: { id: { equals: $projectId } } }
-    orderBy: { dateAdded: desc }
-    take: 3
-  ) {
-    id
-    title
-    slug
-    image {
-      url
-    }
-    hasRewards
-    rewardsAmount
-    rewardType
-    totalWinners
-    winners
-    views
-    likesCount
-    startDate
-    dateAdded
-  }
-  transcriptions(
-    where: { project: { id: { equals: $projectId } } }
-    orderBy: { dateAdded: desc }
-    take: 3
-  ) {
-    id
-    title
-    slug
-    summary
-    user {
-      name
-    }
-    dateAdded
-    views
-    likesCount
-  }
-}
 `;
 
 export const GET_PROJECTS_BY_USER_EMAIL = `

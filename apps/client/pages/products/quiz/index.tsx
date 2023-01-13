@@ -29,8 +29,8 @@ const QuizzesPage: FC<QuizzesProps> = ({ quizzes, quizzesCount }) => {
   return (
     <>
       <Meta
-        title="Cryptocurrency project quizzes. Test your knowledge, earn rewards | Coin Logic"
-        description="Test your knowledge by taking projects specific quizzes and win rewards!"
+        title="TheCoinLogic Quizzes: Test Your Crypto Knowledge"
+        description="TheCoinLogic quizzes allow you to test your knowledge by taking project specific quizzes. Get all the answers right and win rewards!"
       />
       <SmallBackgroundWrapper>
         <div className="text-center">

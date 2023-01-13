@@ -6,11 +6,12 @@ type SignedRequest<T> = {
   data: Object | T[];
   url: string;
   type: 'get' | 'post' | 'delete' | 'put';
+  isFormData?: boolean;
   headers?: Record<string, string>;
 };
 
 export const signedRequest = <T>(
-  { type, data, url, headers }: SignedRequest<T>,
+  { type, data, url, headers, isFormData }: SignedRequest<T>,
   userId: string,
   additionalData?: T,
 ) => {
@@ -26,7 +27,11 @@ export const signedRequest = <T>(
     url,
     method: type,
     data: data,
-    headers: { Authorization: `Bearer ${authToken}`, ...headers },
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      ...headers,
+      ...(isFormData ? { 'Content-Type': 'multipart/form-data' } : {}),
+    },
     maxBodyLength: MAX_BODY_LENGTH,
     maxContentLength: MAX_CONTENT_LENGTH,
   });

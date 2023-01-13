@@ -15,12 +15,10 @@ const ProjectsPage: FC<ProjectsPageProps> = ({ projects, projectsCount }) => {
   return (
     <>
       <Meta
-        title="Audited and KYC'd Cryptocurrency, and DeFi Projects | Coin Logic"
-        description="Explore our list of audited and KYC'd cryptocurrency and DeFi projects. Real, transparent, and in-depth data on The Coin Logic."
+        title="All Cryptocurrency & DeFi Projects | Coin Logic"
+        description="Explore all cryptocurrency & DeFi projects listed on TheCoinLogic. Sort by price, market cap, holders. See transparency scores, audits, KYC, and more."
       />
-      <Container className="py-10">
-        <ProjectsTable data={projects} projectsCount={projectsCount} />
-      </Container>
+      <ProjectsTable data={projects} projectsCount={projectsCount} />
     </>
   );
 };

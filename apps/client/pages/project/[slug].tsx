@@ -266,14 +266,14 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
   const slug = params?.slug;
   const projectData = await withRedisCache(`projectData_${slug}`, () => getProjectAndMarketStatsBySlug(slug as string));
 
-  if (!projectData) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
+  // if (!projectData) {
+  //   return {
+  //     redirect: {
+  //       destination: '/',
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 
   return {
     props: {

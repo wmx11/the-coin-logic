@@ -23,8 +23,8 @@ const index: FC<Props> = ({ products, paymentPlans, usersWithTheSameIp }) => {
   return (
     <>
       <Meta
-        title="Cryptocurrency Project Listing, Marketing Tracking & More | Coin Logic"
-        description="Get the tools you need for your cryptocurrency project. Track all marketing efforts, measure the success of your campaigns, and get an analytics report that's actionable and useful."
+        title="Crypto, DeFi, NFT Listing, Tracking, Analytics | Coin Logic"
+        description="TheCoinLogic provides services & tools for crypto, DeFi, NFT projects from listing, tracking, analytics, to audits, KYC, community management from our partners."
       />
       <SmallBackgroundWrapper>
         <div className="text-center">

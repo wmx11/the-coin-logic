@@ -26,8 +26,8 @@ const TranscriptionsPage: FC<TranscriptionsPageProps> = ({ data, count }) => {
   return (
     <>
       <Meta
-        title="Crypto Projects' Transcriptions | Coin Logic"
-        description="Automatically convert your project's AMAs, meetings, and conferences to text using The Coin Logic AI solution. Summarize, and extract key points, topics, and lists. Save time and resources for your community."
+        title="Crypto & DeFi AMA transcripts and summaries | Coin Logic"
+        description="Transcribe and summarize crypto & DeFi project AMAs with AI. Browse through dozens of already prepared AMA, meeting, and community updates on TheCoinLogic."
       />
       <div>
         <BackgroundWrapper className="min-h-screen flex items-center">
@@ -41,6 +41,7 @@ const TranscriptionsPage: FC<TranscriptionsPageProps> = ({ data, count }) => {
                 solution. Summarize, and extract key points, topics, and lists. Save time and resources for your
                 community.
               </Text>
+              <Text className="text-white">Browse through dozens of other transcripts!</Text>
             </div>
             <div className="flex gap-4 flex-wrap justify-center">
               <Link href={routes.transcriptionCreate} passHref>

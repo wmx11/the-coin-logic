@@ -1,6 +1,7 @@
 import { Select, TextInput } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import ImageUpload from 'components/ImageUpload';
+import TagSelect from 'components/TagSelect';
 import { Network } from 'types';
 
 const PrimaryInformation = <T,>({
@@ -59,6 +60,8 @@ const PrimaryInformation = <T,>({
           description="The network/chain your project is operating on. If you can't find your blockchain, select any and leave the information in the description box."
         />
       ) : null}
+
+      <TagSelect form={form} isProject={true} description="Choose tags that best describe your project" />
     </>
   );
 };

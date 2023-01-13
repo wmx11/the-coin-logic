@@ -1,4 +1,4 @@
-import { Checkbox, Text, Textarea } from '@mantine/core';
+import { Checkbox, Divider, Text, Textarea } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import GradientButton from 'components/Buttons/GradientButton';
 import GoBack from 'components/GoBack';
@@ -19,6 +19,7 @@ import { signedRequest } from 'utils/signedRequest';
 import PrimaryInformation from './PrimaryInformation';
 import ProjectLinks from './ProjectLinks';
 import SocialMedia from './SocialMedia';
+import { Discord } from 'components/Socials/Socials';
 
 type AddProjectProps = {
   networks: Network[];
@@ -60,6 +61,7 @@ const AddProject: FC<AddProjectProps> = ({ networks }) => {
       reddit: '',
       youtube: '',
       medium: '',
+      tags: [],
     },
   });
 
@@ -81,7 +83,7 @@ const AddProject: FC<AddProjectProps> = ({ networks }) => {
       );
 
       const { data } = await signedRequest(
-        { type: 'post', url: routes.api.project.create, data: fd, headers: { 'Content-Type': 'multipart/form-data' } },
+        { type: 'post', url: routes.api.project.create, data: fd, isFormData: true },
         user?.id as string,
       );
 
@@ -194,6 +196,10 @@ const AddProject: FC<AddProjectProps> = ({ networks }) => {
             <GradientButton size="md" type="submit" loading={loading}>
               Submit for review
             </GradientButton>
+
+            <Divider label="And" labelPosition="center" />
+
+            <Discord type="button" label="Join us on Discord & Leave Feedback!" />
           </div>
         </form>
       ) : null}

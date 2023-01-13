@@ -90,7 +90,7 @@ const ProfilePage: FC<ProfilePageProps> = ({ data }) => {
     <>
       <Meta
         title={`${name} - NEXUS Profile | Coin Logic`}
-        description={`Get the latest insights and updates from ${name}! Follow ${name} for content, and valuable insights on all things crypto.`}
+        description={`Get the latest updates from ${name}! Follow ${name} for content, and valuable insights on all things crypto!`}
         image={image?.url as string}
       />
       <Container size="md" className="pb-10">

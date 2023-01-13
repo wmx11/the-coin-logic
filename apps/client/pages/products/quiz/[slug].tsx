@@ -18,7 +18,7 @@ const Quiz: FC<QuizProps> = ({ quiz }) => {
     <>
       <Meta
         title={`${quiz.title} | Coin Logic`}
-        description={`Test your cryptocurrency knowledge and win rewards with The Coin Logic Quizzes! | ${quiz.title}!`}
+        description={`Test your crypto knowledge and win rewards with The Coin Logic Quizzes! | ${quiz.title}!`}
         image={quiz.image?.url}
       />
       <Container className="py-10">

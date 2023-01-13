@@ -41,16 +41,30 @@ const SignInContent = () => {
     return true;
   };
 
-  const tryCheckAccessToken = async () => {
+  const handleSignIn = async ({ email, password }: UserLogin) => {
+    return await signIn('credentials', {
+      redirect: false,
+      email: email.trim(),
+      password,
+    });
+  };
+
+  const tryCheckAccessToken = async ({ email, password }: UserLogin) => {
     let tries = 0;
-    const MAX_TRIES = 5;
+    const MAX_TRIES = 3;
 
     const retry = async () => {
-      console.log(tries);
-
       await new Promise(async (resolve, reject) => {
         if (tries > MAX_TRIES) {
-          reject('Please refresh the page and try again.');
+          const data = await handleSignIn({ email, password });
+
+          if (data?.status === 401) {
+            setErrorMessage(ERROR_MESSAGE);
+            setLoading(false);
+            return reject('Please refresh the page and try again.');
+          }
+
+          tries = 0;
         }
 
         const tokens = await checkAccessToken();
@@ -61,7 +75,8 @@ const SignInContent = () => {
         }
 
         if (tokens) {
-          resolve(tokens);
+          setLoading(false);
+          return resolve(tokens);
         }
       });
     };
@@ -80,11 +95,7 @@ const SignInContent = () => {
   const handleSubmit = async ({ email, password }: UserLogin) => {
     setLoading(true);
     try {
-      const data = await signIn('credentials', {
-        redirect: false,
-        email: email.trim(),
-        password,
-      });
+      const data = await handleSignIn({ email, password });
 
       if (data?.status === 401) {
         setErrorMessage(ERROR_MESSAGE);
@@ -92,7 +103,7 @@ const SignInContent = () => {
       }
 
       if (data?.status === 200) {
-        await tryCheckAccessToken();
+        await tryCheckAccessToken({ email, password });
         resetAll();
         setErrorMessage('');
         setLoginSuccess(true);

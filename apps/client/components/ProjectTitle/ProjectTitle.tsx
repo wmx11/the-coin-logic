@@ -8,7 +8,7 @@ import { Notification } from 'types';
 type ProjectTitleProps = {
   size: string;
   avatar: string;
-  title: string;
+  title?: string;
   component?: string;
   href?: string;
   target?: string;
@@ -17,6 +17,7 @@ type ProjectTitleProps = {
 
 const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, href, notifications, target }) => {
   const [src, setSrc] = useState<string | undefined>(avatar);
+
   const TitleComponent = () => {
     const sizes = {
       xs: 8,
@@ -60,17 +61,18 @@ const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, h
         </div>
       );
     }
+
     if (size === 'sm') {
       return (
-        <div className="flex gap-x-2 items-center">
+        <div className="flex gap-x-2 items-center relative">
           <Indicator
+            processing
+            offset={2}
             color="violet"
             disabled={(notifications && notifications?.length < 1) || !notifications ? true : false}
-            position="middle-end"
-            label={notifications?.length}
-            inline
-            size={15}
-            className="items-center flex"
+            position="top-end"
+            size={10}
+            className="items-center flex mt-[2px]"
           >
             {src ? (
               <Image
@@ -91,6 +93,7 @@ const ProjectTitle: FC<ProjectTitleProps> = ({ size, avatar, title, component, h
         </div>
       );
     }
+
     return <TitleComponent />;
   };
 

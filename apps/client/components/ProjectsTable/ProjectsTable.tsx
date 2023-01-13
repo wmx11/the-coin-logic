@@ -1,4 +1,4 @@
-import { Container, Text } from '@mantine/core';
+import { Container, RingProgress, Text, Tooltip } from '@mantine/core';
 import { useSort } from '@table-library/react-table-library/sort';
 import { Column } from '@table-library/react-table-library/types/compact';
 import { Data, TableNode } from '@table-library/react-table-library/types/table';
@@ -15,8 +15,9 @@ import Link from 'next/link';
 import { FC } from 'react';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { Network, Tag } from 'types';
+import { Network, Project, Tag } from 'types';
 import { PreviousValueTypes } from 'types/MarketData';
+import { Icons } from 'utils/icons';
 import toCurrency from 'utils/toCurrency';
 import toLocaleString from 'utils/toLocaleString';
 
@@ -27,7 +28,7 @@ type ProjectsTableProps = {
 
 const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
   const theme = {
-    Table: `--data-table-library_grid-template-columns: 40px 160px repeat(8, 1fr);`,
+    Table: `--data-table-library_grid-template-columns: 40px 160px repeat(10, 1fr);`,
     BaseCell: `
     > div {
       white-space: normal;
@@ -121,7 +122,7 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
       },
     },
     {
-      label: 'Avg. Holdings',
+      label: 'Avg. Holdings (Tokens)',
       renderCell: ({ avgHoldings, avgHoldingsChange, order }) => (
         <div key={`project_avgHolders_${order}`}>
           {toLocaleString(avgHoldings as number) || <AiOutlineEllipsis />}
@@ -133,53 +134,134 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
       },
     },
     {
-      label: 'Avg. Holdings (USD)',
-      renderCell: ({ avgHoldings, price, order }) => <div key={`project_avgHoldings_${order}`}>{toCurrency(avgHoldings * price) || <AiOutlineEllipsis />}</div>,
+      label: 'Transparency Score',
+      renderCell: ({ project }) => (
+        <div>
+          <Tooltip label="Raw transparency score without including community votes.">
+            <RingProgress
+              size={48}
+              thickness={4}
+              roundCaps
+              label={
+                <div className="flex items-center justify-center">
+                  <GradientText weight={700}>{project?.transparencyScore || 0}</GradientText>
+                </div>
+              }
+              sections={[{ value: project?.transparencyScore || 0, color: 'violet' }]}
+            />
+          </Tooltip>
+        </div>
+      ),
     },
-    { label: 'Tags', renderCell: ({ project, order }) => <Badges key={`project_badges_${order}`} badges={project.tags as Tag[]} /> },
+    {
+      label: 'Tags',
+      renderCell: ({ project, order }) => <Badges key={`project_badges_${order}`} badges={project.tags as Tag[]} />,
+    },
+    {
+      label: 'Audit',
+      renderCell: (data) => {
+        const project = data?.project as Project;
+
+        if (!project?.auditBy || project?.auditBy?.length < 1) {
+          return (
+            <Tooltip label="The project has not provided any Audit information.">
+              <div>
+                <Icons.Cross />
+              </div>
+            </Tooltip>
+          );
+        }
+
+        return project?.auditBy?.map((item, index: number) => (
+          <Link href={(item?.url as string) || '#'}>
+            <a target="_blank">
+              <ProjectTitle
+                size="sm"
+                avatar={item?.auditor?.image ? item?.auditor?.image?.url : ''}
+                key={`project_audit_${index}`}
+              />
+            </a>
+          </Link>
+        ));
+      },
+    },
+    {
+      label: 'KYC',
+      renderCell: (data) => {
+        const project = data?.project as Project;
+
+        if (!project?.kycBy || project?.kycBy?.length < 1) {
+          return (
+            <Tooltip label="The project has not provided any KYC information.">
+              <div>
+                <Icons.Cross />
+              </div>
+            </Tooltip>
+          );
+        }
+
+        return project?.kycBy?.map((item, index) => (
+          <Link href={(item?.url as string) || '#'}>
+            <a target="_blank">
+              <ProjectTitle
+                size="sm"
+                avatar={item?.kycGroup?.image ? item?.kycGroup?.image?.url : ''}
+                key={`project_audit_${index}`}
+              />
+            </a>
+          </Link>
+        ));
+      },
+    },
     {
       label: 'TCL Plan',
-      renderCell: ({ project, order }) => <PaymentPlanBadge key={`project_plan_badge_${order}`} paymentPlan={project?.paymentPlan} badgeProps={{ size: 'xs' }} />,
+      renderCell: ({ project, order }) => (
+        <PaymentPlanBadge
+          key={`project_plan_badge_${order}`}
+          paymentPlan={project?.paymentPlan}
+          badgeProps={{ size: 'xs' }}
+        />
+      ),
     },
     {
       label: 'Network',
-      renderCell: ({ project, order }) => <NetworkBadge key={`project_newtork_badge_${order}`} network={project.network as Network} showName={false} />,
+      renderCell: ({ project, order }) => (
+        <NetworkBadge key={`project_newtork_badge_${order}`} network={project.network as Network} showName={false} />
+      ),
     },
   ];
   return (
-    <div className="my-10">
-      <Container>
-        <div className="mb-6">
-          <GradientTitle order={2}>Projects by Market Cap</GradientTitle>
-          <Text size="xs" color="dimmed">
-            Displaying projects listed on The Coin Logic. Please make sure you do your own research before investing in
-            any of the projects.
-          </Text>
-        </div>
+    <Container className="py-10" size="xl">
+      <div className="mb-6">
+        <GradientTitle order={2}>Projects by Market Cap</GradientTitle>
+        <Text size="xs" color="dimmed">
+          Displaying projects listed on The Coin Logic. Please make sure you do your own research before investing in
+          any of the projects.
+        </Text>
+      </div>
+      <div>
         <div>
-          <div>
-            <Table data={data as TableNode[]} columns={columns} sort={sorter} customTheme={theme} />
-          </div>
-
-          {projectsCount > 0 && (
-            <div className="my-8 flex justify-between items-center">
-              <Text size="xs" color="dimmed">
-                Showing {projectsCount} out of {projectsCount} projects
-              </Text>
-            </div>
-          )}
-
-          <div className="my-8 text-center">
-            <GradientText weight={700} className="mb-4">
-              Can't find your favorite project?
-            </GradientText>
-            <Link href="/referrals" passHref>
-              <GradientButton component="a">Refer a project and earn rewards!</GradientButton>
-            </Link>
-          </div>
+          <Table data={data as TableNode[]} columns={columns} sort={sorter} customTheme={theme} />
         </div>
-      </Container>
-    </div>
+
+        {projectsCount > 0 && (
+          <div className="my-8 flex justify-between items-center">
+            <Text size="xs" color="dimmed">
+              Showing {projectsCount} out of {projectsCount} projects
+            </Text>
+          </div>
+        )}
+
+        <div className="my-8 text-center">
+          <GradientText weight={700} className="mb-4">
+            Can't find your favorite project?
+          </GradientText>
+          <Link href="/referrals" passHref>
+            <GradientButton component="a">Refer a project and earn rewards!</GradientButton>
+          </Link>
+        </div>
+      </div>
+    </Container>
   );
 };
 

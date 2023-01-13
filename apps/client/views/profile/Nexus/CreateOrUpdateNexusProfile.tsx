@@ -72,7 +72,7 @@ const CreateOrUpdateNexusProfile: FC<CreateOrUpdateNexusProfileProps> = ({ provi
           type: 'post',
           data: fd,
           url: routes.api.nexus.createUpdate,
-          headers: { 'Content-Type': 'multipart/form-data' },
+          isFormData: true,
         },
         user?.id as string,
       );

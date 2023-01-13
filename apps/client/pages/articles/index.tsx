@@ -30,8 +30,8 @@ const Articles: FC<ArticlesProps> = ({ blogPosts, blogPostsCount }) => {
   return (
     <>
       <Meta
-        title="Cryptocurrency articles, news, educational content | Coin Logic"
-        description="Explore The Coin Logic product updates, cryptocurrency news, educational content, and how crypto, and DeFi communities can leverage data."
+        title="TheCoinLogic Articles & News: Your Cryptocurrency Knowledge Source"
+        description="TheCoinLogic provides the information necessary to better leverage knowledge in the crypto space. Get the top news, market insights, and expert opinions."
       />
       <SmallBackgroundWrapper>
         <div className="text-center">

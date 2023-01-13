@@ -27,12 +27,12 @@ const Events: FC<EventsProps> = ({ events, count }) => {
   return (
     <>
       <Meta
-        title="Cryptocurrency projects Discord Events tracker | Coin Logic"
-        description="Discover project events with our Discord Events integration."
+        title="Cryptocurrency, DeFi & NFT Projects' Events | Coin Logic"
+        description="Stay up to date and track events of cryptocurrency, DeFi, and NFT projects listed on TheCoinLogic."
       />
       <SmallBackgroundWrapper>
         <div className="text-center">
-          <GradientTitle>Project Events</GradientTitle>
+          <GradientTitle>Projects' Events</GradientTitle>
           <Text size="sm" color="dimmed">
             We aggregate the data and present it to our viewers in a single place. You can filter the events by project,
             and date, easily participate, and share them with your social groups.

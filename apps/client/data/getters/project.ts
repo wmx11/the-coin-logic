@@ -12,6 +12,7 @@ import {
   GET_PROJECTS_BY_USER_EMAIL,
   GET_PROJECTS_COUNT,
   GET_PROJECT_AND_MARKET_STATS_BY_ID,
+  GET_PROJECT_AND_MARKET_STATS_BY_ID_FALLBACK,
   GET_PROJECT_AVERAGE_MARKET_CHANGE_FOR_PERIOD_OF_TIME,
   GET_PROJECT_ID_BY_SLUG,
   MARKET_STAT_CHANGES,
@@ -128,13 +129,22 @@ export const getProjectAndMarketStatsBySlug = async (
 ): Promise<ProjectWithMarketStatsAndChanges | null> => {
   const date = formatISO(new Date());
   const projectId = await getProjectIdBySlug(slug);
-  const marketStatsArray = await getData({
+
+  let marketStatsArray = await getData({
     query: GET_PROJECT_AND_MARKET_STATS_BY_ID,
     variables: { projectId, date },
     fetchPolicy: 'network-only',
   });
 
-  const marketStats = marketStatsArray.marketStats[0] || null;
+  if (marketStatsArray.marketStats.length < 1) {
+    marketStatsArray = await getData({
+      query: GET_PROJECT_AND_MARKET_STATS_BY_ID_FALLBACK,
+      variables: { projectId, date },
+      fetchPolicy: 'network-only',
+    });
+  }
+
+  const marketStats = marketStatsArray?.marketStats && marketStatsArray?.marketStats[0] || marketStatsArray || null;
 
   if (!marketStats) {
     return null;
@@ -151,7 +161,7 @@ export const getProjectAndMarketStatsBySlug = async (
   if (!marketStatsLastDay) {
     return {
       ...marketStats,
-      ...marketStatsArray.socialStats[0],
+      ...(marketStatsArray?.socialStats && marketStatsArray?.socialStats[0] || {}),
       relatedProjects: marketStatsArray.relatedProjects,
       quizzes: marketStatsArray?.quizzes,
       paymentPlans: marketStatsArray?.paymentPlans,

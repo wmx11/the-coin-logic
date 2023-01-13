@@ -18,7 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const createProject = async (auth: Auth) => {
     try {
-      const formData = await handleFormData<Project>(req);
+      const formData = await handleFormData<Project & { tags: string }>(req);
 
       if (!formData) {
         return responseHandler.forbidden();
@@ -31,6 +31,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       const logoData = await handleImageUpload({ image: imageData as FileType, prefix: 'logo', storageName: 'logos' });
 
+      const tags = formData?.fields?.tags && formData?.fields?.tags?.split(',').map((id) => ({ id }));
+
       const project = await prismaClient?.project.create({
         data: {
           ...(omit(values, 'image') as unknown as PrismaSchema.ProjectCreateArgs),
@@ -41,6 +43,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           },
           slug: slug(values.name as string),
           isPending: true,
+          tags: {
+            connect: tags,
+          },
           ...logoData,
         },
       });
