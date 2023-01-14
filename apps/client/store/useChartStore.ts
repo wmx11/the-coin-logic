@@ -1,17 +1,13 @@
-import { Annotation } from 'types/Charts';
+import { Annotation, TransformedChartsData } from 'types/Charts';
 import create from 'zustand';
 
-export type ChartData = {
-  date: string;
-  value: string;
-  annotation: Annotation;
-};
+export type ChartData = TransformedChartsData;
 
 type ChartDataStore = {
   isInitial: boolean;
   loading: boolean;
-  chartData: ChartData[];
-  compareChartData: ChartData[];
+  chartData: TransformedChartsData;
+  compareChartData: TransformedChartsData;
   chartTitle: string;
   compareChartTitle: string;
   chartSection: string | 'marketData' | 'holdersData' | 'socialMediaData';
@@ -19,10 +15,10 @@ type ChartDataStore = {
   pairAddress: string;
   setIsInitial: (isInitial: boolean) => void;
   setLoading: (loading: boolean) => void;
-  setChartData: (chartData: ChartData[]) => void;
+  setChartData: (chartData: TransformedChartsData) => void;
   setChartTitle: (chartTitle: string) => void;
   setChartSection: (chartSection: string) => void;
-  setCompareChartData: (compareChartData: ChartData[]) => void;
+  setCompareChartData: (compareChartData: TransformedChartsData) => void;
   setCompareChartTitle: (compareChartTitle: string) => void;
   setNetwork: (network: string) => void;
   setPairAddress: (pairAddress: string) => void;
@@ -34,8 +30,8 @@ type ChartDataStore = {
 const initialSate = {
   isInitial: true,
   loading: false,
-  chartData: [],
-  compareChartData: [],
+  chartData: {} as TransformedChartsData,
+  compareChartData: {} as TransformedChartsData,
   chartTitle: '',
   compareChartTitle: '',
   chartSection: '',
@@ -47,26 +43,26 @@ const useChartStore = create<ChartDataStore>((set) => ({
   ...initialSate,
   setIsInitial: (isInitial: boolean) => set(() => ({ isInitial })),
   setLoading: (loading: boolean) => set(() => ({ loading })),
-  setChartData: (chartData: ChartData[]) => set(() => ({ chartData })),
+  setChartData: (chartData: TransformedChartsData) => set(() => ({ chartData })),
   setChartTitle: (chartTitle: string) => set(() => ({ chartTitle })),
   setChartSection: (chartSection: string) => set(() => ({ chartSection })),
-  setCompareChartData: (compareChartData: ChartData[]) => set(() => ({ compareChartData })),
+  setCompareChartData: (compareChartData: TransformedChartsData) => set(() => ({ compareChartData })),
   setCompareChartTitle: (compareChartTitle: string) => set(() => ({ compareChartTitle })),
   setNetwork: (network: string) => set(() => ({ network })),
   setPairAddress: (pairAddress: string) => set(() => ({ pairAddress })),
   clearChartData: () =>
     set((state) => {
-      if (state.compareChartData.length) {
-        return { chartData: [], chartTitle: '' };
+      if (state?.compareChartData?.data?.length) {
+        return { chartData: {} as TransformedChartsData, chartTitle: '' };
       }
-      return { chartData: [], chartTitle: '', chartSection: '' };
+      return { chartData: {} as TransformedChartsData, chartTitle: '', chartSection: '' };
     }),
   clearCompareChartData: () =>
     set((state) => {
-      if (state.chartData.length) {
-        return { compareChartData: [], compareChartTitle: '' };
+      if (state?.chartData?.data?.length) {
+        return { compareChartData: {} as TransformedChartsData, compareChartTitle: '' };
       }
-      return { compareChartData: [], compareChartTitle: '', chartSection: '' };
+      return { compareChartData: {} as TransformedChartsData, compareChartTitle: '', chartSection: '' };
     }),
   clearAll: () =>
     set(() => ({

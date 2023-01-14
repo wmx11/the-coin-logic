@@ -63,6 +63,11 @@ const routes = {
     ? 'http://localhost:2000/${campaignId}/${target}'
     : 'https://${target}.tclmt.io/${campaignId}',
   api: {
+    data: {
+      market: `${API}/data/market`,
+      social: `${API}/data/social`,
+      table: `${API}/data/table`,
+    },
     controls: {
       like: `${API}/controls/like`,
       view: `${API}/controls/view`,

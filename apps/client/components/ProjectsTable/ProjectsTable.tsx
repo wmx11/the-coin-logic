@@ -28,7 +28,7 @@ type ProjectsTableProps = {
 
 const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
   const theme = {
-    Table: `--data-table-library_grid-template-columns: 40px 160px repeat(10, 1fr);`,
+    Table: `--data-table-library_grid-template-columns: 40px 160px repeat(8, 1fr);`,
     BaseCell: `
     > div {
       white-space: normal;

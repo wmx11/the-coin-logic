@@ -20,6 +20,7 @@ import {
   GET_TWITTER_FOLLOWERS,
 } from './constatnts/charts';
 import { getData } from './getters';
+import axios from 'axios';
 
 export type MarketStatsForCharts = {
   value: string | CustomTrackersResponse[];
@@ -41,7 +42,21 @@ const withGetData = async (query: string, projectId: string): Promise<WithGetDat
   return { marketStats, project: projects && projects[0], socialStats } || [];
 };
 
-export const getPrice = async (projectId: string) => withGetData(GET_PRICE, projectId);
+// export const getPrice = async (projectId: string) => withGetData(GET_PRICE, projectId);
+export const getPrice = async (projectId: string) => {
+  const { data } = await axios.post('http://localhost:3000/api/data/market', {
+    projectId,
+    selector: 'price',
+  });
+
+  if (!data?.data) {
+    return null;
+  }
+  
+  return data.data;
+};
+
+
 export const getMarketCap = async (projectId: string) => withGetData(GET_MARKET_CAP, projectId);
 export const getTotalSupply = async (projectId: string) => withGetData(GET_TOTAL_SUPPLY, projectId);
 export const getLiquidity = async (projectId: string) => withGetData(GET_LIQUIDITY, projectId);
