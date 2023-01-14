@@ -1,9 +1,10 @@
-import { Button, Divider, LoadingOverlay, Paper, Tooltip } from '@mantine/core';
+import { Button, Divider, LoadingOverlay, Tooltip } from '@mantine/core';
 import { useState } from 'react';
 import { AiOutlineClear } from 'react-icons/ai';
 import { IoClose } from 'react-icons/io5';
 import useChartStore from 'store/useChartStore';
 import AreaChart from './AreaChart';
+import Paper from 'components/Paper';
 
 const AreaChartGroup = () => {
   const [showDexscreener, setShowDexscreener] = useState(false);
@@ -108,7 +109,7 @@ const AreaChartGroup = () => {
   };
 
   return (
-    <Paper shadow="xs" p="md" className="relative">
+    <Paper className="relative">
       <Loader />
       <MainChart />
       <ComparisonChart />

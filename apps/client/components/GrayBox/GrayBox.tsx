@@ -12,7 +12,7 @@ const GrayBox: FC<GrayBoxProps> = ({ className, children }) => {
   return (
     <div
       style={{
-        backgroundColor: themeConfig[theme].grayBoxBackgroundColor,
+        backgroundColor: themeConfig[theme].backgroundColorLighter,
       }}
       className={`p-10 flex flex-col items-center justify-center gap-4 rounded-md mb-8 ${className}`}
     >

@@ -22,7 +22,7 @@ html, body {
 }
 
 .highcharts-grid.highcharts-yaxis-grid .highcharts-grid-line {
-  stroke: rgba(121,80,242,0.2) !important;
+  stroke: none !important;
 }
 
 .highcharts-button-box {
