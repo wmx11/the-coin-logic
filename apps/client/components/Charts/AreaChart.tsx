@@ -20,7 +20,7 @@ const AreaChart = ({ data, title }: ChartTypes) => {
   const options = {
     chart: {
       height: 400,
-      backgroundColor: themeConfig[theme].backgroundColor,
+      backgroundColor: themeConfig[theme].backgroundColorLighter,
     },
     colors: ['#7950f2'],
 
@@ -76,7 +76,7 @@ const AreaChart = ({ data, title }: ChartTypes) => {
           },
           chartOptions: {
             chart: {
-              height: 300,
+              height: 450,
             },
             subtitle: {
               text: null,

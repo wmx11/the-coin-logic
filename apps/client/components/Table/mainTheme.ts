@@ -35,7 +35,7 @@ const mainTheme = (theme: 'light' | 'dark') => ({
     }
   `,
   BaseCell: `
-  background-color: ${themeConfig[theme].backgroundColor};
+  background-color: ${themeConfig[theme].backgroundColorLighter};
 
     // border-bottom: 1px solid transparent;
     // border-right: 1px solid transparent;
