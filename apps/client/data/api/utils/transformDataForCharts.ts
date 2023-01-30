@@ -313,15 +313,12 @@ export const transformDataForNftProjects = async (projects: Project[]) => {
           salesVolume: true,
           salesVolumeChange24: true,
           salesVolumeChange24Percentage: true,
-          marketCap: true,
-          marketCapChange24: true,
-          marketCapChange24Percentage: true,
-          holders: true,
-          holdersChange24: true,
-          holdersChange24Percentage: true,
-          avgHoldings: true,
-          avgHoldingsChange24: true,
-          avgHoldingsChange24Percentage: true,
+          floorPrice: true,
+          floorPriceChange24: true,
+          floorPriceChange24Percentage: true,
+          totalHoldings: true,
+          totalHoldingsChange24: true,
+          totalHoldingsChange24Percentage: true,
         },
       }),
       prismaClient?.socialStat.findFirst({
@@ -367,7 +364,7 @@ export const transformDataForNftProjects = async (projects: Project[]) => {
       return 1;
     }
 
-    return (b?.marketCap as number) - (a?.marketCap as number);
+    return (b?.salesVolume as number) - (a?.salesVolume as number);
   });
   return data;
 };

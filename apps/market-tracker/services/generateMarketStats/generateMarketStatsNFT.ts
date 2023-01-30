@@ -6,7 +6,7 @@ import marketStatsContract from 'tcl-packages/web3/marketStatsContract';
 const generateMarketStatsNFT = async (project: Project) => {
   const contract = marketStatsContract({ rpc: project.network?.url as string, project });
 
-  const [sales, holdings] = await Promise.all([
+  const [sales, holdings, marketStats] = await Promise.all([
     prismaClient?.transfer.aggregate({
       _sum: {
         amount: true,
@@ -25,6 +25,9 @@ const generateMarketStatsNFT = async (project: Project) => {
           gte: startOfToday(),
         },
         projectId: project.id,
+        amount: {
+          gt: 0,
+        },
       },
     }),
     prismaClient.holder.aggregate({
@@ -36,6 +39,14 @@ const generateMarketStatsNFT = async (project: Project) => {
           gte: startOfToday(),
         },
         projectsId: project.id,
+      },
+    }),
+    prismaClient.marketStat.findFirst({
+      orderBy: {
+        dateAdded: 'desc',
+      },
+      where: {
+        projectId: project.id,
       },
     }),
   ]);
@@ -55,14 +66,14 @@ const generateMarketStatsNFT = async (project: Project) => {
   const marketCap = (totalSupply || 0) * (sales?._avg?.amount || 0);
 
   return {
-    totalSupply: totalSupply || 0,
-    marketCap: marketCap || 0,
-    avgPrice: sales?._avg?.amount || 0,
-    floorPrice: sales?._min?.amount || 0,
-    ceilPrice: sales?._max?.amount || 0,
-    salesVolume: sales?._sum?.amount || 0,
-    burnedTokens: parseInt(burnedTokens, 10) || null,
-    totalHoldings: holdings?._sum?.balance || 0,
+    totalSupply: totalSupply || marketStats?.totalSupply,
+    marketCap: marketCap || marketStats?.marketCap,
+    avgPrice: sales?._avg?.amount || marketStats?.avgPrice,
+    floorPrice: sales?._min?.amount || marketStats?.floorPrice,
+    ceilPrice: sales?._max?.amount || marketStats?.ceilPrice,
+    salesVolume: sales?._sum?.amount || marketStats?.salesVolume,
+    burnedTokens: parseInt(burnedTokens, 10) || marketStats?.burnedTokens,
+    totalHoldings: holdings?._sum?.balance || marketStats?.totalHoldings,
     txns: undefined,
     volume: undefined,
     fdv: undefined,
