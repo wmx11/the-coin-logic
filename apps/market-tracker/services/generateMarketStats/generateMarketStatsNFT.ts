@@ -38,6 +38,9 @@ const generateMarketStatsNFT = async (project: Project) => {
         dateAdded: {
           gte: startOfToday(),
         },
+        balance: {
+          gte: 1,
+        },
         projectsId: project.id,
       },
     }),
