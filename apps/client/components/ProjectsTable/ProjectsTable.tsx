@@ -5,7 +5,6 @@ import { Data, TableNode } from '@table-library/react-table-library/types/table'
 import GradientButton from 'components/Buttons/GradientButton';
 import { NetworkBadge } from 'components/NetworkBadge';
 import Paper from 'components/Paper';
-import PaymentPlanBadge from 'components/PaymentPlans/PaymentPlanBadge';
 import { ProjectTitle } from 'components/ProjectTitle';
 import Table from 'components/Table';
 import GradientText from 'components/Text/GradientText';
@@ -22,7 +21,7 @@ import { PreviousValueTypes } from 'types/MarketData';
 import { Icons } from 'utils/icons';
 import toCurrency from 'utils/toCurrency';
 import toLocaleString from 'utils/toLocaleString';
-import { getLogoLink } from 'utils/utils';
+import { getLogoLink, resolveImagePaths } from 'utils/utils';
 
 type ProjectsTableProps = {
   data: TableNode[] | Data | DataForProjectsTable;
@@ -204,7 +203,11 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data }) => {
               <a target="_blank">
                 <ProjectTitle
                   size="sm"
-                  avatar={getLogoLink(item?.auditor?.image_id, item?.auditor?.image_extension)}
+                  avatar={resolveImagePaths().getLink(
+                    resolveImagePaths().images,
+                    item?.auditor?.image_id,
+                    item?.auditor?.image_extension,
+                  )}
                   key={`project_audit_${index}`}
                 />
               </a>
@@ -232,8 +235,12 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data }) => {
               <a target="_blank">
                 <ProjectTitle
                   size="sm"
-                  avatar={getLogoLink(item?.kycGroup?.image_id, item?.kycGroup?.image_extension)}
-                  key={`project_audit_${index}`}
+                  avatar={resolveImagePaths().getLink(
+                    resolveImagePaths().images,
+                    item?.kycGroup?.image_id,
+                    item?.kycGroup?.image_extension,
+                  )}
+                  key={`project_kyc_${index}`}
                 />
               </a>
             </Link>

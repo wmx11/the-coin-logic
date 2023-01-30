@@ -138,6 +138,7 @@ export const resolveImagePaths = () => {
   return {
     logos: getPath('logos'),
     images: getPath('images'),
+    getLink: (path: string, id: string, extension: string) => `${path}/${id}.${extension}}`,
   };
 };
 

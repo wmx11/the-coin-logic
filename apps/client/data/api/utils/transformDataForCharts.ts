@@ -174,7 +174,7 @@ export const transformDataForProjectsTable = async (projects: Project[]) => {
       return 1;
     }
 
-    return (b?.marketCap as number) || 0 - (a?.marketCap as number) || 0;
+    return (b?.marketCap as number) - (a?.marketCap as number);
   });
 
   return { data, count: projects.length };
@@ -367,7 +367,7 @@ export const transformDataForNftProjects = async (projects: Project[]) => {
       return 1;
     }
 
-    return ((b?.marketCap as number) || 0) - ((a?.marketCap as number) || 0);
+    return (b?.marketCap as number) - (a?.marketCap as number);
   });
   return data;
 };
