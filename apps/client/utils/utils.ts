@@ -133,12 +133,14 @@ export const addLinksToText = (string: string) =>
 export const getLogoLink = (imageId: string, extension: string) =>
   `${process.env.NEXT_PUBLIC_LOGOS_URL}/${imageId}.${extension}`;
 
+export const getImageLink = (imageId: string, extension: string) =>
+  `${process.env.NEXT_PUBLIC_IMAGES_URL}/${imageId}.${extension}`;
+
 export const resolveImagePaths = () => {
   const getPath = (pathName: string) => path.resolve(process.cwd(), '../', 'admin', 'public', pathName);
   return {
     logos: getPath('logos'),
     images: getPath('images'),
-    getLink: (path: string, id: string, extension: string) => `${path}/${id}.${extension}}`,
   };
 };
 

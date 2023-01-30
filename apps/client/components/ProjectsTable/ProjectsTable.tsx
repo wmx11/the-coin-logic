@@ -21,7 +21,7 @@ import { PreviousValueTypes } from 'types/MarketData';
 import { Icons } from 'utils/icons';
 import toCurrency from 'utils/toCurrency';
 import toLocaleString from 'utils/toLocaleString';
-import { getLogoLink, resolveImagePaths } from 'utils/utils';
+import { getLogoLink, getImageLink } from 'utils/utils';
 
 type ProjectsTableProps = {
   data: TableNode[] | Data | DataForProjectsTable;
@@ -203,11 +203,7 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data }) => {
               <a target="_blank">
                 <ProjectTitle
                   size="sm"
-                  avatar={resolveImagePaths().getLink(
-                    resolveImagePaths().images,
-                    item?.auditor?.image_id,
-                    item?.auditor?.image_extension,
-                  )}
+                  avatar={getImageLink(item?.auditor?.image_id, item?.auditor?.image_extension)}
                   key={`project_audit_${index}`}
                 />
               </a>
@@ -235,11 +231,7 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data }) => {
               <a target="_blank">
                 <ProjectTitle
                   size="sm"
-                  avatar={resolveImagePaths().getLink(
-                    resolveImagePaths().images,
-                    item?.kycGroup?.image_id,
-                    item?.kycGroup?.image_extension,
-                  )}
+                  avatar={getImageLink(item?.kycGroup?.image_id, item?.kycGroup?.image_extension)}
                   key={`project_kyc_${index}`}
                 />
               </a>
