@@ -47,3 +47,4 @@ export { default as Account } from './Account';
 export { default as Session } from './Session';
 export { default as VerificationToken } from './VerificationToken';
 export { default as UserAuth } from './UserAuth';
+export { default as Promotion } from './Promotion';

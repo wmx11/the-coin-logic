@@ -5,10 +5,16 @@ import generateMarketStatsDefault from './generateMarketStatsDefault';
 import generateMarketStatsDexScreener from './generateMarketStatsDexScreener';
 import getPrimaryPairAddress from 'tcl-packages/utils/getPrimaryPairAddress';
 import { MarketStats } from './types';
+import generateMarketStatsNFT from './generateMarketStatsNFT';
 
 const generateMarketStats = async (project: Project): Promise<MarketStats> => {
   if (!project) {
     throw new Error('No project found. Please provide a project.');
+  }
+
+  if (project.isNft && project.contractAddress) {
+    const marketStats = await generateMarketStatsNFT(project);
+    return marketStats;
   }
 
   if (!project.contractAddress || !project.liquidityPair) {
@@ -44,13 +50,13 @@ const generateMarketStats = async (project: Project): Promise<MarketStats> => {
     return {
       price,
       marketCap,
-      pairPrice: null,
-      liquidity: null,
-      totalSupply: null,
-      burnedTokens: null,
-      txns: null,
-      volume: null,
-      fdv: null,
+      pairPrice: undefined,
+      liquidity: undefined,
+      totalSupply: undefined,
+      burnedTokens: undefined,
+      txns: undefined,
+      volume: undefined,
+      fdv: undefined,
     };
   }
 
@@ -71,9 +77,9 @@ const generateMarketStats = async (project: Project): Promise<MarketStats> => {
     marketCap,
     totalSupply,
     burnedTokens,
-    txns: pair.txns,
-    volume: pair.volume,
-    fdv: pair.fdv,
+    txns: pair.txns || undefined,
+    volume: pair.volume || undefined,
+    fdv: pair.fdv || undefined,
   };
 };
 

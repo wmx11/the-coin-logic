@@ -21,7 +21,10 @@ type EventCardProps = {
 };
 
 const EventCard: FC<EventCardProps> = ({ event }) => {
-  const hasEnded = hasEventEnded(event);
+  const hasEnded = hasEventEnded({
+    startDate: event.scheduledStartTimestamp,
+    endDate: event.scheduledEndTimestamp,
+  });
 
   return (
     <Paper withBorder className={hasEnded ? 'border-red-500' : 'border-green-500'}>
@@ -29,7 +32,13 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
         <div className="flex-1">
           <Text size="xs" color={hasEnded ? 'red' : 'teal'} className="flex items-center gap-2">
             <Icons.Event />
-            {hasEnded ? 'Ended' : getStartsIn(event)}
+            {hasEnded
+              ? 'Ended'
+              : getStartsIn({
+                  startDate: event.scheduledStartTimestamp,
+                  endDate: event.scheduledEndTimestamp,
+                  checkEnd: true,
+                })}
           </Text>
           <GradientText weight={700} size="xl">
             {event.name}

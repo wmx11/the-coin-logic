@@ -6,36 +6,42 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
     twitter,
     discord,
     telegram,
-    twitterChange,
-    discordChange,
-    telegramChange,
     project: { name },
   } = data;
 
   return [
     {
       value: discord as number,
-      previousValue: discordChange as PreviousValueTypes,
+      previousValue: {
+        change: data.discordChange24,
+        percentage: data.discordChange24Percentage,
+      } as PreviousValueTypes,
       title: 'Discord Members',
       isCurrency: false,
       tooltip: `Current ${name} Discord Members Count.`,
-      chartEntry: 'getDiscordMembers',
+      chartEntry: 'discord',
     },
     {
       value: telegram as number,
-      previousValue: telegramChange as PreviousValueTypes,
+      previousValue: {
+        change: data.telegramChange24,
+        percentage: data.telegramChange24Percentage,
+      } as PreviousValueTypes,
       title: 'Telegram Members',
       isCurrency: false,
       tooltip: `Current ${name} Telegram Members Count.`,
-      chartEntry: 'getTelegramMembers',
+      chartEntry: 'telegram',
     },
     {
       value: twitter as number,
-      previousValue: twitterChange as PreviousValueTypes,
+      previousValue: {
+        change: data.twitterChange24,
+        percentage: data.twitterChange24Percentage,
+      } as PreviousValueTypes,
       title: 'Twitter Followers',
       isCurrency: false,
       tooltip: `Current ${name} Twitter Followers Count.`,
-      chartEntry: 'getTwitterFollowers',
+      chartEntry: 'twitter',
     },
   ];
 };

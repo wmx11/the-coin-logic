@@ -1,4 +1,5 @@
 import { Container, Text } from '@mantine/core';
+import AddYourProject from 'components/AddYourProject';
 import AnnouncementCard from 'components/AnnouncementCard';
 import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundWrapper';
 import PaginationFilter from 'components/Filters/PaginationFilter';
@@ -77,6 +78,9 @@ const Announcements: FC<AnnouncementsProps> = ({ announcements, count }) => {
           ) : null}
         </div>
       </Container>
+      <section className="mt-4">
+        <AddYourProject />
+      </section>
     </>
   );
 };

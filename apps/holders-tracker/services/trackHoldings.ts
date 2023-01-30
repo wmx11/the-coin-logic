@@ -1,9 +1,11 @@
 import Web3 from 'web3';
 import baseAbi from 'tcl-packages/web3/baseAbi';
-import createOrUpdateHolderEntriesFromTransferEvents from 'tcl-packages/holders-tracker/services/holders/createOrUpdateHolderEntriesFromTransferEvents';
-import { getHoldersCountByProjectId } from 'tcl-packages/holders-tracker/services/holders';
-import { getProjects, setProjectStatus } from 'tcl-packages/holders-tracker/services/projects';
-import { getLatestBlock } from 'tcl-packages/holders-tracker/services/base';
+import createOrUpdateHolderEntriesFromTransferEvents from 'tcl-packages/blockchainIndexer/services/holders/createOrUpdateHolderEntriesFromTransferEvents';
+import { getHoldersCountByProjectId } from 'tcl-packages/blockchainIndexer/services/holders';
+import { getProjects, setProjectStatus } from 'tcl-packages/blockchainIndexer/services/projects';
+import { getLatestBlock } from 'tcl-packages/blockchainIndexer/services/base';
+import nftAbi from 'tcl-packages/web3/nftAbi';
+import { AbiItem } from 'web3-utils';
 
 let isRunning = false;
 
@@ -29,8 +31,14 @@ const trackHoldings = async (initial = false, reset = false) => {
       const holdersCountByProjectId = await getHoldersCountByProjectId(project?.id);
       const hasHolders = !!holdersCountByProjectId;
 
+      let abi: AbiItem[];
+
+      if (project.isNft) {
+        abi = nftAbi;
+      } else abi = baseAbi;
+
       const web3 = new Web3(project.network?.url as string);
-      const contract = new web3.eth.Contract(baseAbi, project.contractAddress as string);
+      const contract = new web3.eth.Contract(abi, project.contractAddress as string);
       const latestBlock = await getLatestBlock(web3);
 
       await setProjectStatus(project.id, 'tracking_holdings');
@@ -40,7 +48,7 @@ const trackHoldings = async (initial = false, reset = false) => {
         hasHolders: reset ? false : hasHolders,
         contract,
         latestBlock,
-        initial
+        initial,
       });
 
       await setProjectStatus(project.id, 'idle');

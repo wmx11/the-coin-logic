@@ -1,7 +1,10 @@
-import { Annotation, TransformedChartsData } from 'types/Charts';
+import axios from 'axios';
+import routes from 'routes';
+import { TransformedChartsData } from 'types/Charts';
 import create from 'zustand';
 
 export type ChartData = TransformedChartsData;
+type ChartSection = string | 'marketData' | 'holdersData' | 'socialMediaData';
 
 type ChartDataStore = {
   isInitial: boolean;
@@ -10,7 +13,7 @@ type ChartDataStore = {
   compareChartData: TransformedChartsData;
   chartTitle: string;
   compareChartTitle: string;
-  chartSection: string | 'marketData' | 'holdersData' | 'socialMediaData';
+  chartSection: ChartSection;
   network: string;
   pairAddress: string;
   setIsInitial: (isInitial: boolean) => void;
@@ -25,6 +28,7 @@ type ChartDataStore = {
   clearChartData: () => void;
   clearCompareChartData: () => void;
   clearAll: () => void;
+  fetchChartData: ({ entry, projectId, section }: { entry: string; projectId: string; section: ChartSection }) => void;
 };
 
 const initialSate = {
@@ -68,6 +72,20 @@ const useChartStore = create<ChartDataStore>((set) => ({
     set(() => ({
       ...initialSate,
     })),
+  fetchChartData: async ({ entry, projectId, section }) => {
+    const {
+      data: { data },
+    } = await axios.post(routes.api.data[section === 'socialMediaData' ? 'social' : 'market'], {
+      projectId,
+      selector: entry,
+    });
+
+    if (!data) {
+      return null;
+    }
+
+    set({ chartData: data.data, chartSection: section });
+  },
 }));
 
 export default useChartStore;

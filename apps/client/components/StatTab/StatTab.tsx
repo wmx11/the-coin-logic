@@ -1,17 +1,16 @@
 import { Loader, Popover, Text, Tooltip } from '@mantine/core';
+import axios from 'axios';
 import Paper from 'components/Paper';
-import { WithGetDataReturn } from 'data/getters';
-import { FC, forwardRef, useEffect, useState } from 'react';
+import { FC, forwardRef, useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { HiChartSquareBar } from 'react-icons/hi';
 import { MdCompare } from 'react-icons/md';
-import useChartStore, { ChartData } from 'store/useChartStore';
+import routes from 'routes';
+import useChartStore from 'store/useChartStore';
 import { PreviousValueTypes } from '../../types/MarketData';
 import toCurrency from '../../utils/toCurrency';
 import toLocaleString from '../../utils/toLocaleString';
 import { Trend } from '../Trend';
-import axios from 'axios';
-import routes from 'routes';
 
 type StatTabProps = {
   title?: string;
@@ -47,20 +46,17 @@ const StatTab: FC<StatTabProps> = ({
       chartStore.setIsInitial(false);
     }
     chartStore.setLoading(true);
-
     const {
       data: { data },
-    } = await axios.post(routes.api.data.market, {
+    } = await axios.post(routes.api.data[id ? 'customTracker' : section === 'socialMediaData' ? 'social' : 'market'], {
       projectId,
+      trackerId: id,
       selector: entry,
     });
-
     chartStore.setLoading(false);
-
     if (!data) {
       return null;
     }
-
     chartStore.setChartSection(section as string);
     chartStore.setChartTitle(title as string);
     chartStore.setChartData(data.data);
@@ -75,27 +71,18 @@ const StatTab: FC<StatTabProps> = ({
     chartStore.setLoading(true);
     const {
       data: { data },
-    } = await axios.post(routes.api.data.market, {
+    } = await axios.post(routes.api.data[id ? 'customTracker' : section === 'socialMediaData' ? 'social' : 'market'], {
       projectId,
+      trackerId: id,
       selector: entry,
     });
-
     chartStore.setLoading(false);
-
     if (!data) {
       return null;
     }
-
     chartStore.setCompareChartTitle(title as string);
     chartStore.setCompareChartData(data.data);
   };
-
-  useEffect(() => {
-    if (isChartDefaultOpen && !chartStore?.loading && chartStore?.chartData?.data?.length < 1) {
-      handleChartEntry(chartEntry as string);
-      chartStore.setIsInitial(true);
-    }
-  }, []);
 
   const getTabValue = () => {
     if (Array.isArray(value)) {

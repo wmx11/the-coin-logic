@@ -18,17 +18,56 @@ export const MARKET_STAT_CHANGES = [
 
 const COMMON_MARKET_STATS = `    
 price
+priceChange24
+priceChange24Percentage
 marketCap
+marketCapChange24
+marketCapChange24Percentage
 liquidity
+liquidityChange24
+liquidityChange24Percentage
 pairPrice
+pairPriceChange24
+pairPriceChange24Percentage
 totalSupply
+totalSupplyChange24
+totalSupplyChange24Percentage
 holders
+holdersChange24
+holdersChange24Percentage
 avgHoldings
+avgHoldingsChange24
+avgHoldingsChange24Percentage
 newHolders
+newHoldersChange24
+newHoldersChange24Percentage
 leavingHolders
+leavingHoldersChange24
+leavingHoldersChange24Percentage
 recurringHolders
+recurringHoldersChange24
+recurringHoldersChange24Percentage
 fdv
+fdvChange24
+fdvChange24Percentage
 burnedTokens
+burnedTokensChange24
+burnedTokensChange24Percentage
+avgPrice
+avgPriceChange24
+avgPriceChange24Percentage
+floorPrice
+floorPriceChange24
+floorPriceChange24Percentage
+ceilPrice
+ceilPriceChange24
+ceilPriceChange24Percentage
+salesVolume
+salesVolumeChange24
+salesVolumeChange24Percentage
+totalHoldings
+totalHoldingsChange24
+totalHoldingsChange24Percentage
 txns
 volume
 customTrackers
@@ -43,6 +82,8 @@ whitepaper
 contractAddress
 pairAddress
 isNft
+isPreLaunch
+launchDate
 trackHolders
 trackHoldersFromTokenAmount
 initialized
@@ -58,7 +99,6 @@ sellTax
 buyTax
 rebasePeriod
 apy
-calendar
 tclRating
 transparencyScore
 auditBy {
@@ -113,11 +153,13 @@ network {
   name
   scanner
   tokenScanner
+  symbol
   logo {
     url
   }
 }
 description
+preLaunchInformation
 twitter
 discord
 telegram
@@ -126,6 +168,9 @@ github
 medium
 dateAdded
 logo {
+  url
+}
+backgroundImage {
   url
 }
 tags {
@@ -202,8 +247,14 @@ socialStats(
 ) {
   socialsDateAdded: dateAdded
   twitter
+  twitterChange24
+  twitterChange24Percentage
   telegram
+  telegramChange24
+  telegramChange24Percentage
   discord
+  discordChange24
+  discordChange24Percentage
 }
 paymentPlans {
   id

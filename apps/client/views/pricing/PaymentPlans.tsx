@@ -22,7 +22,12 @@ const PaymentPlans: FC<PaymentPlansProps> = ({ paymentPlans }) => {
   return (
     <>
       <div className="mb-8 text-center">
-        <GradientTitle order={2}>Choose from our available project listing plans</GradientTitle>
+        <GradientTitle order={2} className="text-4xl pb-2">
+          Choose from our available listing plans
+        </GradientTitle>
+        <Text className="mb-4 text-xl">
+          <u>One-time only</u> payment! No hidden monthly fees.
+        </Text>
         <Text size="sm" color="dimmed">
           Our payment plans help any project get involved with The Coin Logic. Starting from a free Copper all the way
           up to our premium Palladium tier. Payment plans are applied to project listings. You can also upgrade at any
@@ -30,7 +35,7 @@ const PaymentPlans: FC<PaymentPlansProps> = ({ paymentPlans }) => {
         </Text>
       </div>
 
-      <div className="flex gap-4 justify-between my-4 flex-wrap">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {paymentPlans.map((plan, index) => {
           return (
             <Paper className="flex-1 flex flex-col justify-between gap-2 " withBorder key={`paymentPlan_${index}`}>
@@ -38,13 +43,15 @@ const PaymentPlans: FC<PaymentPlansProps> = ({ paymentPlans }) => {
                 <Text weight={600} size="xl">
                   {plan.name}
                 </Text>
-                <GradientText weight={600}>Price: {toCurrency(plan.price || 0) || '$0'}</GradientText>
-                <Text size="xs" color="dimmed" className="whitespace-pre-wrap mt-2">
+                <GradientText weight={600} size="xl">
+                  Price: {toCurrency(plan.price || 0) || '$0'} {plan?.price && plan?.price > 0 ? '(One-time)' : ''}
+                </GradientText>
+                <Text size="sm" color="dimmed" className="whitespace-pre-wrap mt-2">
                   {plan.description}
                 </Text>
               </div>
               <GradientButton
-                size="xs"
+                size="sm"
                 onClick={() => {
                   if (requireLogin()) {
                     return false;

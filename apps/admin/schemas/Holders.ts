@@ -20,11 +20,12 @@ const Holders: Lists = {
   Transfer: list({
     fields: {
       project: relationship({ ref: 'Project', db: { foreignKey: true } }),
-      amount: float({ defaultValue: 0 }),
-      type: integer(),
-      address: text(),
-      fromAddress: text(),
+      amount: float({ defaultValue: 0, isIndexed: true }),
+      type: integer({ isIndexed: true }),
+      address: text({ isIndexed: true }),
+      fromAddress: text({ isIndexed: true }),
       toAddress: text({ isIndexed: true }),
+      tokenId: text({ isIndexed: true }),
       hash: text({ isIndexed: true }),
       block: integer(),
       createdAt: timestamp({ defaultValue: { kind: 'now' }, isIndexed: true }),
@@ -32,13 +33,14 @@ const Holders: Lists = {
         db: {
           updatedAt: true,
         },
+        isIndexed: true,
       }),
     },
   }),
   Holder: list({
     fields: {
       address: text({ isIndexed: true }),
-      balance: float({ defaultValue: 0 }),
+      balance: float({ defaultValue: 0, isIndexed: true }),
       note: text(),
       isContract: checkbox({ defaultValue: false }),
       projects: relationship({ ref: 'Project', db: { foreignKey: true } }),
@@ -48,6 +50,7 @@ const Holders: Lists = {
         db: {
           updatedAt: true,
         },
+        isIndexed: true,
       }),
     },
   }),

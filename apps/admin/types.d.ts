@@ -2329,21 +2329,60 @@ export type MarketStat = {
   __typename?: 'MarketStat';
   annotation?: Maybe<Scalars['JSON']>;
   avgHoldings?: Maybe<Scalars['Float']>;
+  avgHoldingsChange24?: Maybe<Scalars['Float']>;
+  avgHoldingsChange24Percentage?: Maybe<Scalars['Float']>;
+  avgPrice?: Maybe<Scalars['Float']>;
+  avgPriceChange24?: Maybe<Scalars['Float']>;
+  avgPriceChange24Percentage?: Maybe<Scalars['Float']>;
   burnedTokens?: Maybe<Scalars['Float']>;
+  burnedTokensChange24?: Maybe<Scalars['Float']>;
+  burnedTokensChange24Percentage?: Maybe<Scalars['Float']>;
+  ceilPrice?: Maybe<Scalars['Float']>;
+  ceilPriceChange24?: Maybe<Scalars['Float']>;
+  ceilPriceChange24Percentage?: Maybe<Scalars['Float']>;
   customTrackers?: Maybe<Scalars['JSON']>;
   dateAdded?: Maybe<Scalars['DateTime']>;
   fdv?: Maybe<Scalars['Float']>;
+  fdvChange24?: Maybe<Scalars['Float']>;
+  fdvChange24Percentage?: Maybe<Scalars['Float']>;
+  floorPrice?: Maybe<Scalars['Float']>;
+  floorPriceChange24?: Maybe<Scalars['Float']>;
+  floorPriceChange24Percentage?: Maybe<Scalars['Float']>;
   holders?: Maybe<Scalars['Float']>;
+  holdersChange24?: Maybe<Scalars['Float']>;
+  holdersChange24Percentage?: Maybe<Scalars['Float']>;
   id: Scalars['ID'];
   leavingHolders?: Maybe<Scalars['Float']>;
+  leavingHoldersChange24?: Maybe<Scalars['Float']>;
+  leavingHoldersChange24Percentage?: Maybe<Scalars['Float']>;
   liquidity?: Maybe<Scalars['Float']>;
+  liquidityChange24?: Maybe<Scalars['Float']>;
+  liquidityChange24Percentage?: Maybe<Scalars['Float']>;
   marketCap?: Maybe<Scalars['Float']>;
+  marketCapChange24?: Maybe<Scalars['Float']>;
+  marketCapChange24Percentage?: Maybe<Scalars['Float']>;
   newHolders?: Maybe<Scalars['Float']>;
+  newHoldersChange24?: Maybe<Scalars['Float']>;
+  newHoldersChange24Percentage?: Maybe<Scalars['Float']>;
   pairPrice?: Maybe<Scalars['Float']>;
+  pairPriceChange24?: Maybe<Scalars['Float']>;
+  pairPriceChange24Percentage?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  priceChange24?: Maybe<Scalars['Float']>;
+  priceChange24Percentage?: Maybe<Scalars['Float']>;
   project?: Maybe<Project>;
   recurringHolders?: Maybe<Scalars['Float']>;
+  recurringHoldersChange24?: Maybe<Scalars['Float']>;
+  recurringHoldersChange24Percentage?: Maybe<Scalars['Float']>;
+  salesVolume?: Maybe<Scalars['Float']>;
+  salesVolumeChange24?: Maybe<Scalars['Float']>;
+  salesVolumeChange24Percentage?: Maybe<Scalars['Float']>;
+  totalHoldings?: Maybe<Scalars['Float']>;
+  totalHoldingsChange24?: Maybe<Scalars['Float']>;
+  totalHoldingsChange24Percentage?: Maybe<Scalars['Float']>;
   totalSupply?: Maybe<Scalars['Float']>;
+  totalSupplyChange24?: Maybe<Scalars['Float']>;
+  totalSupplyChange24Percentage?: Maybe<Scalars['Float']>;
   txns?: Maybe<Scalars['JSON']>;
   volume?: Maybe<Scalars['JSON']>;
 };
@@ -2351,39 +2390,117 @@ export type MarketStat = {
 export type MarketStatCreateInput = {
   annotation?: InputMaybe<Scalars['JSON']>;
   avgHoldings?: InputMaybe<Scalars['Float']>;
+  avgHoldingsChange24?: InputMaybe<Scalars['Float']>;
+  avgHoldingsChange24Percentage?: InputMaybe<Scalars['Float']>;
+  avgPrice?: InputMaybe<Scalars['Float']>;
+  avgPriceChange24?: InputMaybe<Scalars['Float']>;
+  avgPriceChange24Percentage?: InputMaybe<Scalars['Float']>;
   burnedTokens?: InputMaybe<Scalars['Float']>;
+  burnedTokensChange24?: InputMaybe<Scalars['Float']>;
+  burnedTokensChange24Percentage?: InputMaybe<Scalars['Float']>;
+  ceilPrice?: InputMaybe<Scalars['Float']>;
+  ceilPriceChange24?: InputMaybe<Scalars['Float']>;
+  ceilPriceChange24Percentage?: InputMaybe<Scalars['Float']>;
   customTrackers?: InputMaybe<Scalars['JSON']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   fdv?: InputMaybe<Scalars['Float']>;
+  fdvChange24?: InputMaybe<Scalars['Float']>;
+  fdvChange24Percentage?: InputMaybe<Scalars['Float']>;
+  floorPrice?: InputMaybe<Scalars['Float']>;
+  floorPriceChange24?: InputMaybe<Scalars['Float']>;
+  floorPriceChange24Percentage?: InputMaybe<Scalars['Float']>;
   holders?: InputMaybe<Scalars['Float']>;
+  holdersChange24?: InputMaybe<Scalars['Float']>;
+  holdersChange24Percentage?: InputMaybe<Scalars['Float']>;
   leavingHolders?: InputMaybe<Scalars['Float']>;
+  leavingHoldersChange24?: InputMaybe<Scalars['Float']>;
+  leavingHoldersChange24Percentage?: InputMaybe<Scalars['Float']>;
   liquidity?: InputMaybe<Scalars['Float']>;
+  liquidityChange24?: InputMaybe<Scalars['Float']>;
+  liquidityChange24Percentage?: InputMaybe<Scalars['Float']>;
   marketCap?: InputMaybe<Scalars['Float']>;
+  marketCapChange24?: InputMaybe<Scalars['Float']>;
+  marketCapChange24Percentage?: InputMaybe<Scalars['Float']>;
   newHolders?: InputMaybe<Scalars['Float']>;
+  newHoldersChange24?: InputMaybe<Scalars['Float']>;
+  newHoldersChange24Percentage?: InputMaybe<Scalars['Float']>;
   pairPrice?: InputMaybe<Scalars['Float']>;
+  pairPriceChange24?: InputMaybe<Scalars['Float']>;
+  pairPriceChange24Percentage?: InputMaybe<Scalars['Float']>;
   price?: InputMaybe<Scalars['Float']>;
+  priceChange24?: InputMaybe<Scalars['Float']>;
+  priceChange24Percentage?: InputMaybe<Scalars['Float']>;
   project?: InputMaybe<ProjectRelateToOneForCreateInput>;
   recurringHolders?: InputMaybe<Scalars['Float']>;
+  recurringHoldersChange24?: InputMaybe<Scalars['Float']>;
+  recurringHoldersChange24Percentage?: InputMaybe<Scalars['Float']>;
+  salesVolume?: InputMaybe<Scalars['Float']>;
+  salesVolumeChange24?: InputMaybe<Scalars['Float']>;
+  salesVolumeChange24Percentage?: InputMaybe<Scalars['Float']>;
+  totalHoldings?: InputMaybe<Scalars['Float']>;
+  totalHoldingsChange24?: InputMaybe<Scalars['Float']>;
+  totalHoldingsChange24Percentage?: InputMaybe<Scalars['Float']>;
   totalSupply?: InputMaybe<Scalars['Float']>;
+  totalSupplyChange24?: InputMaybe<Scalars['Float']>;
+  totalSupplyChange24Percentage?: InputMaybe<Scalars['Float']>;
   txns?: InputMaybe<Scalars['JSON']>;
   volume?: InputMaybe<Scalars['JSON']>;
 };
 
 export type MarketStatOrderByInput = {
   avgHoldings?: InputMaybe<OrderDirection>;
+  avgHoldingsChange24?: InputMaybe<OrderDirection>;
+  avgHoldingsChange24Percentage?: InputMaybe<OrderDirection>;
+  avgPrice?: InputMaybe<OrderDirection>;
+  avgPriceChange24?: InputMaybe<OrderDirection>;
+  avgPriceChange24Percentage?: InputMaybe<OrderDirection>;
   burnedTokens?: InputMaybe<OrderDirection>;
+  burnedTokensChange24?: InputMaybe<OrderDirection>;
+  burnedTokensChange24Percentage?: InputMaybe<OrderDirection>;
+  ceilPrice?: InputMaybe<OrderDirection>;
+  ceilPriceChange24?: InputMaybe<OrderDirection>;
+  ceilPriceChange24Percentage?: InputMaybe<OrderDirection>;
   dateAdded?: InputMaybe<OrderDirection>;
   fdv?: InputMaybe<OrderDirection>;
+  fdvChange24?: InputMaybe<OrderDirection>;
+  fdvChange24Percentage?: InputMaybe<OrderDirection>;
+  floorPrice?: InputMaybe<OrderDirection>;
+  floorPriceChange24?: InputMaybe<OrderDirection>;
+  floorPriceChange24Percentage?: InputMaybe<OrderDirection>;
   holders?: InputMaybe<OrderDirection>;
+  holdersChange24?: InputMaybe<OrderDirection>;
+  holdersChange24Percentage?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   leavingHolders?: InputMaybe<OrderDirection>;
+  leavingHoldersChange24?: InputMaybe<OrderDirection>;
+  leavingHoldersChange24Percentage?: InputMaybe<OrderDirection>;
   liquidity?: InputMaybe<OrderDirection>;
+  liquidityChange24?: InputMaybe<OrderDirection>;
+  liquidityChange24Percentage?: InputMaybe<OrderDirection>;
   marketCap?: InputMaybe<OrderDirection>;
+  marketCapChange24?: InputMaybe<OrderDirection>;
+  marketCapChange24Percentage?: InputMaybe<OrderDirection>;
   newHolders?: InputMaybe<OrderDirection>;
+  newHoldersChange24?: InputMaybe<OrderDirection>;
+  newHoldersChange24Percentage?: InputMaybe<OrderDirection>;
   pairPrice?: InputMaybe<OrderDirection>;
+  pairPriceChange24?: InputMaybe<OrderDirection>;
+  pairPriceChange24Percentage?: InputMaybe<OrderDirection>;
   price?: InputMaybe<OrderDirection>;
+  priceChange24?: InputMaybe<OrderDirection>;
+  priceChange24Percentage?: InputMaybe<OrderDirection>;
   recurringHolders?: InputMaybe<OrderDirection>;
+  recurringHoldersChange24?: InputMaybe<OrderDirection>;
+  recurringHoldersChange24Percentage?: InputMaybe<OrderDirection>;
+  salesVolume?: InputMaybe<OrderDirection>;
+  salesVolumeChange24?: InputMaybe<OrderDirection>;
+  salesVolumeChange24Percentage?: InputMaybe<OrderDirection>;
+  totalHoldings?: InputMaybe<OrderDirection>;
+  totalHoldingsChange24?: InputMaybe<OrderDirection>;
+  totalHoldingsChange24Percentage?: InputMaybe<OrderDirection>;
   totalSupply?: InputMaybe<OrderDirection>;
+  totalSupplyChange24?: InputMaybe<OrderDirection>;
+  totalSupplyChange24Percentage?: InputMaybe<OrderDirection>;
 };
 
 export type MarketStatUpdateArgs = {
@@ -2394,20 +2511,59 @@ export type MarketStatUpdateArgs = {
 export type MarketStatUpdateInput = {
   annotation?: InputMaybe<Scalars['JSON']>;
   avgHoldings?: InputMaybe<Scalars['Float']>;
+  avgHoldingsChange24?: InputMaybe<Scalars['Float']>;
+  avgHoldingsChange24Percentage?: InputMaybe<Scalars['Float']>;
+  avgPrice?: InputMaybe<Scalars['Float']>;
+  avgPriceChange24?: InputMaybe<Scalars['Float']>;
+  avgPriceChange24Percentage?: InputMaybe<Scalars['Float']>;
   burnedTokens?: InputMaybe<Scalars['Float']>;
+  burnedTokensChange24?: InputMaybe<Scalars['Float']>;
+  burnedTokensChange24Percentage?: InputMaybe<Scalars['Float']>;
+  ceilPrice?: InputMaybe<Scalars['Float']>;
+  ceilPriceChange24?: InputMaybe<Scalars['Float']>;
+  ceilPriceChange24Percentage?: InputMaybe<Scalars['Float']>;
   customTrackers?: InputMaybe<Scalars['JSON']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   fdv?: InputMaybe<Scalars['Float']>;
+  fdvChange24?: InputMaybe<Scalars['Float']>;
+  fdvChange24Percentage?: InputMaybe<Scalars['Float']>;
+  floorPrice?: InputMaybe<Scalars['Float']>;
+  floorPriceChange24?: InputMaybe<Scalars['Float']>;
+  floorPriceChange24Percentage?: InputMaybe<Scalars['Float']>;
   holders?: InputMaybe<Scalars['Float']>;
+  holdersChange24?: InputMaybe<Scalars['Float']>;
+  holdersChange24Percentage?: InputMaybe<Scalars['Float']>;
   leavingHolders?: InputMaybe<Scalars['Float']>;
+  leavingHoldersChange24?: InputMaybe<Scalars['Float']>;
+  leavingHoldersChange24Percentage?: InputMaybe<Scalars['Float']>;
   liquidity?: InputMaybe<Scalars['Float']>;
+  liquidityChange24?: InputMaybe<Scalars['Float']>;
+  liquidityChange24Percentage?: InputMaybe<Scalars['Float']>;
   marketCap?: InputMaybe<Scalars['Float']>;
+  marketCapChange24?: InputMaybe<Scalars['Float']>;
+  marketCapChange24Percentage?: InputMaybe<Scalars['Float']>;
   newHolders?: InputMaybe<Scalars['Float']>;
+  newHoldersChange24?: InputMaybe<Scalars['Float']>;
+  newHoldersChange24Percentage?: InputMaybe<Scalars['Float']>;
   pairPrice?: InputMaybe<Scalars['Float']>;
+  pairPriceChange24?: InputMaybe<Scalars['Float']>;
+  pairPriceChange24Percentage?: InputMaybe<Scalars['Float']>;
   price?: InputMaybe<Scalars['Float']>;
+  priceChange24?: InputMaybe<Scalars['Float']>;
+  priceChange24Percentage?: InputMaybe<Scalars['Float']>;
   project?: InputMaybe<ProjectRelateToOneForUpdateInput>;
   recurringHolders?: InputMaybe<Scalars['Float']>;
+  recurringHoldersChange24?: InputMaybe<Scalars['Float']>;
+  recurringHoldersChange24Percentage?: InputMaybe<Scalars['Float']>;
+  salesVolume?: InputMaybe<Scalars['Float']>;
+  salesVolumeChange24?: InputMaybe<Scalars['Float']>;
+  salesVolumeChange24Percentage?: InputMaybe<Scalars['Float']>;
+  totalHoldings?: InputMaybe<Scalars['Float']>;
+  totalHoldingsChange24?: InputMaybe<Scalars['Float']>;
+  totalHoldingsChange24Percentage?: InputMaybe<Scalars['Float']>;
   totalSupply?: InputMaybe<Scalars['Float']>;
+  totalSupplyChange24?: InputMaybe<Scalars['Float']>;
+  totalSupplyChange24Percentage?: InputMaybe<Scalars['Float']>;
   txns?: InputMaybe<Scalars['JSON']>;
   volume?: InputMaybe<Scalars['JSON']>;
 };
@@ -2417,20 +2573,59 @@ export type MarketStatWhereInput = {
   NOT?: InputMaybe<Array<MarketStatWhereInput>>;
   OR?: InputMaybe<Array<MarketStatWhereInput>>;
   avgHoldings?: InputMaybe<FloatNullableFilter>;
+  avgHoldingsChange24?: InputMaybe<FloatNullableFilter>;
+  avgHoldingsChange24Percentage?: InputMaybe<FloatNullableFilter>;
+  avgPrice?: InputMaybe<FloatNullableFilter>;
+  avgPriceChange24?: InputMaybe<FloatNullableFilter>;
+  avgPriceChange24Percentage?: InputMaybe<FloatNullableFilter>;
   burnedTokens?: InputMaybe<FloatNullableFilter>;
+  burnedTokensChange24?: InputMaybe<FloatNullableFilter>;
+  burnedTokensChange24Percentage?: InputMaybe<FloatNullableFilter>;
+  ceilPrice?: InputMaybe<FloatNullableFilter>;
+  ceilPriceChange24?: InputMaybe<FloatNullableFilter>;
+  ceilPriceChange24Percentage?: InputMaybe<FloatNullableFilter>;
   dateAdded?: InputMaybe<DateTimeNullableFilter>;
   fdv?: InputMaybe<FloatNullableFilter>;
+  fdvChange24?: InputMaybe<FloatNullableFilter>;
+  fdvChange24Percentage?: InputMaybe<FloatNullableFilter>;
+  floorPrice?: InputMaybe<FloatNullableFilter>;
+  floorPriceChange24?: InputMaybe<FloatNullableFilter>;
+  floorPriceChange24Percentage?: InputMaybe<FloatNullableFilter>;
   holders?: InputMaybe<FloatNullableFilter>;
+  holdersChange24?: InputMaybe<FloatNullableFilter>;
+  holdersChange24Percentage?: InputMaybe<FloatNullableFilter>;
   id?: InputMaybe<IdFilter>;
   leavingHolders?: InputMaybe<FloatNullableFilter>;
+  leavingHoldersChange24?: InputMaybe<FloatNullableFilter>;
+  leavingHoldersChange24Percentage?: InputMaybe<FloatNullableFilter>;
   liquidity?: InputMaybe<FloatNullableFilter>;
+  liquidityChange24?: InputMaybe<FloatNullableFilter>;
+  liquidityChange24Percentage?: InputMaybe<FloatNullableFilter>;
   marketCap?: InputMaybe<FloatNullableFilter>;
+  marketCapChange24?: InputMaybe<FloatNullableFilter>;
+  marketCapChange24Percentage?: InputMaybe<FloatNullableFilter>;
   newHolders?: InputMaybe<FloatNullableFilter>;
+  newHoldersChange24?: InputMaybe<FloatNullableFilter>;
+  newHoldersChange24Percentage?: InputMaybe<FloatNullableFilter>;
   pairPrice?: InputMaybe<FloatNullableFilter>;
+  pairPriceChange24?: InputMaybe<FloatNullableFilter>;
+  pairPriceChange24Percentage?: InputMaybe<FloatNullableFilter>;
   price?: InputMaybe<FloatNullableFilter>;
+  priceChange24?: InputMaybe<FloatNullableFilter>;
+  priceChange24Percentage?: InputMaybe<FloatNullableFilter>;
   project?: InputMaybe<ProjectWhereInput>;
   recurringHolders?: InputMaybe<FloatNullableFilter>;
+  recurringHoldersChange24?: InputMaybe<FloatNullableFilter>;
+  recurringHoldersChange24Percentage?: InputMaybe<FloatNullableFilter>;
+  salesVolume?: InputMaybe<FloatNullableFilter>;
+  salesVolumeChange24?: InputMaybe<FloatNullableFilter>;
+  salesVolumeChange24Percentage?: InputMaybe<FloatNullableFilter>;
+  totalHoldings?: InputMaybe<FloatNullableFilter>;
+  totalHoldingsChange24?: InputMaybe<FloatNullableFilter>;
+  totalHoldingsChange24Percentage?: InputMaybe<FloatNullableFilter>;
   totalSupply?: InputMaybe<FloatNullableFilter>;
+  totalSupplyChange24?: InputMaybe<FloatNullableFilter>;
+  totalSupplyChange24Percentage?: InputMaybe<FloatNullableFilter>;
 };
 
 export type MarketStatWhereUniqueInput = {
@@ -2851,6 +3046,8 @@ export type Mutation = {
   createProducts?: Maybe<Array<Maybe<Product>>>;
   createProject?: Maybe<Project>;
   createProjects?: Maybe<Array<Maybe<Project>>>;
+  createPromotion?: Maybe<Promotion>;
+  createPromotions?: Maybe<Array<Maybe<Promotion>>>;
   createProvider?: Maybe<Provider>;
   createProviders?: Maybe<Array<Maybe<Provider>>>;
   createQuiz?: Maybe<Quiz>;
@@ -2953,6 +3150,8 @@ export type Mutation = {
   deleteProducts?: Maybe<Array<Maybe<Product>>>;
   deleteProject?: Maybe<Project>;
   deleteProjects?: Maybe<Array<Maybe<Project>>>;
+  deletePromotion?: Maybe<Promotion>;
+  deletePromotions?: Maybe<Array<Maybe<Promotion>>>;
   deleteProvider?: Maybe<Provider>;
   deleteProviders?: Maybe<Array<Maybe<Provider>>>;
   deleteQuiz?: Maybe<Quiz>;
@@ -3058,6 +3257,8 @@ export type Mutation = {
   updateProducts?: Maybe<Array<Maybe<Product>>>;
   updateProject?: Maybe<Project>;
   updateProjects?: Maybe<Array<Maybe<Project>>>;
+  updatePromotion?: Maybe<Promotion>;
+  updatePromotions?: Maybe<Array<Maybe<Promotion>>>;
   updateProvider?: Maybe<Provider>;
   updateProviders?: Maybe<Array<Maybe<Provider>>>;
   updateQuiz?: Maybe<Quiz>;
@@ -3435,6 +3636,16 @@ export type MutationCreateProjectArgs = {
 
 export type MutationCreateProjectsArgs = {
   data: Array<ProjectCreateInput>;
+};
+
+
+export type MutationCreatePromotionArgs = {
+  data: PromotionCreateInput;
+};
+
+
+export type MutationCreatePromotionsArgs = {
+  data: Array<PromotionCreateInput>;
 };
 
 
@@ -3945,6 +4156,16 @@ export type MutationDeleteProjectArgs = {
 
 export type MutationDeleteProjectsArgs = {
   where: Array<ProjectWhereUniqueInput>;
+};
+
+
+export type MutationDeletePromotionArgs = {
+  where: PromotionWhereUniqueInput;
+};
+
+
+export type MutationDeletePromotionsArgs = {
+  where: Array<PromotionWhereUniqueInput>;
 };
 
 
@@ -4503,6 +4724,17 @@ export type MutationUpdateProjectsArgs = {
 };
 
 
+export type MutationUpdatePromotionArgs = {
+  data: PromotionUpdateInput;
+  where: PromotionWhereUniqueInput;
+};
+
+
+export type MutationUpdatePromotionsArgs = {
+  data: Array<PromotionUpdateArgs>;
+};
+
+
 export type MutationUpdateProviderArgs = {
   data: ProviderUpdateInput;
   where: ProviderWhereUniqueInput;
@@ -4731,11 +4963,13 @@ export type NestedStringNullableFilter = {
 export type Network = {
   __typename?: 'Network';
   dateAdded?: Maybe<Scalars['DateTime']>;
+  decimals?: Maybe<Scalars['Int']>;
   id: Scalars['ID'];
   logo?: Maybe<ImageFieldOutput>;
   name?: Maybe<Scalars['String']>;
   scanner?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
+  symbol?: Maybe<Scalars['String']>;
   tokenScanner?: Maybe<Scalars['String']>;
   txScanner?: Maybe<Scalars['String']>;
   url?: Maybe<Scalars['String']>;
@@ -4743,10 +4977,12 @@ export type Network = {
 
 export type NetworkCreateInput = {
   dateAdded?: InputMaybe<Scalars['DateTime']>;
+  decimals?: InputMaybe<Scalars['Int']>;
   logo?: InputMaybe<ImageFieldInput>;
   name?: InputMaybe<Scalars['String']>;
   scanner?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
+  symbol?: InputMaybe<Scalars['String']>;
   tokenScanner?: InputMaybe<Scalars['String']>;
   txScanner?: InputMaybe<Scalars['String']>;
   url?: InputMaybe<Scalars['String']>;
@@ -4760,10 +4996,12 @@ export type NetworkManyRelationFilter = {
 
 export type NetworkOrderByInput = {
   dateAdded?: InputMaybe<OrderDirection>;
+  decimals?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
   scanner?: InputMaybe<OrderDirection>;
   slug?: InputMaybe<OrderDirection>;
+  symbol?: InputMaybe<OrderDirection>;
   tokenScanner?: InputMaybe<OrderDirection>;
   txScanner?: InputMaybe<OrderDirection>;
   url?: InputMaybe<OrderDirection>;
@@ -4799,10 +5037,12 @@ export type NetworkUpdateArgs = {
 
 export type NetworkUpdateInput = {
   dateAdded?: InputMaybe<Scalars['DateTime']>;
+  decimals?: InputMaybe<Scalars['Int']>;
   logo?: InputMaybe<ImageFieldInput>;
   name?: InputMaybe<Scalars['String']>;
   scanner?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
+  symbol?: InputMaybe<Scalars['String']>;
   tokenScanner?: InputMaybe<Scalars['String']>;
   txScanner?: InputMaybe<Scalars['String']>;
   url?: InputMaybe<Scalars['String']>;
@@ -4813,10 +5053,12 @@ export type NetworkWhereInput = {
   NOT?: InputMaybe<Array<NetworkWhereInput>>;
   OR?: InputMaybe<Array<NetworkWhereInput>>;
   dateAdded?: InputMaybe<DateTimeNullableFilter>;
+  decimals?: InputMaybe<IntNullableFilter>;
   id?: InputMaybe<IdFilter>;
   name?: InputMaybe<StringFilter>;
   scanner?: InputMaybe<StringFilter>;
   slug?: InputMaybe<StringFilter>;
+  symbol?: InputMaybe<StringFilter>;
   tokenScanner?: InputMaybe<StringFilter>;
   txScanner?: InputMaybe<StringFilter>;
   url?: InputMaybe<StringFilter>;
@@ -5392,9 +5634,9 @@ export type Project = {
   auditBy?: Maybe<Array<Audit>>;
   auditByCount?: Maybe<Scalars['Int']>;
   auditLink?: Maybe<Scalars['String']>;
+  backgroundImage?: Maybe<ImageFieldOutput>;
   burnAddress?: Maybe<Scalars['String']>;
   buyTax?: Maybe<Scalars['Float']>;
-  calendar?: Maybe<Scalars['String']>;
   comments?: Maybe<Array<Comment>>;
   commentsCount?: Maybe<Scalars['Int']>;
   content?: Maybe<Array<Content>>;
@@ -5424,6 +5666,7 @@ export type Project = {
   isListed?: Maybe<Scalars['Boolean']>;
   isNft?: Maybe<Scalars['Boolean']>;
   isPending?: Maybe<Scalars['Boolean']>;
+  isPreLaunch?: Maybe<Scalars['Boolean']>;
   kycBy?: Maybe<Array<Kyc>>;
   kycByCount?: Maybe<Scalars['Int']>;
   kycLink?: Maybe<Scalars['String']>;
@@ -5433,7 +5676,9 @@ export type Project = {
   liquidityPairCount?: Maybe<Scalars['Int']>;
   logo?: Maybe<ImageFieldOutput>;
   markForDeletion?: Maybe<Scalars['Boolean']>;
+  maxSupply?: Maybe<Scalars['Int']>;
   medium?: Maybe<Scalars['String']>;
+  mintPrice?: Maybe<Scalars['Float']>;
   name?: Maybe<Scalars['String']>;
   network?: Maybe<Network>;
   notifications?: Maybe<Array<Notification>>;
@@ -5443,6 +5688,8 @@ export type Project = {
   parentProjectCount?: Maybe<Scalars['Int']>;
   paymentPlan?: Maybe<PaymentPlan>;
   periodicWalletUpdates?: Maybe<Scalars['Boolean']>;
+  preLaunchInformation?: Maybe<Scalars['String']>;
+  promotion?: Maybe<Promotion>;
   rebasePeriod?: Maybe<Scalars['String']>;
   reddit?: Maybe<Scalars['String']>;
   relatedProjects?: Maybe<Array<Project>>;
@@ -5450,10 +5697,12 @@ export type Project = {
   sellTax?: Maybe<Scalars['Float']>;
   slug?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
+  symbol?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Tag>>;
   tagsCount?: Maybe<Scalars['Int']>;
   tclRating?: Maybe<Scalars['Int']>;
   telegram?: Maybe<Scalars['String']>;
+  tokenType?: Maybe<Scalars['String']>;
   trackData?: Maybe<Scalars['Boolean']>;
   trackHolders?: Maybe<Scalars['Boolean']>;
   trackHoldersFromDollarAmount?: Maybe<Scalars['Float']>;
@@ -5677,9 +5926,9 @@ export type ProjectCreateInput = {
   apy?: InputMaybe<Scalars['Float']>;
   auditBy?: InputMaybe<AuditRelateToManyForCreateInput>;
   auditLink?: InputMaybe<Scalars['String']>;
+  backgroundImage?: InputMaybe<ImageFieldInput>;
   burnAddress?: InputMaybe<Scalars['String']>;
   buyTax?: InputMaybe<Scalars['Float']>;
-  calendar?: InputMaybe<Scalars['String']>;
   comments?: InputMaybe<CommentRelateToManyForCreateInput>;
   content?: InputMaybe<ContentRelateToManyForCreateInput>;
   contractAddress?: InputMaybe<Scalars['String']>;
@@ -5704,6 +5953,7 @@ export type ProjectCreateInput = {
   isListed?: InputMaybe<Scalars['Boolean']>;
   isNft?: InputMaybe<Scalars['Boolean']>;
   isPending?: InputMaybe<Scalars['Boolean']>;
+  isPreLaunch?: InputMaybe<Scalars['Boolean']>;
   kycBy?: InputMaybe<KycRelateToManyForCreateInput>;
   kycLink?: InputMaybe<Scalars['String']>;
   launchBlock?: InputMaybe<Scalars['Int']>;
@@ -5711,7 +5961,9 @@ export type ProjectCreateInput = {
   liquidityPair?: InputMaybe<LiquidityPairRelateToManyForCreateInput>;
   logo?: InputMaybe<ImageFieldInput>;
   markForDeletion?: InputMaybe<Scalars['Boolean']>;
+  maxSupply?: InputMaybe<Scalars['Int']>;
   medium?: InputMaybe<Scalars['String']>;
+  mintPrice?: InputMaybe<Scalars['Float']>;
   name?: InputMaybe<Scalars['String']>;
   network?: InputMaybe<NetworkRelateToOneForCreateInput>;
   notifications?: InputMaybe<NotificationRelateToManyForCreateInput>;
@@ -5719,15 +5971,19 @@ export type ProjectCreateInput = {
   parentProject?: InputMaybe<ProjectRelateToManyForCreateInput>;
   paymentPlan?: InputMaybe<PaymentPlanRelateToOneForCreateInput>;
   periodicWalletUpdates?: InputMaybe<Scalars['Boolean']>;
+  preLaunchInformation?: InputMaybe<Scalars['String']>;
+  promotion?: InputMaybe<PromotionRelateToOneForCreateInput>;
   rebasePeriod?: InputMaybe<Scalars['String']>;
   reddit?: InputMaybe<Scalars['String']>;
   relatedProjects?: InputMaybe<ProjectRelateToManyForCreateInput>;
   sellTax?: InputMaybe<Scalars['Float']>;
   slug?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Scalars['String']>;
+  symbol?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<TagRelateToManyForCreateInput>;
   tclRating?: InputMaybe<Scalars['Int']>;
   telegram?: InputMaybe<Scalars['String']>;
+  tokenType?: InputMaybe<Scalars['String']>;
   trackData?: InputMaybe<Scalars['Boolean']>;
   trackHolders?: InputMaybe<Scalars['Boolean']>;
   trackHoldersFromDollarAmount?: InputMaybe<Scalars['Float']>;
@@ -5758,7 +6014,6 @@ export type ProjectOrderByInput = {
   auditLink?: InputMaybe<OrderDirection>;
   burnAddress?: InputMaybe<OrderDirection>;
   buyTax?: InputMaybe<OrderDirection>;
-  calendar?: InputMaybe<OrderDirection>;
   contractAddress?: InputMaybe<OrderDirection>;
   customVetting?: InputMaybe<OrderDirection>;
   dailyApy?: InputMaybe<OrderDirection>;
@@ -5779,21 +6034,27 @@ export type ProjectOrderByInput = {
   isListed?: InputMaybe<OrderDirection>;
   isNft?: InputMaybe<OrderDirection>;
   isPending?: InputMaybe<OrderDirection>;
+  isPreLaunch?: InputMaybe<OrderDirection>;
   kycLink?: InputMaybe<OrderDirection>;
   launchBlock?: InputMaybe<OrderDirection>;
   launchDate?: InputMaybe<OrderDirection>;
   markForDeletion?: InputMaybe<OrderDirection>;
+  maxSupply?: InputMaybe<OrderDirection>;
   medium?: InputMaybe<OrderDirection>;
+  mintPrice?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
   pairAddress?: InputMaybe<OrderDirection>;
   periodicWalletUpdates?: InputMaybe<OrderDirection>;
+  preLaunchInformation?: InputMaybe<OrderDirection>;
   rebasePeriod?: InputMaybe<OrderDirection>;
   reddit?: InputMaybe<OrderDirection>;
   sellTax?: InputMaybe<OrderDirection>;
   slug?: InputMaybe<OrderDirection>;
   status?: InputMaybe<OrderDirection>;
+  symbol?: InputMaybe<OrderDirection>;
   tclRating?: InputMaybe<OrderDirection>;
   telegram?: InputMaybe<OrderDirection>;
+  tokenType?: InputMaybe<OrderDirection>;
   trackData?: InputMaybe<OrderDirection>;
   trackHolders?: InputMaybe<OrderDirection>;
   trackHoldersFromDollarAmount?: InputMaybe<OrderDirection>;
@@ -5843,9 +6104,9 @@ export type ProjectUpdateInput = {
   apy?: InputMaybe<Scalars['Float']>;
   auditBy?: InputMaybe<AuditRelateToManyForUpdateInput>;
   auditLink?: InputMaybe<Scalars['String']>;
+  backgroundImage?: InputMaybe<ImageFieldInput>;
   burnAddress?: InputMaybe<Scalars['String']>;
   buyTax?: InputMaybe<Scalars['Float']>;
-  calendar?: InputMaybe<Scalars['String']>;
   comments?: InputMaybe<CommentRelateToManyForUpdateInput>;
   content?: InputMaybe<ContentRelateToManyForUpdateInput>;
   contractAddress?: InputMaybe<Scalars['String']>;
@@ -5870,6 +6131,7 @@ export type ProjectUpdateInput = {
   isListed?: InputMaybe<Scalars['Boolean']>;
   isNft?: InputMaybe<Scalars['Boolean']>;
   isPending?: InputMaybe<Scalars['Boolean']>;
+  isPreLaunch?: InputMaybe<Scalars['Boolean']>;
   kycBy?: InputMaybe<KycRelateToManyForUpdateInput>;
   kycLink?: InputMaybe<Scalars['String']>;
   launchBlock?: InputMaybe<Scalars['Int']>;
@@ -5877,7 +6139,9 @@ export type ProjectUpdateInput = {
   liquidityPair?: InputMaybe<LiquidityPairRelateToManyForUpdateInput>;
   logo?: InputMaybe<ImageFieldInput>;
   markForDeletion?: InputMaybe<Scalars['Boolean']>;
+  maxSupply?: InputMaybe<Scalars['Int']>;
   medium?: InputMaybe<Scalars['String']>;
+  mintPrice?: InputMaybe<Scalars['Float']>;
   name?: InputMaybe<Scalars['String']>;
   network?: InputMaybe<NetworkRelateToOneForUpdateInput>;
   notifications?: InputMaybe<NotificationRelateToManyForUpdateInput>;
@@ -5885,15 +6149,19 @@ export type ProjectUpdateInput = {
   parentProject?: InputMaybe<ProjectRelateToManyForUpdateInput>;
   paymentPlan?: InputMaybe<PaymentPlanRelateToOneForUpdateInput>;
   periodicWalletUpdates?: InputMaybe<Scalars['Boolean']>;
+  preLaunchInformation?: InputMaybe<Scalars['String']>;
+  promotion?: InputMaybe<PromotionRelateToOneForUpdateInput>;
   rebasePeriod?: InputMaybe<Scalars['String']>;
   reddit?: InputMaybe<Scalars['String']>;
   relatedProjects?: InputMaybe<ProjectRelateToManyForUpdateInput>;
   sellTax?: InputMaybe<Scalars['Float']>;
   slug?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Scalars['String']>;
+  symbol?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<TagRelateToManyForUpdateInput>;
   tclRating?: InputMaybe<Scalars['Int']>;
   telegram?: InputMaybe<Scalars['String']>;
+  tokenType?: InputMaybe<Scalars['String']>;
   trackData?: InputMaybe<Scalars['Boolean']>;
   trackHolders?: InputMaybe<Scalars['Boolean']>;
   trackHoldersFromDollarAmount?: InputMaybe<Scalars['Float']>;
@@ -5923,7 +6191,6 @@ export type ProjectWhereInput = {
   auditLink?: InputMaybe<StringFilter>;
   burnAddress?: InputMaybe<StringFilter>;
   buyTax?: InputMaybe<FloatNullableFilter>;
-  calendar?: InputMaybe<StringFilter>;
   comments?: InputMaybe<CommentManyRelationFilter>;
   content?: InputMaybe<ContentManyRelationFilter>;
   contractAddress?: InputMaybe<StringFilter>;
@@ -5949,13 +6216,16 @@ export type ProjectWhereInput = {
   isListed?: InputMaybe<BooleanFilter>;
   isNft?: InputMaybe<BooleanFilter>;
   isPending?: InputMaybe<BooleanFilter>;
+  isPreLaunch?: InputMaybe<BooleanFilter>;
   kycBy?: InputMaybe<KycManyRelationFilter>;
   kycLink?: InputMaybe<StringFilter>;
   launchBlock?: InputMaybe<IntNullableFilter>;
   launchDate?: InputMaybe<DateTimeNullableFilter>;
   liquidityPair?: InputMaybe<LiquidityPairManyRelationFilter>;
   markForDeletion?: InputMaybe<BooleanFilter>;
+  maxSupply?: InputMaybe<IntNullableFilter>;
   medium?: InputMaybe<StringFilter>;
+  mintPrice?: InputMaybe<FloatNullableFilter>;
   name?: InputMaybe<StringFilter>;
   network?: InputMaybe<NetworkWhereInput>;
   notifications?: InputMaybe<NotificationManyRelationFilter>;
@@ -5963,15 +6233,19 @@ export type ProjectWhereInput = {
   parentProject?: InputMaybe<ProjectManyRelationFilter>;
   paymentPlan?: InputMaybe<PaymentPlanWhereInput>;
   periodicWalletUpdates?: InputMaybe<BooleanFilter>;
+  preLaunchInformation?: InputMaybe<StringFilter>;
+  promotion?: InputMaybe<PromotionWhereInput>;
   rebasePeriod?: InputMaybe<StringFilter>;
   reddit?: InputMaybe<StringFilter>;
   relatedProjects?: InputMaybe<ProjectManyRelationFilter>;
   sellTax?: InputMaybe<FloatNullableFilter>;
   slug?: InputMaybe<StringFilter>;
   status?: InputMaybe<StringNullableFilter>;
+  symbol?: InputMaybe<StringFilter>;
   tags?: InputMaybe<TagManyRelationFilter>;
   tclRating?: InputMaybe<IntNullableFilter>;
   telegram?: InputMaybe<StringFilter>;
+  tokenType?: InputMaybe<StringNullableFilter>;
   trackData?: InputMaybe<BooleanFilter>;
   trackHolders?: InputMaybe<BooleanFilter>;
   trackHoldersFromDollarAmount?: InputMaybe<FloatNullableFilter>;
@@ -5991,6 +6265,77 @@ export type ProjectWhereInput = {
 };
 
 export type ProjectWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type Promotion = {
+  __typename?: 'Promotion';
+  dateAdded?: Maybe<Scalars['DateTime']>;
+  endDate?: Maybe<Scalars['DateTime']>;
+  id: Scalars['ID'];
+  isEnabled?: Maybe<Scalars['Boolean']>;
+  project?: Maybe<Project>;
+  startDate?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type PromotionCreateInput = {
+  dateAdded?: InputMaybe<Scalars['DateTime']>;
+  endDate?: InputMaybe<Scalars['DateTime']>;
+  isEnabled?: InputMaybe<Scalars['Boolean']>;
+  project?: InputMaybe<ProjectRelateToOneForCreateInput>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type PromotionOrderByInput = {
+  dateAdded?: InputMaybe<OrderDirection>;
+  endDate?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+  isEnabled?: InputMaybe<OrderDirection>;
+  startDate?: InputMaybe<OrderDirection>;
+  updatedAt?: InputMaybe<OrderDirection>;
+};
+
+export type PromotionRelateToOneForCreateInput = {
+  connect?: InputMaybe<PromotionWhereUniqueInput>;
+  create?: InputMaybe<PromotionCreateInput>;
+};
+
+export type PromotionRelateToOneForUpdateInput = {
+  connect?: InputMaybe<PromotionWhereUniqueInput>;
+  create?: InputMaybe<PromotionCreateInput>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type PromotionUpdateArgs = {
+  data: PromotionUpdateInput;
+  where: PromotionWhereUniqueInput;
+};
+
+export type PromotionUpdateInput = {
+  dateAdded?: InputMaybe<Scalars['DateTime']>;
+  endDate?: InputMaybe<Scalars['DateTime']>;
+  isEnabled?: InputMaybe<Scalars['Boolean']>;
+  project?: InputMaybe<ProjectRelateToOneForUpdateInput>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type PromotionWhereInput = {
+  AND?: InputMaybe<Array<PromotionWhereInput>>;
+  NOT?: InputMaybe<Array<PromotionWhereInput>>;
+  OR?: InputMaybe<Array<PromotionWhereInput>>;
+  dateAdded?: InputMaybe<DateTimeNullableFilter>;
+  endDate?: InputMaybe<DateTimeNullableFilter>;
+  id?: InputMaybe<IdFilter>;
+  isEnabled?: InputMaybe<BooleanFilter>;
+  project?: InputMaybe<ProjectWhereInput>;
+  startDate?: InputMaybe<DateTimeNullableFilter>;
+  updatedAt?: InputMaybe<DateTimeNullableFilter>;
+};
+
+export type PromotionWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
@@ -6369,6 +6714,9 @@ export type Query = {
   project?: Maybe<Project>;
   projects?: Maybe<Array<Project>>;
   projectsCount?: Maybe<Scalars['Int']>;
+  promotion?: Maybe<Promotion>;
+  promotions?: Maybe<Array<Promotion>>;
+  promotionsCount?: Maybe<Scalars['Int']>;
   provider?: Maybe<Provider>;
   providers?: Maybe<Array<Provider>>;
   providersCount?: Maybe<Scalars['Int']>;
@@ -7018,6 +7366,24 @@ export type QueryProjectsArgs = {
 
 export type QueryProjectsCountArgs = {
   where?: ProjectWhereInput;
+};
+
+
+export type QueryPromotionArgs = {
+  where: PromotionWhereUniqueInput;
+};
+
+
+export type QueryPromotionsArgs = {
+  orderBy?: Array<PromotionOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: PromotionWhereInput;
+};
+
+
+export type QueryPromotionsCountArgs = {
+  where?: PromotionWhereInput;
 };
 
 
@@ -7836,27 +8202,45 @@ export type SocialStat = {
   annotation?: Maybe<Scalars['JSON']>;
   dateAdded?: Maybe<Scalars['DateTime']>;
   discord?: Maybe<Scalars['Float']>;
+  discordChange24?: Maybe<Scalars['Float']>;
+  discordChange24Percentage?: Maybe<Scalars['Float']>;
   id: Scalars['ID'];
   project?: Maybe<Project>;
   telegram?: Maybe<Scalars['Float']>;
+  telegramChange24?: Maybe<Scalars['Float']>;
+  telegramChange24Percentage?: Maybe<Scalars['Float']>;
   twitter?: Maybe<Scalars['Float']>;
+  twitterChange24?: Maybe<Scalars['Float']>;
+  twitterChange24Percentage?: Maybe<Scalars['Float']>;
 };
 
 export type SocialStatCreateInput = {
   annotation?: InputMaybe<Scalars['JSON']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   discord?: InputMaybe<Scalars['Float']>;
+  discordChange24?: InputMaybe<Scalars['Float']>;
+  discordChange24Percentage?: InputMaybe<Scalars['Float']>;
   project?: InputMaybe<ProjectRelateToOneForCreateInput>;
   telegram?: InputMaybe<Scalars['Float']>;
+  telegramChange24?: InputMaybe<Scalars['Float']>;
+  telegramChange24Percentage?: InputMaybe<Scalars['Float']>;
   twitter?: InputMaybe<Scalars['Float']>;
+  twitterChange24?: InputMaybe<Scalars['Float']>;
+  twitterChange24Percentage?: InputMaybe<Scalars['Float']>;
 };
 
 export type SocialStatOrderByInput = {
   dateAdded?: InputMaybe<OrderDirection>;
   discord?: InputMaybe<OrderDirection>;
+  discordChange24?: InputMaybe<OrderDirection>;
+  discordChange24Percentage?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   telegram?: InputMaybe<OrderDirection>;
+  telegramChange24?: InputMaybe<OrderDirection>;
+  telegramChange24Percentage?: InputMaybe<OrderDirection>;
   twitter?: InputMaybe<OrderDirection>;
+  twitterChange24?: InputMaybe<OrderDirection>;
+  twitterChange24Percentage?: InputMaybe<OrderDirection>;
 };
 
 export type SocialStatUpdateArgs = {
@@ -7868,9 +8252,15 @@ export type SocialStatUpdateInput = {
   annotation?: InputMaybe<Scalars['JSON']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   discord?: InputMaybe<Scalars['Float']>;
+  discordChange24?: InputMaybe<Scalars['Float']>;
+  discordChange24Percentage?: InputMaybe<Scalars['Float']>;
   project?: InputMaybe<ProjectRelateToOneForUpdateInput>;
   telegram?: InputMaybe<Scalars['Float']>;
+  telegramChange24?: InputMaybe<Scalars['Float']>;
+  telegramChange24Percentage?: InputMaybe<Scalars['Float']>;
   twitter?: InputMaybe<Scalars['Float']>;
+  twitterChange24?: InputMaybe<Scalars['Float']>;
+  twitterChange24Percentage?: InputMaybe<Scalars['Float']>;
 };
 
 export type SocialStatWhereInput = {
@@ -7879,10 +8269,16 @@ export type SocialStatWhereInput = {
   OR?: InputMaybe<Array<SocialStatWhereInput>>;
   dateAdded?: InputMaybe<DateTimeNullableFilter>;
   discord?: InputMaybe<FloatNullableFilter>;
+  discordChange24?: InputMaybe<FloatNullableFilter>;
+  discordChange24Percentage?: InputMaybe<FloatNullableFilter>;
   id?: InputMaybe<IdFilter>;
   project?: InputMaybe<ProjectWhereInput>;
   telegram?: InputMaybe<FloatNullableFilter>;
+  telegramChange24?: InputMaybe<FloatNullableFilter>;
+  telegramChange24Percentage?: InputMaybe<FloatNullableFilter>;
   twitter?: InputMaybe<FloatNullableFilter>;
+  twitterChange24?: InputMaybe<FloatNullableFilter>;
+  twitterChange24Percentage?: InputMaybe<FloatNullableFilter>;
 };
 
 export type SocialStatWhereUniqueInput = {
@@ -8383,6 +8779,7 @@ export type Transfer = {
   id: Scalars['ID'];
   project?: Maybe<Project>;
   toAddress?: Maybe<Scalars['String']>;
+  tokenId?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -8396,6 +8793,7 @@ export type TransferCreateInput = {
   hash?: InputMaybe<Scalars['String']>;
   project?: InputMaybe<ProjectRelateToOneForCreateInput>;
   toAddress?: InputMaybe<Scalars['String']>;
+  tokenId?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<Scalars['Int']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -8415,6 +8813,7 @@ export type TransferOrderByInput = {
   hash?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   toAddress?: InputMaybe<OrderDirection>;
+  tokenId?: InputMaybe<OrderDirection>;
   type?: InputMaybe<OrderDirection>;
   updatedAt?: InputMaybe<OrderDirection>;
 };
@@ -8445,6 +8844,7 @@ export type TransferUpdateInput = {
   hash?: InputMaybe<Scalars['String']>;
   project?: InputMaybe<ProjectRelateToOneForUpdateInput>;
   toAddress?: InputMaybe<Scalars['String']>;
+  tokenId?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<Scalars['Int']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -8462,6 +8862,7 @@ export type TransferWhereInput = {
   id?: InputMaybe<IdFilter>;
   project?: InputMaybe<ProjectWhereInput>;
   toAddress?: InputMaybe<StringFilter>;
+  tokenId?: InputMaybe<StringFilter>;
   type?: InputMaybe<IntNullableFilter>;
   updatedAt?: InputMaybe<DateTimeNullableFilter>;
 };

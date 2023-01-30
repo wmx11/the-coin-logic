@@ -1,40 +1,33 @@
-import { Center, Container, Text } from '@mantine/core';
-import GradientButton from 'components/Buttons/GradientButton';
+import { Center, Container } from '@mantine/core';
+import AddYourProject from 'components/AddYourProject';
 import Meta from 'components/Meta';
-import NotificationBar from 'components/NotificationBar';
 import Paper from 'components/Paper';
-import PaymentPlanBadge from 'components/PaymentPlans/PaymentPlanBadge';
 import SubscribeToEmail from 'components/SubscribeToEmail';
-import GradientText from 'components/Text/GradientText';
-import GradientTitle from 'components/Text/GradientTitle';
-import { Trend } from 'components/Trend';
 import withRedisCache from 'data/redis';
 import useUser from 'hooks/useUser';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
 import { FC, useEffect } from 'react';
-import { FiExternalLink } from 'react-icons/fi';
 import useChartStore from 'store/useChartStore';
-import { PaymentPlan, Tag } from 'types';
+import useThemeStore from 'store/useThemeStore';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import toCurrency from 'utils/toCurrency';
+import toLocaleString from 'utils/toLocaleString';
 import Announcements from 'views/project/Announcements';
 import AuditsAndKyc from 'views/project/AuditsAndKyc';
 import Controls from 'views/project/Controls';
 import Events from 'views/project/Events';
+import Header from 'views/project/Header';
+import Notifications from 'views/project/Header/Notifications';
 import Markets from 'views/project/Markets';
 import RelatedProjects from 'views/project/RelatedProjects';
 import TransactionVolume from 'views/project/TransactionVolume';
 import TransparencyScore from 'views/project/TransparencyScore';
-import { Badges } from '../../components/Badges';
 import { NotFound } from '../../components/NotFound';
-import { ProjectTitle } from '../../components/ProjectTitle';
 import TrackVitalsDisclaimer from '../../components/TrackVitalsDisclaimer';
 import { getProjectAndMarketStatsBySlug } from '../../data/getters';
 import AboutProject from '../../views/project/AboutProject';
 import MarketData from '../../views/project/MarketData';
-import toLocaleString from 'utils/toLocaleString';
-import useThemeStore from 'store/useThemeStore';
 
 type ProjectProps = {
   projectData: ProjectWithMarketStatsAndChanges;
@@ -43,16 +36,8 @@ type ProjectProps = {
 const project: FC<ProjectProps> = ({ projectData }) => {
   const { project } = projectData;
 
-  const {
-    notifications,
-    displayTransparencyScore,
-    displayBlogPosts,
-    trackData,
-    trackHolders,
-    trackSocials,
-    trackPrice,
-    trackMarketCap,
-  } = project;
+  const { displayTransparencyScore, displayBlogPosts, trackData, trackHolders, trackSocials, trackPrice, isNft } =
+    project;
 
   if (!project) {
     return (
@@ -76,31 +61,40 @@ const project: FC<ProjectProps> = ({ projectData }) => {
   const Interactions = dynamic<any>(() => import('views/project/Interactions'));
 
   // Clear all charts data on unmount
-  useEffect(() => () => chartStore.clearAll(), []);
+  useEffect(() => {
+    if (!isNft) {
+      chartStore.fetchChartData({ entry: 'price', projectId: project.id, section: 'marketData' });
+    }
+    return () => chartStore.clearAll();
+  }, []);
 
-  const changeText = projectData?.priceChange?.percentage <= 0 ? 'down' : 'up';
+  const changeText =
+    (isNft ? projectData?.avgPriceChange24Percentage : projectData?.priceChange24Percentage) || 0 <= 0 ? 'down' : 'up';
+
+  const metaDescription = isNft
+    ? `${project?.name} average price today is ${toLocaleString(projectData?.avgPrice || 0)} ${
+        project?.network?.symbol || ''
+      }. Average price is ${changeText} ${toLocaleString(
+        projectData?.avgPriceChange24Percentage || 0,
+      )}% in the last 24 hours. It has a market cap of ${toLocaleString(projectData?.marketCap || 0)} ${
+        project?.network?.symbol || ''
+      }.`
+    : `${project?.name} price today is ${toCurrency((projectData.price as number) || 0)}. ${
+        project?.name
+      } price is ${changeText} ${toLocaleString(
+        projectData?.priceChange24Percentage || 0,
+      )}% in the last 24 hours. It has a market cap of ${toLocaleString(projectData?.marketCap || 0)}.`;
 
   return (
     <>
       <Meta
         title={`${project.name} Live Price Chart, News, Analytics | Coin Logic`}
         image={project.logo?.url}
-        description={`${project?.name} price today is ${toCurrency((projectData.price as number) || 0)}. ${
-          project?.name
-        } price is ${changeText} ${toLocaleString(
-          projectData?.priceChange?.percentage || 0,
-        )}% in the last 24 hours. It has a market cap of ${toLocaleString(projectData?.marketCap || 0)}.`}
+        description={metaDescription}
       />
       <div className={theme === 'light' ? 'bg-zinc-50' : ''}>
-        <Container className="py-10">
-          {notifications && (
-            <div className="sticky top-[10px] z-[1]">
-              {notifications?.map((notification, index) => (
-                <NotificationBar notification={notification} key={`notification_${index}`} />
-              ))}
-            </div>
-          )}
-
+        <Container className="pb-10">
+          <Notifications project={project} />
           {user && user?.projects?.find((item) => item.id === project.id) ? (
             <div className="mb-4">
               <Controls data={projectData} />
@@ -109,66 +103,13 @@ const project: FC<ProjectProps> = ({ projectData }) => {
 
           <div className="w-full flex flex-col lg:flex-row gap-4 mb-4 items-start justify-between">
             <div className="flex-1">
-              <div className="w-full mb-4">
-                <div className="flex items-start gap-4 flex-wrap">
-                  <div className="w-full md:w-[45%]">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <ProjectTitle
-                        title={project.name as string}
-                        size="md"
-                        avatar={project.logo ? project.logo.url : ''}
-                      />
-                      {project?.paymentPlan ? (
-                        <PaymentPlanBadge paymentPlan={project?.paymentPlan as PaymentPlan} />
-                      ) : null}
-                    </div>
-                    <div className="mb-4">
-                      <Text color="dimmed" size="xs" className="mb-2">
-                        Tags:
-                      </Text>
-                      <Badges isLimited={false} badges={project.tags as Tag[]} />
-                    </div>
-                    <div className="flex gap-2 w-full md:w-auto mb-4">
-                      <GradientButton
-                        component="a"
-                        href={project.website as string}
-                        target="_blank"
-                        rightIcon={<FiExternalLink />}
-                      >
-                        Website
-                      </GradientButton>
-                      <GradientButton
-                        component="a"
-                        href={project.whitepaper as string}
-                        target="_blank"
-                        rightIcon={<FiExternalLink />}
-                      >
-                        Whitepaper
-                      </GradientButton>
-                    </div>
-                  </div>
-                  <div>
-                    {trackPrice && projectData.price ? (
-                      <div className="mb-4">
-                        <GradientText weight={600} size="xs">
-                          Price
-                        </GradientText>
-                        <GradientTitle order={3}>{toCurrency((projectData.price as number) || 0)}</GradientTitle>
-                        <Trend previousValue={projectData.priceChange} inline={true} />
-                      </div>
-                    ) : null}
-                    {trackMarketCap && projectData.marketCap ? (
-                      <div className="mb-4">
-                        <GradientText weight={600} size="xs">
-                          Market Cap
-                        </GradientText>
-                        <GradientTitle order={3}>{toCurrency((projectData.marketCap as number) || 0)}</GradientTitle>
-                        <Trend previousValue={projectData.marketCapChange} inline={true} />
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
+              <Header project={project} data={projectData} />
+
+              {projectData.relatedProjects && projectData.relatedProjects.length > 0 ? (
+                <Paper className="mb-4">
+                  <RelatedProjects data={projectData} />
+                </Paper>
+              ) : null}
 
               {displayTransparencyScore ? (
                 <div className="flex gap-4 flex-wrap md:flex-nowrap md:justify-between">
@@ -179,12 +120,6 @@ const project: FC<ProjectProps> = ({ projectData }) => {
                     <AuditsAndKyc project={project} />
                   </div>
                 </div>
-              ) : null}
-
-              {projectData.relatedProjects && projectData.relatedProjects.length > 0 ? (
-                <Paper className="mt-4">
-                  <RelatedProjects data={projectData} />
-                </Paper>
               ) : null}
             </div>
           </div>
@@ -209,7 +144,7 @@ const project: FC<ProjectProps> = ({ projectData }) => {
           <div className="my-4">{chartStore.chartSection === 'marketData' && <AreaChartGroup />}</div>
         ) : null}
 
-        {trackData ? (
+        {trackData && !isNft ? (
           <div className="my-16">
             <TransactionVolume data={projectData} />
           </div>
@@ -255,6 +190,7 @@ const project: FC<ProjectProps> = ({ projectData }) => {
         </div>
       </Container>
       <SubscribeToEmail />
+      <AddYourProject />
       <TrackVitalsDisclaimer />
     </>
   );
@@ -262,18 +198,9 @@ const project: FC<ProjectProps> = ({ projectData }) => {
 
 export default project;
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res, params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const slug = params?.slug;
   const projectData = await withRedisCache(`projectData_${slug}`, () => getProjectAndMarketStatsBySlug(slug as string));
-
-  // if (!projectData) {
-  //   return {
-  //     redirect: {
-  //       destination: '/',
-  //       permanent: false,
-  //     },
-  //   };
-  // }
 
   return {
     props: {

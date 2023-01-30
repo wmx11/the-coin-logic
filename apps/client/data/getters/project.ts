@@ -1,21 +1,17 @@
-import { formatISO, endOfYesterday } from 'date-fns';
-import { MarketStat, Project } from 'types';
+import { endOfYesterday, formatISO } from 'date-fns';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
-import getChangesPartial from 'utils/getChangesPartial';
 import { prepareCustomTrackers } from 'utils/prepareCustomTrackers';
 import { getAveragesAndMedians } from 'utils/utils';
 import {
   GET_ENABLED_AND_LISTED_PROJECTS,
   GET_ENABLED_PROJECTS_FOR_FILTERING,
-  GET_MARKETSTATS_BY_PROJECT_ID_FOR_TABLE,
   GET_PREVIOUS_DAY_MARKET_STATS,
   GET_PROJECTS_BY_USER_EMAIL,
   GET_PROJECTS_COUNT,
   GET_PROJECT_AND_MARKET_STATS_BY_ID,
   GET_PROJECT_AND_MARKET_STATS_BY_ID_FALLBACK,
   GET_PROJECT_AVERAGE_MARKET_CHANGE_FOR_PERIOD_OF_TIME,
-  GET_PROJECT_ID_BY_SLUG,
-  MARKET_STAT_CHANGES,
+  GET_PROJECT_ID_BY_SLUG
 } from './constatnts/project';
 import { getData } from './getters';
 
@@ -58,7 +54,7 @@ export const getProjectIdBySlug = async (slug: string) => {
     },
   });
 
-  return projects[0].id || null;
+  return projects[0]?.id || null;
 };
 
 export const getProjectPreviousDayMarketStatsByProjectIdAndDate = async (projectId: string, date: string) => {
@@ -74,54 +70,6 @@ export const getProjectPreviousDayMarketStatsByProjectIdAndDate = async (project
     fetchPolicy: 'network-only',
   });
   return { marketStats: marketStats[0], socialStats: socialStats[0] };
-};
-
-export const getProjectsForTable = async () => {
-  const enabledAndListedProjects: Project[] = await getEnabledAndListedProjects();
-  const projects: MarketStat[] = [];
-
-  for (const project of enabledAndListedProjects) {
-    const { marketStats: todayArr }: { marketStats: MarketStat[] } = await getData({
-      query: GET_MARKETSTATS_BY_PROJECT_ID_FOR_TABLE,
-      fetchPolicy: 'network-only',
-      variables: {
-        projectId: project.id,
-      },
-    });
-
-    const { marketStats: yesterdayArr }: { marketStats: MarketStat[] } = await getData({
-      query: GET_MARKETSTATS_BY_PROJECT_ID_FOR_TABLE,
-      fetchPolicy: 'network-only',
-      variables: {
-        projectId: project.id,
-        date: endOfYesterday(),
-      },
-    });
-
-    const today = todayArr[0] || undefined;
-    const yesterday = yesterdayArr[0] || undefined;
-
-    if (today) {
-      const getChanges = getChangesPartial(today, yesterday || today);
-      const marketStatsWithChanges = { ...today, project };
-      MARKET_STAT_CHANGES.forEach((value) => Object.assign(marketStatsWithChanges, getChanges(value)));
-      projects.push(marketStatsWithChanges);
-    }
-
-    if (!today && !yesterday) {
-      const getChanges = getChangesPartial({}, {});
-      const marketStatsWithChanges = { project } as MarketStat;
-      MARKET_STAT_CHANGES.forEach((value) =>
-        Object.assign(marketStatsWithChanges, { ...getChanges(value), [value]: 0 }),
-      );
-      projects.push(marketStatsWithChanges);
-    }
-  }
-
-  projects.sort((a, b) => (b?.marketCap as number) - (a?.marketCap as number));
-  projects.forEach((item, index) => Object.assign(item, { order: index + 1 }));
-
-  return projects;
 };
 
 export const getProjectAndMarketStatsBySlug = async (
@@ -144,54 +92,54 @@ export const getProjectAndMarketStatsBySlug = async (
     });
   }
 
-  const marketStats = marketStatsArray?.marketStats && marketStatsArray?.marketStats[0] || marketStatsArray || null;
+  const marketStats = (marketStatsArray?.marketStats && marketStatsArray?.marketStats[0]) || marketStatsArray || null;
 
   if (!marketStats) {
     return null;
   }
 
-  const marketStatsLastDayData = await getProjectPreviousDayMarketStatsByProjectIdAndDate(
-    projectId,
-    marketStats.dateAdded,
-  );
+  // const marketStatsLastDayData = await getProjectPreviousDayMarketStatsByProjectIdAndDate(
+  //   projectId,
+  //   marketStats.dateAdded,
+  // );
 
-  const marketStatsLastDay = marketStatsLastDayData?.marketStats;
-  const socialStatsLastDay = marketStatsLastDayData?.socialStats;
+  // const marketStatsLastDay = marketStatsLastDayData?.marketStats;
+  // const socialStatsLastDay = marketStatsLastDayData?.socialStats;
 
-  if (!marketStatsLastDay) {
-    return {
-      ...marketStats,
-      ...(marketStatsArray?.socialStats && marketStatsArray?.socialStats[0] || {}),
-      relatedProjects: marketStatsArray.relatedProjects,
-      quizzes: marketStatsArray?.quizzes,
-      paymentPlans: marketStatsArray?.paymentPlans,
-      transcriptions: marketStatsArray?.transcriptions,
-    };
-  }
+  // if (!marketStatsLastDay) {
+  //   return {
+  //     ...marketStats,
+  //     ...((marketStatsArray?.socialStats && marketStatsArray?.socialStats[0]) || {}),
+  //     relatedProjects: marketStatsArray.relatedProjects || null,
+  //     quizzes: marketStatsArray?.quizzes || null,
+  //     paymentPlans: marketStatsArray?.paymentPlans || null,
+  //     transcriptions: marketStatsArray?.transcriptions || null,
+  //   };
+  // }
 
   // Extract customData labels and their appropriate values
   const marketStatsCustomData = prepareCustomTrackers(marketStats.customData);
-  const marketStatsLastDayCustomData = prepareCustomTrackers(marketStatsLastDay.customData);
+  // const marketStatsLastDayCustomData = prepareCustomTrackers(marketStatsLastDay.customData);
 
   // push the customData labels to the MARKET_STAT_CHANGES array so it gets picked up by the getChanges functions
-  Object.keys(marketStatsLastDayCustomData).forEach((key) => MARKET_STAT_CHANGES.push(key));
+  // Object.keys(marketStatsLastDayCustomData).forEach((key) => MARKET_STAT_CHANGES.push(key));
 
   // Spread the resolvedCustomData objects for the getChanges function
-  const getChanges = getChangesPartial(
-    { ...marketStats, ...marketStatsArray.socialStats[0], ...marketStatsCustomData },
-    { ...marketStatsLastDay, ...marketStatsLastDayCustomData, ...socialStatsLastDay },
-  );
+  // const getChanges = getChangesPartial(
+  //   { ...marketStats, ...marketStatsArray.socialStats[0], ...marketStatsCustomData },
+  //   { ...marketStatsLastDay, ...marketStatsLastDayCustomData, ...socialStatsLastDay },
+  // );
 
   const newMarketStats = {
     ...marketStats,
-    ...marketStatsArray.socialStats[0],
-    relatedProjects: marketStatsArray?.relatedProjects,
-    paymentPlans: marketStatsArray?.paymentPlans,
-    quizzes: marketStatsArray?.quizzes,
-    transcriptions: marketStatsArray?.transcriptions,
+    ...(marketStatsArray.socialStats && marketStatsArray.socialStats[0]),
+    relatedProjects: marketStatsArray.relatedProjects || null,
+    paymentPlans: marketStatsArray?.paymentPlans || null,
+    quizzes: marketStatsArray?.quizzes || null,
+    transcriptions: marketStatsArray?.transcriptions || null,
   };
 
-  MARKET_STAT_CHANGES.forEach((value) => Object.assign(newMarketStats, getChanges(value)));
+  // MARKET_STAT_CHANGES.forEach((value) => Object.assign(newMarketStats, getChanges(value)));
 
   return newMarketStats;
 };

@@ -1,6 +1,7 @@
 import { Container, Text, Title } from '@mantine/core';
 import { Column } from '@table-library/react-table-library/types/compact';
 import { TableNode } from '@table-library/react-table-library/types/table';
+import Paper from 'components/Paper';
 import { ProjectTitle } from 'components/ProjectTitle';
 import Table from 'components/Table';
 import GradientTitle from 'components/Text/GradientTitle';
@@ -100,13 +101,15 @@ const CryptocurrenciesTable: FC<CryptocurrenciesTableProps> = ({ data }) => {
   ];
 
   return (
-    <Container className="py-10">
-      <GradientTitle order={2} className="mb-6">
-        Top 25 Cryptocurrencies by Market Cap
-      </GradientTitle>
-      <div style={{ height: 700 }}>
-        <Table data={data} columns={columns} customTheme={theme} />
-      </div>
+    <Container className="py-10" size="xl">
+      <Paper>
+        <GradientTitle order={2} className="mb-6">
+          Top 25 Cryptocurrencies by Market Cap
+        </GradientTitle>
+        <div style={{ height: 700 }}>
+          <Table data={data} columns={columns} customTheme={theme} />
+        </div>
+      </Paper>
     </Container>
   );
 };

@@ -1,8 +1,8 @@
 import { Anchor, Badge, Space, Spoiler, Text, Tooltip } from '@mantine/core';
 import Paper from 'components/Paper';
+import { SocialBadges } from 'components/Socials/Socials';
 import { FC } from 'react';
 import { BiUserCheck } from 'react-icons/bi';
-import { FaDiscord, FaGithub, FaReddit, FaTelegram, FaTwitter } from 'react-icons/fa';
 import { Network, Project } from 'types';
 import toLocaleString from 'utils/toLocaleString';
 import { ClipboardButton } from '../../../components/ClipboardButton';
@@ -10,7 +10,6 @@ import { NetworkBadge } from '../../../components/NetworkBadge';
 import { formatDate } from '../../../utils/formatters';
 import CommunityComments from '../CommunityComments';
 import CommunityVotes from '../CommunityVotes';
-import { SocialBadges } from 'components/Socials/Socials';
 
 type AboutProjectProps = {
   data: Project;
@@ -38,29 +37,23 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
     youtube,
   } = data;
 
-  const socials = [
-    { title: 'Discord', href: discord, Icon: FaDiscord },
-    { title: 'Twitter', href: twitter, Icon: FaTwitter },
-    { title: 'Telegram', href: telegram, Icon: FaTelegram },
-    { title: 'Reddit', href: reddit, Icon: FaReddit },
-    { title: 'GitHub', href: github, Icon: FaGithub },
-  ];
-
   return (
     <>
       <Paper className="mb-4">
         <div className="mb-4 flex flex-col md:flex-row md:gap-8">
           <div>
-            <Text size="sm" className="mb-2">
-              <strong>Contract Address:</strong>
-              <Space />
-              <div className="flex items-center gap-1 break-all">
-                <Anchor href={`${network?.tokenScanner}/${contractAddress}`} target="_blank" size="sm" color="violet">
-                  {contractAddress}
-                </Anchor>
-                <ClipboardButton copy={contractAddress as string} />
-              </div>
-            </Text>
+            {contractAddress ? (
+              <Text size="sm" className="mb-2">
+                <strong>Contract Address:</strong>
+                <Space />
+                <div className="flex items-center gap-1 break-all">
+                  <Anchor href={`${network?.tokenScanner}/${contractAddress}`} target="_blank" size="sm" color="violet">
+                    {contractAddress}
+                  </Anchor>
+                  <ClipboardButton copy={contractAddress as string} />
+                </div>
+              </Text>
+            ) : null}
 
             {!isNft ? (
               <Text size="sm">

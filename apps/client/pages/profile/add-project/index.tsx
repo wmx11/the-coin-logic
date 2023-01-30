@@ -1,4 +1,4 @@
-import AddProject from 'views/profile/AddProject';
+import CreateOrUpdateProject from 'views/profile/CreateOrUpdateProject';
 import UserLayout from 'views/profile/ProfileLayout';
 import prisma from 'data/prisma';
 import { ReactElement } from 'react';
@@ -9,7 +9,7 @@ type AddProjectPageProps = {
 };
 
 const AddProjectPage = ({ networks }: AddProjectPageProps) => {
-  return <AddProject networks={networks} />;
+  return <CreateOrUpdateProject networks={networks} />;
 };
 
 export default AddProjectPage;

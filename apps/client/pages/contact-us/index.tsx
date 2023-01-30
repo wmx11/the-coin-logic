@@ -14,9 +14,11 @@ import useRecaptcha from 'hooks/useRecaptcha';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { commons } from 'schemas/user';
+import useThemeStore from 'store/useThemeStore';
 import { z } from 'zod';
 
 const index = () => {
+  const theme = useThemeStore((state) => state.theme);
   const { validate, errorMessage } = useRecaptcha();
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -65,17 +67,16 @@ const index = () => {
 
   return (
     <>
-      <Meta
-        title="Contact Us | Coin Logic"
-        description="Do you have a question or have a proposal? Let's get in touch!"
-      />
+      <Meta title="Contact Us | Coin Logic" description="Do you have a question or a proposal? Let's get in touch!" />
       <SmallBackgroundWrapper>
-        <GradientTitle align="center">Contact us!</GradientTitle>
+        <GradientTitle align="center" className="text-5xl mb-4 pb-2">
+          Contact us!
+        </GradientTitle>
         <Text size="sm" align="center" color="dimmed">
-          Do you have a question or have a proposal? Let's get in touch!
+          Do you have a question or a proposal? Let's get in touch!
         </Text>
       </SmallBackgroundWrapper>
-      <BackgroundWrapper className="py-24 flex flex-col items-center justify-center">
+      <div className="py-24 flex flex-col items-center justify-center">
         <Paper className="w-full md:max-w-[600px] md:min-w-[400px] mb-16">
           <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
             <Stack spacing="md">
@@ -105,15 +106,15 @@ const index = () => {
           </form>
         </Paper>
         <div>
-          <Title order={2} color="white" className="mb-4">
+          <Title order={2} className="mb-4">
             Find us on social media!
           </Title>
-          <div className="text-white flex items-center gap-8">
+          <div className={` ${theme === 'dark' ? 'text-white' : 'text-violet'} flex items-center justify-center gap-8`}>
             <Discord size={35} />
             <Twitter size={35} />
           </div>
         </div>
-      </BackgroundWrapper>
+      </div>
       <TrackVitalsDisclaimer />
     </>
   );

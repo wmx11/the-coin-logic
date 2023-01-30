@@ -11,5 +11,21 @@ export type ProjectWithMarketStatsAndChanges = {
   SocialStat & { socialsDateAdded?: string } & MarketStatChanges;
 
 export type TrendingHighlights = {
-  trendingHighlights: { name: string; slug: string; logo: string; change: number; votes: number }[];
+  trendingHighlights: {
+    name: string;
+    slug: string;
+    logo: string;
+    change: number;
+    total: number;
+    isPromoted?: boolean;
+  }[];
+};
+
+export type UpcomingHighlights = Votes & {
+  name: string;
+  slug: string;
+  logo: string;
+  change: number;
+  total: number;
+  isPromoted?: boolean;
 };

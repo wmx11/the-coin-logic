@@ -1,12 +1,13 @@
 import { Container, Text } from '@mantine/core';
 import Controls from 'components/Controls/Controls';
 import HighlightsCollectionForContent from 'components/HighlightCard/HighlightsCollectionForContent';
+import UpcomingProjectsHighlights from 'components/HighlightCard/UpcomingProjectsHighlights';
 import Meta from 'components/Meta';
 import { ProjectTitle } from 'components/ProjectTitle';
 import SocialShare from 'components/SocialShare';
 import GradientText from 'components/Text/GradientText';
 import GradientTitle from 'components/Text/GradientTitle';
-import { getTrendingProjects } from 'data/getters/server/getTrendingProjects';
+import { getTrendingProjects } from 'data/getters/server/projects';
 import { getTranscriptionBySlug } from 'data/getters/transcriptions';
 import withRedisCache from 'data/redis';
 import useControls from 'hooks/useControls';
@@ -130,6 +131,9 @@ const TranscriptionBySlugPage: FC<TranscriptionBySlugPageProps> = ({ data, trend
               <div className="mt-4">
                 <HighlightsCollectionForContent trendingHighlights={trendingHighlights} />
               </div>
+              <div className="mt-4">
+                <UpcomingProjectsHighlights />
+              </div>
             </div>
           </div>
         </section>
@@ -152,7 +156,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     };
   }
 
-  const trendingHighlights = await withRedisCache('trending_projects', () => getTrendingProjects(5), 10 * 60);
+  const trendingHighlights = await withRedisCache('trending_projects', () => getTrendingProjects(), 10 * 60);
 
   return {
     props: {

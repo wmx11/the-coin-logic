@@ -19,7 +19,6 @@ type PaymentPlansSelectProps = {
   onChange?: (value: string) => void;
   description?: string;
   disabled?: boolean;
-  isNft?: boolean;
 };
 
 export const PaymentPlansSelectItem = forwardRef<HTMLDivElement, PaymentPlansSelectItemProps>(
@@ -41,7 +40,6 @@ const PaymentPlansSelect: FC<PaymentPlansSelectProps> = ({
   description,
   currentPlan,
   disabled,
-  isNft,
 }) => {
   const [data, setData] = useState<PaymentPlan[]>();
   const [value, setValue] = useState<string | null>(null);
@@ -53,12 +51,6 @@ const PaymentPlansSelect: FC<PaymentPlansSelectProps> = ({
 
       setValue((router.query[QUERY_PAYMENT_PLAN_ID] as string) || null);
 
-      if (isNft) {
-        const filteredData = orderedData.filter((item) => item.price === 0);
-        setData(filteredData);
-        return;
-      }
-
       if (currentPlan) {
         const filteredData = orderedData.filter((item) => item.price > (currentPlan?.price as number));
         setData(filteredData);
@@ -67,7 +59,7 @@ const PaymentPlansSelect: FC<PaymentPlansSelectProps> = ({
 
       setData(orderedData);
     });
-  }, [isNft]);
+  }, []);
 
   if (!data?.length) {
     return (
@@ -100,6 +92,7 @@ const PaymentPlansSelect: FC<PaymentPlansSelectProps> = ({
       description={description}
       size={size}
       disabled={disabled}
+      clearable
     />
   );
 };

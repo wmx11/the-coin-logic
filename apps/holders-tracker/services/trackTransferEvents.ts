@@ -1,6 +1,6 @@
 import sleep from 'tcl-packages/utils/sleep';
-import trackTransferEventsByProject from 'tcl-packages/holders-tracker/services/transfers/trackTransferEventsByProject';
-import { getProjects, setProjectStatus } from 'tcl-packages/holders-tracker/services/projects';
+import trackTransferEventsByProject from 'tcl-packages/blockchainIndexer/services/transfers/trackTransferEventsByProject';
+import { getProjects, setProjectStatus } from 'tcl-packages/blockchainIndexer/services/projects';
 
 let isRunning = false;
 

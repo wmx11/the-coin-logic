@@ -6,6 +6,7 @@ import routes from 'routes';
 import { Content } from 'types';
 import { formatDate } from 'utils/formatters';
 import Controls from '../Controls/Controls';
+import Paper from 'components/Paper';
 
 type ContentCardProps = {
   data: Content;
@@ -31,8 +32,8 @@ const ContentCard: FC<ContentCardProps> = ({
   return (
     <Link href={(slug ? baseRoute : fallbackRoute).replace('${slug}', slug ? slug : id)} key={slug}>
       <a>
-        <div className="md:max-w-[318px] w-full hover:shadow-md transition-shadow rounded-md">
-          <Card shadow="sm" p="lg" withBorder>
+        <Paper className="md:max-w-[318px] p-0">
+          <Card p="lg">
             {showImage ? (
               <Card.Section>
                 <ImageWithPlaceholder image={image ? image.url : ''} width={318} height={180} alt={title as string} />
@@ -72,7 +73,7 @@ const ContentCard: FC<ContentCardProps> = ({
               </div>
             ) : null}
           </Card>
-        </div>
+        </Paper>
       </a>
     </Link>
   );

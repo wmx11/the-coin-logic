@@ -16,8 +16,7 @@ const Paper: FC<PaperProps> = ({ children, className, withBorder, onClick }) => 
     <PaperComponent
       withBorder
       p="md"
-      shadow="sm"
-      className={`hover:shadow-lg transition-shadow ${className}`}
+      className={`hover:shadow-lg hover:shadow-violet/10 transition-shadow ${className} shadow-md shadow-violet/10`}
       onClick={onClick}
       style={theme === 'dark' ? { backgroundColor: themeConfig[theme].backgroundColorLighter } : {}}
     >

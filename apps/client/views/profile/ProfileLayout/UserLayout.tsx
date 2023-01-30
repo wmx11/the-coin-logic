@@ -29,7 +29,7 @@ const ProfileLayout = (props: ProfileLayoutProps) => {
   }
 
   return (
-    <Container className=" min-h-screen">
+    <Container className="min-h-screen" size="xl">
       <div className="flex">
         {(!isMobileScreen || props.withNoMenu) && (
           <div className="w-full md:min-w-[150px] md:max-w-[200px] py-10 pr-2">

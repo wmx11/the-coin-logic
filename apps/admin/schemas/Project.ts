@@ -22,7 +22,10 @@ const Project: Lists = {
         },
         isIndexed: true,
       }),
+      symbol: text({ ui: { description: 'The token symbol (ETH, AVAX, etc.)' } }),
+      maxSupply: integer({ ui: { description: 'The maximum supply of the token/NFT' } }),
       logo: image({ storage: 'localLogos' }),
+      backgroundImage: image({ storage: 'localImages' }), // 850 x 450
       dateAdded: timestamp({ defaultValue: { kind: 'now' } }),
       enabled: checkbox({
         defaultValue: false,
@@ -40,6 +43,10 @@ const Project: Lists = {
       isNft: checkbox({
         defaultValue: false,
         ui: { description: 'Is the project an NFT (does not display and track some of the data)' },
+      }),
+      isPreLaunch: checkbox({
+        defaultValue: false,
+        ui: { description: 'Is the project not launched yet? Presale/Prelaunch status' },
       }),
       displayBlogPosts: checkbox({
         defaultValue: false,
@@ -87,6 +94,18 @@ const Project: Lists = {
           { label: 'Tracking Holdings', value: 'tracking_holdings' },
         ],
       }),
+      tokenType: select({
+        ui: {
+          displayMode: 'segmented-control',
+          description: 'Token Type (ERC Standard)',
+        },
+        defaultValue: 'erc20',
+        options: [
+          { label: 'ERC20', value: 'erc20' },
+          { label: 'ERC721', value: 'erc721' },
+          { label: 'ERC1155', value: 'erc1155' },
+        ],
+      }),
       tags: relationship({
         ref: 'Tag.projects',
         many: true,
@@ -111,6 +130,7 @@ const Project: Lists = {
         ui: { description: 'Specify the dollar value for tracking wallets.' },
       }),
       description: text({ ui: { displayMode: 'textarea' } }),
+      preLaunchInformation: text({ ui: { displayMode: 'textarea' } }),
       launchDate: timestamp(),
       launchBlock: integer(),
       user: relationship({ ref: 'User.projects', many: true }),
@@ -122,7 +142,7 @@ const Project: Lists = {
       rebasePeriod: text(),
       apy: float(),
       dailyApy: float(),
-      calendar: text(),
+      mintPrice: float(),
       website: text(),
       whitepaper: text(),
       twitter: text(),
@@ -149,7 +169,7 @@ const Project: Lists = {
       }),
       transparencyScore: integer({
         validation: {
-          max: 90,
+          max: 100,
         },
       }),
       paymentPlan: relationship({ ref: 'PaymentPlan' }),
@@ -161,6 +181,7 @@ const Project: Lists = {
         ui: { displayMode: 'count' },
       }),
       transparencyHighlights: json({ defaultValue: [{ isPositive: false, content: '' }] }),
+      promotion: relationship({ ref: 'Promotion.project' }),
       content: relationship({ ref: 'Content.project', many: true }),
       comments: relationship({ ref: 'Comment.project', many: true, ui: { displayMode: 'count' } }),
       votes: relationship({ ref: 'Vote.project', many: true, ui: { displayMode: 'count' } }),

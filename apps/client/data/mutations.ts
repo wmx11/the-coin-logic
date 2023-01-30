@@ -29,6 +29,7 @@ export const CREATE_USER = gql`
 
 export const UPDATE_USER_BY_EMAIL = gql`
   mutation UpdateUser(
+    $name: String
     $email: String
     $firstName: String
     $lastName: String
@@ -38,6 +39,7 @@ export const UPDATE_USER_BY_EMAIL = gql`
     updateUser(
       where: { email: $email }
       data: {
+        name: $name
         firstName: $firstName
         lastName: $lastName
         isSubscribedToEmail: $isSubscribedToEmail

@@ -29,7 +29,7 @@ const RelatedProjects: FC<RelatedProjectsProps> = ({ data }) => {
   return (
     <div>
       <GradientTitle order={4} className="mb-4">
-        Related Projects and Tokens
+        Related
       </GradientTitle>
       <div className="w-full flex flex-wrap gap-8 items-center">
         {projects.map((item, index) => {

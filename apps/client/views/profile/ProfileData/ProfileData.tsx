@@ -7,12 +7,11 @@ import { FaRegEdit } from 'react-icons/fa';
 import routes from 'routes';
 import useUserStore, { UserWithOrdersCount } from 'store/useUserStore';
 import { formatDate } from 'utils/formatters';
+import toLocaleString from 'utils/toLocaleString';
 import ChangePassword from './ChangePassword';
 import DeleteAccount from './DeleteAccount';
 import PersonalInformation from './PersonalInformation';
 import Referrals from './Referrals';
-import SubscriptionInformation from './SubscriptionInformation';
-import toLocaleString from 'utils/toLocaleString';
 
 type ProfileDataType = {
   className?: string;
@@ -59,7 +58,6 @@ const ProfileData: FC<ProfileDataType> = ({ className }) => {
       </div>
 
       <PersonalInformation user={user} />
-      <SubscriptionInformation user={user} />
       <Referrals referrals={{ referralLink, referredUsers, onboardedProjects }} />
       <ChangePassword />
       <DeleteAccount />

@@ -1,14 +1,13 @@
-import request, { IsSafeAuth } from 'data/api/request';
+import { REDIS_METRICS_DATA_EXPIRATION } from 'constants/general';
+import request from 'data/api/request';
 import { response } from 'data/api/response';
 import applyRateLimit from 'data/api/utils/applyRateLimit';
-import { NextApiRequest, NextApiResponse } from 'next';
-import config from 'tcl-packages/email/config';
-import emailClient from 'tcl-packages/email/emailClient';
-import { prismaClient } from 'tcl-packages/prismaClient';
-import { MarketStat, SocialStat } from 'types';
-import { redis } from 'data/redis';
-import { TransformedChartsData } from 'types/Charts';
 import { transformDataForMetricsCharts } from 'data/api/utils/transformDataForCharts';
+import { redis } from 'data/redis';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { prismaClient } from 'tcl-packages/prismaClient';
+import { SocialStat } from 'types';
+import { TransformedChartsData } from 'types/Charts';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const requestHandler = request(req, res);
@@ -19,12 +18,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   } catch (error) {
     return responseHandler.tooManyRequests(JSON.stringify(error));
   }
-  // auth: IsSafeAuth
-  const getMarketData = async () => {
-    // if (!auth.trusted || auth.signature !== 'market_data') {
-    //   return responseHandler.unauthorized();
-    // }
 
+  const getMarketData = async () => {
     let redisInstance;
 
     if (redis) {
@@ -43,7 +38,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       if (cachedData) {
         results = JSON.parse(cachedData) as TransformedChartsData;
         const hasNoResults = results?.data?.length < 1;
-        const lastResult = results?.data[results?.data?.length - 1];
+        const lastResult = results?.data ? results?.data[results?.data?.length - 1] : false;
 
         let newData;
 
@@ -55,7 +50,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 ? {}
                 : {
                     dateAdded: {
-                      gt: new Date(lastResult[0]),
+                      gt: new Date(lastResult ? lastResult[0] : ''),
                     },
                   }),
             },
@@ -75,6 +70,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           results.data.push(...transformedData.data);
           results.annotation.push(...transformedData.annotation);
           await redisInstance.set(cacheKey, JSON.stringify(results));
+          await redisInstance.expire(cacheKey, REDIS_METRICS_DATA_EXPIRATION);
         }
 
         return responseHandler.ok({ data: results });
@@ -99,6 +95,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (redisInstance !== undefined) {
       await redisInstance?.set(cacheKey, JSON.stringify(transformedData));
+      await redisInstance.expire(cacheKey, REDIS_METRICS_DATA_EXPIRATION);
     }
 
     return responseHandler.ok({ data: transformedData });

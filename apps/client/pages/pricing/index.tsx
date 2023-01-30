@@ -26,34 +26,24 @@ const index: FC<Props> = ({ products, paymentPlans, usersWithTheSameIp }) => {
         title="Crypto, DeFi, NFT Listing, Tracking, Analytics | Coin Logic"
         description="TheCoinLogic provides services & tools for crypto, DeFi, NFT projects from listing, tracking, analytics, to audits, KYC, community management from our partners."
       />
-      <SmallBackgroundWrapper>
-        <div className="text-center">
-          <GradientTitle>Our Products and pricing</GradientTitle>
-          <Text size="sm" color="dimmed">
-            Explore our products and their pricing. Find the best suitable one for you. Have questions? Reach out to us!
-          </Text>
-        </div>
-      </SmallBackgroundWrapper>
       <Container className="py-10">
-        <div>
+        <div className="mb-16">
+          <div className="mb-24">
+            <PaymentPlans paymentPlans={paymentPlans} />
+          </div>
           <div className="mb-16">
-            <div className="mb-16">
-              <Products />
-            </div>
-            <div className="mb-8">
-              <PaymentPlans paymentPlans={paymentPlans} />
-            </div>
+            <Products />
           </div>
-          <div className="my-16">
-            <GradientTitle order={3} align="center">
-              Check our other products
-            </GradientTitle>
-          </div>
-          <div className="grid md:grid-cols-2 gap-8">
-            <RegularPricing products={products} />
-            {/* <ProjectListingPricing products={products} /> */}
-            <CampaignTrackerPricing products={products} usersWithTheSameIp={usersWithTheSameIp} />
-          </div>
+        </div>
+        <div className="my-16">
+          <GradientTitle order={2} align="center" className="text-4xl">
+            Check our other products
+          </GradientTitle>
+        </div>
+        <div className="grid md:grid-cols-2 gap-8">
+          <RegularPricing products={products} />
+          {/* <ProjectListingPricing products={products} /> */}
+          <CampaignTrackerPricing products={products} usersWithTheSameIp={usersWithTheSameIp} />
         </div>
       </Container>
     </>

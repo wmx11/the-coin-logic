@@ -7,6 +7,9 @@ node_modules
 # JS files
 *.js
 
+packages/**/*.js
+packages/**/*.d.*
+
 ## Don't ignore .config files!
 !*.config.js
 

@@ -15,6 +15,7 @@ export const QUERY_QUIZ = 'quiz';
 export const QUERY_PAGE = 'page';
 export const QUERY_PER_PAGE = 'per_page';
 export const PER_PAGE = 25;
+export const REDIS_METRICS_DATA_EXPIRATION = 15 * 24 * 60 * 60;
 
 export const MAX_BODY_LENGTH = 209715200; //200mb
 export const MAX_CONTENT_LENGTH = 209715200; //200mb

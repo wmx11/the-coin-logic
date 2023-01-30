@@ -5,7 +5,7 @@ import {
   getLeavingHoldersCountByProjectId,
   getNewHoldersCountByProjectId,
   getRecurringHoldersCountByProjectId,
-} from 'tcl-packages/holders-tracker/services/holders';
+} from 'tcl-packages/blockchainIndexer/services/holders';
 import { Project } from 'tcl-packages/types';
 import { HoldersStats } from './types';
 

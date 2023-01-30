@@ -64,26 +64,6 @@ export const getPairPrice = async (projectId: string) => withGetData(GET_PAIR_PR
 export const getBurnedTokens = async (projectId: string) => withGetData(GET_BURNED_TOKENS, projectId);
 export const getFdv = async (projectId: string) => withGetData(GET_FDV, projectId);
 
-export const getCustomTrackers = async (projectId: string, selector: string) => {
-  const data = await withGetData(GET_CUSTOM_TRACKERS, projectId);
-
-  const resolvedData = {
-    marketStats:
-      data.marketStats &&
-      data?.marketStats.map((item) => {
-        const selectedValue = (item?.value as CustomTrackersResponse[]).filter(
-          (customItem) => customItem.label === selector || customItem.id === selector,
-        );
-        return {
-          value: selectedValue.length > 0 ? selectedValue[0].value : null,
-          date: item.date,
-        };
-      }),
-  };
-
-  return { ...resolvedData, project: data.project };
-};
-
 export const getHolders = async (projectId: string) => withGetData(GET_HOLDERS, projectId);
 export const getAvgHoldings = async (projectId: string) => withGetData(GET_AVERAGE_HOLDINGS, projectId);
 export const getNewHolders = async (projectId: string) => withGetData(GET_NEW_HOLDERS, projectId);

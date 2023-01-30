@@ -4,6 +4,7 @@ import AssureDefi from 'public/images/assure_defi.png';
 import TMG from 'public/images/tmg_logo.png';
 import FluxLabs from 'public/images/flux-labs.png';
 import PrismaShield from 'public/images/prisma_shield.png';
+import CryptoLink from 'public/images/cryptolink.png';
 import Gauss from 'public/images/gauss.png';
 import { Container, Text } from '@mantine/core';
 import React from 'react';
@@ -13,19 +14,26 @@ import Link from 'next/link';
 const Partners = () => {
   return (
     <div>
-      <Container size="lg" className="py-10">
+      <Container size="xl" className="py-10">
         <Text className="text-white text-center text-md mb-8 tracking-widest" weight={600}>
           Trusted By Our Partners
         </Text>
-        <div className="flex gap-8 justify-between items-center flex-wrap">
-          <div className="max-w-[90px] w-full">
+        <div className="flex gap-2 justify-between items-center flex-wrap">
+          <div className="max-w-[160px] w-full">
+            <Link href="https://tbaas.io/">
+              <a target="_blank">
+                <Image src={CryptoLink} />
+              </a>
+            </Link>
+          </div>
+          <div className="max-w-[90px] w-full ">
             <Link href="https://prismashield.com/">
               <a target="_blank">
                 <Image src={PrismaShield} />
               </a>
             </Link>
           </div>
-          <div className="max-w-[180px] w-full">
+          <div className="max-w-[180px] w-full ">
             <Link href="https://assuredefi.com/">
               <a target="_blank">
                 <Image src={AssureDefi} />

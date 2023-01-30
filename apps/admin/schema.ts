@@ -49,7 +49,8 @@ import {
   Account,
   Session,
   VerificationToken,
-  UserAuth
+  UserAuth,
+  Promotion,
 } from './schemas';
 
 export const lists: Lists = {
@@ -101,5 +102,6 @@ export const lists: Lists = {
   ...Account,
   ...Session,
   ...VerificationToken,
-  ...UserAuth
+  ...UserAuth,
+  ...Promotion,
 };

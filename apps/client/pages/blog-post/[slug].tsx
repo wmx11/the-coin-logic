@@ -2,6 +2,7 @@ import { DocumentRendererProps } from '@keystone-6/document-renderer';
 import { Center, Container, Text } from '@mantine/core';
 import Controls from 'components/Controls/Controls';
 import HighlightsCollectionForContent from 'components/HighlightCard/HighlightsCollectionForContent';
+import UpcomingProjectsHighlights from 'components/HighlightCard/UpcomingProjectsHighlights';
 import { LargeImage } from 'components/Images/Images';
 import Meta from 'components/Meta';
 import { NotFound } from 'components/NotFound';
@@ -11,7 +12,7 @@ import GradientTitle from 'components/Text/GradientTitle';
 import TextContent from 'components/TextContent';
 import { QUERY_PROJECT } from 'constants/general';
 import { getBlogContentBySlug } from 'data/getters';
-import { getTrendingProjects } from 'data/getters/server/getTrendingProjects';
+import { getTrendingProjects } from 'data/getters/server/projects';
 import withRedisCache from 'data/redis';
 import useControls from 'hooks/useControls';
 import useUser from 'hooks/useUser';
@@ -136,8 +137,9 @@ const index: FC<ContentTypes> = ({ content, trendingHighlights }) => {
 
           <TextContent content={content} richContent={richContent} className="max-w-none" />
         </section>
-        <section>
+        <section className="flex flex-col gap-4">
           <HighlightsCollectionForContent trendingHighlights={trendingHighlights} />
+          <UpcomingProjectsHighlights />
         </section>
       </Container>
     </>
@@ -155,7 +157,7 @@ type Params = {
 export const getServerSideProps = async ({ params }: Params) => {
   const slug = params.slug;
   const content = await withRedisCache(`blog_content_${slug}`, () => getBlogContentBySlug(slug));
-  const trendingHighlights = await withRedisCache('trending_projects', () => getTrendingProjects(5), 10 * 60);
+  const trendingHighlights = await withRedisCache('trending_projects', () => getTrendingProjects(), 10 * 60);
 
   return {
     props: {

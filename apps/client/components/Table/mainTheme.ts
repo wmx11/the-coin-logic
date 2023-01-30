@@ -3,7 +3,7 @@ import { themeConfig } from 'utils/theme';
 // --data-table-library_grid-template-columns: 140px repeat(6, 1fr); max-width: 90vw; width: 100%;
 
 const mainTheme = (theme: 'light' | 'dark') => ({
-  Table: ``,
+  Table: ` display: grid !important;`,
   Header: ``,
   Body: ``,
   BaseRow: `
@@ -25,7 +25,7 @@ const mainTheme = (theme: 'light' | 'dark') => ({
     font-size: 12px;
   
     &:not(:last-of-type) .td {
-        border-bottom: 1px solid #6f3fd372;
+        border-bottom: 1px solid #6f3fd352;
     }
 
     &:hover {
@@ -35,7 +35,7 @@ const mainTheme = (theme: 'light' | 'dark') => ({
     }
   `,
   BaseCell: `
-  background-color: ${themeConfig[theme].backgroundColorLighter};
+  background-color: ${theme === 'light' ? ' ' : themeConfig[theme].backgroundColorLighter};
 
     // border-bottom: 1px solid transparent;
     // border-right: 1px solid transparent;

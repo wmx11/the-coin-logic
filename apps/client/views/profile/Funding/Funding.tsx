@@ -69,7 +69,7 @@ const Funding = () => {
         </section>
 
         {isOpen ? (
-          <section className="grid gap-4 grid-cols-1 md:grid-cols-[320px,1fr]">
+          <section className="grid gap-4 grid-cols-1 md:grid-cols-2">
             <div className="flex flex-col gap-2">
               <GradientText weight={600}>Choose your funding amount</GradientText>
               <GradientButton onClick={() => addItem({ sku: products.sku.addServiceTokens_1 })}>1 Token</GradientButton>
