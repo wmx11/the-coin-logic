@@ -131,7 +131,7 @@ export const transformDataForProjectsTable = async (projects: Project[]) => {
           },
         },
         orderBy: {
-          dateAdded: 'desc',
+          dateAdded: 'asc',
         },
         select: {
           price: true,
@@ -223,6 +223,10 @@ export const transformDataForUpcomingProjectsTable = async (projects: Project[])
     data.push({
       ...project,
       isPromoted: isPromoted(project?.promotion as Promotion),
+      logo: getLogoLink(
+        (project as ProjectPrisma)?.logo_id as string,
+        (project as ProjectPrisma)?.logo_extension as string,
+      ),
       network: {
         name: network?.name,
         logo: {

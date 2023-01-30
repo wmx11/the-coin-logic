@@ -24,6 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           not: null,
         },
       },
+      distinct: ['projectId'],
       orderBy: [
         {
           priceChange24Percentage: 'desc',
