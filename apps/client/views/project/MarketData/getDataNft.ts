@@ -28,7 +28,7 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
       title: `Average Price (${network?.symbol})`,
       chartEntry: 'avgPrice',
       isChartDefaultOpen: true,
-      tooltip: `Current ${name} price in $USD.`,
+      tooltip: `Current ${name} average price in ${network?.symbol}.`,
     },
     {
       value: ceilPrice as number,
@@ -38,7 +38,7 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
       } as PreviousValueTypes,
       title: `Ceiling Price (${network?.symbol})`,
       chartEntry: 'ceilPrice',
-      tooltip: `Current ${name} price in $USD.`,
+      tooltip: `Current ${name} ceiling (max) price in ${network?.symbol}.`,
     },
     {
       value: floorPrice as number,
@@ -48,7 +48,7 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
       } as PreviousValueTypes,
       title: `Floor Price (${network?.symbol})`,
       chartEntry: 'floorPrice',
-      tooltip: `Current ${name} price in $USD.`,
+      tooltip: `Current ${name} floor (minimum) price in ${network?.symbol}.`,
     },
     {
       value: totalHoldings as number,
@@ -58,7 +58,7 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
       } as PreviousValueTypes,
       title: 'Total Holdings',
       chartEntry: 'totalHoldings',
-      tooltip: `Current ${name} price in $USD.`,
+      tooltip: `Sum of all ${name} NFTs across wallets.`,
     },
     {
       value: marketCap as number,
@@ -66,9 +66,9 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
         change: data.marketCapChange24,
         percentage: data.marketCapChange24Percentage,
       } as PreviousValueTypes,
-      title: `Market Cap (${network?.symbol})`,
+      title: `Approx. Market Cap (${network?.symbol})`,
       chartEntry: 'marketCap',
-      tooltip: 'Current market cap. Total supply * Price.',
+      tooltip: 'Approximate market cap of the NFT collection.',
     },
     {
       value: salesVolume as number,
@@ -78,7 +78,7 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
       } as PreviousValueTypes,
       title: 'Sales Volume',
       chartEntry: 'salesVolume',
-      tooltip: 'Current market cap. Total supply * Price.',
+      tooltip: `Sum of all sales in ${network?.symbol}`,
     },
     {
       value: totalSupply as number,
@@ -89,7 +89,7 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
       title: 'Total Supply',
       chartEntry: 'totalSupply',
       isCurrency: false,
-      tooltip: `Current ${name} NFT total supply.`,
+      tooltip: `Current ${name} Total Supply. The maximum amount of tokens in existence.`,
     },
     {
       value: burnedTokens as number,
