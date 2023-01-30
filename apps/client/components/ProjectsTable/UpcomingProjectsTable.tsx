@@ -31,7 +31,7 @@ const UpcomingProjectsTable: FC<UpcomingProjectsTableType> = ({ projects }) => {
   }
 
   const theme = {
-    Table: `--data-table-library_grid-template-columns: 50px 160px 1fr 120px repeat(7, 1fr)`,
+    Table: `--data-table-library_grid-template-columns: 50px 160px 1fr 120px repeat(6, 1fr)`,
     BaseCell: `
     > div {
       white-space: normal;
@@ -76,20 +76,15 @@ const UpcomingProjectsTable: FC<UpcomingProjectsTableType> = ({ projects }) => {
     },
     {
       label: 'Launch Date',
-      renderCell: ({ launchDate }) => (
+      renderCell: ({ launchDate, preLaunchInformation }) => (
         <div>
           {formateDateWithHours(launchDate) || 'N/A'}
           <Text color="green">{launchDate ? getStartsIn({ startDate: launchDate, checkEnd: false }) : null}</Text>
-        </div>
-      ),
-    },
-    {
-      label: 'Launch Info',
-      renderCell: ({ preLaunchInformation }) => (
-        <div>
-          <Text size="xs" color="green" className="whitespace-pre">
-            {preLaunchInformation || 'N/A'}
-          </Text>
+          {preLaunchInformation ? (
+            <Text color="orange" size="xs" className='text-[9px]'>
+              Prelaunch Info Inside
+            </Text>
+          ) : null}
         </div>
       ),
     },

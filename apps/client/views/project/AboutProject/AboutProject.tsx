@@ -1,6 +1,7 @@
 import { Anchor, Badge, Space, Spoiler, Text, Tooltip } from '@mantine/core';
 import Paper from 'components/Paper';
 import { SocialBadges } from 'components/Socials/Socials';
+import GradientText from 'components/Text/GradientText';
 import { FC } from 'react';
 import { BiUserCheck } from 'react-icons/bi';
 import { Network, Project } from 'types';
@@ -20,6 +21,7 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
     name,
     pairAddress,
     contractAddress,
+    preLaunchInformation,
     network,
     dateAdded,
     description,
@@ -132,6 +134,21 @@ const AboutProject: FC<AboutProjectProps> = ({ data }) => {
           </Badge>
         </div>
       </Paper>
+
+      {preLaunchInformation ? (
+        <Paper className="mb-4">
+          <div className="flex items-center gap-2 mb-4">
+            🔥 
+            <GradientText weight={700} size="xl">
+              Pre-launch information
+            </GradientText>
+            🔥 
+          </div>
+          <Text size="sm" className="whitespace-pre">
+            {preLaunchInformation}
+          </Text>
+        </Paper>
+      ) : null}
 
       {displayCommunityVotes ? (
         <div className="mb-4">
