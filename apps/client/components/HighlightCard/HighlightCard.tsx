@@ -1,4 +1,5 @@
 import { Text } from '@mantine/core';
+import GradientButton from 'components/Buttons/GradientButton';
 import Paper from 'components/Paper';
 import GradientText from 'components/Text/GradientText';
 import Link from 'next/link';
@@ -29,21 +30,22 @@ type HighlightCardProps = {
 
 const HighlightCard: FC<HighlightCardProps> = ({ icon, title, children, moreLink }) => {
   return (
-    <Paper>
-      <div className="flex justify-between items-center">
-        <GradientText weight={700} size="lg" className="flex items-center gap-2">
-          <div className="text-violet">{icon}</div> {title}
-        </GradientText>
-        <Link href={(moreLink as string) || ''}>
-          <a className="flex items-center gap-2 text-violet hover:opacity-80">
-            <div className="text-sm">More</div>
-            <div className="text-xs mt-1">
-              <Icons.ChevronRight />
-            </div>
-          </a>
+    <Paper className='md:max-w-[310px] w-full'>
+      <div className="flex flex-col justify-between h-full">
+        <div>
+          <div className="flex justify-between items-center">
+            <GradientText weight={700} size="lg" className="flex items-center gap-2">
+              <div className="text-violet">{icon}</div> {title}
+            </GradientText>
+          </div>
+          <div className="pt-4 ml-4">{children}</div>
+        </div>
+        <Link href={(moreLink as string) || ''} passHref>
+          <GradientButton size="xs" component="a" rightIcon={<Icons.ChevronRight />}>
+            View More
+          </GradientButton>
         </Link>
       </div>
-      <div className="pt-4 ml-4">{children}</div>
     </Paper>
   );
 };

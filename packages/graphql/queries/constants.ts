@@ -71,6 +71,7 @@ const COMMON_GETTER_FOR_TRACKING = `
   pairAddress
   launchBlock
   initialized
+  isNft
   network {
     url
   }

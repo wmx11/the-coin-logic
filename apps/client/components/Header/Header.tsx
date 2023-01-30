@@ -16,8 +16,8 @@ function Header() {
 
   return (
     <div className="z-20 w-full bg-lightBlue relative">
-      <Container className={`${isMobileScreen && 'flex items-center justify-end py-3 w-full'}`}>
-        {isMobileScreen && (
+      <Container className={`${isMobileScreen ? 'flex items-center justify-end py-3 w-full' : ''}`} size="xl">
+        {isMobileScreen ? (
           <Drawer
             opened={isOpen}
             onClose={() => setIsOpen(false)}
@@ -33,7 +33,7 @@ function Header() {
             <Navigation setIsOpen={setIsOpen} />
             <UserNavigation setIsOpen={setIsOpen} />
           </Drawer>
-        )}
+        ) : null}
 
         <div className="flex justify-between w-full md:py-2">
           <div className="flex items-center gap-8">
@@ -45,20 +45,20 @@ function Header() {
               </Link>
             </div>
 
-            {!isMobileScreen && <Navigation />}
+            {!isMobileScreen ? <Navigation /> : null}
           </div>
 
           <div className="flex gap-4 items-center">
             <ActionIcon variant="outline" onClick={toggleTheme}>
               {theme === 'light' ? <Icons.Moon /> : <Icons.Sun />}
             </ActionIcon>
-            {!isMobileScreen && <UserNavigation />}
+            {!isMobileScreen ? <UserNavigation /> : null}
           </div>
         </div>
 
-        {isMobileScreen && (
+        {isMobileScreen ? (
           <Burger opened={isOpen} onClick={() => setIsOpen((isOpen) => !isOpen)} color="white" className="ml-4" />
-        )}
+        ) : null}
       </Container>
     </div>
   );

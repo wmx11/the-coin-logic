@@ -1,4 +1,4 @@
-import updateWalletBalancesPeriodically from 'tcl-packages/holders-tracker/services/holders/updateWalletBalancesPeriodically';
+import updateWalletBalancesPeriodically from 'tcl-packages/blockchainIndexer/services/holders/updateWalletBalancesPeriodically';
 
 let isRunning = false;
 

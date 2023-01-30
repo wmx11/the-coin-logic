@@ -1,4 +1,5 @@
 import { Container, Text } from '@mantine/core';
+import AddYourProject from 'components/AddYourProject';
 import BackgroundWrapper from 'components/BackgroundWrapper/BackgroundWrapper';
 import GradientButton from 'components/Buttons/GradientButton';
 import ProviderCard from 'components/ContentCollection/ProviderCard';
@@ -70,7 +71,10 @@ const NexusPage: FC<NexusPageProps> = ({ data }) => {
       <Container className="py-10">
         <div>{providers}</div>
       </Container>
-      <JoinOurCommunity />
+      <div className="mt-52">
+        <JoinOurCommunity />
+      </div>
+      <AddYourProject />
     </>
   );
 };

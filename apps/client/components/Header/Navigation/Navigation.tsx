@@ -105,7 +105,30 @@ const Navigation: FC<NavigationProps> = ({ setIsOpen }) => {
   return (
     <div className={`flex justify-between text-white py-4 ${isMobileScreen && 'flex-col items-center'}`}>
       <div className={`flex gap-x-8 items-center ${isMobileScreen && 'flex-col mb-8 text-center w-full'} `}>
-        <NavLink href={routes.projects} label="Projects" />
+        <DropdownMenu
+          dropdown={[
+            {
+              route: routes.projects,
+              label: 'Token Projects',
+              icon: <Icons.Coins />,
+              description: 'Discover token projects based on their market cap',
+            },
+            {
+              route: routes.nftProjects,
+              label: 'NFT Projects',
+              icon: <Icons.Images />,
+              description: 'Discover NFT projects and their collections',
+            },
+            {
+              route: routes.upcomingProjects,
+              label: 'Upcoming Projects',
+              icon: <Icons.Fresh />,
+              description: 'Discover fresh and upcoming projects. Be the first one to find new gems!',
+            },
+          ]}
+        >
+          <NavLink href={routes.projects} label="Projects" withArrow />
+        </DropdownMenu>
         <DropdownMenu
           dropdown={[
             {

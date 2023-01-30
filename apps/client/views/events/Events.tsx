@@ -1,4 +1,5 @@
 import { Container, Text } from '@mantine/core';
+import AddYourProject from 'components/AddYourProject';
 import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundWrapper';
 import EventCard from 'components/EventCard';
 import PaginationFilter from 'components/Filters/PaginationFilter';
@@ -68,6 +69,9 @@ const Events: FC<EventsProps> = ({ events, count }) => {
           ) : null}
         </div>
       </Container>
+      <section className="mt-4">
+        <AddYourProject />
+      </section>
     </>
   );
 };

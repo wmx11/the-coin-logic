@@ -1,11 +1,12 @@
 import { Loader, Popover, Text, Tooltip } from '@mantine/core';
+import axios from 'axios';
 import Paper from 'components/Paper';
-import { WithGetDataReturn } from 'data/getters';
-import { FC, forwardRef, useEffect, useState } from 'react';
+import { FC, forwardRef, useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { HiChartSquareBar } from 'react-icons/hi';
 import { MdCompare } from 'react-icons/md';
-import useChartStore, { ChartData } from 'store/useChartStore';
+import routes from 'routes';
+import useChartStore from 'store/useChartStore';
 import { PreviousValueTypes } from '../../types/MarketData';
 import toCurrency from '../../utils/toCurrency';
 import toLocaleString from '../../utils/toLocaleString';
@@ -40,24 +41,25 @@ const StatTab: FC<StatTabProps> = ({
   const [opened, setOpened] = useState(false);
   const chartStore = useChartStore((state) => state);
 
-  const getChartEntryData = async (entry: string) => {
-    const methods = await import('data/getters/charts');
-    const data = await methods[entry as keyof typeof methods](projectId as string, id || (title as string));
-    return data as WithGetDataReturn;
-  };
-
   const handleChartEntry = async (entry: string) => {
     if (!isChartDefaultOpen) {
       chartStore.setIsInitial(false);
     }
     chartStore.setLoading(true);
-    const data = await getChartEntryData(entry);
+    const {
+      data: { data },
+    } = await axios.post(routes.api.data[id ? 'customTracker' : section === 'socialMediaData' ? 'social' : 'market'], {
+      projectId,
+      trackerId: id,
+      selector: entry,
+    });
     chartStore.setLoading(false);
+    if (!data) {
+      return null;
+    }
     chartStore.setChartSection(section as string);
     chartStore.setChartTitle(title as string);
-    chartStore.setChartData(
-      section === 'socialMediaData' ? (data.socialStats as ChartData[]) : (data.marketStats as ChartData[]),
-    );
+    chartStore.setChartData(data.data);
     chartStore.setNetwork(section === 'socialMediaData' ? '' : (data?.project?.network?.slug as string));
     chartStore.setPairAddress(section === 'socialMediaData' ? '' : (data?.project?.pairAddress as string));
   };
@@ -67,20 +69,20 @@ const StatTab: FC<StatTabProps> = ({
       chartStore.setIsInitial(false);
     }
     chartStore.setLoading(true);
-    const data = await getChartEntryData(entry);
+    const {
+      data: { data },
+    } = await axios.post(routes.api.data[id ? 'customTracker' : section === 'socialMediaData' ? 'social' : 'market'], {
+      projectId,
+      trackerId: id,
+      selector: entry,
+    });
     chartStore.setLoading(false);
-    chartStore.setCompareChartTitle(title as string);
-    chartStore.setCompareChartData(
-      section === 'socialMediaData' ? (data.socialStats as ChartData[]) : (data.marketStats as ChartData[]),
-    );
-  };
-
-  useEffect(() => {
-    if (isChartDefaultOpen && !chartStore.loading && chartStore.chartData.length < 1) {
-      handleChartEntry(chartEntry as string);
-      chartStore.setIsInitial(true);
+    if (!data) {
+      return null;
     }
-  }, []);
+    chartStore.setCompareChartTitle(title as string);
+    chartStore.setCompareChartData(data.data);
+  };
 
   const getTabValue = () => {
     if (Array.isArray(value)) {
@@ -137,7 +139,7 @@ const StatTab: FC<StatTabProps> = ({
 
         {chartEntry && (
           <div className="cursor-pointer flex gap-4 md:gap-2 items-center">
-            {chartStore?.chartData?.length === 0 && chartStore?.loading ? (
+            {chartStore?.chartData?.data?.length === 0 && chartStore?.loading ? (
               <Loader color="violet" size={15} />
             ) : (
               <Tooltip label={`View ${title} chart`} withArrow transition="pop" color="violet" multiline>
@@ -146,7 +148,7 @@ const StatTab: FC<StatTabProps> = ({
                 </div>
               </Tooltip>
             )}
-            {chartStore?.chartData?.length > 0 && chartStore?.chartTitle !== title && (
+            {chartStore?.chartData?.data?.length > 0 && chartStore?.chartTitle !== title && (
               <Tooltip
                 label={`Compare ${chartStore.chartTitle} with ${title} chart`}
                 withArrow

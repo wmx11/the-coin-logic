@@ -20,6 +20,7 @@ import {
   GET_TWITTER_FOLLOWERS,
 } from './constatnts/charts';
 import { getData } from './getters';
+import axios from 'axios';
 
 export type MarketStatsForCharts = {
   value: string | CustomTrackersResponse[];
@@ -41,33 +42,27 @@ const withGetData = async (query: string, projectId: string): Promise<WithGetDat
   return { marketStats, project: projects && projects[0], socialStats } || [];
 };
 
-export const getPrice = async (projectId: string) => withGetData(GET_PRICE, projectId);
+// export const getPrice = async (projectId: string) => withGetData(GET_PRICE, projectId);
+export const getPrice = async (projectId: string) => {
+  const { data } = await axios.post('http://localhost:3000/api/data/market', {
+    projectId,
+    selector: 'price',
+  });
+
+  if (!data?.data) {
+    return null;
+  }
+  
+  return data.data;
+};
+
+
 export const getMarketCap = async (projectId: string) => withGetData(GET_MARKET_CAP, projectId);
 export const getTotalSupply = async (projectId: string) => withGetData(GET_TOTAL_SUPPLY, projectId);
 export const getLiquidity = async (projectId: string) => withGetData(GET_LIQUIDITY, projectId);
 export const getPairPrice = async (projectId: string) => withGetData(GET_PAIR_PRICE, projectId);
 export const getBurnedTokens = async (projectId: string) => withGetData(GET_BURNED_TOKENS, projectId);
 export const getFdv = async (projectId: string) => withGetData(GET_FDV, projectId);
-
-export const getCustomTrackers = async (projectId: string, selector: string) => {
-  const data = await withGetData(GET_CUSTOM_TRACKERS, projectId);
-
-  const resolvedData = {
-    marketStats:
-      data.marketStats &&
-      data?.marketStats.map((item) => {
-        const selectedValue = (item?.value as CustomTrackersResponse[]).filter(
-          (customItem) => customItem.label === selector || customItem.id === selector,
-        );
-        return {
-          value: selectedValue.length > 0 ? selectedValue[0].value : null,
-          date: item.date,
-        };
-      }),
-  };
-
-  return { ...resolvedData, project: data.project };
-};
 
 export const getHolders = async (projectId: string) => withGetData(GET_HOLDERS, projectId);
 export const getAvgHoldings = async (projectId: string) => withGetData(GET_AVERAGE_HOLDINGS, projectId);

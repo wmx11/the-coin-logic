@@ -13,7 +13,6 @@ const addSocialStats = async (): Promise<void> => {
   for (const project of projects) {
     try {
       const socialStats = await getSocialStats(project);
-      console.log(socialStats);
       await createSocialStats(socialStats);
       await sleep(1000);
     } catch (error) {

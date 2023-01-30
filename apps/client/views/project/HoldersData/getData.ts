@@ -8,54 +8,64 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
     newHolders,
     recurringHolders,
     leavingHolders,
-    holdersChange,
-    avgHoldingsChange,
-    newHoldersChange,
-    recurringHoldersChange,
-    leavingHoldersChange,
     project: { name, trackHoldersFromTokenAmount },
   } = data;
 
   return [
     {
       value: holders as number,
-      previousValue: holdersChange as PreviousValueTypes,
+      previousValue: {
+        change: data.holdersChange24,
+        percentage: data.holdersChange24Percentage,
+      } as PreviousValueTypes,
       title: `Holders (from ${trackHoldersFromTokenAmount} tokens)`,
       isCurrency: false,
       tooltip: `Current ${name} holders amount counting from ${trackHoldersFromTokenAmount} tokens.`,
-      chartEntry: 'getHolders',
+      chartEntry: 'holders',
     },
     {
       value: avgHoldings as number,
-      previousValue: avgHoldingsChange as PreviousValueTypes,
+      previousValue: {
+        change: data.avgHoldingsChange24,
+        percentage: data.avgHoldingsChange24Percentage,
+      } as PreviousValueTypes,
       title: 'Average Holdings',
       isCurrency: false,
       tooltip: `Calculates (adds up all holder wallets tokens and divides by the number of holder wallets) the average wallet token holding.`,
-      chartEntry: 'getAvgHoldings',
+      chartEntry: 'avgHoldings',
     },
     {
       value: newHolders as number,
-      previousValue: newHoldersChange as PreviousValueTypes,
+      previousValue: {
+        change: data.newHoldersChange24,
+        percentage: data.newHoldersChange24Percentage,
+      } as PreviousValueTypes,
       title: 'New Holders',
       isCurrency: false,
       tooltip: `Amount of new holders onboarding ${name}.`,
-      chartEntry: 'getNewHolders',
+      chartEntry: 'newHolders',
     },
     {
       value: recurringHolders as number,
-      previousValue: recurringHoldersChange as PreviousValueTypes,
+      previousValue: {
+        change: data.recurringHoldersChange24,
+        percentage: data.recurringHoldersChange24Percentage,
+      } as PreviousValueTypes,
       title: 'Recurring Buys or Transfers',
       isCurrency: false,
       tooltip: `Amount of already existing holders purchasing, transacting, or transfering ${name} tokens.`,
-      chartEntry: 'getRecurringHolders',
+      chartEntry: 'recurringHolders',
     },
     {
       value: leavingHolders as number,
-      previousValue: leavingHoldersChange as PreviousValueTypes,
+      previousValue: {
+        change: data.leavingHoldersChange24,
+        percentage: data.leavingHoldersChange24Percentage,
+      } as PreviousValueTypes,
       title: 'Leaving Holders',
       isCurrency: false,
       tooltip: `Amount of holders that have sold their ${name} tokens and have less than ${trackHoldersFromTokenAmount} tokens in their wallet.`,
-      chartEntry: 'getLeavingHolders',
+      chartEntry: 'leavingHolders',
     },
   ];
 };

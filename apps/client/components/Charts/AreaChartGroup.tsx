@@ -65,7 +65,7 @@ const AreaChartGroup = () => {
   };
 
   const MainChart = () => {
-    if (chartData?.length === 0) {
+    if (!chartData?.data || chartData?.data?.length === 0) {
       return null;
     }
 
@@ -88,7 +88,7 @@ const AreaChartGroup = () => {
   };
 
   const ComparisonChart = () => {
-    if (compareChartData?.length === 0) {
+    if (!compareChartData?.data || compareChartData?.data?.length === 0) {
       return null;
     }
 

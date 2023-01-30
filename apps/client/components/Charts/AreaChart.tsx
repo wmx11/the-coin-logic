@@ -1,17 +1,12 @@
-import React from 'react';
+import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts/highstock';
 import HighchartsExporting from 'highcharts/modules/exporting';
-import HighchartsReact from 'highcharts-react-official';
-import { Annotation } from 'types/Charts';
 import useThemeStore from 'store/useThemeStore';
+import { TransformedChartsData } from 'types/Charts';
 import { themeConfig } from 'utils/theme';
 
 type ChartTypes = {
-  data: {
-    date: string;
-    value: string | number;
-    annotation: Annotation;
-  }[];
+  data: TransformedChartsData;
   title: string;
 };
 
@@ -49,7 +44,7 @@ const AreaChart = ({ data, title }: ChartTypes) => {
     ],
     series: [
       {
-        data: data.map(({ date, value }) => [new Date(date).getTime(), value]),
+        data: data.data,
         type: 'areaspline',
         name: title,
         threshold: null,
@@ -68,28 +63,7 @@ const AreaChart = ({ data, title }: ChartTypes) => {
       {
         type: 'flags',
         name: 'Flags on series',
-        data: data.reduce((arr, curr) => {
-          if (curr?.annotation?.title === null) {
-            return arr;
-          }
-
-          const data = {
-            x: new Date(curr?.date).getTime(),
-            title: curr?.annotation?.title,
-            text: curr?.annotation?.description,
-            events: {
-              click: () => {
-                if (curr?.annotation?.href) {
-                  window.open(curr?.annotation?.href, '__blank');
-                }
-              },
-            },
-          };
-
-          arr.push(data);
-
-          return arr;
-        }, [] as any),
+        data: data?.annotation,
         onSeries: title.replaceAll(' ', '-'),
         shape: 'squarepin',
       },

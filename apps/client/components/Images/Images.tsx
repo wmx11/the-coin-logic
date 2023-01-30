@@ -19,13 +19,13 @@ export const ImageWithPlaceholder = ({ image, width, height, alt }: ImageProps) 
       height={height}
       width={width}
       style={{ verticalAlign: 'middle' }}
-      layout="intrinsic"
+      layout="responsive"
       onError={() => {
         setSrc(undefined);
       }}
     />
   ) : (
-    <div className="bg-slate-200" style={{ width, height }}></div>
+    <div className="bg-slate-200" style={{height }}></div>
   );
 };
 

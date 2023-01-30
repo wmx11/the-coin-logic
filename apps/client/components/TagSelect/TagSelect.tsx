@@ -32,6 +32,7 @@ const TagSelect = <T,>({ isPerson, isProject, form, description }: TagSelectProp
         {...form.getInputProps('tags')}
         data={data || []}
         label="Tags"
+        size="md"
         description={description || 'Choose the tags that best describe you.'}
         searchable
       />

@@ -1,11 +1,12 @@
 import { isAfter, isToday } from 'date-fns';
 import { IncomingMessage } from 'http';
 import path from 'path';
-import { CartItem } from 'types';
+import { CartItem, Project, Promotion } from 'types';
 import { products as productsSku } from 'utils/products';
 import { formatDate } from './formatters';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
+import { hasEventEnded, hasEventStarted } from './events';
 
 export const isDev = process.env.NODE_ENV !== 'production';
 
@@ -177,4 +178,21 @@ export const formatBytes = (bytes: number, decimals = 2) => {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+};
+
+export const isPromoted = (promotion?: Promotion) => {
+  if (!promotion) {
+    return false;
+  }
+
+  const { isEnabled, startDate, endDate } = promotion;
+
+  if (!isEnabled) {
+    return false;
+  }
+
+  const hasStarted = hasEventStarted(startDate);
+  const hasEnded = hasEventEnded({ startDate, endDate });
+
+  return hasStarted && !hasEnded;
 };

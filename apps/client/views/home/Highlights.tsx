@@ -3,6 +3,7 @@ import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundW
 import HighlightCard from 'components/HighlightCard';
 import { HighlightCardItem } from 'components/HighlightCard/HighlightCard';
 import TrendingProjectsHighlights from 'components/HighlightCard/TrendingProjectsHighlights';
+import UpcomingProjectsHighlights from 'components/HighlightCard/UpcomingProjectsHighlights';
 import GradientTitle from 'components/Text/GradientTitle';
 import { QUERY_PROJECT } from 'constants/general';
 import Link from 'next/link';
@@ -22,12 +23,14 @@ type HighlightsProps = {
 
 const Highlights: FC<HighlightsProps> = ({ highlights }) => {
   return (
-    <SmallBackgroundWrapper>
+    <SmallBackgroundWrapper containerSize="xl">
       <GradientTitle order={2} className="mb-4">
         Recent Highlights
       </GradientTitle>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="flex flex-wrap gap-4">
         <TrendingProjectsHighlights trendingHighlights={highlights.trendingHighlights} />
+        <UpcomingProjectsHighlights />
+
         <HighlightCard title="Upcoming Events" icon={<Icons.Event />} moreLink={routes.events}>
           {highlights?.eventsHighlights?.length ? (
             highlights.eventsHighlights.map((event, index) => {

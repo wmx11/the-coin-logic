@@ -6,11 +6,14 @@ import {
   FaCheck,
   FaChevronDown,
   FaChevronRight,
+  FaCoins,
   FaCrown,
   FaFileExport,
   FaFireAlt,
   FaGamepad,
   FaHeart,
+  FaImages,
+  FaLemon,
   FaPlus,
   FaRegEdit,
   FaRegEye,
@@ -25,7 +28,7 @@ import {
   FaUserCog,
 } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
-import { FiLogOut, FiMoon, FiSun } from 'react-icons/fi';
+import { FiExternalLink, FiLogOut, FiMoon, FiSun } from 'react-icons/fi';
 import { GoTriangleDown, GoTriangleUp } from 'react-icons/go';
 import { GrMoney } from 'react-icons/gr';
 import { HiLink } from 'react-icons/hi';
@@ -49,7 +52,7 @@ export const Icons = {
   Check: FaCheck,
   ChevronDown: FaChevronDown,
   ChevronRight: FaChevronRight,
-  Coins: GrMoney,
+  Coins: FaCoins,
   Money: SiBitcoin,
   Cross: FaTimes,
   Crown: FaCrown,
@@ -83,7 +86,10 @@ export const Icons = {
   Upload: AiOutlineCloudUpload,
   Nexus: IoPlanetSharp,
   Link: HiLink,
+  ExternalLink: FiExternalLink,
   Google: FcGoogle,
   Sun: FiSun,
   Moon: FiMoon,
+  Images: FaImages,
+  Fresh: FaLemon
 };

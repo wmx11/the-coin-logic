@@ -76,6 +76,7 @@ const SignInContent = () => {
 
         if (tokens) {
           setLoading(false);
+          resetAll();
           return resolve(tokens);
         }
       });

@@ -39,6 +39,8 @@ const routes = {
   pricing: `/pricing`,
   privacyPolicy: `/privacy-policy`,
   projects: `/projects`,
+  upcomingProjects: `/projects/upcoming`,
+  nftProjects: `/projects/nft`,
   events: `/events`,
   nexus: '/nexus',
   nexusBySlug: '/nexus/${slug}',
@@ -63,6 +65,15 @@ const routes = {
     ? 'http://localhost:2000/${campaignId}/${target}'
     : 'https://${target}.tclmt.io/${campaignId}',
   api: {
+    data: {
+      market: `${API}/data/market`,
+      customTracker: `${API}/data/custom-tracker`,
+      social: `${API}/data/social`,
+      table: `${API}/data/table`,
+      upcoming: `${API}/data/upcoming`,
+      trending: `${API}/data/trending`,
+      nft: `${API}/data/nft`,
+    },
     controls: {
       like: `${API}/controls/like`,
       view: `${API}/controls/view`,
@@ -99,7 +110,7 @@ const routes = {
         rate: `${API}/project/transparency/rate`,
         recalculate: `${API}/project/transparency/recalculate`,
       },
-      create: `${API}/project/create`,
+      createUpdate: `${API}/project/create-update`,
     },
     votes: {
       getVotes: `${API}/votes/get-votes`,
@@ -130,6 +141,9 @@ const routes = {
       youtube: `${API}/transcriptions/youtube`,
       upload: `${API}/transcriptions/upload`,
       check: `${API}/transcriptions/check`,
+    },
+    cache: {
+      clear: `${API}/cache/clear`,
     },
   },
   external: {

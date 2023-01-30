@@ -18,7 +18,7 @@ type TableProps = {
 
 const Table: FC<TableProps> = ({ data, columns, customTheme = {}, sort }) => {
   const globalTheme = useThemeStore((state) => state.theme);
-  const mantineTheme = getTheme({ highlightOnHover: true, verticalSpacing: 12 });
+  const mantineTheme = getTheme({ highlightOnHover: true, verticalSpacing: 14 });
   const theme = useTheme([mantineTheme, mainTheme(globalTheme), customTheme]);
 
   return (

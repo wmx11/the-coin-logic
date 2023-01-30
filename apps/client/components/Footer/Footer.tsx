@@ -27,22 +27,25 @@ function Footer() {
         <footer className="footer py-20 text-white">
           <div>
             <span className="footer-title">Services</span>
-            <Link href={routes.services}>
+            <Link href={`${routes.services}?service=tracking`}>
               <a className="link link-hover">Listing & Tracking</a>
             </Link>
-            <Link href={routes.services}>
+            <Link href={`${routes.services}?service=tbaas`}>
+              <a className="link link-hover">Trustless Bridging as a Service</a>
+            </Link>
+            <Link href={`${routes.services}?service=audits`}>
               <a className="link link-hover">Audits</a>
             </Link>
-            <Link href={routes.services}>
+            <Link href={`${routes.services}?service=kyc`}>
               <a className="link link-hover">KYC</a>
             </Link>
-            <Link href={routes.services}>
+            <Link href={`${routes.services}?service=marketing`}>
               <a className="link link-hover">Marketing</a>
             </Link>
-            <Link href={routes.services}>
+            <Link href={`${routes.services}?service=community`}>
               <a className="link link-hover">Community Events</a>
             </Link>
-            <Link href={routes.services}>
+            <Link href={`${routes.services}?service=ama`}>
               <a className="link link-hover">AMAs</a>
             </Link>
           </div>

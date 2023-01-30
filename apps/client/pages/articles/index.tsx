@@ -1,4 +1,5 @@
 import { Container, Text } from '@mantine/core';
+import AddYourProject from 'components/AddYourProject';
 import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundWrapper';
 import { ContentCardsCollection } from 'components/ContentCollection';
 import PaginationFilter from 'components/Filters/PaginationFilter';
@@ -64,6 +65,9 @@ const Articles: FC<ArticlesProps> = ({ blogPosts, blogPostsCount }) => {
           ) : null}
         </div>
       </Container>
+      <section className="mt-4">
+        <AddYourProject />
+      </section>
     </>
   );
 };

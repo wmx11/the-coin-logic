@@ -1,11 +1,13 @@
 import Web3 from 'web3';
 
 import baseAbi from './baseAbi';
+import nftAbi from './nftAbi';
 import config from './config';
 
 import type { Contract as ContractType } from 'web3-eth-contract';
 import type { Project } from '../types';
 import pairTokenAddressResolver from '../utils/pairTokenAddressResolver';
+import { AbiItem } from 'web3-utils';
 
 type CommonCalls = {
   balanceOf: (address: string) => Promise<string>;
@@ -31,19 +33,34 @@ const marketStatsContract = ({ rpc, project }: ContractProps) => {
     return null;
   }
 
-  const resolvePairTokenAddress = pairTokenAddressResolver(project);
+  let abi: AbiItem[];
+
+  if (project.isNft) {
+    abi = nftAbi;
+  } else {
+    abi = baseAbi;
+  }
 
   /** Initiates the Web3 with the given RPC endpoint */
   const web3 = new Web3(rpc);
 
   /** Initiates the Project Contract */
-  const projectContract = new web3.eth.Contract(baseAbi, project?.contractAddress as string);
+  const projectContract = new web3.eth.Contract(abi, project?.contractAddress as string);
+
+  if (project.isNft) {
+    return {
+      projectContract: { ...commonCalls(projectContract) },
+      getBalance: (address: string) => web3.eth.getBalance(address),
+    };
+  }
+
+  const resolvePairTokenAddress = pairTokenAddressResolver(project);
 
   /** Initiates the Project Pair Contract (TITANO/BNB) */
-  const projectPairContract = new web3.eth.Contract(baseAbi, resolvePairTokenAddress(0) as string);
+  const projectPairContract = new web3.eth.Contract(abi, resolvePairTokenAddress(0) as string);
 
   /** Initiates the Pair Stable (BNB/BUSD) */
-  const pairStableContract = new web3.eth.Contract(baseAbi, resolvePairTokenAddress(1) as string);
+  const pairStableContract = new web3.eth.Contract(abi, resolvePairTokenAddress(1) as string);
 
   return {
     projectContract: { ...commonCalls(projectContract) },

@@ -31,7 +31,10 @@ const Events: FC<EventsProps> = ({ data }) => {
           {data.events?.length ? (
             <ScrollArea style={{ height: 350 }} offsetScrollbars>
               {data.events?.map((event, index) => {
-                const hasEnded = hasEventEnded(event);
+                const hasEnded = hasEventEnded({
+                  startDate: event.scheduledStartTimestamp,
+                  endDate: event.scheduledEndTimestamp,
+                });
                 return (
                   <div className="mb-4" key={`event_${index}`}>
                     <div className="my-2 rounded-md overflow-hidden">
@@ -48,7 +51,14 @@ const Events: FC<EventsProps> = ({ data }) => {
                       </GradientText>
                       <Text className="flex-1" size="xs" align="right">
                         {hasEnded ? null : formateDateWithHours(event.scheduledStartTimestamp)}
-                        <Text color={hasEnded ? 'red' : 'green'}>{hasEnded ? 'Ended' : getStartsIn(event)}</Text>
+                        <Text color={hasEnded ? 'red' : 'green'}>
+                          {hasEnded
+                            ? 'Ended'
+                            : getStartsIn({
+                                startDate: event.scheduledStartTimestamp,
+                                endDate: event.scheduledEndTimestamp,
+                              })}
+                        </Text>
                       </Text>
                     </div>
                     <Text size="xs" color="dimmed">

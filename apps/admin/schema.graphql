@@ -743,13 +743,17 @@ type Project {
   id: ID!
   name: String
   slug: String
+  symbol: String
+  maxSupply: Int
   logo: ImageFieldOutput
+  backgroundImage: ImageFieldOutput
   dateAdded: DateTime
   enabled: Boolean
   isPending: Boolean
   isAwaitingPayment: Boolean
   isListed: Boolean
   isNft: Boolean
+  isPreLaunch: Boolean
   displayBlogPosts: Boolean
   displayTransparencyScore: Boolean
   displayCommunityVotes: Boolean
@@ -764,6 +768,7 @@ type Project {
   markForDeletion: Boolean
   useDexScreener: Boolean
   status: String
+  tokenType: String
   tags(
     where: TagWhereInput! = {}
     orderBy: [TagOrderByInput!]! = []
@@ -786,6 +791,7 @@ type Project {
   trackHoldersFromTokenAmount: Float
   trackHoldersFromDollarAmount: Float
   description: String
+  preLaunchInformation: String
   launchDate: DateTime
   launchBlock: Int
   user(
@@ -815,7 +821,7 @@ type Project {
   rebasePeriod: String
   apy: Float
   dailyApy: Float
-  calendar: String
+  mintPrice: Float
   website: String
   whitepaper: String
   twitter: String
@@ -854,6 +860,7 @@ type Project {
   ): [TransparencyRating!]
   transparencyRatingsCount(where: TransparencyRatingWhereInput! = {}): Int
   transparencyHighlights: JSON
+  promotion: Promotion
   content(
     where: ContentWhereInput! = {}
     orderBy: [ContentOrderByInput!]! = []
@@ -933,12 +940,15 @@ input ProjectWhereInput {
   id: IDFilter
   name: StringFilter
   slug: StringFilter
+  symbol: StringFilter
+  maxSupply: IntNullableFilter
   dateAdded: DateTimeNullableFilter
   enabled: BooleanFilter
   isPending: BooleanFilter
   isAwaitingPayment: BooleanFilter
   isListed: BooleanFilter
   isNft: BooleanFilter
+  isPreLaunch: BooleanFilter
   displayBlogPosts: BooleanFilter
   displayTransparencyScore: BooleanFilter
   displayCommunityVotes: BooleanFilter
@@ -953,6 +963,7 @@ input ProjectWhereInput {
   markForDeletion: BooleanFilter
   useDexScreener: BooleanFilter
   status: StringNullableFilter
+  tokenType: StringNullableFilter
   tags: TagManyRelationFilter
   contractAddress: StringFilter
   pairAddress: StringFilter
@@ -963,6 +974,7 @@ input ProjectWhereInput {
   trackHoldersFromTokenAmount: FloatNullableFilter
   trackHoldersFromDollarAmount: FloatNullableFilter
   description: StringFilter
+  preLaunchInformation: StringFilter
   launchDate: DateTimeNullableFilter
   launchBlock: IntNullableFilter
   user: UserManyRelationFilter
@@ -973,7 +985,7 @@ input ProjectWhereInput {
   rebasePeriod: StringFilter
   apy: FloatNullableFilter
   dailyApy: FloatNullableFilter
-  calendar: StringFilter
+  mintPrice: FloatNullableFilter
   website: StringFilter
   whitepaper: StringFilter
   twitter: StringFilter
@@ -993,6 +1005,7 @@ input ProjectWhereInput {
   auditBy: AuditManyRelationFilter
   kycBy: KycManyRelationFilter
   transparencyRatings: TransparencyRatingManyRelationFilter
+  promotion: PromotionWhereInput
   content: ContentManyRelationFilter
   comments: CommentManyRelationFilter
   votes: VoteManyRelationFilter
@@ -1001,6 +1014,17 @@ input ProjectWhereInput {
   discordConfig: DiscordConfigWhereInput
   parentProject: ProjectManyRelationFilter
   relatedProjects: ProjectManyRelationFilter
+}
+
+input IntNullableFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntNullableFilter
 }
 
 input StringNullableFilter {
@@ -1042,17 +1066,6 @@ input LiquidityPairManyRelationFilter {
   every: LiquidityPairWhereInput
   some: LiquidityPairWhereInput
   none: LiquidityPairWhereInput
-}
-
-input IntNullableFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: IntNullableFilter
 }
 
 input NotificationManyRelationFilter {
@@ -1113,12 +1126,15 @@ input ProjectOrderByInput {
   id: OrderDirection
   name: OrderDirection
   slug: OrderDirection
+  symbol: OrderDirection
+  maxSupply: OrderDirection
   dateAdded: OrderDirection
   enabled: OrderDirection
   isPending: OrderDirection
   isAwaitingPayment: OrderDirection
   isListed: OrderDirection
   isNft: OrderDirection
+  isPreLaunch: OrderDirection
   displayBlogPosts: OrderDirection
   displayTransparencyScore: OrderDirection
   displayCommunityVotes: OrderDirection
@@ -1133,6 +1149,7 @@ input ProjectOrderByInput {
   markForDeletion: OrderDirection
   useDexScreener: OrderDirection
   status: OrderDirection
+  tokenType: OrderDirection
   contractAddress: OrderDirection
   pairAddress: OrderDirection
   exhangeAddress: OrderDirection
@@ -1140,6 +1157,7 @@ input ProjectOrderByInput {
   trackHoldersFromTokenAmount: OrderDirection
   trackHoldersFromDollarAmount: OrderDirection
   description: OrderDirection
+  preLaunchInformation: OrderDirection
   launchDate: OrderDirection
   launchBlock: OrderDirection
   sellTax: OrderDirection
@@ -1147,7 +1165,7 @@ input ProjectOrderByInput {
   rebasePeriod: OrderDirection
   apy: OrderDirection
   dailyApy: OrderDirection
-  calendar: OrderDirection
+  mintPrice: OrderDirection
   website: OrderDirection
   whitepaper: OrderDirection
   twitter: OrderDirection
@@ -1168,13 +1186,17 @@ input ProjectOrderByInput {
 input ProjectUpdateInput {
   name: String
   slug: String
+  symbol: String
+  maxSupply: Int
   logo: ImageFieldInput
+  backgroundImage: ImageFieldInput
   dateAdded: DateTime
   enabled: Boolean
   isPending: Boolean
   isAwaitingPayment: Boolean
   isListed: Boolean
   isNft: Boolean
+  isPreLaunch: Boolean
   displayBlogPosts: Boolean
   displayTransparencyScore: Boolean
   displayCommunityVotes: Boolean
@@ -1189,6 +1211,7 @@ input ProjectUpdateInput {
   markForDeletion: Boolean
   useDexScreener: Boolean
   status: String
+  tokenType: String
   tags: TagRelateToManyForUpdateInput
   contractAddress: String
   pairAddress: String
@@ -1199,6 +1222,7 @@ input ProjectUpdateInput {
   trackHoldersFromTokenAmount: Float
   trackHoldersFromDollarAmount: Float
   description: String
+  preLaunchInformation: String
   launchDate: DateTime
   launchBlock: Int
   user: UserRelateToManyForUpdateInput
@@ -1210,7 +1234,7 @@ input ProjectUpdateInput {
   rebasePeriod: String
   apy: Float
   dailyApy: Float
-  calendar: String
+  mintPrice: Float
   website: String
   whitepaper: String
   twitter: String
@@ -1231,6 +1255,7 @@ input ProjectUpdateInput {
   kycBy: KycRelateToManyForUpdateInput
   transparencyRatings: TransparencyRatingRelateToManyForUpdateInput
   transparencyHighlights: JSON
+  promotion: PromotionRelateToOneForUpdateInput
   content: ContentRelateToManyForUpdateInput
   comments: CommentRelateToManyForUpdateInput
   votes: VoteRelateToManyForUpdateInput
@@ -1311,6 +1336,12 @@ input TransparencyRatingRelateToManyForUpdateInput {
   connect: [TransparencyRatingWhereUniqueInput!]
 }
 
+input PromotionRelateToOneForUpdateInput {
+  create: PromotionCreateInput
+  connect: PromotionWhereUniqueInput
+  disconnect: Boolean
+}
+
 input CommentRelateToManyForUpdateInput {
   disconnect: [CommentWhereUniqueInput!]
   set: [CommentWhereUniqueInput!]
@@ -1353,13 +1384,17 @@ input ProjectUpdateArgs {
 input ProjectCreateInput {
   name: String
   slug: String
+  symbol: String
+  maxSupply: Int
   logo: ImageFieldInput
+  backgroundImage: ImageFieldInput
   dateAdded: DateTime
   enabled: Boolean
   isPending: Boolean
   isAwaitingPayment: Boolean
   isListed: Boolean
   isNft: Boolean
+  isPreLaunch: Boolean
   displayBlogPosts: Boolean
   displayTransparencyScore: Boolean
   displayCommunityVotes: Boolean
@@ -1374,6 +1409,7 @@ input ProjectCreateInput {
   markForDeletion: Boolean
   useDexScreener: Boolean
   status: String
+  tokenType: String
   tags: TagRelateToManyForCreateInput
   contractAddress: String
   pairAddress: String
@@ -1384,6 +1420,7 @@ input ProjectCreateInput {
   trackHoldersFromTokenAmount: Float
   trackHoldersFromDollarAmount: Float
   description: String
+  preLaunchInformation: String
   launchDate: DateTime
   launchBlock: Int
   user: UserRelateToManyForCreateInput
@@ -1395,7 +1432,7 @@ input ProjectCreateInput {
   rebasePeriod: String
   apy: Float
   dailyApy: Float
-  calendar: String
+  mintPrice: Float
   website: String
   whitepaper: String
   twitter: String
@@ -1416,6 +1453,7 @@ input ProjectCreateInput {
   kycBy: KycRelateToManyForCreateInput
   transparencyRatings: TransparencyRatingRelateToManyForCreateInput
   transparencyHighlights: JSON
+  promotion: PromotionRelateToOneForCreateInput
   content: ContentRelateToManyForCreateInput
   comments: CommentRelateToManyForCreateInput
   votes: VoteRelateToManyForCreateInput
@@ -1469,6 +1507,11 @@ input KycRelateToManyForCreateInput {
 input TransparencyRatingRelateToManyForCreateInput {
   create: [TransparencyRatingCreateInput!]
   connect: [TransparencyRatingWhereUniqueInput!]
+}
+
+input PromotionRelateToOneForCreateInput {
+  create: PromotionCreateInput
+  connect: PromotionWhereUniqueInput
 }
 
 input CommentRelateToManyForCreateInput {
@@ -1924,19 +1967,58 @@ input NotificationCreateInput {
 type MarketStat {
   id: ID!
   price: Float
+  priceChange24: Float
+  priceChange24Percentage: Float
   marketCap: Float
+  marketCapChange24: Float
+  marketCapChange24Percentage: Float
   totalSupply: Float
+  totalSupplyChange24: Float
+  totalSupplyChange24Percentage: Float
   liquidity: Float
+  liquidityChange24: Float
+  liquidityChange24Percentage: Float
   pairPrice: Float
+  pairPriceChange24: Float
+  pairPriceChange24Percentage: Float
   burnedTokens: Float
+  burnedTokensChange24: Float
+  burnedTokensChange24Percentage: Float
   txns: JSON
   volume: JSON
   fdv: Float
+  fdvChange24: Float
+  fdvChange24Percentage: Float
   holders: Float
+  holdersChange24: Float
+  holdersChange24Percentage: Float
   avgHoldings: Float
+  avgHoldingsChange24: Float
+  avgHoldingsChange24Percentage: Float
   newHolders: Float
+  newHoldersChange24: Float
+  newHoldersChange24Percentage: Float
   leavingHolders: Float
+  leavingHoldersChange24: Float
+  leavingHoldersChange24Percentage: Float
   recurringHolders: Float
+  recurringHoldersChange24: Float
+  recurringHoldersChange24Percentage: Float
+  avgPrice: Float
+  avgPriceChange24: Float
+  avgPriceChange24Percentage: Float
+  floorPrice: Float
+  floorPriceChange24: Float
+  floorPriceChange24Percentage: Float
+  ceilPrice: Float
+  ceilPriceChange24: Float
+  ceilPriceChange24Percentage: Float
+  salesVolume: Float
+  salesVolumeChange24: Float
+  salesVolumeChange24Percentage: Float
+  totalHoldings: Float
+  totalHoldingsChange24: Float
+  totalHoldingsChange24Percentage: Float
   annotation: JSON
   customTrackers: JSON
   project: Project
@@ -1953,17 +2035,56 @@ input MarketStatWhereInput {
   NOT: [MarketStatWhereInput!]
   id: IDFilter
   price: FloatNullableFilter
+  priceChange24: FloatNullableFilter
+  priceChange24Percentage: FloatNullableFilter
   marketCap: FloatNullableFilter
+  marketCapChange24: FloatNullableFilter
+  marketCapChange24Percentage: FloatNullableFilter
   totalSupply: FloatNullableFilter
+  totalSupplyChange24: FloatNullableFilter
+  totalSupplyChange24Percentage: FloatNullableFilter
   liquidity: FloatNullableFilter
+  liquidityChange24: FloatNullableFilter
+  liquidityChange24Percentage: FloatNullableFilter
   pairPrice: FloatNullableFilter
+  pairPriceChange24: FloatNullableFilter
+  pairPriceChange24Percentage: FloatNullableFilter
   burnedTokens: FloatNullableFilter
+  burnedTokensChange24: FloatNullableFilter
+  burnedTokensChange24Percentage: FloatNullableFilter
   fdv: FloatNullableFilter
+  fdvChange24: FloatNullableFilter
+  fdvChange24Percentage: FloatNullableFilter
   holders: FloatNullableFilter
+  holdersChange24: FloatNullableFilter
+  holdersChange24Percentage: FloatNullableFilter
   avgHoldings: FloatNullableFilter
+  avgHoldingsChange24: FloatNullableFilter
+  avgHoldingsChange24Percentage: FloatNullableFilter
   newHolders: FloatNullableFilter
+  newHoldersChange24: FloatNullableFilter
+  newHoldersChange24Percentage: FloatNullableFilter
   leavingHolders: FloatNullableFilter
+  leavingHoldersChange24: FloatNullableFilter
+  leavingHoldersChange24Percentage: FloatNullableFilter
   recurringHolders: FloatNullableFilter
+  recurringHoldersChange24: FloatNullableFilter
+  recurringHoldersChange24Percentage: FloatNullableFilter
+  avgPrice: FloatNullableFilter
+  avgPriceChange24: FloatNullableFilter
+  avgPriceChange24Percentage: FloatNullableFilter
+  floorPrice: FloatNullableFilter
+  floorPriceChange24: FloatNullableFilter
+  floorPriceChange24Percentage: FloatNullableFilter
+  ceilPrice: FloatNullableFilter
+  ceilPriceChange24: FloatNullableFilter
+  ceilPriceChange24Percentage: FloatNullableFilter
+  salesVolume: FloatNullableFilter
+  salesVolumeChange24: FloatNullableFilter
+  salesVolumeChange24Percentage: FloatNullableFilter
+  totalHoldings: FloatNullableFilter
+  totalHoldingsChange24: FloatNullableFilter
+  totalHoldingsChange24Percentage: FloatNullableFilter
   project: ProjectWhereInput
   dateAdded: DateTimeNullableFilter
 }
@@ -1971,35 +2092,113 @@ input MarketStatWhereInput {
 input MarketStatOrderByInput {
   id: OrderDirection
   price: OrderDirection
+  priceChange24: OrderDirection
+  priceChange24Percentage: OrderDirection
   marketCap: OrderDirection
+  marketCapChange24: OrderDirection
+  marketCapChange24Percentage: OrderDirection
   totalSupply: OrderDirection
+  totalSupplyChange24: OrderDirection
+  totalSupplyChange24Percentage: OrderDirection
   liquidity: OrderDirection
+  liquidityChange24: OrderDirection
+  liquidityChange24Percentage: OrderDirection
   pairPrice: OrderDirection
+  pairPriceChange24: OrderDirection
+  pairPriceChange24Percentage: OrderDirection
   burnedTokens: OrderDirection
+  burnedTokensChange24: OrderDirection
+  burnedTokensChange24Percentage: OrderDirection
   fdv: OrderDirection
+  fdvChange24: OrderDirection
+  fdvChange24Percentage: OrderDirection
   holders: OrderDirection
+  holdersChange24: OrderDirection
+  holdersChange24Percentage: OrderDirection
   avgHoldings: OrderDirection
+  avgHoldingsChange24: OrderDirection
+  avgHoldingsChange24Percentage: OrderDirection
   newHolders: OrderDirection
+  newHoldersChange24: OrderDirection
+  newHoldersChange24Percentage: OrderDirection
   leavingHolders: OrderDirection
+  leavingHoldersChange24: OrderDirection
+  leavingHoldersChange24Percentage: OrderDirection
   recurringHolders: OrderDirection
+  recurringHoldersChange24: OrderDirection
+  recurringHoldersChange24Percentage: OrderDirection
+  avgPrice: OrderDirection
+  avgPriceChange24: OrderDirection
+  avgPriceChange24Percentage: OrderDirection
+  floorPrice: OrderDirection
+  floorPriceChange24: OrderDirection
+  floorPriceChange24Percentage: OrderDirection
+  ceilPrice: OrderDirection
+  ceilPriceChange24: OrderDirection
+  ceilPriceChange24Percentage: OrderDirection
+  salesVolume: OrderDirection
+  salesVolumeChange24: OrderDirection
+  salesVolumeChange24Percentage: OrderDirection
+  totalHoldings: OrderDirection
+  totalHoldingsChange24: OrderDirection
+  totalHoldingsChange24Percentage: OrderDirection
   dateAdded: OrderDirection
 }
 
 input MarketStatUpdateInput {
   price: Float
+  priceChange24: Float
+  priceChange24Percentage: Float
   marketCap: Float
+  marketCapChange24: Float
+  marketCapChange24Percentage: Float
   totalSupply: Float
+  totalSupplyChange24: Float
+  totalSupplyChange24Percentage: Float
   liquidity: Float
+  liquidityChange24: Float
+  liquidityChange24Percentage: Float
   pairPrice: Float
+  pairPriceChange24: Float
+  pairPriceChange24Percentage: Float
   burnedTokens: Float
+  burnedTokensChange24: Float
+  burnedTokensChange24Percentage: Float
   txns: JSON
   volume: JSON
   fdv: Float
+  fdvChange24: Float
+  fdvChange24Percentage: Float
   holders: Float
+  holdersChange24: Float
+  holdersChange24Percentage: Float
   avgHoldings: Float
+  avgHoldingsChange24: Float
+  avgHoldingsChange24Percentage: Float
   newHolders: Float
+  newHoldersChange24: Float
+  newHoldersChange24Percentage: Float
   leavingHolders: Float
+  leavingHoldersChange24: Float
+  leavingHoldersChange24Percentage: Float
   recurringHolders: Float
+  recurringHoldersChange24: Float
+  recurringHoldersChange24Percentage: Float
+  avgPrice: Float
+  avgPriceChange24: Float
+  avgPriceChange24Percentage: Float
+  floorPrice: Float
+  floorPriceChange24: Float
+  floorPriceChange24Percentage: Float
+  ceilPrice: Float
+  ceilPriceChange24: Float
+  ceilPriceChange24Percentage: Float
+  salesVolume: Float
+  salesVolumeChange24: Float
+  salesVolumeChange24Percentage: Float
+  totalHoldings: Float
+  totalHoldingsChange24: Float
+  totalHoldingsChange24Percentage: Float
   annotation: JSON
   customTrackers: JSON
   project: ProjectRelateToOneForUpdateInput
@@ -2013,19 +2212,58 @@ input MarketStatUpdateArgs {
 
 input MarketStatCreateInput {
   price: Float
+  priceChange24: Float
+  priceChange24Percentage: Float
   marketCap: Float
+  marketCapChange24: Float
+  marketCapChange24Percentage: Float
   totalSupply: Float
+  totalSupplyChange24: Float
+  totalSupplyChange24Percentage: Float
   liquidity: Float
+  liquidityChange24: Float
+  liquidityChange24Percentage: Float
   pairPrice: Float
+  pairPriceChange24: Float
+  pairPriceChange24Percentage: Float
   burnedTokens: Float
+  burnedTokensChange24: Float
+  burnedTokensChange24Percentage: Float
   txns: JSON
   volume: JSON
   fdv: Float
+  fdvChange24: Float
+  fdvChange24Percentage: Float
   holders: Float
+  holdersChange24: Float
+  holdersChange24Percentage: Float
   avgHoldings: Float
+  avgHoldingsChange24: Float
+  avgHoldingsChange24Percentage: Float
   newHolders: Float
+  newHoldersChange24: Float
+  newHoldersChange24Percentage: Float
   leavingHolders: Float
+  leavingHoldersChange24: Float
+  leavingHoldersChange24Percentage: Float
   recurringHolders: Float
+  recurringHoldersChange24: Float
+  recurringHoldersChange24Percentage: Float
+  avgPrice: Float
+  avgPriceChange24: Float
+  avgPriceChange24Percentage: Float
+  floorPrice: Float
+  floorPriceChange24: Float
+  floorPriceChange24Percentage: Float
+  ceilPrice: Float
+  ceilPriceChange24: Float
+  ceilPriceChange24Percentage: Float
+  salesVolume: Float
+  salesVolumeChange24: Float
+  salesVolumeChange24Percentage: Float
+  totalHoldings: Float
+  totalHoldingsChange24: Float
+  totalHoldingsChange24Percentage: Float
   annotation: JSON
   customTrackers: JSON
   project: ProjectRelateToOneForCreateInput
@@ -2035,8 +2273,14 @@ input MarketStatCreateInput {
 type SocialStat {
   id: ID!
   twitter: Float
+  twitterChange24: Float
+  twitterChange24Percentage: Float
   telegram: Float
+  telegramChange24: Float
+  telegramChange24Percentage: Float
   discord: Float
+  discordChange24: Float
+  discordChange24Percentage: Float
   annotation: JSON
   project: Project
   dateAdded: DateTime
@@ -2052,8 +2296,14 @@ input SocialStatWhereInput {
   NOT: [SocialStatWhereInput!]
   id: IDFilter
   twitter: FloatNullableFilter
+  twitterChange24: FloatNullableFilter
+  twitterChange24Percentage: FloatNullableFilter
   telegram: FloatNullableFilter
+  telegramChange24: FloatNullableFilter
+  telegramChange24Percentage: FloatNullableFilter
   discord: FloatNullableFilter
+  discordChange24: FloatNullableFilter
+  discordChange24Percentage: FloatNullableFilter
   project: ProjectWhereInput
   dateAdded: DateTimeNullableFilter
 }
@@ -2061,15 +2311,27 @@ input SocialStatWhereInput {
 input SocialStatOrderByInput {
   id: OrderDirection
   twitter: OrderDirection
+  twitterChange24: OrderDirection
+  twitterChange24Percentage: OrderDirection
   telegram: OrderDirection
+  telegramChange24: OrderDirection
+  telegramChange24Percentage: OrderDirection
   discord: OrderDirection
+  discordChange24: OrderDirection
+  discordChange24Percentage: OrderDirection
   dateAdded: OrderDirection
 }
 
 input SocialStatUpdateInput {
   twitter: Float
+  twitterChange24: Float
+  twitterChange24Percentage: Float
   telegram: Float
+  telegramChange24: Float
+  telegramChange24Percentage: Float
   discord: Float
+  discordChange24: Float
+  discordChange24Percentage: Float
   annotation: JSON
   project: ProjectRelateToOneForUpdateInput
   dateAdded: DateTime
@@ -2082,8 +2344,14 @@ input SocialStatUpdateArgs {
 
 input SocialStatCreateInput {
   twitter: Float
+  twitterChange24: Float
+  twitterChange24Percentage: Float
   telegram: Float
+  telegramChange24: Float
+  telegramChange24Percentage: Float
   discord: Float
+  discordChange24: Float
+  discordChange24Percentage: Float
   annotation: JSON
   project: ProjectRelateToOneForCreateInput
   dateAdded: DateTime
@@ -2493,9 +2761,11 @@ type Network {
   slug: String
   logo: ImageFieldOutput
   url: String
+  symbol: String
   scanner: String
   tokenScanner: String
   txScanner: String
+  decimals: Int
   dateAdded: DateTime
 }
 
@@ -2511,9 +2781,11 @@ input NetworkWhereInput {
   name: StringFilter
   slug: StringFilter
   url: StringFilter
+  symbol: StringFilter
   scanner: StringFilter
   tokenScanner: StringFilter
   txScanner: StringFilter
+  decimals: IntNullableFilter
   dateAdded: DateTimeNullableFilter
 }
 
@@ -2522,9 +2794,11 @@ input NetworkOrderByInput {
   name: OrderDirection
   slug: OrderDirection
   url: OrderDirection
+  symbol: OrderDirection
   scanner: OrderDirection
   tokenScanner: OrderDirection
   txScanner: OrderDirection
+  decimals: OrderDirection
   dateAdded: OrderDirection
 }
 
@@ -2533,9 +2807,11 @@ input NetworkUpdateInput {
   slug: String
   logo: ImageFieldInput
   url: String
+  symbol: String
   scanner: String
   tokenScanner: String
   txScanner: String
+  decimals: Int
   dateAdded: DateTime
 }
 
@@ -2549,9 +2825,11 @@ input NetworkCreateInput {
   slug: String
   logo: ImageFieldInput
   url: String
+  symbol: String
   scanner: String
   tokenScanner: String
   txScanner: String
+  decimals: Int
   dateAdded: DateTime
 }
 
@@ -3377,6 +3655,7 @@ type Transfer {
   address: String
   fromAddress: String
   toAddress: String
+  tokenId: String
   hash: String
   block: Int
   createdAt: DateTime
@@ -3398,6 +3677,7 @@ input TransferWhereInput {
   address: StringFilter
   fromAddress: StringFilter
   toAddress: StringFilter
+  tokenId: StringFilter
   hash: StringFilter
   block: IntNullableFilter
   createdAt: DateTimeNullableFilter
@@ -3411,6 +3691,7 @@ input TransferOrderByInput {
   address: OrderDirection
   fromAddress: OrderDirection
   toAddress: OrderDirection
+  tokenId: OrderDirection
   hash: OrderDirection
   block: OrderDirection
   createdAt: OrderDirection
@@ -3424,6 +3705,7 @@ input TransferUpdateInput {
   address: String
   fromAddress: String
   toAddress: String
+  tokenId: String
   hash: String
   block: Int
   createdAt: DateTime
@@ -3442,6 +3724,7 @@ input TransferCreateInput {
   address: String
   fromAddress: String
   toAddress: String
+  tokenId: String
   hash: String
   block: Int
   createdAt: DateTime
@@ -5475,6 +5758,65 @@ input SessionRelateToManyForCreateInput {
   connect: [SessionWhereUniqueInput!]
 }
 
+type Promotion {
+  id: ID!
+  isEnabled: Boolean
+  project: Project
+  startDate: DateTime
+  endDate: DateTime
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input PromotionWhereUniqueInput {
+  id: ID
+}
+
+input PromotionWhereInput {
+  AND: [PromotionWhereInput!]
+  OR: [PromotionWhereInput!]
+  NOT: [PromotionWhereInput!]
+  id: IDFilter
+  isEnabled: BooleanFilter
+  project: ProjectWhereInput
+  startDate: DateTimeNullableFilter
+  endDate: DateTimeNullableFilter
+  dateAdded: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input PromotionOrderByInput {
+  id: OrderDirection
+  isEnabled: OrderDirection
+  startDate: OrderDirection
+  endDate: OrderDirection
+  dateAdded: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PromotionUpdateInput {
+  isEnabled: Boolean
+  project: ProjectRelateToOneForUpdateInput
+  startDate: DateTime
+  endDate: DateTime
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
+input PromotionUpdateArgs {
+  where: PromotionWhereUniqueInput!
+  data: PromotionUpdateInput!
+}
+
+input PromotionCreateInput {
+  isEnabled: Boolean
+  project: ProjectRelateToOneForCreateInput
+  startDate: DateTime
+  endDate: DateTime
+  dateAdded: DateTime
+  updatedAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -5979,6 +6321,15 @@ type Mutation {
   updateUserAuths(data: [UserAuthUpdateArgs!]!): [UserAuth]
   deleteUserAuth(where: UserAuthWhereUniqueInput!): UserAuth
   deleteUserAuths(where: [UserAuthWhereUniqueInput!]!): [UserAuth]
+  createPromotion(data: PromotionCreateInput!): Promotion
+  createPromotions(data: [PromotionCreateInput!]!): [Promotion]
+  updatePromotion(
+    where: PromotionWhereUniqueInput!
+    data: PromotionUpdateInput!
+  ): Promotion
+  updatePromotions(data: [PromotionUpdateArgs!]!): [Promotion]
+  deletePromotion(where: PromotionWhereUniqueInput!): Promotion
+  deletePromotions(where: [PromotionWhereUniqueInput!]!): [Promotion]
   endSession: Boolean!
   authenticateUserWithPassword(
     email: String!
@@ -6450,6 +6801,14 @@ type Query {
   ): [UserAuth!]
   userAuth(where: UserAuthWhereUniqueInput!): UserAuth
   userAuthsCount(where: UserAuthWhereInput! = {}): Int
+  promotions(
+    where: PromotionWhereInput! = {}
+    orderBy: [PromotionOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Promotion!]
+  promotion(where: PromotionWhereUniqueInput!): Promotion
+  promotionsCount(where: PromotionWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(

@@ -1,4 +1,5 @@
 import { Button, Container, Text, Title } from '@mantine/core';
+import AddYourProject from 'components/AddYourProject';
 import BackgroundWrapper from 'components/BackgroundWrapper';
 import { SmallBackgroundWrapper } from 'components/BackgroundWrapper/BackgroundWrapper';
 import GradientButton from 'components/Buttons/GradientButton';
@@ -131,6 +132,9 @@ const TranscriptionsPage: FC<TranscriptionsPageProps> = ({ data, count }) => {
         </section>
         <section>
           <SubscribeToEmail />
+        </section>
+        <section>
+          <AddYourProject />
         </section>
       </div>
     </>

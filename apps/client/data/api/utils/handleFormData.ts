@@ -52,11 +52,14 @@ export const handleFormData = async <Fields>(req: NextApiRequest): Promise<FormD
         value = undefined;
       }
 
+      if (value === 'null') {
+        value = null;
+      }
+
       if (/('\d+')/.test(`'${value}'`)) {
         value = parseInt(value, 10);
       }
 
-      
       Object.assign(obj, { [key]: value ?? '' });
 
       return obj;

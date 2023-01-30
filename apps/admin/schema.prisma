@@ -114,17 +114,25 @@ model Project {
   id                             String                @id @default(cuid())
   name                           String                @default("")
   slug                           String                @default("")
+  symbol                         String                @default("")
+  maxSupply                      Int?
   logo_filesize                  Int?
   logo_extension                 String?
   logo_width                     Int?
   logo_height                    Int?
   logo_id                        String?
+  backgroundImage_filesize       Int?
+  backgroundImage_extension      String?
+  backgroundImage_width          Int?
+  backgroundImage_height         Int?
+  backgroundImage_id             String?
   dateAdded                      DateTime?             @default(now())
   enabled                        Boolean               @default(false)
   isPending                      Boolean               @default(false)
   isAwaitingPayment              Boolean               @default(false)
   isListed                       Boolean               @default(false)
   isNft                          Boolean               @default(false)
+  isPreLaunch                    Boolean               @default(false)
   displayBlogPosts               Boolean               @default(false)
   displayTransparencyScore       Boolean               @default(false)
   displayCommunityVotes          Boolean               @default(false)
@@ -139,6 +147,7 @@ model Project {
   markForDeletion                Boolean               @default(false)
   useDexScreener                 Boolean               @default(false)
   status                         String?
+  tokenType                      String?               @default("erc20")
   tags                           Tag[]                 @relation("Project_tags")
   contractAddress                String                @default("")
   pairAddress                    String                @default("")
@@ -150,6 +159,7 @@ model Project {
   trackHoldersFromTokenAmount    Float?                @default(0)
   trackHoldersFromDollarAmount   Float?                @default(0)
   description                    String                @default("")
+  preLaunchInformation           String                @default("")
   launchDate                     DateTime?
   launchBlock                    Int?
   user                           User[]                @relation("Project_user")
@@ -161,7 +171,7 @@ model Project {
   rebasePeriod                   String                @default("")
   apy                            Float?
   dailyApy                       Float?
-  calendar                       String                @default("")
+  mintPrice                      Float?
   website                        String                @default("")
   whitepaper                     String                @default("")
   twitter                        String                @default("")
@@ -183,6 +193,7 @@ model Project {
   kycBy                          Kyc[]                 @relation("Kyc_project")
   transparencyRatings            TransparencyRating[]  @relation("TransparencyRating_project")
   transparencyHighlights         Json?                 @default("[{\"isPositive\":false,\"content\":\"\"}]")
+  promotion                      Promotion?            @relation("Promotion_project")
   content                        Content[]             @relation("Content_project")
   comments                       Comment[]             @relation("Comment_project")
   votes                          Vote[]                @relation("Vote_project")
@@ -282,52 +293,85 @@ model Notification {
 }
 
 model MarketStat {
-  id               String    @id @default(cuid())
-  price            Float?
-  marketCap        Float?
-  totalSupply      Float?
-  liquidity        Float?
-  pairPrice        Float?
-  burnedTokens     Float?
-  txns             Json?
-  volume           Json?
-  fdv              Float?
-  holders          Float?
-  avgHoldings      Float?
-  newHolders       Float?
-  leavingHolders   Float?
-  recurringHolders Float?
-  annotation       Json?     @default("{\"title\":null,\"description\":null,\"href\":null}")
-  customTrackers   Json?     @default("[]")
-  project          Project?  @relation("MarketStat_project", fields: [projectId], references: [id])
-  projectId        String?   @map("project")
-  dateAdded        DateTime? @default(now())
+  id                                 String    @id @default(cuid())
+  price                              Float?
+  priceChange24                      Float?
+  priceChange24Percentage            Float?
+  marketCap                          Float?
+  marketCapChange24                  Float?
+  marketCapChange24Percentage        Float?
+  totalSupply                        Float?
+  totalSupplyChange24                Float?
+  totalSupplyChange24Percentage      Float?
+  liquidity                          Float?
+  liquidityChange24                  Float?
+  liquidityChange24Percentage        Float?
+  pairPrice                          Float?
+  pairPriceChange24                  Float?
+  pairPriceChange24Percentage        Float?
+  burnedTokens                       Float?
+  burnedTokensChange24               Float?
+  burnedTokensChange24Percentage     Float?
+  txns                               Json?
+  volume                             Json?
+  fdv                                Float?
+  fdvChange24                        Float?
+  fdvChange24Percentage              Float?
+  holders                            Float?
+  holdersChange24                    Float?
+  holdersChange24Percentage          Float?
+  avgHoldings                        Float?
+  avgHoldingsChange24                Float?
+  avgHoldingsChange24Percentage      Float?
+  newHolders                         Float?
+  newHoldersChange24                 Float?
+  newHoldersChange24Percentage       Float?
+  leavingHolders                     Float?
+  leavingHoldersChange24             Float?
+  leavingHoldersChange24Percentage   Float?
+  recurringHolders                   Float?
+  recurringHoldersChange24           Float?
+  recurringHoldersChange24Percentage Float?
+  avgPrice                           Float?
+  avgPriceChange24                   Float?
+  avgPriceChange24Percentage         Float?
+  floorPrice                         Float?
+  floorPriceChange24                 Float?
+  floorPriceChange24Percentage       Float?
+  ceilPrice                          Float?
+  ceilPriceChange24                  Float?
+  ceilPriceChange24Percentage        Float?
+  salesVolume                        Float?
+  salesVolumeChange24                Float?
+  salesVolumeChange24Percentage      Float?
+  totalHoldings                      Float?
+  totalHoldingsChange24              Float?
+  totalHoldingsChange24Percentage    Float?
+  annotation                         Json?     @default("{\"title\":null,\"description\":null,\"href\":null}")
+  customTrackers                     Json?     @default("[]")
+  project                            Project?  @relation("MarketStat_project", fields: [projectId], references: [id])
+  projectId                          String?   @map("project")
+  dateAdded                          DateTime? @default(now())
 
-  @@index([price])
-  @@index([marketCap])
-  @@index([totalSupply])
-  @@index([liquidity])
-  @@index([pairPrice])
-  @@index([burnedTokens])
-  @@index([fdv])
-  @@index([holders])
-  @@index([avgHoldings])
-  @@index([newHolders])
-  @@index([leavingHolders])
-  @@index([recurringHolders])
   @@index([projectId])
   @@index([dateAdded])
 }
 
 model SocialStat {
-  id         String    @id @default(cuid())
-  twitter    Float?
-  telegram   Float?
-  discord    Float?
-  annotation Json?     @default("{\"title\":null,\"description\":null,\"href\":null}")
-  project    Project?  @relation("SocialStat_project", fields: [projectId], references: [id])
-  projectId  String?   @map("project")
-  dateAdded  DateTime? @default(now())
+  id                         String    @id @default(cuid())
+  twitter                    Float?
+  twitterChange24            Float?
+  twitterChange24Percentage  Float?
+  telegram                   Float?
+  telegramChange24           Float?
+  telegramChange24Percentage Float?
+  discord                    Float?
+  discordChange24            Float?
+  discordChange24Percentage  Float?
+  annotation                 Json?     @default("{\"title\":null,\"description\":null,\"href\":null}")
+  project                    Project?  @relation("SocialStat_project", fields: [projectId], references: [id])
+  projectId                  String?   @map("project")
+  dateAdded                  DateTime? @default(now())
 
   @@index([projectId])
   @@index([dateAdded])
@@ -425,9 +469,11 @@ model Network {
   logo_height                      Int?
   logo_id                          String?
   url                              String                @default("")
+  symbol                           String                @default("")
   scanner                          String                @default("")
   tokenScanner                     String                @default("")
   txScanner                        String                @default("")
+  decimals                         Int?
   dateAdded                        DateTime?             @default(now())
   from_Project_network             Project[]             @relation("Project_network")
   from_Coupon_acceptFromNetworks   Coupon[]              @relation("Coupon_acceptFromNetworks")
@@ -623,6 +669,7 @@ model Transfer {
   address               String    @default("")
   fromAddress           String    @default("")
   toAddress             String    @default("")
+  tokenId               String    @default("")
   hash                  String    @default("")
   block                 Int?
   createdAt             DateTime? @default(now())
@@ -630,9 +677,15 @@ model Transfer {
   from_Holder_transfers Holder[]  @relation("Holder_transfers")
 
   @@index([projectId])
+  @@index([amount])
+  @@index([type])
+  @@index([address])
+  @@index([fromAddress])
   @@index([toAddress])
+  @@index([tokenId])
   @@index([hash])
   @@index([createdAt])
+  @@index([updatedAt])
 }
 
 model Holder {
@@ -648,8 +701,10 @@ model Holder {
   updatedAt  DateTime?  @updatedAt
 
   @@index([address])
+  @@index([balance])
   @@index([projectsId])
   @@index([dateAdded])
+  @@index([updatedAt])
 }
 
 model Provider {
@@ -1066,4 +1121,15 @@ model UserAuth {
   sessions      Session[] @relation("Session_user")
 
   @@map("users")
+}
+
+model Promotion {
+  id        String    @id @default(cuid())
+  isEnabled Boolean   @default(false)
+  project   Project?  @relation("Promotion_project", fields: [projectId], references: [id])
+  projectId String?   @unique @map("project")
+  startDate DateTime?
+  endDate   DateTime?
+  dateAdded DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }

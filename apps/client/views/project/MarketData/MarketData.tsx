@@ -4,14 +4,15 @@ import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import { formateDateWithHours } from '../../../utils/formatters';
 import { StatsTabGroup } from '../../../components/StatsTabGroup';
 import { getData } from './getData';
+import { getDataNft } from './getDataNft';
 
 type MarketDataTypes = { data: ProjectWithMarketStatsAndChanges };
 
 const MarketData: FC<MarketDataTypes> = ({ data }) => {
   const { dateAdded } = data;
-  const { slug, id } = data.project;
+  const { slug, id, isNft } = data.project;
 
-  const marketData = getData(data);
+  const marketData = isNft ? getDataNft(data) : getData(data);
 
   return (
     <>

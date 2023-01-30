@@ -13,7 +13,7 @@ export type Auth = {
 };
 
 export type IsSafeAuth = {
-  signature: 'email_submit' | 'add_property' | 'get_property' | 'register_user' | 'resend_verification_email';
+  signature: 'email_submit' | 'add_property' | 'get_property' | 'register_user' | 'resend_verification_email' | 'market_data';
   trusted: boolean;
 };
 

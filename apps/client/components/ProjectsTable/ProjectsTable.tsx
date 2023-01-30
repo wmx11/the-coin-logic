@@ -2,45 +2,51 @@ import { Container, RingProgress, Text, Tooltip } from '@mantine/core';
 import { useSort } from '@table-library/react-table-library/sort';
 import { Column } from '@table-library/react-table-library/types/compact';
 import { Data, TableNode } from '@table-library/react-table-library/types/table';
-import { Badges } from 'components/Badges';
 import GradientButton from 'components/Buttons/GradientButton';
 import { NetworkBadge } from 'components/NetworkBadge';
+import Paper from 'components/Paper';
 import PaymentPlanBadge from 'components/PaymentPlans/PaymentPlanBadge';
 import { ProjectTitle } from 'components/ProjectTitle';
 import Table from 'components/Table';
 import GradientText from 'components/Text/GradientText';
 import GradientTitle from 'components/Text/GradientTitle';
 import { Trend } from 'components/Trend';
+import { DataForProjectsTable } from 'data/api/utils/transformDataForCharts';
 import Link from 'next/link';
 import { FC } from 'react';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { Network, Project, Tag } from 'types';
+import { Sparklines, SparklinesCurve, SparklinesSpots } from 'react-sparklines';
+import { Network } from 'types';
 import { PreviousValueTypes } from 'types/MarketData';
 import { Icons } from 'utils/icons';
 import toCurrency from 'utils/toCurrency';
 import toLocaleString from 'utils/toLocaleString';
+import { getLogoLink } from 'utils/utils';
 
 type ProjectsTableProps = {
-  data: TableNode[] | Data;
-  projectsCount: number;
+  data: TableNode[] | Data | DataForProjectsTable;
 };
 
-const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
+const ProjectsTable: FC<ProjectsTableProps> = ({ data }) => {
+  const tableData = data as DataForProjectsTable;
+  const projectData = tableData?.data;
+  const projectCount = tableData?.count;
+
   const theme = {
-    Table: `--data-table-library_grid-template-columns: 40px 160px repeat(10, 1fr);`,
+    Table: `--data-table-library_grid-template-columns: 210px repeat(9, 1fr);`,
     BaseCell: `
     > div {
       white-space: normal;
     }
-    &:nth-of-type(2) {
+    &:nth-of-type(1) {
       left: 0px;
       box-shadow: 2px 0px 2px rgba(0,0,0,0.1);
     }`,
   };
 
   const sorter = useSort(
-    data as Data,
+    projectData as unknown as Data,
     {
       onChange: () => {},
     },
@@ -61,36 +67,33 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
 
   const columns: Column[] = [
     {
-      label: '#',
-      renderCell: ({ order }) => (
-        <Text size="xs" color="dimmed" key={`order_${order}`}>
-          {order}
-        </Text>
-      ),
-    },
-    {
       label: 'Name',
       pinLeft: true,
-      renderCell: ({ project, order }) => (
+      renderCell: ({ name, slug, logo_id, logo_extension, isPromoted }) => (
         <>
           <ProjectTitle
             component="a"
-            href={`/project/${project?.slug || ''}`}
-            title={project.name as string}
+            href={`/project/${slug || ''}`}
+            title={name as string}
             size="sm"
-            avatar={project.logo ? project.logo.url : ''}
-            notifications={project.notifications}
-            key={`project_title_${order}`}
+            avatar={getLogoLink(logo_id, logo_extension)}
+            notifications={[]}
+            isPromoted={isPromoted}
           />
         </>
       ),
     },
     {
       label: 'Price',
-      renderCell: ({ price, priceChange, order }) => (
-        <div key={`project_price_${order}`}>
+      renderCell: ({ price, priceChange24, priceChange24Percentage }) => (
+        <div>
           {<Text>{toCurrency(price as number)}</Text>}
-          {<Trend previousValue={priceChange as PreviousValueTypes} inline={true} />}
+          {
+            <Trend
+              previousValue={{ change: priceChange24, percentage: priceChange24Percentage } as PreviousValueTypes}
+              inline={true}
+            />
+          }
         </div>
       ),
       sort: {
@@ -99,10 +102,17 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
     },
     {
       label: 'Market Cap',
-      renderCell: ({ marketCap, marketCapChange, order }) => (
-        <div key={`project_mc_${order}`}>
+      renderCell: ({ marketCap, marketCapChange24, marketCapChange24Percentage }) => (
+        <div>
           {toCurrency(marketCap as number)}
-          {<Trend previousValue={marketCapChange as PreviousValueTypes} inline={true} />}
+          {
+            <Trend
+              previousValue={
+                { change: marketCapChange24, percentage: marketCapChange24Percentage } as PreviousValueTypes
+              }
+              inline={true}
+            />
+          }
         </div>
       ),
       sort: {
@@ -111,10 +121,15 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
     },
     {
       label: 'Holders',
-      renderCell: ({ holders, holdersChange, order }) => (
-        <div key={`project_holders_${order}`}>
+      renderCell: ({ holders, holdersChange24, holdersChange24Percentage }) => (
+        <div>
           {toLocaleString(holders as number) || <AiOutlineEllipsis />}
-          {<Trend previousValue={holdersChange as PreviousValueTypes} inline={true} />}
+          {
+            <Trend
+              previousValue={{ change: holdersChange24, percentage: holdersChange24Percentage } as PreviousValueTypes}
+              inline={true}
+            />
+          }
         </div>
       ),
       sort: {
@@ -122,11 +137,18 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
       },
     },
     {
-      label: 'Avg. Holdings (Tokens)',
-      renderCell: ({ avgHoldings, avgHoldingsChange, order }) => (
-        <div key={`project_avgHolders_${order}`}>
+      label: 'Avg. Token Holdings',
+      renderCell: ({ avgHoldings, avgHoldingsChange24, avgHoldingsChange24Percentage }) => (
+        <div>
           {toLocaleString(avgHoldings as number) || <AiOutlineEllipsis />}
-          {<Trend previousValue={avgHoldingsChange as PreviousValueTypes} inline={true} />}
+          {
+            <Trend
+              previousValue={
+                { change: avgHoldingsChange24, percentage: avgHoldingsChange24Percentage } as PreviousValueTypes
+              }
+              inline={true}
+            />
+          }
         </div>
       ),
       sort: {
@@ -134,8 +156,17 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
       },
     },
     {
+      label: 'Last 7 Days',
+      renderCell: ({ sparkline }) => (
+        <Sparklines data={sparkline} width={100} style={{ minWidth: 100 }} height={35} margin={2}>
+          <SparklinesCurve color="#7950f2" />
+          <SparklinesSpots style={{ fill: '#7950f2' }} />
+        </Sparklines>
+      ),
+    },
+    {
       label: 'Transparency Score',
-      renderCell: ({ project }) => (
+      renderCell: ({ transparencyScore }) => (
         <div>
           <Tooltip label="Raw transparency score without including community votes.">
             <RingProgress
@@ -144,10 +175,10 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
               roundCaps
               label={
                 <div className="flex items-center justify-center">
-                  <GradientText weight={700}>{project?.transparencyScore || 0}</GradientText>
+                  <GradientText weight={700}>{transparencyScore || 0}</GradientText>
                 </div>
               }
-              sections={[{ value: project?.transparencyScore || 0, color: 'violet' }]}
+              sections={[{ value: transparencyScore || 0, color: 'violet' }]}
             />
           </Tooltip>
         </div>
@@ -156,10 +187,8 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
 
     {
       label: 'Audit',
-      renderCell: (data) => {
-        const project = data?.project as Project;
-
-        if (!project?.auditBy || project?.auditBy?.length < 1) {
+      renderCell: ({ auditBy }) => {
+        if (!auditBy || auditBy?.length < 1) {
           return (
             <Tooltip label="The project has not provided any Audit information.">
               <div>
@@ -169,27 +198,27 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
           );
         }
 
-        return project?.auditBy?.map((item, index: number) => (
-          <Link href={(item?.url as string) || '#'}>
-            <a target="_blank">
-              <ProjectTitle
-                size="sm"
-                avatar={item?.auditor?.image ? item?.auditor?.image?.url : ''}
-                key={`project_audit_${index}`}
-              />
-            </a>
-          </Link>
-        ));
+        return auditBy?.map(
+          (item: { url: string; auditor: { image_id: string; image_extension: string } }, index: number) => (
+            <Link href={(item?.url as string) || '#'}>
+              <a target="_blank">
+                <ProjectTitle
+                  size="sm"
+                  avatar={getLogoLink(item?.auditor?.image_id, item?.auditor?.image_extension)}
+                  key={`project_audit_${index}`}
+                />
+              </a>
+            </Link>
+          ),
+        );
       },
     },
     {
       label: 'KYC',
-      renderCell: (data) => {
-        const project = data?.project as Project;
-
-        if (!project?.kycBy || project?.kycBy?.length < 1) {
+      renderCell: ({ kycBy }) => {
+        if (!kycBy || kycBy?.length < 1) {
           return (
-            <Tooltip label="The project has not provided any KYC information.">
+            <Tooltip label="The project has not provided any Audit information.">
               <div>
                 <Icons.Cross />
               </div>
@@ -197,71 +226,62 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data, projectsCount }) => {
           );
         }
 
-        return project?.kycBy?.map((item, index) => (
-          <Link href={(item?.url as string) || '#'}>
-            <a target="_blank">
-              <ProjectTitle
-                size="sm"
-                avatar={item?.kycGroup?.image ? item?.kycGroup?.image?.url : ''}
-                key={`project_audit_${index}`}
-              />
-            </a>
-          </Link>
-        ));
+        return kycBy?.map(
+          (item: { url: string; kycGroup: { image_id: string; image_extension: string } }, index: number) => (
+            <Link href={(item?.url as string) || '#'}>
+              <a target="_blank">
+                <ProjectTitle
+                  size="sm"
+                  avatar={getLogoLink(item?.kycGroup?.image_id, item?.kycGroup?.image_extension)}
+                  key={`project_audit_${index}`}
+                />
+              </a>
+            </Link>
+          ),
+        );
       },
     },
+
     {
       label: 'Network',
-      renderCell: ({ project, order }) => (
-        <NetworkBadge key={`project_newtork_badge_${order}`} network={project.network as Network} showName={false} />
-      ),
-    },
-    {
-      label: 'Tags',
-      renderCell: ({ project, order }) => <Badges key={`project_badges_${order}`} badges={project.tags as Tag[]} />,
-    },
-    {
-      label: 'TCL Plan',
-      renderCell: ({ project, order }) => (
-        <PaymentPlanBadge
-          key={`project_plan_badge_${order}`}
-          paymentPlan={project?.paymentPlan}
-          badgeProps={{ size: 'xs' }}
-        />
-      ),
+      renderCell: ({ network }) => <NetworkBadge network={network as Network} showName={false} />,
     },
   ];
   return (
     <Container className="py-10" size="xl">
-      <div className="mb-6">
-        <GradientTitle order={2}>Projects by Market Cap</GradientTitle>
-        <Text size="xs" color="dimmed">
-          Displaying projects listed on The Coin Logic. Please make sure you do your own research before investing in
-          any of the projects.
-        </Text>
-      </div>
-      <div>
+      <Paper>
+        <div className="mb-6">
+          <GradientTitle order={2}>Token Projects by Market Cap</GradientTitle>
+          <Text size="xs" color="dimmed">
+            Displaying token projects sorted by market cap listed on The Coin Logic.
+          </Text>
+          <Text size="xs" color="dimmed">
+            Do conduct your own due diligence and consult your financial advisor before making any investment decisions.
+          </Text>
+        </div>
         <div>
-          <Table data={data as TableNode[]} columns={columns} sort={sorter} customTheme={theme} />
-        </div>
-
-        {projectsCount > 0 && (
-          <div className="my-8 flex justify-between items-center">
-            <Text size="xs" color="dimmed">
-              Showing {projectsCount} out of {projectsCount} projects
-            </Text>
+          <div>
+            <Table data={projectData as TableNode[]} columns={columns} sort={sorter} customTheme={theme} />
           </div>
-        )}
 
-        <div className="my-8 text-center">
-          <GradientText weight={700} className="mb-4">
-            Can't find your favorite project?
-          </GradientText>
-          <Link href="/referrals" passHref>
-            <GradientButton component="a">Refer a project and earn rewards!</GradientButton>
-          </Link>
+          {projectCount && projectCount > 0 && (
+            <div className="my-8 flex justify-between items-center">
+              <Text size="xs" color="dimmed">
+                Showing {projectCount} out of {projectCount} projects
+              </Text>
+            </div>
+          )}
+
+          <div className="my-8 text-center">
+            <GradientText weight={700} className="mb-4">
+              Can't find your favorite project?
+            </GradientText>
+            <Link href="/referrals" passHref>
+              <GradientButton component="a">Refer a project and earn rewards!</GradientButton>
+            </Link>
+          </div>
         </div>
-      </div>
+      </Paper>
     </Container>
   );
 };

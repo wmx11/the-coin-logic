@@ -1,23 +1,23 @@
-import { Container } from '@mantine/core';
-import React, { FC, PropsWithChildren } from 'react';
+import { Container, MantineNumberSize } from '@mantine/core';
+import { FC, PropsWithChildren } from 'react';
 import useThemeStore from 'store/useThemeStore';
-import { themeConfig } from 'utils/theme';
 
 type BackgroundWrapperProps = {
   className?: string;
+  containerSize?: MantineNumberSize;
 } & PropsWithChildren;
 
 const BackgroundWrapper: FC<BackgroundWrapperProps> = ({ children, className }) => {
   return (
     <div
-      className={`${className} bg-[url('../public/images/grid.svg')] bg-lightBlue bg-repeat relative overflow-hidden`}
+      className={`${className} bg-[url('../public/images/grid.svg')] bg-lightBlue bg-repeat bg-center relative overflow-hidden`}
     >
       {children}
     </div>
   );
 };
 
-export const SmallBackgroundWrapper: FC<BackgroundWrapperProps> = ({ children, className }) => {
+export const SmallBackgroundWrapper: FC<BackgroundWrapperProps> = ({ children, className, containerSize }) => {
   const theme = useThemeStore((state) => state.theme);
 
   return (
@@ -26,9 +26,11 @@ export const SmallBackgroundWrapper: FC<BackgroundWrapperProps> = ({ children, c
         theme === 'light'
           ? 'bg-slate-50 bg-[url("../public/images/grid_violet.svg")]'
           : `bg-[url("../public/images/grid_dark_mode.svg")]`
-      } bg-repeat relative overflow-hidden`}
+      } bg-repeat bg-center relative overflow-hidden`}
     >
-      <Container className="py-24">{children}</Container>
+      <Container className="py-24" size={containerSize}>
+        {children}
+      </Container>
     </div>
   );
 };
