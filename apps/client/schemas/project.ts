@@ -8,7 +8,7 @@ export const projectSchema = z.object({
   paymentPlanId: z.string(),
   isNft: z.boolean(),
   isPreLaunch: z.boolean(),
-  launchDate: z.date(),
+  launchDate: z.date().optional(),
   pairAddress: z.string(),
   description: z
     .string()

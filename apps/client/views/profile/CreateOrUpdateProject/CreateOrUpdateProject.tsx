@@ -57,7 +57,7 @@ const CreateOrUpdateProject: FC<CreateOrUpdateProjectProps> = ({ networks, proje
       paymentPlanId: project?.paymentPlan?.id || '',
       isNft: project?.isNft ? project?.isNft : false,
       isPreLaunch: project?.isPreLaunch ? project?.isPreLaunch : false,
-      launchDate: project?.launchDate || '',
+      launchDate: project?.launchDate ? new Date(project?.launchDate) : new Date(),
       pairAddress: project?.pairAddress || '',
       description: project?.description || '',
       preLaunchInformation: project?.preLaunchInformation || '',
