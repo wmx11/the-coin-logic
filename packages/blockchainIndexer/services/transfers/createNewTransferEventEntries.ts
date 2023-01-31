@@ -1,4 +1,4 @@
-import { getBlockByProjectId, getDecimals } from '../base';
+import { getBlockByProjectId, getDecimals, getLatestBlock } from '../base';
 
 import type { Contract } from 'web3-eth-contract';
 import type { Project } from '../../../types';
@@ -31,13 +31,17 @@ const createNewTransferEventEntries = async ({
     decimals = await getDecimals(contract);
   }
 
+  const latestBlock = await getLatestBlock(web3);
+  const toBlock = fromBlock + (project.initialized ? config.chunks : config.initialChunks);
+
   const context = {
     iterations,
     iteration: 1,
     decimals,
     projectBlock,
     from: fromBlock,
-    to: fromBlock + (project.initialized ? config.chunks : config.initialChunks),
+    // Prevent from querying beyong available blocks
+    to: toBlock >= latestBlock ? latestBlock : toBlock,
     contract,
     web3,
     project,

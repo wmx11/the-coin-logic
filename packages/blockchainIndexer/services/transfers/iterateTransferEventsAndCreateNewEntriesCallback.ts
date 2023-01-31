@@ -4,7 +4,7 @@ import type { Block, Project } from '../../../types';
 import sleep from '../../../utils/sleep';
 import toDecimals from '../../../utils/toDecimals';
 import { default as holdersTrackerConfig } from '../../config';
-import { updateBlock } from '../base';
+import { getLatestBlock, updateBlock } from '../base';
 import {
   addTransferEvent,
   getPastTransferEvents,
@@ -97,8 +97,12 @@ const iterateTransferEventsAndCreateNewEntriesCallback = async (context: Extende
     });
   }
 
+  const latestBlock = await getLatestBlock(web3);
+
   const newFromBlock = from + chunks;
-  const newToBlock = newFromBlock + chunks;
+  const newToBlockValue = newFromBlock + chunks;
+  // Prevent from querying beyong available blocks
+  const newToBlock = newToBlockValue >= latestBlock ? latestBlock : newToBlockValue;
   const updatedContext = { ...context, from: newFromBlock, to: newToBlock };
 
   await sleep(holdersTrackerConfig.timeouts.iterateTransferEventsAndCreateNewEntriesCallback);
