@@ -43,6 +43,7 @@ export const getTransferType = ({ project, fromAddress, toAddress }: GetTransfer
   const exchange = project?.pairAddress?.toLowerCase();
   const contract = project?.contractAddress?.toLowerCase();
   const burn = project?.burnAddress?.toLowerCase();
+  const genesisAddress = '0x0000000000000000000000000000000000000000'.toLowerCase();
 
   // Burn
   if (to === burn) {
@@ -60,7 +61,14 @@ export const getTransferType = ({ project, fromAddress, toAddress }: GetTransfer
   }
 
   // Transfer
-  if (from !== exchange && from !== burn && to !== contract && to !== burn) {
+  if (
+    from !== exchange &&
+    from !== burn &&
+    from !== genesisAddress &&
+    to !== contract &&
+    to !== burn &&
+    to !== genesisAddress
+  ) {
     return 2;
   }
 
@@ -70,13 +78,13 @@ export const getTransferType = ({ project, fromAddress, toAddress }: GetTransfer
   }
 
   // Mint
-  if (from === '0x0000000000000000000000000000000000000000') {
+  if (from === genesisAddress) {
     return 4;
   }
 
   // Other
   return 5;
-} 
+};
 
 export const getTransferEventsFromPreviousBlockByProjectId = (projectId: string, previousBlock: number) => {
   return prismaClient.transfer.findMany({
