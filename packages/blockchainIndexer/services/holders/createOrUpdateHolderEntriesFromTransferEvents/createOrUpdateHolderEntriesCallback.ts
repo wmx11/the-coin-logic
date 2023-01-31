@@ -48,7 +48,7 @@ const createOrUpdateHolderEntriesCallback = async (context: ExtendedContext) => 
         : toDecimals(walletBalance, decimals) || (event.amount as number);
 
       cache.set(event.toAddress, {
-        balance: project.isNft ? (balance <= 1 ? balance : 0) : balance,
+        balance: project.isNft ? (balance >= 1 ? balance : 0) : balance,
       });
 
       await sleep(10);

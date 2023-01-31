@@ -1,5 +1,6 @@
-import { PreviousValueTypes, StatsData } from 'types/MarketData';
+import { CustomTrackersResponse, PreviousValueTypes, StatsData } from 'types/MarketData';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
+import { getCustomTrackersChangeLabels, getCustomTrackersLabels } from 'utils/prepareCustomTrackers';
 
 export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] => {
   const {
@@ -11,12 +12,27 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
     floorPrice,
     salesVolume,
     totalHoldings,
+    customTrackers,
     project: { name, trackData, network },
   } = data;
 
   if (!trackData) {
     return [];
   }
+
+  const customDataChangeLabels = getCustomTrackersChangeLabels(getCustomTrackersLabels(customTrackers));
+
+  const resolvedCustomData = customTrackers.map(
+    ({ id, label, value, description, isCurrency }: CustomTrackersResponse, index: number) => ({
+      value,
+      previousValue: data[customDataChangeLabels[index]],
+      title: label,
+      chartEntry: 'customTracker',
+      id,
+      tooltip: description,
+      isCurrency,
+    }),
+  );
 
   return [
     {
@@ -102,5 +118,6 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
       isCurrency: false,
       tooltip: `Current burned ${name} NFTs amount.`,
     },
+    ...resolvedCustomData,
   ];
 };

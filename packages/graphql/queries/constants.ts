@@ -24,6 +24,7 @@ export const GET_ENABLED_PROJECTS = `
     trackPrice
     trackMarketCap
     isNft
+    mintPrice
     liquidityPair {
       address
       useDexScreener
@@ -72,6 +73,7 @@ const COMMON_GETTER_FOR_TRACKING = `
   launchBlock
   initialized
   isNft
+  mintPrice
   network {
     url
   }

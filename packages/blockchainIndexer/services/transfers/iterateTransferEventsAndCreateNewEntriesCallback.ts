@@ -1,6 +1,5 @@
 import { Contract } from 'web3-eth-contract';
 import { Context } from '../../../utils/iterateWithContext';
-
 import type { Block, Project } from '../../../types';
 import sleep from '../../../utils/sleep';
 import toDecimals from '../../../utils/toDecimals';
@@ -51,12 +50,17 @@ const iterateTransferEventsAndCreateNewEntriesCallback = async (context: Extende
 
     const { from: fromAddress, to: toAddress, value } = event.returnValues;
 
+    const transerType = getTransferType({ project, fromAddress, toAddress }) as number;
     let amount = toDecimals(value, decimals) || 0;
 
     // If the project is an NFT, pull additional information from the TX Hash, e.g. Value
     if (project.isNft) {
-      const txInfo = await web3.eth.getTransaction(event.transactionHash);
-      amount = toDecimals(txInfo?.value, decimals) || 0;
+      if (transerType === 4) {
+        amount = project.mintPrice || 0;
+      } else {
+        const txInfo = await web3.eth.getTransaction(event.transactionHash);
+        amount = toDecimals(txInfo?.value, decimals) || 0;
+      }
     }
 
     const existingTransferEvent = await getTransferEventByHashAmountAndProjectId(
@@ -74,7 +78,7 @@ const iterateTransferEventsAndCreateNewEntriesCallback = async (context: Extende
       project: { connect: { id: project.id } },
       amount,
       block: event.blockNumber,
-      type: getTransferType({ project, fromAddress, toAddress }) as number,
+      type: transerType,
       address: event.address,
       fromAddress,
       toAddress,

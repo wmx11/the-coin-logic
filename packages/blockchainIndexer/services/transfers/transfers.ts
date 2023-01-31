@@ -27,7 +27,17 @@ export const addTransferEvent = (data: PrismaSchema.TransferCreateInput) => {
   return prismaClient.transfer.create({ data });
 };
 
-export const getTransferType = ({ project, fromAddress, toAddress }: GetTransferType) => {
+enum TransferType {
+  BURN = -1,
+  SELL = 0,
+  BUY = 1,
+  TRANSFER = 2,
+  TAX = 3,
+  MINT = 4,
+  OTHER = 5,
+}
+
+export const getTransferType = ({ project, fromAddress, toAddress }: GetTransferType): TransferType => {
   const from = fromAddress?.toLowerCase();
   const to = toAddress?.toLowerCase();
   const exchange = project?.pairAddress?.toLowerCase();
@@ -60,13 +70,13 @@ export const getTransferType = ({ project, fromAddress, toAddress }: GetTransfer
   }
 
   // Mint
-  if (from === burn) {
+  if (from === '0x0000000000000000000000000000000000000000') {
     return 4;
   }
 
   // Other
   return 5;
-};
+} 
 
 export const getTransferEventsFromPreviousBlockByProjectId = (projectId: string, previousBlock: number) => {
   return prismaClient.transfer.findMany({
