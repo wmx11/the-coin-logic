@@ -77,6 +77,7 @@ const PROJECT_DATA_GETTERS = `
 id
 name
 slug
+symbol
 website
 whitepaper
 contractAddress

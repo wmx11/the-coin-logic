@@ -13,10 +13,10 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
     salesVolume,
     totalHoldings,
     customTrackers,
-    project: { name, trackData, network },
+    project: { name, trackData, network, symbol },
   } = data;
 
-  if (!trackData) {
+if (!trackData) {
     return [];
   }
 
@@ -41,10 +41,10 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
         change: data.avgPriceChange24,
         percentage: data.avgPriceChange24Percentage,
       } as PreviousValueTypes,
-      title: `Average Price (${network?.symbol})`,
+      title: `Average Price (${symbol || network?.symbol})`,
       chartEntry: 'avgPrice',
       isChartDefaultOpen: true,
-      tooltip: `Current ${name} average price in ${network?.symbol}.`,
+      tooltip: `Current ${name} average price in ${symbol || network?.symbol}.`,
     },
     {
       value: ceilPrice as number,
@@ -52,9 +52,9 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
         change: data.ceilPriceChange24,
         percentage: data.ceilPriceChange24Percentage,
       } as PreviousValueTypes,
-      title: `Ceiling Price (${network?.symbol})`,
+      title: `Ceiling Price (${symbol || network?.symbol})`,
       chartEntry: 'ceilPrice',
-      tooltip: `Current ${name} ceiling (max) price in ${network?.symbol}.`,
+      tooltip: `Current ${name} ceiling (max) price in ${symbol || network?.symbol}.`,
     },
     {
       value: floorPrice as number,
@@ -62,9 +62,9 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
         change: data.floorPriceChange24,
         percentage: data.floorPriceChange24Percentage,
       } as PreviousValueTypes,
-      title: `Floor Price (${network?.symbol})`,
+      title: `Floor Price (${symbol || network?.symbol})`,
       chartEntry: 'floorPrice',
-      tooltip: `Current ${name} floor (minimum) price in ${network?.symbol}.`,
+      tooltip: `Current ${name} floor (minimum) price in ${symbol || network?.symbol}.`,
     },
     {
       value: totalHoldings as number,
@@ -82,7 +82,7 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
         change: data.marketCapChange24,
         percentage: data.marketCapChange24Percentage,
       } as PreviousValueTypes,
-      title: `Approx. Market Cap (${network?.symbol})`,
+      title: `Approx. Market Cap (${symbol || network?.symbol})`,
       chartEntry: 'marketCap',
       tooltip: 'Approximate market cap of the NFT collection.',
     },
@@ -94,7 +94,7 @@ export const getDataNft = (data: ProjectWithMarketStatsAndChanges): StatsData[] 
       } as PreviousValueTypes,
       title: 'Sales Volume',
       chartEntry: 'salesVolume',
-      tooltip: `Sum of all sales in ${network?.symbol}`,
+      tooltip: `Sum of all sales in ${symbol || network?.symbol}`,
     },
     {
       value: totalSupply as number,
