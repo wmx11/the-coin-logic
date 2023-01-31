@@ -20,6 +20,7 @@
     "admin:start": "yarn workspace admin start",
     "admin:production": "pm2 start ecosystems/frontend.config.js --only 'admin'",
     "production:start": "pm2 start ecosystems/frontend.config.js",
+    "packages:build": "npx tsc -b packages/tsconfig.json --force",
     "holders-tracker:build": "npx tsc -b apps/holders-tracker/tsconfig.json --force",
     "market-tracker:build": "npx tsc -b apps/market-tracker/tsconfig.json --force",
     "marketing-tracker:build": "npx tsc -b apps/marketing-tracker/tsconfig.json --force",
