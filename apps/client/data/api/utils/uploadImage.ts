@@ -31,7 +31,7 @@ export const handleImageUpload = async <T>({
 
   const resolvedPath = resolveImagePaths();
 
-  if ((isRemove || isUpdate) && instance && instance[imageId]) {
+  if ((isRemove || isUpdate) && image && instance && instance[imageId]) {
     try {
       fs.unlink(
         `${resolvedPath[storageName as keyof typeof resolvedPath]}/${instance[imageId]}.${instance[imageExtension]}`,
