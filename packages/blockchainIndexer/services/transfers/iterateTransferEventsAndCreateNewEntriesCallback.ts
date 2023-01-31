@@ -55,8 +55,18 @@ const iterateTransferEventsAndCreateNewEntriesCallback = async (context: Extende
 
     // If the project is an NFT, pull additional information from the TX Hash, e.g. Value
     if (project.isNft) {
+      // If It's a MINT
       if (transerType === 4) {
-        amount = project.mintPrice || 0;
+        const MINT_TRANSFER_TOPICS_LENGTH = 4;
+        const receipt = await web3.eth.getTransactionReceipt(event.transactionHash);
+        const numberOfInternalTransfers =
+          receipt.logs.filter(
+            (item) =>
+              item?.topics?.includes(holdersTrackerConfig.topics.transfer) &&
+              item?.topics?.length === MINT_TRANSFER_TOPICS_LENGTH &&
+              item?.topics[2]?.includes(toAddress?.toLowerCase()?.substring(2)),
+          ).length || 1;
+        amount = numberOfInternalTransfers * project.mintPrice || 0;
       } else {
         const txInfo = await web3.eth.getTransaction(event.transactionHash);
         amount = toDecimals(txInfo?.value, decimals) || 0;
