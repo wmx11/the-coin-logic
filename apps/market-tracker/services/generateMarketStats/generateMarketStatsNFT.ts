@@ -35,9 +35,6 @@ const generateMarketStatsNFT = async (project: Project) => {
         balance: true,
       },
       where: {
-        dateAdded: {
-          gte: startOfToday(),
-        },
         balance: {
           gte: 1,
         },
