@@ -12,7 +12,7 @@ function Footer() {
   const theme = useThemeStore((state) => state.theme);
 
   return (
-    <BackgroundWrapper>
+    <BackgroundWrapper className="mt-24">
       <svg xmlns="http://www.w3.org/2000/svg" width="3840" height="70" className="rotate-180">
         <g>
           <path

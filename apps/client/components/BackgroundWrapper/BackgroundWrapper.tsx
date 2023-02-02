@@ -8,9 +8,13 @@ type BackgroundWrapperProps = {
 } & PropsWithChildren;
 
 const BackgroundWrapper: FC<BackgroundWrapperProps> = ({ children, className }) => {
+  const theme = useThemeStore((state) => state.theme);
+
   return (
     <div
-      className={`${className} bg-[url('../public/images/grid.svg')] bg-lightBlue bg-repeat bg-center relative overflow-hidden`}
+      className={`${className} bg-[url('../public/images/grid.svg')] ${
+        theme === 'light' ? 'bg-lightBlue' : ''
+      }  bg-repeat bg-center relative overflow-hidden`}
     >
       {children}
     </div>

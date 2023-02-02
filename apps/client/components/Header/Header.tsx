@@ -15,7 +15,7 @@ function Header() {
   const { theme, toggleTheme } = useThemeStore();
 
   return (
-    <div className="z-20 w-full bg-lightBlue relative">
+    <div className={`z-20 w-full ${theme === 'light' ? 'bg-lightBlue' : ''}  relative`}>
       <Container className={`${isMobileScreen ? 'flex items-center justify-end py-3 w-full' : ''}`} size="xl">
         {isMobileScreen ? (
           <Drawer
