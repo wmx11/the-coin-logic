@@ -8,6 +8,7 @@ import React, { FC } from 'react';
 import Layout from '../components/Layout';
 import client from '../data/apollo-client';
 import useThemeStore from 'store/useThemeStore';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
 type ProvidersWrapperTypes = {
   children: React.ReactElement;
@@ -33,10 +34,6 @@ const ProvidersWrapper: FC<ProvidersWrapperTypes> = ({ children }): React.ReactE
   const theme = useThemeStore((state) => state.theme);
   const ConfirmationModal = dynamic<any>(() => import('components/Modals/ConfirmationModal'), { ssr: false });
   const Web3Modal = dynamic<any>(() => import('@web3modal/react').then((mod) => mod.Web3Modal), { ssr: false });
-  const GoogleReCaptchaProvider = dynamic<any>(
-    () => import('react-google-recaptcha-v3').then((mod) => mod.GoogleReCaptchaProvider),
-    { ssr: false },
-  );
 
   return (
     <GoogleReCaptchaProvider
