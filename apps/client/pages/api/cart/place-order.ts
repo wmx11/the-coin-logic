@@ -221,20 +221,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    if (item?.product?.isMonthly || paymentPlanConfig?.marketingTrackerDuration) {
-      await signedRequest(
-        {
-          type: 'post',
-          url: routes.api.user.initSubscription,
-          data: {
-            order: newOrder,
-            duration: paymentPlanConfig?.marketingTrackerDuration || undefined,
-          },
-        },
-        user.id,
-      );
-    }
-
     return responseHandler.ok(newOrder, 'Order has been placed successfully');
   };
 

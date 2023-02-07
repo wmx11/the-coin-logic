@@ -44,10 +44,6 @@ const UserNavigationLinks: FC<UserNavigationLinksProps> = ({ isInMenuProvider, s
         </MenuNavLink>
       ) : null}
 
-      <MenuNavLink href={routes.marketingTracker} icon={<Icons.Track />} isInMenu={isInMenuProvider} onClick={onClick}>
-        Marketing Tracker
-      </MenuNavLink>
-
       <MenuNavLink href={routes.funding} icon={<Icons.Money />} isInMenu={isInMenuProvider} onClick={onClick}>
         Funding
       </MenuNavLink>

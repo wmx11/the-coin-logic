@@ -24,7 +24,7 @@ function Footer() {
         </g>
       </svg>
       <Container>
-        <footer className="footer py-20 text-white">
+        <footer className="footer py-24 text-white">
           <div>
             <span className="footer-title">Services</span>
             <Link href={`${routes.services}?service=tracking`}>
