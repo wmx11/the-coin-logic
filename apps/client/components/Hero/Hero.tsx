@@ -10,11 +10,10 @@ import TextTransition, { presets } from 'react-text-transition';
 import useThemeStore from 'store/useThemeStore';
 import { themeConfig } from 'utils/theme';
 
-const TEXTS = ['LOGIC', 'DATA', 'INSIGHT', 'TRACKING', 'CLARITY'];
+const TEXTS = ['LOGIC', 'DATA', 'INSIGHT', 'CLARITY', 'TRUST'];
 
 function Hero() {
   const theme = useThemeStore((state) => state.theme);
-
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -29,15 +28,17 @@ function Hero() {
           <div className="flex text-center fade-in">
             <div className="text-white flex-1 z-10">
               <div className="mb-16">
-                <Title order={1} className="text-5xl md:text-7xl mb-10">
+                <Title order={1} className="text-5xl md:text-8xl mb-10">
                   <span>Get More </span>
                   <TextTransition inline springConfig={presets.gentle} direction="up">
                     <GradientText weight={700}>{TEXTS[index % TEXTS.length]}</GradientText>
                   </TextTransition>
                   <Space h="md" />
-                  For Your Crypto Projects
+                  Going Decentralized
                 </Title>
-                <Title order={4}>Bringing transparency through data</Title>
+                <GradientText weight={700} size="xl">
+                  Trustless & Decentralized Crypto Data Aggregation
+                </GradientText>
               </div>
 
               <div className="flex gap-4 flex-wrap justify-center">

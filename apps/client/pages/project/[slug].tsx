@@ -5,7 +5,7 @@ import Paper from 'components/Paper';
 import SubscribeToEmail from 'components/SubscribeToEmail';
 import withRedisCache from 'data/redis';
 import useUser from 'hooks/useUser';
-import { GetServerSideProps, GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import { FC, useEffect } from 'react';
 import useChartStore from 'store/useChartStore';
