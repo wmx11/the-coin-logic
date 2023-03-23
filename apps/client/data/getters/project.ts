@@ -1,4 +1,4 @@
-import { endOfYesterday, formatISO } from 'date-fns';
+import { formatISO, subHours } from 'date-fns';
 import { ProjectWithMarketStatsAndChanges } from 'types/Project';
 import { prepareCustomTrackers } from 'utils/prepareCustomTrackers';
 import { getAveragesAndMedians } from 'utils/utils';
@@ -11,7 +11,7 @@ import {
   GET_PROJECT_AND_MARKET_STATS_BY_ID,
   GET_PROJECT_AND_MARKET_STATS_BY_ID_FALLBACK,
   GET_PROJECT_AVERAGE_MARKET_CHANGE_FOR_PERIOD_OF_TIME,
-  GET_PROJECT_ID_BY_SLUG
+  GET_PROJECT_ID_BY_SLUG,
 } from './constatnts/project';
 import { getData } from './getters';
 
@@ -62,7 +62,7 @@ export const getProjectPreviousDayMarketStatsByProjectIdAndDate = async (project
     return null;
   }
 
-  const lastDay = formatISO(endOfYesterday());
+  const lastDay = formatISO(subHours(new Date(), 24));
 
   const { marketStats, socialStats } = await getData({
     query: GET_PREVIOUS_DAY_MARKET_STATS,

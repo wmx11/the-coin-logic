@@ -2,8 +2,8 @@
 module.exports = {
   apps: [
     {
-      name: 'marketing-tracker',
-      script: './apps/marketing-tracker/dist/index.js',
+      name: 'discord-bots',
+      script: './apps/discord-bots/dist/index.js',
       env: {
         NODE_ENV: 'production',
       },

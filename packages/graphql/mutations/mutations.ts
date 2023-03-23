@@ -1,7 +1,9 @@
-import { endOfYesterday, formatISO } from 'date-fns';
+import { subHours, formatISO } from 'date-fns';
 import { prismaClient } from 'tcl-packages/prismaClient';
 import type { MarketStat, SocialStat } from '../../types';
 import getChangesPartial from '../../utils/getChangesPartial';
+import Redis from 'ioredis';
+import { DISOCRD_BOTS_STATS_CHANNEL, redisConenctionString } from '../../utils/redis';
 
 export const createMarketStats = async (marketStats: MarketStat): Promise<MarketStat | null> => {
   try {
@@ -9,7 +11,7 @@ export const createMarketStats = async (marketStats: MarketStat): Promise<Market
       where: {
         projectId: marketStats?.id || '',
         dateAdded: {
-          lte: formatISO(endOfYesterday()),
+          lte: formatISO(subHours(new Date(), 24)),
         },
       },
     });
@@ -75,6 +77,9 @@ export const createMarketStats = async (marketStats: MarketStat): Promise<Market
         project: { connect: { id: marketStats?.id } },
       },
     });
+    
+    const redis = new Redis(redisConenctionString);
+    redis.publish(DISOCRD_BOTS_STATS_CHANNEL, JSON.stringify(createMarketStat));
 
     return createMarketStat || null;
   } catch (error) {
@@ -89,7 +94,7 @@ export const createSocialStats = async (socialStats: SocialStat): Promise<Social
       where: {
         projectId: socialStats?.id || '',
         dateAdded: {
-          lte: formatISO(endOfYesterday()),
+          lte: formatISO(subHours(new Date(), 24)),
         },
       },
     });
