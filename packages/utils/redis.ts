@@ -3,6 +3,8 @@ import root from 'find-yarn-workspace-root';
 
 dotenv.config({ path: `${root()}/.env` });
 
+console.log(`${root()}/.env`);
+
 const connectionStringProd = process.env.REDIS_USERNAME
   ? `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}/0`
   : {};
