@@ -554,6 +554,7 @@ model DiscordBot {
   id             String    @id @default(cuid())
   name           String    @default("")
   enabled        Boolean   @default(false)
+  isCurrency     Boolean   @default(false)
   presence       String    @default("")
   botId          String    @default("")
   apiKey         String    @default("")

@@ -1328,6 +1328,7 @@ export type DiscordBot = {
   dateAdded?: Maybe<Scalars['DateTime']>;
   enabled?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
+  isCurrency?: Maybe<Scalars['Boolean']>;
   name?: Maybe<Scalars['String']>;
   presence?: Maybe<Scalars['String']>;
   project?: Maybe<Project>;
@@ -1340,6 +1341,7 @@ export type DiscordBotCreateInput = {
   customTracking?: InputMaybe<Scalars['String']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
+  isCurrency?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   presence?: InputMaybe<Scalars['String']>;
   project?: InputMaybe<ProjectRelateToOneForCreateInput>;
@@ -1353,6 +1355,7 @@ export type DiscordBotOrderByInput = {
   dateAdded?: InputMaybe<OrderDirection>;
   enabled?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
+  isCurrency?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
   presence?: InputMaybe<OrderDirection>;
   tracking?: InputMaybe<OrderDirection>;
@@ -1369,6 +1372,7 @@ export type DiscordBotUpdateInput = {
   customTracking?: InputMaybe<Scalars['String']>;
   dateAdded?: InputMaybe<Scalars['DateTime']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
+  isCurrency?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   presence?: InputMaybe<Scalars['String']>;
   project?: InputMaybe<ProjectRelateToOneForUpdateInput>;
@@ -1385,6 +1389,7 @@ export type DiscordBotWhereInput = {
   dateAdded?: InputMaybe<DateTimeNullableFilter>;
   enabled?: InputMaybe<BooleanFilter>;
   id?: InputMaybe<IdFilter>;
+  isCurrency?: InputMaybe<BooleanFilter>;
   name?: InputMaybe<StringFilter>;
   presence?: InputMaybe<StringFilter>;
   project?: InputMaybe<ProjectWhereInput>;

@@ -3169,6 +3169,7 @@ type DiscordBot {
   id: ID!
   name: String
   enabled: Boolean
+  isCurrency: Boolean
   presence: String
   botId: String
   apiKey: String
@@ -3189,6 +3190,7 @@ input DiscordBotWhereInput {
   id: IDFilter
   name: StringFilter
   enabled: BooleanFilter
+  isCurrency: BooleanFilter
   presence: StringFilter
   botId: StringFilter
   apiKey: StringFilter
@@ -3202,6 +3204,7 @@ input DiscordBotOrderByInput {
   id: OrderDirection
   name: OrderDirection
   enabled: OrderDirection
+  isCurrency: OrderDirection
   presence: OrderDirection
   botId: OrderDirection
   apiKey: OrderDirection
@@ -3213,6 +3216,7 @@ input DiscordBotOrderByInput {
 input DiscordBotUpdateInput {
   name: String
   enabled: Boolean
+  isCurrency: Boolean
   presence: String
   botId: String
   apiKey: String
@@ -3230,6 +3234,7 @@ input DiscordBotUpdateArgs {
 input DiscordBotCreateInput {
   name: String
   enabled: Boolean
+  isCurrency: Boolean
   presence: String
   botId: String
   apiKey: String

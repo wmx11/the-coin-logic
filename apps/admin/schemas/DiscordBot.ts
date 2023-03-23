@@ -9,6 +9,7 @@ const DiscordBot: Lists = {
     fields: {
       name: text({ validation: { isRequired: true } }),
       enabled: checkbox({ defaultValue: false }),
+      isCurrency: checkbox({ defaultValue: false }),
       presence: text({ validation: { isRequired: true } }),
       botId: text({ validation: { isRequired: true } }),
       apiKey: text({ validation: { isRequired: true } }),
@@ -33,6 +34,14 @@ const DiscordBot: Lists = {
           {
             label: 'Pair Price',
             value: 'pairPrice',
+          },
+          {
+            label: 'Holders',
+            value: 'holders',
+          },
+          {
+            label: 'Burned Tokens',
+            value: 'burnedTokens',
           },
         ],
       }),
