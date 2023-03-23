@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
-import path from 'path';
+import root from 'find-yarn-workspace-root';
 
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+dotenv.config({ path: `${root()}/.env` });
 
 const connectionStringProd = process.env.REDIS_USERNAME
   ? `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}/0`

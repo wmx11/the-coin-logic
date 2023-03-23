@@ -9,6 +9,7 @@ node_modules
 
 packages/**/*.js
 packages/**/*.d.ts.map
+packages/**/*.d.ts
 
 ## Don't ignore .config files!
 !*.config.js
