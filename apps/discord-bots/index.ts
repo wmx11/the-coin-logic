@@ -5,8 +5,6 @@ import { DISCORD_BOTS_CHANNEL, DISOCRD_BOTS_STATS_CHANNEL, redisConenctionString
 import toCurrency from 'tcl-packages/utils/toCurrency';
 import { setNickname } from './utils/utils';
 
-console.log(process.env.NODE_ENV, redisConenctionString);
-
 const redis = new Redis(redisConenctionString);
 
 redis.subscribe(DISCORD_BOTS_CHANNEL, DISOCRD_BOTS_STATS_CHANNEL, (err) => {
