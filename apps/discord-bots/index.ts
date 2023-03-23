@@ -20,7 +20,7 @@ const setBotData = async (client: Client, bot: DiscordBot, marketStats: MarketSt
   }
 
   const data = marketStats[bot.tracking] || undefined;
-  const nickname = bot.isCurrency ? toCurrency(data)?.toString() : toLocaleString(data)?.toString() || 'Thinking...';
+  const nickname = bot?.isCurrency ? toCurrency(data)?.toString() : toLocaleString(data)?.toString() || 'Thinking...';
   setNickname(client, bot.botId, nickname);
 };
 
