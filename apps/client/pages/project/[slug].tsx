@@ -69,7 +69,9 @@ const project: FC<ProjectProps> = ({ projectData }) => {
   }, []);
 
   const changeText =
-    (isNft ? projectData?.avgPriceChange24Percentage : projectData?.priceChange24Percentage) || 0 <= 0 ? 'down' : 'up';
+    (isNft ? projectData?.avgPriceChange24Percentage ?? 0 : projectData?.priceChange24Percentage ?? 0) >= 0
+      ? 'up'
+      : 'down';
 
   const metaDescription = isNft
     ? `${project?.name} average price today is ${toLocaleString(projectData?.avgPrice || 0)} ${
