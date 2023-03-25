@@ -14,7 +14,7 @@ const Trend: FC<TrendProps> = ({ value, previousValue, inline }) => {
   const trendValue = previousValue?.change || 0;
   const percentage = previousValue?.percentage || 0;
   const trendText = trendValue >= 0 ? `+${toLocaleString(trendValue)}` : `${toLocaleString(trendValue)}`;
-  const trendColor = trendValue > 0 ? 'text-green-500' : 'text-red-500';
+  const trendColor = trendValue >= 0 ? 'text-green-500' : 'text-red-500';
   const trendIndicator = trendValue > 0 ? <GoTriangleUp /> : <GoTriangleDown />;
 
   const InlineComponent = () => {

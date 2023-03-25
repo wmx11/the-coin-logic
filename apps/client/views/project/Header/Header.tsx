@@ -72,7 +72,13 @@ const Header: FC<HeaderProps> = ({ project, data }) => {
               <GradientText weight={700} className="text-3xl">
                 {toCurrency((data.price as number) || 0)}
               </GradientText>
-              <Trend previousValue={{ change: 0, percentage: data?.priceChange24Percentage as number }} inline={true} />
+              <Trend
+                previousValue={{
+                  change: data?.priceChange24 || 0,
+                  percentage: data?.priceChange24Percentage as number,
+                }}
+                inline={true}
+              />
             </div>
           ) : null}
           {project?.trackMarketCap && data.marketCap ? (
@@ -84,7 +90,10 @@ const Header: FC<HeaderProps> = ({ project, data }) => {
                 {toCurrency((data.marketCap as number) || 0)}
               </GradientText>
               <Trend
-                previousValue={{ change: 0, percentage: data?.marketCapChange24Percentage as number }}
+                previousValue={{
+                  change: data?.marketCapChange24 || 0,
+                  percentage: data?.marketCapChange24Percentage as number,
+                }}
                 inline={true}
               />
             </div>

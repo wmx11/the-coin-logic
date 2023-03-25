@@ -14,6 +14,9 @@ export const createMarketStats = async (marketStats: MarketStat): Promise<Market
           lte: formatISO(subHours(new Date(), 24)),
         },
       },
+      orderBy: {
+        dateAdded: 'desc',
+      },
     });
 
     const getChanges = getChangesPartial(marketStats, lastDayMarketStats || {});
@@ -77,7 +80,7 @@ export const createMarketStats = async (marketStats: MarketStat): Promise<Market
         project: { connect: { id: marketStats?.id } },
       },
     });
-    
+
     const redis = new Redis(redisConenctionString);
     redis.publish(DISOCRD_BOTS_STATS_CHANNEL, JSON.stringify(createMarketStat));
 
@@ -96,6 +99,9 @@ export const createSocialStats = async (socialStats: SocialStat): Promise<Social
         dateAdded: {
           lte: formatISO(subHours(new Date(), 24)),
         },
+      },
+      orderBy: {
+        dateAdded: 'desc',
       },
     });
 
