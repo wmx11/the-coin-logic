@@ -19,7 +19,15 @@ const setBotData = async (client: Client, bot: DiscordBot, marketStats: MarketSt
     return;
   }
 
-  const data = marketStats[bot.tracking] || undefined;
+  const getTrackingData = () => {
+    if (bot.customTracking) {
+      const customTrackers = marketStats.customTrackers as { id: string; value: number }[];
+      return customTrackers.find((item) => item?.id === bot?.customTracking)?.value;
+    }
+    return marketStats[bot.tracking];
+  };
+
+  const data = getTrackingData() || undefined;
   const nickname = bot?.isCurrency ? toCurrency(data)?.toString() : toLocaleString(data)?.toString() || 'Thinking...';
   setNickname(client, bot.botId, nickname);
 };
