@@ -57,6 +57,7 @@ export const GET_ENABLED_PROJECTS = `
       useDexScreener
       isCurrency
       applyProjectNativeTokenPrice
+      applyProjectTokenPrice
       method
       network {
         slug
