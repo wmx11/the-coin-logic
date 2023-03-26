@@ -24,11 +24,11 @@ const resolveCustomTrackers = async (project: Project, marketStats: MarketStats)
 
     const resolvedData = (() => {
       if (customTracker.applyProjectNativeTokenPrice) {
-        return !!parseFloat(data) ? data * marketStats.pairPrice : data;
+        return (data * marketStats.pairPrice) ?? data;
       }
 
       if (customTracker.applyProjectTokenPrice) {
-        return !!parseFloat(data) ? data * marketStats.price : data;
+        return (data * marketStats.price) ?? data;
       }
 
       return data;
