@@ -1,14 +1,11 @@
 import { ActivityType, Client, Events, GatewayIntentBits } from 'discord.js';
-import Redis from 'ioredis';
 import { DiscordBot, MarketStat, prismaClient } from 'tcl-packages/prismaClient';
-import { DISCORD_BOTS_CHANNEL, DISOCRD_BOTS_STATS_CHANNEL, redisConenctionString } from 'tcl-packages/utils/redis';
+import { DISCORD_BOTS_CHANNEL, DISOCRD_BOTS_STATS_CHANNEL, redisClient } from 'tcl-packages/utils/redis';
 import toCurrency from 'tcl-packages/utils/toCurrency';
 import toLocaleString from 'tcl-packages/utils/toLocaleString';
 import { setNickname } from './utils/utils';
 
-const redis = new Redis(redisConenctionString);
-
-redis.subscribe(DISCORD_BOTS_CHANNEL, DISOCRD_BOTS_STATS_CHANNEL, (err) => {
+redisClient.subscribe(DISCORD_BOTS_CHANNEL, DISOCRD_BOTS_STATS_CHANNEL, (err) => {
   if (err) {
     console.log('Failed to subscribe', err.message);
   }
@@ -48,7 +45,7 @@ const handleBot = (bot: DiscordBot) => {
 
       setBotData(client, bot, null);
 
-      redis.on('message', (channel, message: string) => {
+      redisClient.on('message', (channel, message: string) => {
         try {
           if (channel !== DISOCRD_BOTS_STATS_CHANNEL) {
             return;
@@ -81,7 +78,7 @@ const init = async () => {
     },
   });
 
-  redis.on('message', (channel, message: string) => {
+  redisClient.on('message', (channel, message: string) => {
     try {
       if (channel !== DISCORD_BOTS_CHANNEL) {
         return;
