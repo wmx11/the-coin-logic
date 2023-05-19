@@ -50,7 +50,7 @@ const DiscordBot: Lists = {
     },
     hooks: {
       afterOperation: ({ item }) => {
-        redisClient.publish(DISCORD_BOTS_CHANNEL, JSON.stringify(item));
+        redisClient?.publish(DISCORD_BOTS_CHANNEL, JSON.stringify(item));
       },
     },
   }),
