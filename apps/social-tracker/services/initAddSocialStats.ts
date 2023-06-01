@@ -1,3 +1,6 @@
 import addSocialStats from './addSocialStats';
 
-addSocialStats();
+(async () => {
+  await addSocialStats();
+  process.exit();
+})();
