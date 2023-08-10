@@ -19,7 +19,7 @@ const generateMarketStats = async (project: Project): Promise<MarketStats> => {
 
   if (!project.contractAddress || !project.liquidityPair) {
     throw new Error(
-      'Project has no contract address or liquidity pairs set. Please add the contract address and liquidity pairs  to the project.',
+      'Project has no contract address or liquidity pairs set. Please add the contract address and liquidity pairs to the project.',
     );
   }
 

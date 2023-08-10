@@ -143,25 +143,11 @@ const Navigation: FC<NavigationProps> = ({ setIsOpen }) => {
               icon: <Icons.Announcement />,
               description: 'Keep track of the latest project announcements with our Discord Announcements integration',
             },
-            {
-              route: routes.quizzes,
-              label: 'Quizzes',
-              icon: <Icons.Quiz />,
-              description: 'Test your knowledge by taking project specific quizzes and win rewards!',
-            },
-            {
-              route: routes.transcriptions,
-              label: 'Transcriptions',
-              icon: <Icons.Text />,
-              description:
-                'Transcribe, summarize, extract key points, topics, and bullet points from your AMAs, meetings by using our AI solution!',
-            },
           ]}
         >
           <NavLink href={routes.pricing} label="Products" withArrow />
         </DropdownMenu>
         <NavLink href={routes.services} label="Services" />
-        <NavLink href={routes.nexus} label="Nexus" leftIcon={<Icons.Nexus />} />
         <NavLink href={routes.articles} label="Articles" />
       </div>
     </div>
