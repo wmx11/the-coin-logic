@@ -14,6 +14,7 @@ export const GET_ENABLED_PROJECTS = `
     contractAddress
     pairAddress
     burnAddress
+    ABI
     trackHoldersFromTokenAmount
     useDexScreener
     twitter

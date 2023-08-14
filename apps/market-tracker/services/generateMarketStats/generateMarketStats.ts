@@ -6,6 +6,7 @@ import generateMarketStatsDexScreener from './generateMarketStatsDexScreener';
 import getPrimaryPairAddress from 'tcl-packages/utils/getPrimaryPairAddress';
 import { MarketStats } from './types';
 import generateMarketStatsNFT from './generateMarketStatsNFT';
+import generateMarketStatsCustom from './generateMarketStatsCustom';
 
 const generateMarketStats = async (project: Project): Promise<MarketStats> => {
   if (!project) {
@@ -14,6 +15,11 @@ const generateMarketStats = async (project: Project): Promise<MarketStats> => {
 
   if (project.isNft && project.contractAddress) {
     const marketStats = await generateMarketStatsNFT(project);
+    return marketStats;
+  }  
+
+  if (project.ABI?.custom && project.contractAddress) {
+    const marketStats = await generateMarketStatsCustom(project);
     return marketStats;
   }
 
