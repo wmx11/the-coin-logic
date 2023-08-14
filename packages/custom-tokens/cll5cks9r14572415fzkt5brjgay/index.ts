@@ -27,7 +27,7 @@ export default async function (project: Project) {
   const totalSupply = toDecimals(totalSupplyResolved, decimals);
   const marketCap = price * totalSupply;
   const liquidity = marketCap;
-  const pairPrice = stableTokenResolved?.at(0)?.priceUsd || undefined;
+  const pairPrice = parseFloat(stableTokenResolved?.at(0)?.priceUsd) || undefined;
 
   return {
     price,
