@@ -28,6 +28,7 @@ import TrackVitalsDisclaimer from '../../components/TrackVitalsDisclaimer';
 import { getProjectAndMarketStatsBySlug } from '../../data/getters';
 import AboutProject from '../../views/project/AboutProject';
 import MarketData from '../../views/project/MarketData';
+import BuyAndSellTokens from 'views/project/BuyAndSellTokens';
 
 type ProjectProps = {
   projectData: ProjectWithMarketStatsAndChanges;
@@ -133,6 +134,7 @@ const project: FC<ProjectProps> = ({ projectData }) => {
               </div>
               <div className="w-full md:w-[34%] flex flex-col gap-4">
                 <Markets data={project} />
+                {/* <BuyAndSellTokens data={project} /> */}
                 <Announcements data={project} />
                 <Events data={project} />
               </div>

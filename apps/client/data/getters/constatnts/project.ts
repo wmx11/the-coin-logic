@@ -75,6 +75,7 @@ dateAdded`;
 
 const PROJECT_DATA_GETTERS = `
 id
+ABI
 name
 slug
 symbol

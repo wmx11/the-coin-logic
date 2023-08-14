@@ -25,7 +25,7 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
 
   const customDataChangeLabels = getCustomTrackersChangeLabels(getCustomTrackersLabels(customTrackers));
 
-  const resolvedCustomData = customTrackers.map(
+  const resolvedCustomData = customTrackers?.map(
     ({ id, label, value, description, isCurrency }: CustomTrackersResponse, index: number) => ({
       value,
       previousValue: data[customDataChangeLabels[index]],
@@ -35,7 +35,7 @@ export const getData = (data: ProjectWithMarketStatsAndChanges): StatsData[] => 
       tooltip: description,
       isCurrency,
     }),
-  );
+  ) || [];
 
   return [
     {
