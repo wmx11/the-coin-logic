@@ -25,7 +25,7 @@ const web3Config = {
   ethereum: {
     appName: 'web3Modal',
     autoConnect: true,
-    chains: [chains.mainnet, chains.avalanche, chains.polygon, chains.binanceSmartChain, chains.fantom],
+    chains: [chains.polygon],
     providers: [providers.walletConnectProvider({ projectId: process.env.NEXT_PUBLIC_WEB3_PROJECT_ID as string })],
   },
 };

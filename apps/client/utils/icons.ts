@@ -31,7 +31,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { FiExternalLink, FiLogOut, FiMoon, FiSun } from 'react-icons/fi';
 import { GoTriangleDown, GoTriangleUp } from 'react-icons/go';
 import { GrMoney } from 'react-icons/gr';
-import { HiLink } from 'react-icons/hi';
+import { HiLink, HiSwitchVertical } from 'react-icons/hi';
 import { IoPlanetSharp, IoTicketOutline } from 'react-icons/io5';
 import {
   MdAnnouncement,
@@ -89,6 +89,7 @@ export const Icons = {
   ExternalLink: FiExternalLink,
   Google: FcGoogle,
   Sun: FiSun,
+  Switch: HiSwitchVertical,
   Moon: FiMoon,
   Images: FaImages,
   Fresh: FaLemon
