@@ -1,11 +1,5 @@
 import { NumberInput, Tabs } from '@mantine/core';
-import {
-  useAccount,
-  useConnectModal,
-  useContractRead,
-  useContractWrite,
-  useNetwork
-} from '@web3modal/react';
+import { useAccount, useConnectModal, useContractRead, useContractWrite, useNetwork } from '@web3modal/react';
 import GradientButton from 'components/Buttons/GradientButton';
 import Paper from 'components/Paper';
 import GradientTitle from 'components/Text/GradientTitle';
@@ -82,7 +76,11 @@ const BuyAndSellTokens: FC<BuyAndSellTokensProps> = ({ data }) => {
     args: [account?.address],
   });
 
-  const { write: approve, isLoading: isLoadingApprove } = useContractWrite({
+  const {
+    write: approve,
+    isLoading: isLoadingApprove,
+    error: errorApprove,
+  } = useContractWrite({
     abi: baseAbi,
     functionName: 'approve',
     address: USDC_ADDRESS,
@@ -115,6 +113,16 @@ const BuyAndSellTokens: FC<BuyAndSellTokensProps> = ({ data }) => {
     chainId: POLYGON,
     args: [ethers.utils.parseUnits((tokenAAmount || 0).toString()).toString()],
   });
+
+  const handleApprove = async () => {
+    setIsLoading(true);
+    const data = await approve();
+    console.log(errorApprove);
+    toast.success(`Your transaction has been submitted!`);
+    await data?.wait();
+    toast.success(`You have successfully approved the contract`);
+    setIsLoading(false);
+  };
 
   const handleBuy = async () => {
     setIsLoading(true);
@@ -171,9 +179,9 @@ const BuyAndSellTokens: FC<BuyAndSellTokensProps> = ({ data }) => {
         </GradientButton>
       );
     }
-    if (!allowance || (allowance as number) < 1) {
+    if (parseFloat(ethers.utils.formatUnits((allowance as BigNumber) || '0')) < 1) {
       return (
-        <GradientButton className="w-full capitalize" onClick={() => approve()} loading={isLoadingApprove}>
+        <GradientButton className="w-full capitalize" onClick={handleApprove} loading={isLoadingApprove}>
           Approve Contract
         </GradientButton>
       );
