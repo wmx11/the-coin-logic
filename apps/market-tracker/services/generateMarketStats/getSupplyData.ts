@@ -1,4 +1,4 @@
-import ethers from 'ethers';
+import { ethers } from 'ethers';
 import { Project } from 'tcl-packages/types';
 import toDecimals from 'tcl-packages/utils/toDecimals';
 import marketStatsContract from 'tcl-packages/web3/marketStatsContract';
@@ -17,12 +17,12 @@ type SupplyDataObject = {
 const getSupplyData = ({ contract, prices, liquidityPools, decimals, project }: SupplyDataObject) => {
   const getProjectTokensTotalSupply = async () => {
     const totalSupply = await contract.projectContract.totalSupply();
-    const parsedTotalSupply = parseFloat(ethers.utils.formatUnits(totalSupply) || '0');
+    const parsedTotalSupply = parseFloat(ethers.formatUnits(totalSupply) || '0');
     return parsedTotalSupply;
   };
   const getBurnedTokensBalance = async () => {
     const burnedTokensAmount = await contract.projectContract.balanceOf(project.burnAddress.trim());
-    const parsedBurnedTokensAmount = parseFloat(ethers.utils.formatUnits(burnedTokensAmount) || '0');
+    const parsedBurnedTokensAmount = parseFloat(ethers.formatUnits(burnedTokensAmount) || '0');
     return parsedBurnedTokensAmount;
   };
 
