@@ -3,14 +3,13 @@ import { useAccount, useConnectModal, useContractRead, useContractWrite, useNetw
 import GradientButton from 'components/Buttons/GradientButton';
 import Paper from 'components/Paper';
 import GradientTitle from 'components/Text/GradientTitle';
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { FC, useState } from 'react';
 import { toast } from 'react-toastify';
 import customAbi from 'tcl-packages/custom-tokens/cll5cks9r14572415fzkt5brjgay/abi';
 import { Project } from 'tcl-packages/types';
 import baseAbi from 'tcl-packages/web3/baseAbi';
 import config from 'tcl-packages/web3/config';
-import { toBigNumber } from 'tcl-packages/web3/utils';
 
 type BuyAndSellTokensProps = {
   data: Project;
@@ -85,7 +84,7 @@ const BuyAndSellTokens: FC<BuyAndSellTokensProps> = ({ data }) => {
     functionName: 'approve',
     address: USDC_ADDRESS,
     chainId: POLYGON,
-    args: [data.contractAddress, toBigNumber(10000000000)],
+    args: [data.contractAddress, ethers.parseUnits('10000000000').toString()],
   });
 
   const {
@@ -98,7 +97,7 @@ const BuyAndSellTokens: FC<BuyAndSellTokensProps> = ({ data }) => {
     address: data.contractAddress as string,
     functionName: 'mint',
     chainId: POLYGON,
-    args: [ethers.utils.parseUnits((tokenBAmount || 0).toString()).toString()],
+    args: [ethers.parseUnits((tokenBAmount || 0).toString()).toString()],
   });
 
   const {
@@ -111,7 +110,7 @@ const BuyAndSellTokens: FC<BuyAndSellTokensProps> = ({ data }) => {
     address: data.contractAddress as string,
     functionName: 'sellSevenUp',
     chainId: POLYGON,
-    args: [ethers.utils.parseUnits((tokenAAmount || 0).toString()).toString()],
+    args: [ethers.parseUnits((tokenAAmount || 0).toString()).toString()],
   });
 
   const handleApprove = async () => {
@@ -151,14 +150,14 @@ const BuyAndSellTokens: FC<BuyAndSellTokensProps> = ({ data }) => {
   };
 
   const handleTokenAChange = (value: number) => {
-    const tokenAPrice = rhyzePrice ? parseFloat(ethers.utils.formatUnits(rhyzePrice as BigNumber)) : 0;
+    const tokenAPrice = rhyzePrice ? parseFloat(ethers.formatUnits(rhyzePrice)) : 0;
     const safeValue = value < 0 ? 0 : value;
     setTokenAAmount(safeValue);
     setTokenBAmount(safeValue * tokenAPrice);
   };
 
   const handleTokenBChange = (value: number) => {
-    const tokenAPrice = rhyzePrice ? parseFloat(ethers.utils.formatUnits(rhyzePrice as BigNumber)) : 0;
+    const tokenAPrice = rhyzePrice ? parseFloat(ethers.formatUnits(rhyzePrice)) : 0;
     const safeValue = value < 0 ? 0 : value;
     setTokenAAmount(safeValue / tokenAPrice);
     setTokenBAmount(safeValue);
@@ -179,7 +178,7 @@ const BuyAndSellTokens: FC<BuyAndSellTokensProps> = ({ data }) => {
         </GradientButton>
       );
     }
-    if (parseFloat(ethers.utils.formatUnits((allowance as BigNumber) || '0')) < 1) {
+    if (parseFloat(ethers.formatUnits(allowance || '0')) < 1) {
       return (
         <GradientButton className="w-full capitalize" onClick={handleApprove} loading={isLoadingApprove}>
           Approve Contract
@@ -204,10 +203,7 @@ const BuyAndSellTokens: FC<BuyAndSellTokensProps> = ({ data }) => {
         <div className="flex justify-between items-center mb-2">
           <div>Rhyze</div>
           <div className="text-xs text-slate-500">
-            Balance:{' '}
-            {isLoadingRhyzeBalance
-              ? '...'
-              : parseFloat(ethers.utils.formatUnits((rhyzeBalance as BigNumber) || '0')).toFixed(6)}
+            Balance: {isLoadingRhyzeBalance ? '...' : parseFloat(ethers.formatUnits(rhyzeBalance || '0')).toFixed(6)}
           </div>
         </div>
         <NumberInput
@@ -230,9 +226,7 @@ const BuyAndSellTokens: FC<BuyAndSellTokensProps> = ({ data }) => {
             Balance:{' '}
             {isLoadingUsdcBalance
               ? '...'
-              : parseFloat(ethers.utils.formatUnits((usdcBalance as BigNumber) || '0', USDC_ADDRESS_DECIMALS)).toFixed(
-                  6,
-                )}
+              : parseFloat(ethers.formatUnits(usdcBalance || '0', USDC_ADDRESS_DECIMALS)).toFixed(6)}
           </div>
         </div>
         <NumberInput
