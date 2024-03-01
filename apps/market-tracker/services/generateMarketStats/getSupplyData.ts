@@ -1,3 +1,4 @@
+import ethers from 'ethers';
 import { Project } from 'tcl-packages/types';
 import toDecimals from 'tcl-packages/utils/toDecimals';
 import marketStatsContract from 'tcl-packages/web3/marketStatsContract';
@@ -14,8 +15,16 @@ type SupplyDataObject = {
 };
 
 const getSupplyData = ({ contract, prices, liquidityPools, decimals, project }: SupplyDataObject) => {
-  const getProjectTokensTotalSupply = async () => await contract.projectContract.totalSupply();
-  const getBurnedTokensBalance = async () => await contract.projectContract.balanceOf(project.burnAddress.trim());
+  const getProjectTokensTotalSupply = async () => {
+    const totalSupply = await contract.projectContract.totalSupply();
+    const parsedTotalSupply = parseFloat(ethers.utils.formatUnits(totalSupply) || '0');
+    return parsedTotalSupply;
+  };
+  const getBurnedTokensBalance = async () => {
+    const burnedTokensAmount = await contract.projectContract.balanceOf(project.burnAddress.trim());
+    const parsedBurnedTokensAmount = parseFloat(ethers.utils.formatUnits(burnedTokensAmount) || '0');
+    return parsedBurnedTokensAmount;
+  };
 
   /** Calculate the liquidity value of the liquidity pool based on its pair token (TITANO/WBNB) */
   const getLiquidity = async () => {
@@ -29,24 +38,20 @@ const getSupplyData = ({ contract, prices, liquidityPools, decimals, project }: 
   /** Calculate the market cap of the token based on its token price (USD) */
   const getMarketCap = async () => {
     const tokenPrice = await prices.getTokenPrice();
-    const projectTokensDecimal = await decimals.getProjectTokensDecimal();
     const projectTokensTotalSupply = await getProjectTokensTotalSupply();
 
-    return tokenPrice * toDecimals(projectTokensTotalSupply, projectTokensDecimal);
+    return tokenPrice * projectTokensTotalSupply;
   };
 
   const getTotalSupply = async () => {
-    const projectTokensDecimal = await decimals.getProjectTokensDecimal();
     const projectTokensTotalSupply = await getProjectTokensTotalSupply();
 
-    return toDecimals(projectTokensTotalSupply, projectTokensDecimal);
+    return projectTokensTotalSupply;
   };
 
   const getBurnedTokens = async () => {
-    const projectTokensDecimal = await decimals.getProjectTokensDecimal();
     const burnedTokensBalance = await getBurnedTokensBalance();
-
-    return toDecimals(burnedTokensBalance, projectTokensDecimal);
+    return burnedTokensBalance;
   };
 
   return {

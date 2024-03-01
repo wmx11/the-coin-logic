@@ -3,7 +3,7 @@ import { MarketStats } from '../generateMarketStats/types';
 
 const resolveCustomTrackers = async (project: Project, marketStats: MarketStats) => {
   if (!project.customTrackers || !project.customTrackers.length) {
-    return [];
+    return undefined;
   }
 
   const results = [];
@@ -24,11 +24,11 @@ const resolveCustomTrackers = async (project: Project, marketStats: MarketStats)
 
     const resolvedData = (() => {
       if (customTracker.applyProjectNativeTokenPrice) {
-        return (data * marketStats.pairPrice);
+        return data * marketStats.pairPrice;
       }
 
       if (customTracker.applyProjectTokenPrice) {
-        return (data * marketStats.price);
+        return data * marketStats.price;
       }
 
       return data;

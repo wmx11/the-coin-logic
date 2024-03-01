@@ -70,7 +70,7 @@ const generateMarketStats = async (project: Project): Promise<MarketStats> => {
   const pairPrice = await defaultMarketStatsGenerator.prices.getPairPrice();
   const liquidity = await defaultMarketStatsGenerator.supply.getLiquidity();
   const marketCap = await defaultMarketStatsGenerator.supply.getMarketCap();
-  // const totalSupply = await defaultMarketStatsGenerator.supply.getTotalSupply();
+  const totalSupply = await defaultMarketStatsGenerator.supply.getTotalSupply();
   const burnedTokens = await defaultMarketStatsGenerator.supply.getBurnedTokens();
 
   const dexData = await getPairInformationByChainId(project.network.slug, project.pairAddress);
@@ -81,7 +81,7 @@ const generateMarketStats = async (project: Project): Promise<MarketStats> => {
     pairPrice,
     liquidity,
     marketCap,
-    totalSupply: undefined,
+    totalSupply,
     burnedTokens,
     txns: pair.txns || undefined,
     volume: pair.volume || undefined,
