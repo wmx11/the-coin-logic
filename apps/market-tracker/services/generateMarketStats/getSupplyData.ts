@@ -22,7 +22,7 @@ const getSupplyData = ({ contract, prices, liquidityPools, decimals, project }: 
   };
   const getBurnedTokensBalance = async () => {
     const burnedTokensAmount = await contract.projectContract.balanceOf(project.burnAddress.trim());
-    const parsedBurnedTokensAmount = parseFloat(ethers.formatUnits(burnedTokensAmount) || '0');
+    const parsedBurnedTokensAmount = parseFloat(ethers.formatUnits(burnedTokensAmount).substring(0, 15) || '0');
     return parsedBurnedTokensAmount;
   };
 
