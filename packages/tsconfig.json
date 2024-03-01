@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "target": "ES6",
+    "skipLibCheck": true,
     "composite": true,
     "declaration": true,
     "declarationMap": true,
