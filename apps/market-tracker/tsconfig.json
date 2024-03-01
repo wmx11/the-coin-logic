@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+      "target": "ES5",
+      "skipLibCheck": true,
       "composite": true,
       "declaration": true,
       "declarationMap": true,
@@ -8,7 +10,6 @@
       "allowSyntheticDefaultImports": true,
       "outDir": "./dist",
       "rootDir": ".",
-
       "paths": { 
         "tcl-packages/*": ["../../packages/*"],
         "tcl-packages": ["../../packages"]
