@@ -42,7 +42,7 @@ const UpcomingProjectsTable: FC<UpcomingProjectsTableType> = ({ projects }) => {
     }`,
   };
 
-  const columns: Column[] = [
+  const columns: Column<any>[] = [
     {
       label: '#',
       renderCell: ({ order }) => order,

@@ -11,12 +11,12 @@ import useThemeStore from 'store/useThemeStore';
 
 type TableProps = {
   data: TableNode[];
-  columns: Column[];
+  columns: Column<any>[];
   customTheme?: Theme;
-  sort?: Sort;
+  sort?: Sort<any>;
 };
 
-const Table: FC<TableProps> = ({ data, columns, customTheme = {}, sort }) => {
+const Table = ({ data, columns, customTheme = {}, sort }: TableProps) => {
   const globalTheme = useThemeStore((state) => state.theme);
   const mantineTheme = getTheme({ highlightOnHover: true, verticalSpacing: 14 });
   const theme = useTheme([mantineTheme, mainTheme(globalTheme), customTheme]);

@@ -40,7 +40,7 @@ const NFTProjectsTable: FC<NFTProjectsTableProps> = ({ projects }) => {
     }`,
   };
 
-  const columns: Column[] = [
+  const columns: Column<any>[] = [
     {
       label: 'Name',
       pinLeft: true,

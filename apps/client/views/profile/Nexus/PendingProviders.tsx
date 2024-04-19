@@ -13,7 +13,7 @@ type PendingProvidersProps = {
 };
 
 const PendingProviders: FC<PendingProvidersProps> = ({ pendingProviders }) => {
-  const columns: Column[] = [
+  const columns: Column<any>[] = [
     { label: 'Date Created', renderCell: (data) => formatDate(data?.dateAdded) },
     { label: 'Name', renderCell: (data) => data?.name },
     { label: 'Is Enabled', renderCell: (data) => data?.enabled?.toString() },

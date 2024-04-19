@@ -27,7 +27,7 @@ const Funding = () => {
     clearItems();
   }, []);
 
-  const columns: Column[] = [
+  const columns: Column<any>[] = [
     { label: 'Date', renderCell: (token) => formateDateWithHours(token.dateAdded) },
     { label: 'Service Tokens Used', renderCell: (token) => token.used },
     { label: 'Description', renderCell: (token) => token.description },

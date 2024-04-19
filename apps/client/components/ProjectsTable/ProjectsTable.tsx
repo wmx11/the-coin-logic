@@ -45,7 +45,7 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data }) => {
   };
 
   const sorter = useSort(
-    projectData as unknown as Data,
+    projectData as unknown as Data<any>,
     {
       onChange: () => {},
     },
@@ -64,7 +64,7 @@ const ProjectsTable: FC<ProjectsTableProps> = ({ data }) => {
     },
   );
 
-  const columns: Column[] = [
+  const columns: Column<any>[] = [
     {
       label: 'Name',
       pinLeft: true,

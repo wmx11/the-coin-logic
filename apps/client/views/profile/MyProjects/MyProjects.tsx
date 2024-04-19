@@ -57,7 +57,7 @@ const MyProjects = ({ projects }: MyProjectsProps) => {
     }
   };
 
-  const columns: Column[] = [
+  const columns: Column<any>[] = [
     {
       label: 'Project',
       pinLeft: true,

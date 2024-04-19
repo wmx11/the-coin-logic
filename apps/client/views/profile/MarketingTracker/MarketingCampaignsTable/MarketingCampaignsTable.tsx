@@ -49,7 +49,7 @@ const MarketingCampaignsTable: FC<MarketingCampaignsTableProps> = ({ marketingCa
     }`,
   };
 
-  const columns: Column[] = [
+  const columns: Column<any>[] = [
     {
       label: 'Title',
       pinLeft: true,

@@ -29,7 +29,7 @@ const CryptocurrenciesTable: FC<CryptocurrenciesTableProps> = ({ data }) => {
     }`,
   };
 
-  const columns: Column[] = [
+  const columns: Column<any>[] = [
     {
       label: '#',
       renderCell: (item) => (
