@@ -85,5 +85,8 @@
     "xlsx": "^0.18.5",
     "ytdl-core": "^4.11.2",
     "zod": "^3.17.3"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6"
   }
 }
