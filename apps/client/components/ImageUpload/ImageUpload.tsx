@@ -111,7 +111,6 @@ const ImageUpload = <T,>({
     <>
       <FileInput
         label={label}
-        placeholder={placeholder}
         description={description}
         withAsterisk={withAsterisk}
         required={required}
